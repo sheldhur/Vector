@@ -1,0 +1,62 @@
+.input-cell {
+  position: relative;
+}
+
+.input-cell-input-wrapper,
+.input-cell-text-wrapper {
+  padding-right: 24px;
+  position: relative;
+}
+
+.input-cell-text-wrapper {
+  padding: 0;
+}
+.input-cell-underline {
+  padding-right: 24px;
+  width: 100%;
+  position: absolute;
+}
+.input-cell-underline hr {
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-bottom: 1px dashed silver;
+}
+
+.input-cell-input-wrapper input[type='text'] {
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.input-cell-input-wrapper.error input[type='text']{
+  color: #dd482a;
+}
+.input-cell-input-wrapper.error hr{
+  border-color: #dd482a;
+}
+
+.input-cell-icon {
+  position: absolute;
+  right: 0;
+  line-height: 18px;
+  width: 20px;
+}
+
+.input-cell-text-wrapper .input-cell-icon {
+  display: none;
+  cursor: pointer;
+}
+
+.input-cell:hover .input-cell-text-wrapper .input-cell-icon {
+  display: inline-block;
+}
+
+.input-cell-text-wrapper .input-cell-icon:hover {
+  color: #108ee9;
+}

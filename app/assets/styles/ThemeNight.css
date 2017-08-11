@@ -1,0 +1,41 @@
+.theme-night {
+  color: #b0b0b0;
+}
+
+.theme-night .ant-table,
+.theme-night .ant-pagination-jump-prev:not(:hover):after,
+.theme-night .ant-pagination-jump-next:not(:hover):after,
+.theme-night .ant-pagination-options-quick-jumper{
+  color: #b0b0b0;
+}
+
+.theme-night .ant-table-bordered table {
+  border-color: #464545;
+}
+
+.theme-night .ant-table-bordered .ant-table-thead tr > th,
+.theme-night .ant-table-bordered .ant-table-tbody tr > td {
+  border-color: #464545;
+}
+
+.theme-night .ant-table thead > tr > th {
+  background-color: #515050;
+  color: #b0b0b0;
+}
+
+.theme-night .ant-table-thead > tr.ant-table-row-hover > td,
+.theme-night .ant-table-tbody > tr.ant-table-row-hover > td,
+.theme-night .ant-table-thead > tr:hover > td,
+.theme-night .ant-table-tbody > tr:hover > td {
+  background-color: #34363a;
+}
+
+.theme-night .ant-table .select-row td {
+  background-color: #484c51;
+}
+
+.theme-night .ant-table-empty .ant-table-placeholder {
+  background-color: transparent;
+  border-color: #464545;
+  color: #b0b0b0;
+}

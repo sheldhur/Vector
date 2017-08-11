@@ -1,0 +1,33 @@
+.theme-light {
+  background-color: white;
+}
+
+.theme-light .chart-title{
+  color: #313031;
+}
+
+.theme-light .axis line, .theme-light .axis path {
+  stroke: #313031;
+}
+
+.theme-light .axis .tick text {
+  fill: #313031;
+}
+
+.theme-light .map-axis text {
+  fill: #313031;
+}
+
+.theme-light .grid path, .theme-light .grid line {
+  stroke: #313031;
+}
+
+.theme-light .chart-tooltip line.x {
+  stroke: #313031;
+}
+
+.theme-light.main-page tbody > tr > td,
+.theme-light .resizeble-panel.vertical > div:first-child + div + div,
+.theme-light .resizeble-panel.horizontal > div:first-child + div + div {
+  border-color: rgba(22, 22, 22, 0.1);
+}

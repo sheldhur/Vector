@@ -1,0 +1,148 @@
+.main-page-settings .ant-modal-body {
+  padding: 0;
+}
+
+.main-page-settings .ant-tabs-left .ant-tabs-tab {
+  text-align: left !important;
+}
+
+.main-page-settings .ant-tabs-tabpane {
+  padding: 10px 10px 10px 0;
+  overflow: auto;
+}
+
+.main-page-settings .ant-row.ant-form-item {
+  margin-bottom: 2px;
+}
+
+.main-page-settings fieldset {
+  border: none;
+  border-top: 1px solid #e9e9e9;
+}
+
+.main-page-settings fieldset legend {
+  margin: 0 25px;
+  padding: 0 8px;
+  width: auto;
+  border: none;
+  color: inherit;
+}
+
+.main-page-settings fieldset legend .ant-switch {
+  margin-bottom: 3px;
+}
+
+.main-page-settings fieldset > div.show {
+  overflow: hidden;
+  max-height: 500px;
+  transition: max-height 1.6s ease-out;
+}
+
+.main-page-settings fieldset > div.hide {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.8s ease-in;
+}
+
+.main-page-settings .ant-form-item-control > .ant-select-sm {
+  padding-top: 5px;
+}
+
+/*.main-page-settings .custom-group .ant-select-selection {*/
+  /*background-color: #eee;*/
+/*}*/
+
+/*.main-page-settings .custom-group .ant-select:hover .ant-select-selection,*/
+/*.main-page-settings .custom-group .ant-select-focused .ant-select-selection,*/
+/*.main-page-settings .custom-group .ant-select-open .ant-select-selection {*/
+  /*border-color: #d9d9d9;*/
+  /*box-shadow: none;*/
+/*}*/
+
+/*.main-page-settings .custom-group .ant-select-open .ant-select-selection {*/
+  /*color: #108ee9;*/
+/*}*/
+
+.dz-view-select {
+  margin-top: 1px;
+  position: relative;
+  width: 42px;
+  height: 28px;
+}
+
+.dz-view-select > div {
+  position: absolute;
+}
+
+.dz-view-select.circle {
+  margin-top: 4px;
+  width: 36px;
+  height: 22px;
+}
+
+.dz-view-select.circle > div {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+}
+
+.dz-view-select.circle > div.positive {
+  background-color: rgba(208, 2, 27, 0.5);
+}
+
+.dz-view-select.circle > div.negative {
+  background-color: rgba(42, 71, 226, 0.5);
+  left: 14px;
+}
+
+.dz-view-select.circle-gradient > div {
+  width: 28px;
+  height: 28px;
+}
+
+.dz-view-select.circle-gradient > div.positive {
+  background: radial-gradient(circle closest-side at center, rgba(208, 2, 27, 0.5) 0%, rgba(208, 2, 27, 0) 100%);
+}
+
+.dz-view-select.circle-gradient > div.negative {
+  background: radial-gradient(circle closest-side at center, rgba(42, 71, 226, 0.5) 0%, rgba(42, 71, 226, 0) 100%);
+  left: 14px;
+}
+
+.dz-view-select.square {
+  margin-top: 7px;
+  width: 32px;
+  height: 15px;
+}
+
+.dz-view-select.square > div {
+  width: 15px;
+  height: 15px;
+}
+
+.dz-view-select.square > div.positive {
+  border: 1px solid black;
+}
+
+.dz-view-select.square > div.negative {
+  left: 17px;
+  position: relative;
+}
+
+.dz-view-select.square > div.negative:before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 1px);
+  width: 1px;
+  height: 100%;
+  background-color: black;
+}
+
+.dz-view-select.square > div.negative:after {
+  content: '';
+  position: absolute;
+  top: calc(50% - 1px);
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}

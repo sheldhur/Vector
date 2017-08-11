@@ -1,0 +1,12 @@
+.main-page-header > .ant-input-group {
+  display: inline;
+  padding-left: 5px;
+}
+
+.main-page-header .ant-input-group:first-child {
+  padding-left: 0;
+}
+
+.main-page-header .ant-btn:hover {
+  background-color: #108ee9;
+}

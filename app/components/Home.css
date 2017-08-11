@@ -1,0 +1,52 @@
+.home-page .ant-card {
+  margin-top: 50px;
+  background: #132941;
+  background: linear-gradient(45deg, #132941 0, #5e95b0 100%);
+  text-align: center;
+}
+
+.home-page .ant-card-head {
+  border: none;
+  background-color: transparent;
+}
+
+.home-page .ant-card-head-title {
+  font-weight: bold;
+  font-size: 200%;
+  color: #ddd;
+}
+
+.home-page .ant-row {
+  margin-bottom: 10px;
+}
+
+.home-page .ant-input.ant-input-group-addon {
+  cursor: default;
+  color: rgba(0, 0, 0, 1);
+}
+
+.home-page input {
+  text-align: center;
+}
+
+.home-page .ant-input-group {
+  min-width: 400px;
+}
+
+.home-page .ant-input-number {
+  width: 200px;
+}
+
+.home-page .ant-select {
+  min-width: 100px;
+}
+
+.home-page .ant-select-selection-selected-value,
+.home-page .ant-select-dropdown {
+  float: none;
+  text-align: center;
+}
+
+.home-page .ant-radio-group {
+  color: #ddd;
+}

@@ -1,0 +1,55 @@
+.line-style-cell {
+  position: relative;
+  padding-right: 24px;
+}
+
+.line-style-cell-wrapper {
+  cursor: pointer;
+}
+
+.line-style-cell-wrapper > div {
+  height: 16px;
+}
+
+.line-style-cell-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 18px;
+}
+
+.line-style-cell:hover .line-style-cell-icon {
+  color: #108ee9;
+}
+
+.ant-popover .sketch-picker {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.ant-popover .line-style-control {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.ant-popover .line-style-control .left,
+.ant-popover .line-style-control .right {
+  flex: 1;
+}
+
+.ant-popover .line-style-control .right {
+  padding-left: 10px;
+}
+
+.ant-popover .line-style-control + div {
+  text-align: center;
+}
+
+.ant-popover .line-style-control .ant-form-item {
+  margin-bottom: 0;
+}
+
+.ant-popover .line-style-control .ant-form-item-label {
+}

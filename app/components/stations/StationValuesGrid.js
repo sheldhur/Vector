@@ -1,0 +1,187 @@
+// @flow
+import React, {Component, PropTypes} from 'react';
+import ReactDOM from 'react-dom';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import moment from 'moment';
+import Grid from '../grid/Grid';
+import * as ChartActions from './../../actions/chart';
+import * as StationActions from './../../actions/station';
+import * as app from './../../constants/app';
+
+class StationGrid extends Component {
+
+  state = {
+    availableSize: 'auto',
+    pageSize: 5,
+    pageCurrent: null,
+  };
+
+  componentDidMount = () => {
+    window.addEventListener('resize', this.calcPageSize);
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.calcPageSize);
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.state.availableSize === 'auto') {
+      setTimeout(() => {
+        this.calcPageSize();
+      }, 100);
+    }
+    this.setState({pageCurrent: this.calcPageCurrent(nextProps)});
+  };
+
+  calcPageCurrent = (props) => {
+    const {data: {values, isLoading}, currentTime} = props;
+    const data = values ? Object.values(values) : [];
+    const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
+    let currentPage = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].time === currentTimeStr) {
+        currentPage = Math.floor(i / this.state.pageSize) + 1;
+        break;
+      }
+    }
+
+    return currentPage;
+  };
+
+  //TODO: прибить пагинатор к низу
+  calcPageSize = () => {
+    let grid = ReactDOM.findDOMNode(this.refs.grid);
+    let pagination = grid.querySelector('.ant-pagination');
+
+    let theadHeight = grid.querySelector('thead').clientHeight || 0;
+    let paginationHeight = pagination ? pagination.clientHeight : 0;
+    let row = grid.querySelector('tbody > tr');
+    let availableSize = window.innerHeight - grid.getBoundingClientRect().top;
+
+    if (row) {
+      let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / row.offsetHeight);
+      if (pageSize > 0) {
+        this.setState({availableSize, pageSize});
+      }
+    }
+  };
+
+  handlerPageChange = (page) => {
+    this.setState({pageCurrent: page});
+  };
+
+  handleCellChange = (field, id, value, afterAction) => {
+    console.log(id, {[field]: value});
+    if (['compX', 'compY', 'compZ'].indexOf(field) !== -1 && value.trim() === '') {
+      value = null;
+    }
+    this.props.stationActions.updateStationValue(id, {[field]: value}, afterAction);
+  };
+
+  render() {
+    let columns = [{
+      title: 'Time',
+      dataIndex: 'time',
+      hasFilter: true,
+      hasSorter: true,
+      onCellClick: (record, event) => {
+        this.props.chartActions.setChartCurrentTime(moment(record.time, app.FORMAT_DATE_SQL).toDate());
+      }
+    }, {
+      title: 'X',
+      dataIndex: 'compX',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+          (value, afterAction) => this.handleCellChange('compX', record.id, value, afterAction)
+        }/>),
+      width: 160
+    }, {
+      title: 'Y',
+      dataIndex: 'compY',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+          (value, afterAction) => this.handleCellChange('compY', record.id, value, afterAction)
+        }/>),
+      width: 160
+    }, {
+      title: 'Z',
+      dataIndex: 'compZ',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+          (value, afterAction) => this.handleCellChange('compZ', record.id, value, afterAction)
+        }/>),
+      width: 160
+    }, {
+      title: 'F',
+      dataIndex: 'compF',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+          (value, afterAction) => this.handleCellChange('compF', record.id, value, afterAction)
+        }/>),
+      width: 160
+    }, {
+      title: '',
+      dataIndex: 'format',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => {
+        return app.VALUES_CONVERT_FORMAT[text];
+      },
+      width: 80
+    }];
+
+    console.info('GRID RERENDER');
+
+    const {data: {values, isLoading}, currentTime} = this.props;
+    const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
+
+    let data = values ? Object.values(values) : [];
+
+    return (
+      <div style={{height: this.state.availableSize}}>
+        <Grid
+          rowClassName = {(record) => {return record.time === currentTimeStr ? 'select-row' : ''}}
+          ref="grid"
+          rowKey="id"
+          columns={columns}
+          data={data}
+          loading={isLoading}
+          pagination={{pageSize: this.state.pageSize, showQuickJumper: true, current: this.state.pageCurrent, onChange: this.handlerPageChange}}
+          size="x-small"
+          bordered={true}
+        />
+      </div>
+    );
+  }
+}
+
+StationGrid.propTypes = {
+  width: PropTypes.string || PropTypes.number,
+  height: PropTypes.string || PropTypes.number,
+};
+
+StationGrid.defaultProps = {
+  width: '100%',
+  height: '100%',
+};
+
+function mapStateToProps(state) {
+  return {
+    data: state.station.stationView,
+    currentTime: state.chart.chartCurrentTime
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    chartActions: bindActionCreators(ChartActions, dispatch),
+    stationActions: bindActionCreators(StationActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StationGrid);

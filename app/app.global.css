@@ -1,0 +1,129 @@
+body {
+  position: relative;
+  background-color: #222222;
+  /*font-family: Arial, Helvetica, Helvetica Neue, serif;*/
+  font-size: 12px;
+  overflow: hidden;
+  transition: opacity 0.25s ease-in-out;
+}
+
+* {
+  -webkit-font-smoothing: antialiased !important;
+}
+
+html, body, #root, #root > div {
+  height: 100%;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #e9e9e9;
+  margin: 18px 0;
+}
+
+.centered-box {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.centered-box * {
+  text-align: center;
+  font-weight: normal;
+  color: inherit;
+}
+/*.tooltip .tooltip-inner {*/
+/*background-color: rgba(0, 0, 0, 0.8);*/
+/*}*/
+/*.tooltip .tooltip-arrow {*/
+/*border-right-color: rgba(0, 0, 0, 0.8);*/
+/*}*/
+
+@import "./assets/styles/Terminus.css";
+@import "./components/widgets/ResizeblePanel.css";
+
+@import "./components/chart/LineChart.css";
+@import "./components/chart/MapChart.css";
+
+@import "./components/Home.css";
+
+@import "./components/main/Main.css";
+@import "./components/main/MainHeader.css";
+@import "./components/settings/Settings.css";
+
+@import "./components/grid/Grid.css";
+
+@import "./components/dataSet/DataSetView.css";
+
+@import "./components/stations/StationsView.css";
+
+@import "./assets/styles/ThemeNight.css";
+@import "./assets/styles/ThemeLigth.css";
+
+@import "./assets/styles/Screencapture.css";
+
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.ant-modal-title {
+  text-align: center;
+}
+
+.hotkey .ant-tag {
+  margin-right: 0;
+  background-color: transparent;
+  border: 1px solid white;
+  color: inherit;
+}
+
+.ant-input-group.custom-group .ant-input-group-addon {
+  width: auto;
+  line-height: 1.5;
+  background-color: #eee;
+}
+
+.ant-input-group .ant-btn:hover{
+  color: white;
+}
+
+.ant-input-group .ant-btn-danger:hover{
+  background-color: #f04134;
+}
+
+.ant-input-group .spin:hover i{
+  -webkit-animation-name: spinnerRotate;
+  -webkit-animation-duration: 1.5s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes spinnerRotate {
+  from{-webkit-transform:rotate(0deg);}
+  to{-webkit-transform:rotate(360deg);}
+}
+
+.ant-input-group.custom-group .ant-input,
+.ant-input-group.custom-group .ant-input-number {
+  margin-right: 0 !important;
+  border-right-width: 1px !important;
+}
+
+.ant-pagination > * {
+  margin-right: 2px !important;
+}
+
+.ant-row {
+  margin-top: 10px;
+}
+
+/*.ant-spin-nested-loading > div > .ant-spin {*/
+  /*width: auto;*/
+/*}*/
+
+body {
+  opacity: 1 !important;
+  transition: opacity 0.5s ease-in-out;
+}

@@ -1,0 +1,13 @@
+.checkbox-cell {
+  text-align: center;
+}
+
+.checkbox-cell.error .ant-checkbox-inner {
+  border-color: #dd482a;
+}
+
+.checkbox-cell.error .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #dd482a;
+  border-color: #dd482a;
+}
+

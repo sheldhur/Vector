@@ -1,0 +1,32 @@
+/* Main */
+.screencapture .main-page td {
+  border-color: transparent !important;
+}
+
+.screencapture .resizeble-panel > div:first-child + div + div{
+  border-color: transparent !important;
+}
+
+/* LineChart */
+.screencapture .axis line,
+.screencapture .axis path,
+.screencapture .grid path,
+.screencapture .grid line {
+  stroke: black;
+}
+
+.screencapture .axis .tick text {
+  fill: black
+}
+
+.screencapture .chart-title {
+  color: black;
+}
+
+/* MapChart */
+.screencapture .map-axis.azimuthal line {
+  stroke: black;
+}
+.screencapture .map-axis text {
+  fill: black;
+}

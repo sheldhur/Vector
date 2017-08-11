@@ -1,0 +1,25 @@
+.select-cell .ant-select {
+  color: inherit;
+}
+
+.select-cell .ant-select-selection {
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.select-cell .ant-select-selection__rendered {
+  line-height: 18px;
+  margin-right: 14px;
+}
+
+.select-cell.error .ant-select-selection {
+  color: #dd482a;
+}
+
+.select-cell.saved .ant-select-arrow:before {
+  content: '\E64D';
+  animation: loadingCircle 1s infinite linear;
+}

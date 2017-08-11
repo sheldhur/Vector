@@ -1,0 +1,50 @@
+.custom-filter-dropdown {
+  padding: 8px;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+}
+
+.custom-filter-dropdown input {
+  width: 130px;
+  margin-right: 8px;
+}
+
+.custom-filter-dropdown .ant-btn-group .ant-btn {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/*.custom-filter-dropdown button + button {*/
+/*margin-left: 8px;*/
+/*}*/
+
+.ant-table-x-small tbody > tr > td {
+  padding: 3px 8px;
+}
+
+.ant-table-x-small thead > tr > th {
+  padding: 5px 8px;
+}
+
+.ant-table-x-small .ant-table-footer {
+  padding: 5px 8px;
+}
+
+.ant-table .select-row td {
+  background-color: #d7e3f7;
+}
+
+.grid-cell-popconfirm .ant-popover-buttons button:first-child {
+  display: none;
+}
+
+.dataset-grid .nowrap {
+  white-space: nowrap;
+}
+
+@import "InputCell.css";
+@import "CheckboxCell.css";
+@import "SelectCell.css";
+@import "ColorCell.css";
+@import "LineStyleCell.css";
