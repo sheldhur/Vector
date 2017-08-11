@@ -1,6 +1,9 @@
 # Vector
-*App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data. 
-Built with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [d3](https://github.com/d3/d3) [antd](https://github.com/ant-design/ant-design).*
+App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data.
+
+Built with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [d3](https://github.com/d3/d3) [antd](https://github.com/ant-design/ant-design).
+
+![Example](/example/result.gif)
 
 ## Support data formats
 * Network of observatories
@@ -27,6 +30,9 @@ Built with [Electron](https://github.com/atom/electron), [React](https://faceboo
 git clone https://github.com/sheldhur/Vector
 cd Vector
 npm install
+cd app
+npm install
+cd ..
 npm run dev
 ```
 
