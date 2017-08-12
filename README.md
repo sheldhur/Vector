@@ -1,7 +1,7 @@
 # Vector
 App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data.
 
-Built with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [d3](https://github.com/d3/d3) [antd](https://github.com/ant-design/ant-design).
+Built with [Electron](https://github.com/atom/electron), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [D3](https://github.com/d3/d3), [Ant Design](https://github.com/ant-design/ant-design), [SQLite](https://github.com/DenisCarriere/sqlite3-offline), [Sequelize](https://github.com/sequelize/sequelize/).
 
 ![Example](/example/result.gif)
 
@@ -45,4 +45,4 @@ npm run package
 ##### Building windows apps from non-windows platforms
 Please checkout [Building windows apps from non-windows platforms](https://github.com/maxogden/electron-packager#building-windows-apps-from-non-windows-platforms).
 
-#### License [MIT](LICENSE.md)
+#### License [MIT](LICENSE)

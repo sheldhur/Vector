@@ -1,7 +1,6 @@
 import {push} from 'react-router-redux';
 import {hashHistory} from 'react-router';
 import {remote} from 'electron';
-import moment from 'moment';
 import * as fs from 'fs';
 import deepAssign from './../lib/deepAssign';
 import dbConnect from './../database/dbConnect';
@@ -104,11 +103,12 @@ export function openDataBase(path, openMain = true) {
       db = dbConnect(path);
 
       db.sequelize.authenticate().then(() => {
-        dispatch(loadSettings());
-        dispatch(saveLastDataBase(path));
-        if (openMain) {
-          openMainPage();
-        }
+        dispatch(loadSettings()).then(() => {
+          dispatch(saveLastDataBase(path));
+          if (openMain) {
+            openMainPage();
+          }
+        });
       });
     } catch (error) {
       console.error(error);
