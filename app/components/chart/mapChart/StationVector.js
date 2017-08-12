@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import hexToRgb from 'hex-to-rgb';
 import * as ChartActions from './../../../actions/chart';
 import * as StationActions from './../../../actions/station';
 import * as stationsCalc from './../../../lib/stationsCalc';
@@ -128,11 +129,9 @@ class StationVector extends Component {
   render() {
     const {mapLayer} = this.props.settings.project;
     const data = this.prepareStationsData();
-
-    let bigint;
-    let color = {
-      positive: [(bigint = parseInt(mapLayer.dZ.color.positive.replace('#', ''), 16)) >> 16 & 255, bigint >> 8 & 255, bigint & 255],
-      negative: [(bigint = parseInt(mapLayer.dZ.color.negative.replace('#', ''), 16)) >> 16 & 255, bigint >> 8 & 255, bigint & 255],
+    const color = {
+      positive: hexToRgb(mapLayer.dZ.color.positive),
+      negative: hexToRgb(mapLayer.dZ.color.negative),
     };
 
     let style = {
