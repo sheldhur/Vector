@@ -5,7 +5,7 @@ import {SketchPicker} from 'react-color';
 import FontAwesome from 'react-fontawesome';
 
 
-class ColorCell extends React.Component {
+class ColorCell extends Component {
 
   state = {
     value: this.props.value,

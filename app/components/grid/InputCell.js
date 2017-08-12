@@ -5,7 +5,7 @@ import {Input, Icon, Popconfirm} from 'antd';
 
 const ESCAPE_KEY = 27;
 
-class InputCell extends React.Component {
+class InputCell extends Component {
   state = {
     value: this.props.value,
     editable: false,

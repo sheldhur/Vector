@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {Checkbox, Icon, Popconfirm} from 'antd';
 
 
-class CheckboxCell extends React.Component {
+class CheckboxCell extends Component {
 
   state = {
     value: !!this.props.value,

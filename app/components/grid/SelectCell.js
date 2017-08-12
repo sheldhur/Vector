@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {Select, Icon, Popconfirm} from 'antd';
 
 
-class SelectCell extends React.Component {
+class SelectCell extends Component {
 
   state = {
     value: this.props.value,
