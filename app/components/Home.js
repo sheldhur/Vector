@@ -9,7 +9,6 @@ import * as MainActions from './../actions/main';
 import * as app from './../constants/app';
 // import './../lib/geomagneticData/_test';
 
-const {dialog} = remote;
 
 class Home extends Component {
   avgByList = app.IMPORT_AVG;
@@ -52,42 +51,17 @@ class Home extends Component {
   };
 
   handlerDialog = (e, isCreateNew) => {
-    dialog.showOpenDialog({
-      title: !isCreateNew ? 'Select database file' : 'Select path for new database',
-      defaultPath: 'project.db3',
-      properties: !isCreateNew ? ['openFile'] : ['openFile', 'createDirectory', 'promptToCreate'],
-      buttonLabel: !isCreateNew ? 'Open database' : 'Create database',
-      filters: [
-        {name: 'Database', extensions: app.FILE_EXT_DB},
-        {name: 'All Files', extensions: app.FILE_EXT_ALL}
-      ],
-    }, (filePaths) => {
-      if (filePaths && filePaths.length) {
-        if (isCreateNew) {
-          let settings = {
-            time: {
-              avg: this.state.avg,
-              period: this.state.period,
-              selected: {
-                start: null,
-                end: null,
-              },
-            }
-          };
-
-          settings.time.period = {
-            start: settings.time.period.start.millisecond(0).toISOString(),
-            end: settings.time.period.end.millisecond(0).toISOString(),
-          };
-
-          settings.time.selected = settings.time.period;
-
-          this.props.mainActions.createDataBase(filePaths[0], settings);
-        } else {
-          this.props.mainActions.openDataBase(filePaths[0]);
-        }
+    const settings = isCreateNew ? {
+      time: {
+        avg: this.state.avg,
+        period: this.state.period,
+        selected: {
+          start: null,
+          end: null,
+        },
       }
-    });
+    } : undefined;
+    this.props.mainActions.dialogOpenCreateDataBase(settings)
   };
 
   disabledRangeTime = () => {

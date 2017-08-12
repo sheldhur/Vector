@@ -4,10 +4,10 @@ import {remote} from 'electron';
 import * as fs from 'fs';
 import deepAssign from './../lib/deepAssign';
 import dbConnect from './../database/dbConnect';
-import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB} from './../constants/app';
+import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB, FILE_EXT_DB, FILE_EXT_ALL} from './../constants/app';
 import * as types from './../constants/main';
 
-// let dbConnect = remote.require('./database/dbConnect');
+const {dialog} = remote;
 let db;
 
 
@@ -152,4 +152,45 @@ export function closeDataBase() {
 
 function openMainPage() {
   return hashHistory.push('/main');
+}
+
+export function dialogOpenCreateDataBase(settings) {
+  return (dispatch) => {
+    dialog.showOpenDialog({
+      title: !settings ? 'Select database file' : 'Select path for new database',
+      defaultPath: 'project.db3',
+      properties: !settings ? ['openFile'] : ['openFile', 'createDirectory', 'promptToCreate'],
+      buttonLabel: !settings ? 'Open database' : 'Create database',
+      filters: [
+        {name: 'Database', extensions: FILE_EXT_DB},
+        {name: 'All Files', extensions: FILE_EXT_ALL}
+      ],
+    }, (filePaths) => {
+      if (filePaths && filePaths.length) {
+        if (settings) {
+          let settings = {
+            time: {
+              avg: this.state.avg,
+              period: this.state.period,
+              selected: {
+                start: null,
+                end: null,
+              },
+            }
+          };
+
+          settings.time.period = {
+            start: settings.time.period.start.millisecond(0).toISOString(),
+            end: settings.time.period.end.millisecond(0).toISOString(),
+          };
+
+          settings.time.selected = settings.time.period;
+
+          dispatch(createDataBase(filePaths[0], settings));
+        } else {
+          dispatch(openDataBase(filePaths[0]));
+        }
+      }
+    });
+  }
 }

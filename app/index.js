@@ -52,8 +52,7 @@ ipcRenderer.on('dispatchFromMain', (event, msg) => {
       store.dispatch(StationActions.getLatitudeAvgValues());
       store.dispatch(DataSetActions.getData());
     } else if (msg.action === 'openDataBase') {
-      // store.dispatch(MainActions.openDataBase());
-      alert('open db');
+      store.dispatch(MainActions.dialogOpenCreateDataBase());
     }
   }
 });

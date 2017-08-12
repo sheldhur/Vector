@@ -7,7 +7,7 @@ function isNonNullObject(value) {
 }
 
 function isNotSpecial(value) {
-  var stringValue = Object.prototype.toString.call(value);
+  const stringValue = Object.prototype.toString.call(value);
 
   return stringValue !== '[object RegExp]'
     && stringValue !== '[object Date]'
@@ -16,7 +16,7 @@ function isNotSpecial(value) {
 
 export default function deepAssign(destination, source, arrayMerge) {
   for (let key in destination) {
-    if (source.hasOwnProperty(key)) {
+    if (source && source.hasOwnProperty(key)) {
       if (isMergeableObject(destination[key])) {
         destination[key] = deepAssign(destination[key], source[key], arrayMerge);
       } else {
