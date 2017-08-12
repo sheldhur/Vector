@@ -68,6 +68,7 @@ class StationAvgChart extends Component {
     const colorGroup = app.DATA_SET_COLOR;
 
     let chartData = [];
+    let lineHasValues = {};
 
     if (data) {
       latitudeRanges.forEach((range, rangeKey) => {
@@ -87,11 +88,11 @@ class StationAvgChart extends Component {
             points: []
           };
 
-          if (lines[lineKey].isHasValues === undefined) {
-            lines[lineKey].isHasValues = data[line.comp] !== undefined && data[line.comp][rangeKey] !== undefined && data[line.comp][rangeKey][line.hemisphere] !== undefined;
+          if (lineHasValues[lineKey] === undefined) {
+            lineHasValues[lineKey] = data[line.comp] !== undefined && data[line.comp][rangeKey] !== undefined && data[line.comp][rangeKey][line.hemisphere] !== undefined;
           }
 
-          if (lines[lineKey].isHasValues === true) {
+          if (lineHasValues[lineKey]) {
             let pointsValue = data[line.comp][rangeKey][line.hemisphere];
             for (let time in pointsValue) {
               lineData.points.push({
@@ -117,7 +118,7 @@ class StationAvgChart extends Component {
     const {isLoading, isError} = this.props;
     const {latitudeRanges} = this.props.settings.avgChart;
 
-    let preparedData = this.prepareDataForChart();
+    const preparedData = this.prepareDataForChart();
     const isEmpty = !preparedData.length;
 
     const Alert = (props) => {
@@ -133,10 +134,9 @@ class StationAvgChart extends Component {
     };
 
     const AvgDataChart = (props) => {
-      let chartTitle = '';
       // if (props.itemKey !== 0) {
-      let condition = props.itemKey !== latitudeRanges.length - 1 ? '≥ gLat >' : '≥ gLat ≥';
-      chartTitle = `${latitudeRanges[props.itemKey][0]}° ${condition} ${latitudeRanges[props.itemKey][1]}°`;
+      const condition = props.itemKey !== latitudeRanges.length - 1 ? '≥ gLat >' : '≥ gLat ≥';
+      const chartTitle = `${latitudeRanges[props.itemKey][0]}° ${condition} ${latitudeRanges[props.itemKey][1]}°`;
       // }
 
       let isHasValues = false;

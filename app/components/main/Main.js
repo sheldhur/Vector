@@ -4,21 +4,10 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import MainHeader from './MainHeader';
 import MainDashboard from './MainDashboard';
-import calcProgress from './../../lib/calcProgress'
 
-// import './../../lib/geomagneticData/_test';
-
-
-const files = new Array(4);
-const rows = new Array(3600);
-const currentFile = 4 - 1;
-const currentRow = 1234 - 1;
-
-console.log(calcProgress(files.length, currentFile, rows.length, currentRow));
 
 class Main extends Component {
   render() {
-
     return (
       <table className={`main-page theme-${this.props.theme}`}>
         <tbody>
