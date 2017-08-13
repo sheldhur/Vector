@@ -11,8 +11,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "sequelize": "^3.30.4",
-    "sqlite3-offline": "^3.1.8-2"
+    "sequelize": "^4.4.3",
+    "sqlite3-offline": "^3.1.18"
   },
   "theme": {
     "text-color": "rgba(0, 0, 0, 1)",

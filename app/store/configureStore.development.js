@@ -4,7 +4,7 @@ import {push, routerMiddleware} from "react-router-redux";
 import {electronEnhancer} from "redux-electron-store";
 import {ipcRenderer} from "electron";
 import thunk from "redux-thunk";
-import createLogger from "redux-logger";
+import {createLogger} from "redux-logger";
 import rootReducer from "./../reducers";
 
 
