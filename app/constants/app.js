@@ -66,9 +66,9 @@ export const DEFAULT_SETTINGS = {
       playDelay: 0.1
     },
     mapLayer: {
-      projectionType: 'stereographic',
+      projectionType: 'equirectangular',
       world: {
-        scale: '1:50',
+        scale: '1:110',
         countries: false,
         color: {
           water: '#a4bac7',
