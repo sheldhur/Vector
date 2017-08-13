@@ -1,19 +1,13 @@
-process.versions.electron = process.env.ELECTRON_VERSION || '1.6.4';
+process.versions.electron = process.env.ELECTRON_VERSION || '1.6.12';
 
-import {app} from 'electron';
 import dbConnect from './database/dbConnect';
 import errorToObject from './lib/errorToObject';
 import workers from './workers';
 
 
-
 //TODO: по сути бэкенд. Имеет смысл в рендере запросы к воркерам сделать аля API worker.stations.getLatitudeAvgValues() и держать пул воркеров.
 
 let db;
-
-if (!process.send) {
-  app.quit();
-}
 
 process.on('message', (data) => {
   if (!data) {
