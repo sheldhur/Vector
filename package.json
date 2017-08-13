@@ -2,7 +2,7 @@
   "name": "Vector",
   "productName": "Vector",
   "version": "2.0.0-beta.1",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "description": "App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data",
   "main": "main.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node ./test/runTests.js",
@@ -29,7 +29,7 @@
     "clean": "node ./scripts/clean.js",
     "cleanup": "mop -v"
   },
-  "browserslist": "electron 1.4",
+  "browserslist": "electron 1.6.12",
   "build": {
     "productName": "Vector",
     "appId": "org.sheldhurMornor.Vector",
@@ -79,7 +79,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sheldhur/vector.git"
+    "url": "git+https://github.com/sheldhur/Vector.git"
   },
   "author": {
     "name": "Sheldhur Mornor",
@@ -88,18 +88,24 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sheldhur/vector/issues"
+    "url": "https://github.com/sheldhur/Vector/issues"
   },
   "keywords": [
     "electron",
-    "boilerplate",
-    "react",
-    "react-router",
-    "flux",
-    "webpack",
-    "react-hot"
+    "sqlite",
+    "Earth",
+    "Sun",
+    "space",
+    "weather",
+    "geomagnetism",
+    "intermagnet",
+    "iaga2002",
+    "cdaweb",
+    "themis",
+    "goes",
+    "carisma"
   ],
-  "homepage": "https://github.com/sheldhur/vector#readme",
+  "homepage": "https://github.com/sheldhur/Vector#readme",
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
@@ -216,7 +222,7 @@
     "redux-electron-store": "^0.4.1",
     "redux-ignore": "^1.2.4",
     "redux-thunk": "^2.2.0",
-    "sequelize": "^4.4.3",
+    "sequelize": "^4.4.4",
     "sequelize-cli": "^2.8.0",
     "sequelize-log-syntax-colors": "^1.0.0",
     "source-map-support": "^0.4.15",

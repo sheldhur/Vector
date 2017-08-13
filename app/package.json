@@ -2,7 +2,7 @@
   "name": "Vector",
   "productName": "Vector",
   "version": "2.0.0-beta.1",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "description": "App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data",
   "main": "./main.js",
   "author": {
     "name": "Sheldhur Mornor",
@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "sequelize": "^4.4.3",
+    "sequelize": "^4.4.7",
     "sqlite3-offline": "^3.1.18"
   },
   "theme": {
