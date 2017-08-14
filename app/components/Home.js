@@ -7,8 +7,7 @@ import {Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio} f
 import moment from 'moment';
 import * as MainActions from './../actions/main';
 import * as app from './../constants/app';
-import IconResizer from './_IconResizer';
-
+// import IconResizer from './_IconResizer';
 // import './../lib/geomagneticData/_test';
 
 
@@ -80,11 +79,7 @@ class Home extends Component {
   render = () => {
     const {avg, period} = this.state;
 
-    const isDateRange = !(period.start !== null || period.end !== null)
-
-    return (
-      <IconResizer/>
-    );
+    const isDateRange = !(period.start !== null || period.end !== null);
 
     return (
       <div className="home-page">
