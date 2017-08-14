@@ -1,5 +1,6 @@
 import carisma from './parsers/carisma';
-import cdaWebData from './parsers/cdaWebData';
+import cdaweb from './parsers/cdaweb';
+import cdawebThemis from './parsers/cdawebThemis';
 import csv from './parsers/csv';
 import iaga2002 from './parsers/iaga2002';
 import magBase from './parsers/magBase';
@@ -11,7 +12,8 @@ import toIaga2002 from './formatters/toIaga2002';
 
 export default {
   carisma,
-  cdaWebData,
+  cdaweb,
+  cdawebThemis,
   csv,
   iaga2002,
   magBase,

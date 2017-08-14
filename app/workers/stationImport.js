@@ -50,7 +50,7 @@ function readFile(filePath, fileType) {
   } else if (fileType === 'CARISMA') {
     return geomag.carisma(filePath);
   } else if (fileType === 'CDAWeb') {
-    return geomag.cdaWebData(filePath);
+    return geomag.cdawebThemis(filePath);
   } else if (fileType === '210 MM') {
     return geomag.mm210(filePath);
   } else if (fileType === 'MagBase') {

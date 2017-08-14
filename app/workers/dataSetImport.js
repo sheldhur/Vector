@@ -43,7 +43,7 @@ export default function (dbSession, data) {
 
 function readFile(filePath, fileType) {
   if (fileType === 'CDAWeb') {
-    return geomag.cdaWebData(filePath);
+    return geomag.cdaweb(filePath);
   } else if (fileType === 'CSV') {
     return geomag.csv(filePath);
   } else if (fileType === 'GOES') {
