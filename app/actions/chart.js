@@ -27,8 +27,8 @@ export function shiftChartCurrentTime (value) {
     let {time} = getState().main.settings.project;
     let {chartCurrentTime} = getState().chart;
 
-    let timeStart = new Date(time.period.start);
-    let timeEnd = new Date(time.period.end);
+    let timeStart = new Date(time.selected.start);
+    let timeEnd = new Date(time.selected.end);
 
     let timeCurrent = chartCurrentTime || timeStart;
 
@@ -43,13 +43,6 @@ export function shiftChartCurrentTime (value) {
     }
 
     dispatch(setChartCurrentTime(timeNew));
-
-    // if (timeNew.getTime().between([timeStart.valueOf(),timeEnd.valueOf()], true)) {
-    //   dispatch(setChartCurrentTime(timeNew));
-    //   return timeNew;
-    // }
-    //
-    // return false;
   };
 }
 
