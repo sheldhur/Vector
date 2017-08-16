@@ -8,6 +8,7 @@ import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB, FILE_EXT_DB, FILE
 import * as types from './../constants/main';
 
 const {dialog} = remote;
+const currentWindow = remote.getCurrentWindow();
 let db;
 
 
@@ -156,7 +157,8 @@ function openMainPage() {
 
 export function dialogOpenCreateDataBase(settings) {
   return (dispatch) => {
-    dialog.showOpenDialog({
+    let showDialog = settings ? dialog.showOpenDialog : dialog.showSaveDialog;
+    showDialog(currentWindow, {
       title: !settings ? 'Select database file' : 'Select path for new database',
       defaultPath: 'project.db3',
       properties: !settings ? ['openFile'] : ['openFile', 'createDirectory', 'promptToCreate'],

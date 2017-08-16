@@ -4,6 +4,7 @@ import resourcePath from './../../lib/resourcePath';
 import * as fs from 'fs';
 
 const {dialog} = remote;
+const currentWindow = remote.getCurrentWindow();
 
 
 export default function (props) {
@@ -14,7 +15,7 @@ export default function (props) {
     label: 'Export',
     icon: resourcePath('./assets/icons/blue-document-excel-csv.png'),
     click: () => {
-      dialog.showSaveDialog({
+      dialog.showSaveDialog(currentWindow, {
         title: 'Select path',
         defaultPath: 'latitudeAvgValues.csv',
         properties: ['openFile', 'createDirectory'],
@@ -79,7 +80,7 @@ export default function (props) {
     label: 'Save to image',
     icon: resourcePath('./assets/icons/image-export.png'),
     click: () => {
-      dialog.showSaveDialog({
+      dialog.showSaveDialog(currentWindow, {
         title: 'Select path for image',
         defaultPath: 'stationAvgChar.png',
         properties: ['openFile', 'createDirectory'],

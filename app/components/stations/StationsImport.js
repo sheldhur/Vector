@@ -10,6 +10,7 @@ import * as app from './../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
+const currentWindow = remote.getCurrentWindow();
 
 
 class StationImport extends Component {
@@ -22,7 +23,7 @@ class StationImport extends Component {
   handlerDropdownSelect = (e) => {
     const fileType = this.fileTypes[e.key];
 
-    dialog.showOpenDialog({
+    dialog.showOpenDialog(currentWindow, {
       title: 'Select ' + fileType + ' format data file',
       defaultPath: 'project.db3',
       properties: ['openFile', 'multiSelections'],

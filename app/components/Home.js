@@ -23,8 +23,8 @@ class Home extends Component {
       value: 1,
     },
     period: {
-      start: moment(),
-      end: moment(),
+      start: undefined,
+      end: undefined,
     }
   };
 
@@ -79,7 +79,7 @@ class Home extends Component {
   render = () => {
     const {avg, period} = this.state;
 
-    const isDateRange = !(period.start !== null || period.end !== null);
+    const isDateRange = period.start && period.end;
 
     return (
       <div className="home-page">
@@ -129,7 +129,7 @@ class Home extends Component {
                   icon="file-add"
                   type="primary"
                   onClick={(e) => this.handlerDialog(e, true)}
-                  disabled={isDateRange}
+                  disabled={!isDateRange}
                 >Create new database</Button>
               </Row>
             </Card>

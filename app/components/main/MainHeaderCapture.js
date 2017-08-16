@@ -9,13 +9,14 @@ import domToImage from 'dom-to-image';
 import * as fs from 'fs';
 
 const {dialog, BrowserWindow} = remote;
+const currentWindow = remote.getCurrentWindow();
 
 
 class MainHeaderCapture extends Component {
   size = 'small';
 
   handlerSaveImage = (e) => {
-    dialog.showSaveDialog({
+    dialog.showSaveDialog(currentWindow, {
       title: 'Select path for image',
       defaultPath: this.props.currentTime ? `mainView ${moment(this.props.currentTime).format('YYYY-MM-DD HH-mm-ss')}.png` : 'mainView.png',
       properties: ['openFile', 'createDirectory'],

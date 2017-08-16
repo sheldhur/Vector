@@ -4,6 +4,7 @@ import resourcePath from './../../lib/resourcePath';
 import * as fs from 'fs';
 
 const {dialog} = remote;
+const currentWindow = remote.getCurrentWindow();
 
 
 export default function (props) {
@@ -31,7 +32,7 @@ export default function (props) {
     label: 'Save to image',
     icon: resourcePath('./assets/icons/image-export.png'),
     click: () => {
-      dialog.showSaveDialog({
+      dialog.showSaveDialog(currentWindow, {
         title: 'Select path for image',
         defaultPath: 'mapChart.png',
         properties: ['openFile', 'createDirectory'],
