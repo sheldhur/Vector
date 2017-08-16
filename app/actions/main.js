@@ -157,7 +157,7 @@ function openMainPage() {
 
 export function dialogOpenCreateDataBase(settings) {
   return (dispatch) => {
-    let showDialog = settings ? dialog.showOpenDialog : dialog.showSaveDialog;
+    let showDialog = !settings ? dialog.showOpenDialog : dialog.showSaveDialog;
     showDialog(currentWindow, {
       title: !settings ? 'Select database file' : 'Select path for new database',
       defaultPath: 'project.db3',
