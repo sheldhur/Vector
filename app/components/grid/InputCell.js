@@ -53,7 +53,7 @@ class InputCell extends Component {
     this.setState({
       error: false
     }, () => this.input.focus());
-  }
+  };
 
   handleCheck = () => {
     if (this.props.onChange && this.props.value !== this.state.value) {
@@ -118,7 +118,7 @@ class InputCell extends Component {
           </div>
           :
           <div className="input-cell-text-wrapper" onDoubleClick={this.handleEdit}>
-            {value !== null ? value : ' '}
+            {value}&nbsp;
             <Icon type="edit" className="input-cell-icon" onClick={this.handleEdit}/>
           </div>
         }

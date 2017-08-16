@@ -116,15 +116,6 @@ class StationGrid extends Component {
         }/>),
       width: 160
     }, {
-      title: 'F',
-      dataIndex: 'compF',
-      hasFilter: true,
-      hasSorter: true,
-      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('compF', record.id, value, afterAction)
-        }/>),
-      width: 160
-    }, {
       title: '',
       dataIndex: 'format',
       hasFilter: true,

@@ -69,7 +69,7 @@ class DataSetValueActions extends Component {
         </Col>
         <Col span={8} style={{textAlign: 'center'}}>
           <Select
-            value={parseInt(dataSetId)}
+            value={dataSetId}
             style={{ width: 150 }}
             placeholder="Select data series"
             optionFilterProp="children"
@@ -78,7 +78,7 @@ class DataSetValueActions extends Component {
             onChange={this.handlerStationChange}
           >
             {dataSetSorted.map((dataSet, i) => {
-              return <Select.Option key={i} value={dataSet.id}>{dataSet.name}</Select.Option>;
+              return <Select.Option key={dataSet.id.toString()}>{dataSet.name}</Select.Option>;
             })}
           </Select>
           {" "}

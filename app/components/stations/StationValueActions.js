@@ -80,7 +80,7 @@ class StationValueActions extends Component {
         </Col>
         <Col span={8} style={{textAlign: 'center'}}>
           <Select
-            value={parseInt(stationId)}
+            value={stationId}
             style={{ width: 150 }}
             placeholder="Select station"
             optionFilterProp="children"
@@ -89,7 +89,7 @@ class StationValueActions extends Component {
             onChange={this.handlerStationChange}
           >
             {stationsSorted.map((station, i) => {
-              return <Select.Option key={i} value={station.id}>{station.name}</Select.Option>;
+              return <Select.Option key={station.id.toString()}>{station.name}</Select.Option>;
             })}
           </Select>
           {" "}
