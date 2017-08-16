@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import {sprintf} from 'sprintf-js';
 import * as d3 from 'd3';
 import Chart from './lineChart/Chart';
 import Line from './lineChart/Line';
@@ -219,7 +220,7 @@ class LineChart extends Component {
     }
   }
 
-  multiFormat(date) {
+  multiFormatDate(date) {
     let formatMillisecond = d3.timeFormat(":%S.%L"),
       formatSecond = d3.timeFormat(":%S"),
       formatMinute = d3.timeFormat("%H:%M"),
@@ -236,6 +237,10 @@ class LineChart extends Component {
       : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
       : d3.timeYear(date) < date ? formatMonth
       : formatYear)(date);
+  }
+
+  multiFormatFloat(float) {
+    return sprintf('%.5g', float);
   }
 
   render() {
@@ -271,6 +276,7 @@ class LineChart extends Component {
                           orient="left"
                           scale={scale.y[linesGroupKey]}
                           ticks={ticks.y}
+                          format={this.multiFormatFloat}
                           translate={`translate(${currentMarginLeft}, 0)`}>
         <text x={-size.height / 2}
               y="5"
@@ -327,7 +333,7 @@ class LineChart extends Component {
               <Axis orient="bottom"
                     scale={scale.x}
                     ticks={ticks.x}
-                    format={this.multiFormat}
+                    format={this.multiFormatDate}
                     translate={`translate(0, ${size.height})`}/>
             </g>
             {isRenderLines && <g>

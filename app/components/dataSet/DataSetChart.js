@@ -38,7 +38,7 @@ class DataSetChart extends Component {
         let dataSetLine = {
           name: dataSet.name,
           si: dataSet.si,
-          format: '%(name)s: %(y).2f %(si)s',
+          format: '%(name)s: %(y).5g %(si)s',
           style: {
             stroke: colorGroup[dataSetId % colorGroup.length],
             strokeWidth: 1,
