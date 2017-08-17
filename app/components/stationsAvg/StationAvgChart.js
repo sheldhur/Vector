@@ -68,10 +68,10 @@ class StationAvgChart extends Component {
     const colorGroup = app.DATA_SET_COLOR;
 
     let chartData = [];
-    let lineHasValues = {};
 
     if (data) {
       latitudeRanges.forEach((range, rangeKey) => {
+        let lineHasValues = {};
         let latitudeGroup = {
           si: null,
           lines: []
@@ -119,7 +119,11 @@ class StationAvgChart extends Component {
     const {latitudeRanges} = this.props.settings.avgChart;
 
     const preparedData = this.prepareDataForChart();
-    const isEmpty = !preparedData.length;
+    let isEmpty = !preparedData.some((latitudeRange) => {
+      return latitudeRange.some((group) => {
+        return group.lines.length > 0;
+      })
+    });
 
     const Alert = (props) => {
       return (
