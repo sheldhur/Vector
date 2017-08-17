@@ -170,25 +170,13 @@ export function dialogOpenCreateDataBase(settings) {
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
         if (settings) {
-          let settings = {
-            time: {
-              avg: this.state.avg,
-              period: this.state.period,
-              selected: {
-                start: null,
-                end: null,
-              },
-            }
-          };
-
           settings.time.period = {
             start: settings.time.period.start.millisecond(0).toISOString(),
             end: settings.time.period.end.millisecond(0).toISOString(),
           };
-
           settings.time.selected = settings.time.period;
 
-          dispatch(createDataBase(filePaths[0], settings));
+          dispatch(createDataBase(filePaths, settings));
         } else {
           dispatch(openDataBase(filePaths[0]));
         }
