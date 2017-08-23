@@ -68,8 +68,9 @@ export default function (props) {
     }
   }));
   menu.append(new MenuItem({
-    enabled: false,
     label: 'Show in window',
+    enabled: false,
+    visible: process.env.NODE_ENV === 'development',
     icon: resourcePath('./assets/icons/applications-blue.png'),
     click: () => {
       console.log('item 1 clicked')
