@@ -9,13 +9,18 @@ import * as app from './../../constants/app';
 //TODO: время для сегодняшнего дня
 class SettingsDataTimeRage extends Component {
 
+  createRange = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
   disabledRangeTime = (current, type, range) => {
     let disabled = {
       disabledSeconds: () => {
-        let seconds = [...Array(60).keys()];
-        seconds.shift();
-
-        return seconds;
+        return this.createRange(0, 60);
       }
     };
 
@@ -27,7 +32,7 @@ class SettingsDataTimeRage extends Component {
       };
       disabled.disabledMinutes = (selectedHour) => {
         if (selectedHour === rangeHour) {
-          return type === 'start' ? this.createRange(0, rangeMinute) : this.createRange(rangeMinute + 1, 60)
+          return type === 'start' ? this.createRange(0, rangeMinute) : this.createRange(rangeMinute + 1, 60);
         }
       };
     }
