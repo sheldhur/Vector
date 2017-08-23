@@ -82,6 +82,7 @@ class DataSetOptions extends Component {
           title={titleImport}
           visible={showModal}
           onCancel={this.handlerCancelClick}
+          maskClosable={false}
           footer={[
             <Button key="cancel" size="large" onClick={this.handlerCancelClick}>Cancel</Button>
           ]}

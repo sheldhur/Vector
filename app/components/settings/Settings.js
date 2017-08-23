@@ -389,6 +389,7 @@ class Settings extends Component {
           onCancel={this.handlerReset}
           onOk={this.handlerSave}
           visible={this.state.modalVisible}
+          maskClosable={false}
         >
           <Form>
             <Tabs tabPosition="left" defaultActiveKey="1">
