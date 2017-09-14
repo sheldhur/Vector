@@ -170,11 +170,11 @@ export function dialogOpenCreateDataBase(settings) {
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
         if (settings) {
-          settings.time.period = {
-            start: settings.time.period.start.millisecond(0).toISOString(),
-            end: settings.time.period.end.millisecond(0).toISOString(),
+          settings.project.time.period = {
+            start: settings.project.time.period.start.millisecond(0).toISOString(),
+            end: settings.project.time.period.end.millisecond(0).toISOString(),
           };
-          settings.time.selected = settings.time.period;
+          settings.project.time.selected = settings.project.time.period;
 
           dispatch(createDataBase(filePaths, settings));
         } else {

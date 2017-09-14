@@ -53,15 +53,14 @@ class Home extends Component {
 
   handlerDialog = (e, isCreateNew) => {
     const settings = isCreateNew ? {
-      time: {
-        avg: this.state.avg,
-        period: this.state.period,
-        selected: {
-          start: null,
-          end: null,
-        },
+      project: {
+        time: {
+          avg: this.state.avg,
+          period: this.state.period
+        }
       }
     } : undefined;
+
     this.props.mainActions.dialogOpenCreateDataBase(settings)
   };
 
