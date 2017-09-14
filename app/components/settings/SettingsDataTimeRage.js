@@ -20,7 +20,7 @@ class SettingsDataTimeRage extends Component {
   disabledRangeTime = (current, type, range) => {
     let disabled = {
       disabledSeconds: () => {
-        return this.createRange(0, 60);
+        return this.createRange(1, 60);
       }
     };
 
