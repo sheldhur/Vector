@@ -11,6 +11,7 @@ function isNotSpecial(value) {
 
   return stringValue !== '[object RegExp]'
     && stringValue !== '[object Date]'
+    && stringValue !== '[object Array]'
     && !value.hasOwnProperty('_isAMomentObject')
 }
 
