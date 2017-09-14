@@ -60,8 +60,6 @@ function highliteSQl(text, outputType = 'bash') {
     newText = newText.replace(regEx, color.magenta + keyWords[i] + color.none);
   }
 
-  // newText = 'Executing (default): ' + newText;
-
   if (outputType === 'css') {
     let colorCSS = {};
     for (let name in color) {
@@ -92,10 +90,10 @@ function highliteSQl(text, outputType = 'bash') {
   }
 
   return newText;
-};
+}
 
 export default function (string) {
-  string = string.match(/(.*executing\s+\([^\s]+\):\s)(.+)/i);
+  string = string.match(/(.*executing\s+\([^\s]+\):\s)(.+(\s+.+)+)/i);
 
   console.groupCollapsed.apply(console, highliteSQl(string[1] + string[2].replace(/[\r\n\s]+/g, ' '), 'css'));
   console.log.apply(console, highliteSQl(string[1] + sqlformatter.format(string[2]), 'css'));
