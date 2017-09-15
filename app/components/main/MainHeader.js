@@ -7,6 +7,7 @@ import {Button, Input} from 'antd';
 import moment from 'moment';
 import MainHeaderControls from './MainHeaderControls';
 import MainHeaderCapture from './MainHeaderCapture';
+import MainUpdateApp from './MainUpdateApp';
 import Settings from './../settings/Settings';
 import SettingsDataTimeRage from './../settings/SettingsDataTimeRage';
 import * as MainActions from './../../actions/main';
@@ -84,6 +85,7 @@ class MainHeader extends Component {
         <Settings size={this.size}/>
         <MainHeaderControls size={this.size}/>
         <MainHeaderCapture size={this.size}/>
+        <MainUpdateApp/>
       </div>
     );
 

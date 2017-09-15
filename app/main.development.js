@@ -1,8 +1,14 @@
 // @flow
 import {app, BrowserWindow, ipcMain} from 'electron';
+import log from 'electron-log';
+import {autoUpdater} from "electron-updater";
 import MenuBuilder from './menu';
 import configureStore from './store/configureStore';
 import appPackage from './package.json';
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 
 const store = configureStore();
 let mainWindow = null;
@@ -10,6 +16,7 @@ let mainWindow = null;
 if (process.env.NODE_ENV === 'development') {
   app.setName(appPackage.name);
   app.setVersion(appPackage.version);
+  autoUpdater.updateConfigPath = './dev-app-update.yml';
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -18,10 +25,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // if (process.env.NODE_ENV === 'development') {
-  require('electron-debug')(); // eslint-disable-line global-require
-  const path = require('path'); // eslint-disable-line
-  const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
-  require('module').globalPaths.push(p); // eslint-disable-line
+require('electron-debug')(); // eslint-disable-line global-require
+const path = require('path'); // eslint-disable-line
+const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
+require('module').globalPaths.push(p); // eslint-disable-line
 // }
 
 app.on('window-all-closed', () => {
@@ -29,7 +36,7 @@ app.on('window-all-closed', () => {
 });
 
 
-const installExtensions = async() => {
+const installExtensions = async () => {
   if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
 
@@ -49,9 +56,8 @@ const installExtensions = async() => {
   }
 };
 
-app.on('ready', async() => {
+app.on('ready', async () => {
   await installExtensions();
-
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -72,6 +78,8 @@ app.on('ready', async() => {
     mainWindow.show();
     mainWindow.focus();
     mainWindow.maximize();
+
+    autoUpdater.checkForUpdates();
   });
 
   mainWindow.on('closed', () => {
@@ -83,4 +91,17 @@ app.on('ready', async() => {
 
   const menuBuilder = new MenuBuilder(mainWindow, store);
   menuBuilder.buildMenu();
+});
+
+
+autoUpdater.on('download-progress', (progressObj) => {
+  log.info('Downloaded ' + Math.round(progressObj.percent) + '% (' + progressObj.transferred + "/" + progressObj.total + ')');
+});
+autoUpdater.on('update-downloaded', (update) => mainWindow.send('dispatchFromMain', {update}));
+ipcMain.on('installUpdate', () => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('autoUpdater.quitAndInstall()');
+  } else {
+    autoUpdater.quitAndInstall();
+  }
 });

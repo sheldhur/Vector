@@ -43,9 +43,11 @@ if (module.hot) {
 }
 
 ipcRenderer.on('dispatchFromMain', (event, msg) => {
-  if (msg.push !== undefined) {
+  if (msg.push) {
     hashHistory.push(msg.push);
-  } else if (msg.action !== undefined) {
+  } else if (msg.update) {
+    store.dispatch(MainActions.setUpdate(msg.update));
+  } else if (msg.action) {
     if (msg.action === 'getLastDataBase') {
       store.dispatch(MainActions.getLastDataBase(false));
     } else if (msg.action === 'getData') {

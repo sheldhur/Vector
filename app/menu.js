@@ -1,6 +1,7 @@
 // @flow
 import {app, Menu, shell, BrowserWindow, dialog, ipcMain} from 'electron';
 import {push} from 'react-router-redux';
+import {autoUpdater} from "electron-updater";
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -265,13 +266,7 @@ export default class MenuBuilder {
             {
               label: 'About',
               click() {
-                shell.openExternal('http://electron.atom.io');
-              }
-            },
-            {
-              label: 'Check for updates',
-              click() {
-                shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
+                shell.openExternal('https://github.com/sheldhur/Vector/');
               }
             }
           ]

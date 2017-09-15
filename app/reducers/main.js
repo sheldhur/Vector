@@ -8,6 +8,7 @@ const initialState = {
   settings: {...DEFAULT_SETTINGS},
   error: null,
   dbPath: null,
+  update: null
 };
 
 export default function main(state = initialState, action) {
@@ -25,6 +26,8 @@ export default function main(state = initialState, action) {
       return {...state, settings};
     case types.ERROR:
       return {...state, error: action.payload};
+    case types.UPDATE:
+      return {...state, update: action.payload};
     case types.DB_PATH:
       return {...state, dbPath: action.payload};
     default:

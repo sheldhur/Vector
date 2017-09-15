@@ -73,7 +73,14 @@
     "directories": {
       "buildResources": "resources",
       "output": "release"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "sheldhur",
+        "repo": "Vector"
+      }
+    ]
   },
   "bin": {
     "electron": "./node_modules/.bin/electron"
@@ -202,7 +209,9 @@
     "deep-assign": "^2.0.0",
     "dom-to-image": "^2.5.2",
     "electron-debug": "^1.4.0",
+    "electron-log": "^2.2.9",
     "electron-redux": "^1.3.0",
+    "electron-updater": "^2.8.9",
     "hex-to-rgb": "^1.0.1",
     "interpolating-polynomial": "^1.1.2",
     "moment": "^2.18.1",

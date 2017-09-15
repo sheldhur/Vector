@@ -19,6 +19,13 @@ export function setError(payload) {
   };
 }
 
+export function setUpdate(payload) {
+  return {
+    type: types.UPDATE,
+    payload
+  };
+}
+
 export function setSettings(payload) {
   return {
     type: types.SETTINGS,
