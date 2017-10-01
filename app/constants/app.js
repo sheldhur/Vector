@@ -7,7 +7,7 @@ export const FILE_EXT_DB = ['db3', 'db'];
 export const IMPORT_AVG = ['seconds', 'minutes'];
 export const IMPORT_AVG_DATA = ['Only station data', 'All data'];
 export const IMPORT_TYPE_DATA_SET = ['CDAWeb', 'GOES', 'CSV'].sort();
-export const IMPORT_TYPE_STATION = ['IAGA-2002', 'IAGA-2000', 'CSV', 'CDAWeb', 'CARISMA', '210 MM', 'MagBase', 'SAMNET'].sort();
+export const IMPORT_TYPE_STATION = ['IAGA-2002', 'IAGA-2000', 'CSV', 'CDAWeb', 'CARISMA', '210 MM', 'MagBase', 'SAMNET', 'IMAGE'].sort();
 
 export const FORMAT_DATE_INPUT = 'DD.MM.YYYY HH:mm';
 export const FORMAT_DATE_SQL = 'YYYY-MM-DD HH:mm:ss.SSS';

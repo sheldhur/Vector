@@ -7,6 +7,7 @@ import magBase from './parsers/magBase';
 import mm210 from './parsers/mm210';
 import samnet from './parsers/samnet';
 import goes from './parsers/goes';
+import imageColumnOld from './parsers/imageColumnOld';
 
 import toIaga2002 from './formatters/toIaga2002';
 
@@ -20,5 +21,6 @@ export default {
   mm210,
   samnet,
   goes,
+  imageColumnOld,
   toIaga2002,
 }

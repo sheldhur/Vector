@@ -34,13 +34,18 @@ export default function (dbSession, data) {
 
   Promise.map(filePaths, (filePath) => {
     process.send({event: 'setCurrentFile', filePath});
-    return readFile(filePath, fileType)
-      .then((data) => saveStation(data, fileType))
-      .then((result) => prepareValues(result, time))
-      .then((result) => saveStationValues(result, filePaths, fileCurrent++))
-      .catch((error) => {
-        console.error(error);
-      });
+    return readFile(filePath, fileType).then((readResult) => {
+      let stationsData = Array.isArray(readResult) ? readResult : [readResult];
+
+      return Promise.map(stationsData, (stationData) => {
+        return saveStation(stationData, fileType)
+          .then((result) => prepareValues(result, time))
+          .then((result) => saveStationValues(result, filePaths, stationsData, fileCurrent++))
+          .catch((error) => {
+            console.error(error);
+          });
+      }, {concurrency: 1});
+    });
   }, {concurrency: 1});
 }
 
@@ -57,12 +62,15 @@ function readFile(filePath, fileType) {
     return geomag.magBase(filePath);
   } else if (fileType === 'SAMNET') {
     return geomag.samnet(filePath);
+  } else if (fileType === 'IMAGE') {
+    return geomag.imageColumnOld(filePath);
   } else {
     return Promise.reject(new Error(`File type ${fileType} is not supported`));
   }
 }
 
 function saveStation(data, fileType) {
+  console.log(data);
   let props = {
     name: data.properties.code.toUpperCase(),
     source: fileType,
@@ -210,7 +218,7 @@ function prepareInterpolatedValues(rows, time, method = VALUES_RAW) {
   return [];
 }
 
-function saveStationValues(data, files, fileCurrent) {
+function saveStationValues(data, files, stations, fileCurrent) {
   let {station, format, rows} = data;
 
   return new Promise((resolve, reject) => {
@@ -227,7 +235,7 @@ function saveStationValues(data, files, fileCurrent) {
         row = convertToXY(row, station.reported);
         row[0] = moment(row[0]).format(db.formatTime);
         stmt.run(...row, station.id, format, (error) => {
-          let newProgress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
+          let newProgress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
           if (newProgress.current > progress.current) {
             progress = newProgress;
             process.send({event: 'setProgress', progress});
