@@ -93,9 +93,13 @@ function highliteSQl(text, outputType = 'bash') {
 }
 
 export default function (string) {
-  string = string.match(/(.*executing\s+\([^\s]+\):\s)(.+(\s+.+)+)/i);
+  let stringSplit = string.match(/(.*executing\s+\([^\s]+\):\s)(.+(\s+.+)*)/i);
 
-  console.groupCollapsed.apply(console, highliteSQl(string[1] + string[2].replace(/[\r\n\s]+/g, ' '), 'css'));
-  console.log.apply(console, highliteSQl(string[1] + sqlformatter.format(string[2]), 'css'));
-  console.groupEnd();
+  try {
+    console.groupCollapsed.apply(console, highliteSQl(stringSplit[1] + stringSplit[2].replace(/[\r\n\s]+/g, ' '), 'css'));
+    console.log.apply(console, highliteSQl(stringSplit[1] + sqlformatter.format(stringSplit[2]), 'css'));
+    console.groupEnd();
+  } catch (e) {
+    throw new Error("Can't parse query string: " + string);
+  }
 }
