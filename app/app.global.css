@@ -50,6 +50,7 @@ hr {
 
 @import "./components/main/Main.css";
 @import "./components/main/MainHeader.css";
+@import "./components/main/MainUpdateApp.css";
 @import "./components/settings/Settings.css";
 
 @import "./components/grid/Grid.css";

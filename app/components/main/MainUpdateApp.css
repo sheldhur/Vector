@@ -1,0 +1,13 @@
+.main-update-app .ant-modal-body p {
+  margin-bottom: 8px;
+}
+
+.main-update-app .ant-modal-body ul {
+  margin-bottom: 16px;
+  padding-left: 2em;
+  list-style-type: disc;
+}
+
+.main-update-app .ant-modal-body strong{
+  font-weight: 600;
+}
