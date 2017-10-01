@@ -2,9 +2,10 @@ import {push} from 'react-router-redux';
 import {hashHistory} from 'react-router';
 import {remote} from 'electron';
 import * as fs from 'fs';
+import moment from 'moment';
 import deepAssign from './../lib/deepAssign';
 import dbConnect from './../database/dbConnect';
-import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB, FILE_EXT_DB, FILE_EXT_ALL} from './../constants/app';
+import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB, FILE_EXT_DB, FILE_EXT_ALL, FORMAT_DATE_SQL} from './../constants/app';
 import * as types from './../constants/main';
 
 const {dialog} = remote;
@@ -74,6 +75,11 @@ export function saveSettings(values, useDefault = false) {
       return source.length > 0 ? source : destination;
     });
 
+    settings.project.time.period.start = moment(settings.project.time.period.start).format(FORMAT_DATE_SQL);
+    settings.project.time.period.end = moment(settings.project.time.period.end).format(FORMAT_DATE_SQL);
+    settings.project.time.selected.start = moment(settings.project.time.selected.start).format(FORMAT_DATE_SQL);
+    settings.project.time.selected.end = moment(settings.project.time.selected.end).format(FORMAT_DATE_SQL);
+
     let settingsProject = JSON.stringify(settings.project, null, 2);
     let settingsApp = JSON.stringify(settings.app, null, 2);
 
@@ -87,6 +93,12 @@ export function loadSettings(id = 1) {
   return (dispatch) => {
     return db.Project.findById(id)
       .then((project) => {
+
+        project.settings.time.period.start = moment(project.settings.time.period.start, FORMAT_DATE_SQL);
+        project.settings.time.period.end = moment(project.settings.time.period.end, FORMAT_DATE_SQL);
+        project.settings.time.selected.start = moment(project.settings.time.selected.start, FORMAT_DATE_SQL);
+        project.settings.time.selected.end = moment(project.settings.time.selected.end, FORMAT_DATE_SQL);
+
         return {app: {}, project: project.settings}
       })
       .then((settings) => {
