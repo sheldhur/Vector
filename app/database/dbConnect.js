@@ -2,6 +2,44 @@ import Sequelize from 'sequelize';
 import models from './models';
 import consoleLogSQL from './../lib/consoleLogSQL';
 
+const Op = Sequelize.Op;
+const operatorsAliases = {
+  $eq: Op.eq,
+  $ne: Op.ne,
+  $gte: Op.gte,
+  $gt: Op.gt,
+  $lte: Op.lte,
+  $lt: Op.lt,
+  $not: Op.not,
+  $in: Op.in,
+  $notIn: Op.notIn,
+  $is: Op.is,
+  $like: Op.like,
+  $notLike: Op.notLike,
+  $iLike: Op.iLike,
+  $notILike: Op.notILike,
+  $regexp: Op.regexp,
+  $notRegexp: Op.notRegexp,
+  $iRegexp: Op.iRegexp,
+  $notIRegexp: Op.notIRegexp,
+  $between: Op.between,
+  $notBetween: Op.notBetween,
+  $overlap: Op.overlap,
+  $contains: Op.contains,
+  $contained: Op.contained,
+  $adjacent: Op.adjacent,
+  $strictLeft: Op.strictLeft,
+  $strictRight: Op.strictRight,
+  $noExtendRight: Op.noExtendRight,
+  $noExtendLeft: Op.noExtendLeft,
+  $and: Op.and,
+  $or: Op.or,
+  $any: Op.any,
+  $all: Op.all,
+  $values: Op.values,
+  $col: Op.col
+};
+
 export let db;
 
 let dbConnect = (dbPath) => {
@@ -17,20 +55,12 @@ let dbConnect = (dbPath) => {
           } else {
             consoleLogSQL(log);
           }
-          // if (process.env.NODE_ENV === 'development') {
-          //   if (process.env.ELECTRON_VERSION) {
-          //     process.send({consoleLogSQL: log});
-          //   } else {
-          //     consoleLogSQL(log);
-          //   }
-          // } else {
-          //   console.log(log);
-          // }
         }
       },
       define: {
         timestamps: false
-      }
+      },
+      operatorsAliases
     });
 
     db = {};
@@ -77,5 +107,3 @@ let dbConnect = (dbPath) => {
 };
 
 export default dbConnect;
-// exports['default'] = dbConnect;
-// module.exports = exports['default'];
