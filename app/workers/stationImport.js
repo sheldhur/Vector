@@ -70,7 +70,6 @@ function readFile(filePath, fileType) {
 }
 
 function saveStation(data, fileType) {
-  console.log(data);
   let props = {
     name: data.properties.code.toUpperCase(),
     source: fileType,

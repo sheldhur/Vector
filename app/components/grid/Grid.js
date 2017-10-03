@@ -38,13 +38,16 @@ class Grid extends Component {
       if (!match) {
         return null;
       } else {
-        props[dataIndex] = (
-          <span dangerouslySetInnerHTML={{
-            __html: value.replace(reg[dataIndex], (str) => {
-              return '<span class="highlight">' + str + '</span>';
-            })
-          }}/>
-        );
+        props[dataIndex] = {
+          text: value,
+          search: reg[dataIndex],
+          updateFilter: () => {
+            this.setState({
+              data: this.filterData(this.props.data, reg)
+            });
+            console.log('updateFilter');
+          }
+        }
       }
     }
     return {...item, ...props};
@@ -76,18 +79,23 @@ class Grid extends Component {
       }
     }
 
-    let data = this.props.data;
-    if (data) {
-      data = data.map((item, i) => {
-        return this.columnFilter(item, reg);
-      }).filter(item => !!item);
-    }
+    let data = this.filterData(this.props.data, reg);
 
     this.setState({
       filterDropdownVisible: false,
       data,
       filterValue
     });
+  }
+
+  filterData (data, reg) {
+    if (data) {
+      data = data.map((item, i) => {
+        return this.columnFilter(item, reg);
+      }).filter(item => !!item);
+    }
+
+    return data;
   }
 
   handlerFilterChange(e, reset = false) {

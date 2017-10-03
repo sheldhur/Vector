@@ -32,7 +32,7 @@ class StationGrid extends Component {
   fixPageSize = () => {
     setTimeout(() => {
       this.calcPageSize();
-    }, 100);
+    }, 300);
   };
 
   //TODO: прибить пагинатор к низу
@@ -43,13 +43,12 @@ class StationGrid extends Component {
     let theadHeight = grid.querySelector('thead').clientHeight || 0;
     let paginationHeight = pagination ? pagination.clientHeight : 0;
     let row = grid.querySelector('tbody > tr');
+    let rowHeight = row ? row.offsetHeight : 25;
     let availableSize = window.innerHeight - grid.getBoundingClientRect().top;
 
-    if (row) {
-      let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / row.offsetHeight);
-      if (pageSize > 0) {
-        this.setState({availableSize, pageSize});
-      }
+    let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
+    if (pageSize > 0) {
+      this.setState({availableSize, pageSize});
     }
   };
 
@@ -115,7 +114,9 @@ class StationGrid extends Component {
           <Popconfirm
             placement="left"
             title="Are you sure delete this station?"
-            onConfirm={() => {this.props.stationActions.deleteStation({id: record.id})}}
+            onConfirm={() => {
+              this.props.stationActions.deleteStation({id: record.id})
+            }}
             okText="Yes"
             cancelText="No"
           >
@@ -136,7 +137,7 @@ class StationGrid extends Component {
           columns={columns}
           data={data}
           loading={isLoading}
-          pagination={{ size: 'small', pageSize: this.state.pageSize }}
+          pagination={{size: 'small', pageSize: this.state.pageSize}}
           size="x-small"
           bordered={true}
         />

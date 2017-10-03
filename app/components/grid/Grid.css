@@ -43,6 +43,11 @@
   white-space: nowrap;
 }
 
+.ant-table .highlight{
+  color: darkred;
+  font-weight: bold;
+}
+
 @import "InputCell.css";
 @import "CheckboxCell.css";
 @import "SelectCell.css";

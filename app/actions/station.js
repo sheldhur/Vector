@@ -141,12 +141,14 @@ export function getStationViewValues(args) {
 
 export function updateStation(id, fields, callback) {
   return (dispatch) => {
-    console.log(db);
+    let result;
+
     db.Station
       .update(fields, {where: {id}})
-      .then((result) => callback ? callback({result}) : result)
+      .then((res) => result = res)
       .then(() => db.Station.find({where: {id}}))
       .then((stationValue) => dispatch(_updateStation(id, stationValue.get({plain: true}))))
+      .then(() => callback ? callback({result}) : result)
       .catch((error) => {
         if (callback) {
           callback({error})
@@ -172,11 +174,14 @@ function _updateStation(id, fields) {
 
 export function updateStationValue(id, fields, callback) {
   return (dispatch) => {
+    let result;
+
     db.StationValue
       .update(fields, {where: {id}})
-      .then((result) => callback ? callback({result}) : result)
+      .then((res) => result = res)
       .then(() => db.StationValue.find({where: {id}}))
       .then((stationValue) => dispatch(_updateStationValue(id, stationValue.get({plain: true}))))
+      .then(() => callback ? callback({result}) : result)
       .catch((error) => {
         if (callback) {
           callback({error})

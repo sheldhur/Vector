@@ -75,11 +75,14 @@ export function getData() {
 
 export function updateDataSet(id, fields, callback) {
   return (dispatch) => {
+    let result;
+
     db.DataSet
       .update(fields, {where: {id}})
-      .then((result) => callback ? callback({result}) : result)
+      .then((res) => result = res)
       .then(() => db.DataSet.find({where: {id}}))
       .then((dataSet) => dispatch(_updateDataSet(id, dataSet.get({plain: true}))))
+      .then(() => callback ? callback({result}) : result)
       .catch((error) => {
         if (callback) {
           callback({error})
@@ -145,11 +148,14 @@ function _deleteDataSet(dataSetIds) {
 
 export function updateDataSetValue(id, fields, callback) {
   return (dispatch) => {
+    let result;
+
     db.DataSetValue
       .update(fields, {where: {id}})
-      .then((result) => callback ? callback({result}) : result)
+      .then((res) => result = res)
       .then(() => db.DataSetValue.find({where: {id}}))
       .then((dataSetValue) => dispatch(_updateDataSetValue(id, dataSetValue.get({plain: true}))))
+      .then(() => callback ? callback({result}) : result)
       .catch((error) => {
         if (callback) {
           callback({error})

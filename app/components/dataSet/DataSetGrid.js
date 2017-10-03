@@ -32,7 +32,7 @@ class DataSetGrid extends Component {
   fixPageSize = () => {
     setTimeout(() => {
       this.calcPageSize();
-    }, 100);
+    }, 300);
   };
 
   calcPageSize = () => {
@@ -53,7 +53,6 @@ class DataSetGrid extends Component {
   };
 
   handleCellChange = (field, id, value, afterAction) => {
-    console.log({[field]: value});
     this.props.dataSetActions.updateDataSet(id, {[field]: value}, afterAction);
   };
 
@@ -75,6 +74,8 @@ class DataSetGrid extends Component {
       }, {
         title: 'Name',
         dataIndex: 'name',
+        hasFilter: true,
+        hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('name', record.id, value, afterAction)
         }/>)
@@ -82,6 +83,8 @@ class DataSetGrid extends Component {
         title: 'SI',
         dataIndex: 'si',
         width: 75,
+        hasFilter: true,
+        hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('si', record.id, value, afterAction)
         }/>)
@@ -89,6 +92,8 @@ class DataSetGrid extends Component {
         title: 'Bad value',
         dataIndex: 'badValue',
         width: 75,
+        hasFilter: true,
+        hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('badValue', record.id, value, afterAction)
         }/>)
@@ -103,6 +108,8 @@ class DataSetGrid extends Component {
         title: 'Axis Y',
         dataIndex: 'axisY',
         width: 30,
+        hasFilter: true,
+        hasSorter: true,
         render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsAxisY} onChange={
           (value, afterAction) => this.handleCellChange('axisY', record.id, value, afterAction)
         }/>)
@@ -110,6 +117,8 @@ class DataSetGrid extends Component {
         title: 'Group',
         dataIndex: 'axisGroup',
         width: 50,
+        hasFilter: true,
+        hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('axisGroup', record.id, value, afterAction)
         }/>)

@@ -1,6 +1,7 @@
 // @flow
 import React, {Component, PropTypes} from 'react';
 import {Input, Icon, Popconfirm} from 'antd';
+import HighlightValue from './HighlightValue';
 
 
 const ESCAPE_KEY = 27;
@@ -14,8 +15,15 @@ class InputCell extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.value !== nextProps.value) {
-      this.setState({value: nextProps.value});
+    const {value, editable} = this.state;
+    const isUpdate = nextProps.value && nextProps.value.hasOwnProperty('search') ?
+      (value.text !== nextProps.value || value.search !== nextProps.search) :
+      (value !== nextProps.value);
+
+    if (isUpdate) {
+      this.setState({
+        value: nextProps.value
+      });
     }
   }
 
@@ -30,8 +38,8 @@ class InputCell extends Component {
   };
 
   handleChange = (e) => {
-    const value = e.target.value;
-    this.setState({value});
+    const {value} = e.target;
+    this.setState({value: value});
   };
 
   handleKeyDown = (e) => {
@@ -59,7 +67,7 @@ class InputCell extends Component {
     if (this.props.onChange && this.props.value !== this.state.value) {
       if (!this.state.error) {
         this.setState({isSaved: true}, () => {
-          this.props.onChange(this.state.value, this.afterAction)
+          this.props.onChange(this.state.value, (value) => this.afterAction(value));
         });
       }
     } else {
@@ -78,6 +86,10 @@ class InputCell extends Component {
       this.setState({
         editable: false,
         isSaved: false,
+      }, () => {
+        if (this.props.value && this.props.value.hasOwnProperty('updateFilter')) {
+          this.props.value.updateFilter();
+        }
       });
     }
   };
@@ -88,6 +100,15 @@ class InputCell extends Component {
       <h4>{error.name}</h4>
       <p>{error.message}</p>
     </div> : null;
+
+    let plainValue = null;
+    let search = null;
+    if (value && value.hasOwnProperty('text')) {
+      plainValue = value.text;
+      search = value.search;
+    } else {
+      plainValue = value
+    }
 
     return (
       <div className="input-cell">
@@ -103,7 +124,7 @@ class InputCell extends Component {
             >
               <Input
                 ref={(el) => this.input = el}
-                value={value}
+                value={plainValue}
                 disabled={isSaved}
                 onChange={!isSaved ? this.handleChange : null}
                 onPressEnter={!isSaved ? this.handleCheck : null}
@@ -118,7 +139,7 @@ class InputCell extends Component {
           </div>
           :
           <div className="input-cell-text-wrapper" onDoubleClick={this.handleEdit}>
-            {value}&nbsp;
+            <HighlightValue value={plainValue} search={search}/>&nbsp;
             <Icon type="edit" className="input-cell-icon" onClick={this.handleEdit}/>
           </div>
         }

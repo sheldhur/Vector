@@ -1,6 +1,7 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {Select, Icon, Popconfirm} from 'antd';
+import HighlightValue from './HighlightValue';
 
 
 class SelectCell extends Component {
@@ -9,11 +10,18 @@ class SelectCell extends Component {
     value: this.props.value,
     isSaved: false,
     error: false
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.value !== nextProps.value) {
-      this.setState({value: nextProps.value});
+    const {value} = this.state;
+    const isUpdate = nextProps.value && nextProps.value.hasOwnProperty('search') ?
+      (value.text !== nextProps.value || value.search !== nextProps.search) :
+      (value !== nextProps.value);
+
+    if (isUpdate) {
+      this.setState({
+        value: nextProps.value
+      });
     }
   }
 
@@ -46,6 +54,10 @@ class SelectCell extends Component {
     } else {
       this.setState({
         isSaved: false,
+      }, () => {
+        if (this.props.value && this.props.value.hasOwnProperty('updateFilter')) {
+          this.props.value.updateFilter();
+        }
       });
     }
   };
@@ -57,6 +69,15 @@ class SelectCell extends Component {
       <p>{error.message}</p>
     </div> : null;
 
+    let plainValue = null;
+    let search = null;
+    if (value && value.hasOwnProperty('text')) {
+      plainValue = value.text;
+      search = value.search;
+    } else {
+      plainValue = value
+    }
+
     return (
       <div className={"select-cell" + (error ? ' error' : '') + (isSaved ? ' saved' : '')}>
         <Popconfirm
@@ -67,7 +88,8 @@ class SelectCell extends Component {
           onConfirm={this.handleConfirm}
         >
           <Select
-            ref={(el) => this.input = el} value={value}
+            ref={(el) => this.input = el}
+            value={plainValue}
             onChange={this.handleChange}
             size="small"
             dropdownMatchSelectWidth={false}
@@ -75,7 +97,11 @@ class SelectCell extends Component {
           >
             {this.props.options.map((item, i) => {
               let key = item.value || i;
-              return <Select.Option key={key} value={key}>{item.text || item}</Select.Option>
+              return (
+                <Select.Option key={key} value={key}>
+                  <HighlightValue value={item.text || item} search={search}/>
+                </Select.Option>
+              );
             })}
           </Select>
         </Popconfirm>
