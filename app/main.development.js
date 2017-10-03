@@ -64,7 +64,7 @@ app.on('ready', async () => {
     width: 1450,
     height: 800,
     backgroundColor: '#222222',
-    title: app.getName(),
+    title: `${app.getName()} ${app.getVersion()}`,
     webPreferences: {
       devTools: true,
     }

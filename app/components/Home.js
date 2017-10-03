@@ -84,7 +84,7 @@ class Home extends Component {
       <div className="home-page">
         <Row justify="center" align="middle">
           <Col span={12} offset={6}>
-            <Card title={`${remote.app.getName()} v${remote.app.getVersion()}`} bordered={false}>
+            <Card title={remote.app.getName()} bordered={false}>
               <Row>
                 <Button
                   icon="file"
