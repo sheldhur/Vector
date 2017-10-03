@@ -7,6 +7,9 @@
    padding: 0 10px;
  }
 
+.dataset-values-view .dataset-actions .ant-btn {
+  line-height: normal;
+}
 
 .dataset-view .dataset-import {
   text-align: center;

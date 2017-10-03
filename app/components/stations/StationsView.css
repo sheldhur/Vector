@@ -8,6 +8,10 @@
   padding: 0 10px;
 }
 
+.stations-view .station-actions .ant-btn {
+  line-height: normal;
+}
+
 .stations-view .station-import {
   text-align: center;
 }
