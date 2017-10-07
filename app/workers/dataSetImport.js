@@ -55,7 +55,6 @@ function readFile(filePath, fileType) {
 }
 
 function saveDataSets(data) {
-  process.send({data});
   return new Promise((resolve, reject) => {
     let results = [];
     Promise.map(data.columns, (item, i) => {
