@@ -41,8 +41,11 @@ class StationAvgChart extends Component {
         0: 'DateTime'
       }
     };
+
+    let linesEnabled = lines.filter((line) => line.enabled);
+
     latitudeRanges.forEach((range, rangeKey) => {
-      lines.forEach((line, lineKey) => {
+      linesEnabled.forEach((line, lineKey) => {
         let colKey = rangeKey + '-' + lineKey;
 
         csvData[0][colKey] = line.comp.replace(/^d/, 'Δ') + ' ' + line.hemisphere + ' ' + range.toString();
