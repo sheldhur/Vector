@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 
 
 class Line extends Component {
@@ -12,6 +13,6 @@ class Line extends Component {
 Line.defaultProps = {
   path: '',
   style: {},
-}
+};
 
 export default Line;

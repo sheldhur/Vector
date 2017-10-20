@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from "react";
+import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert} from "antd";

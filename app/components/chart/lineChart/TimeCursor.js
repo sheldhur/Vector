@@ -1,6 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import moment from 'moment';
 
 class TimeCursor extends Component {
 

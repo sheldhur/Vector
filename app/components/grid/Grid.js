@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {Table, Input, Button, Icon} from 'antd';
 
 import InputCell from './InputCell';

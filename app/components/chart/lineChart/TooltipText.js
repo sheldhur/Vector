@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 

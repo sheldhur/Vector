@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {Checkbox, Icon, Popconfirm} from 'antd';
 
 

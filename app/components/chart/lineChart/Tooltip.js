@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {sprintf} from 'sprintf-js';

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import MapCylindrical from './mapChart/MapCylindrical';
 import MapAzimuthal from './mapChart/MapAzimuthal';

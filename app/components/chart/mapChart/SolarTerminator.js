@@ -1,4 +1,6 @@
-import React, {Component, PropTypes, ReactDOM} from 'react';
+// @flow
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';

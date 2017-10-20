@@ -1,8 +1,8 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {remote} from 'electron';
 import {Icon} from 'antd';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';

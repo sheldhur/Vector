@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 
@@ -70,6 +71,6 @@ Axis.defaultProps = {
   ticks: 5,
   tickValues: undefined,
   format: undefined
-}
+};
 
 export default Axis;

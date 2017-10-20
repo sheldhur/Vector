@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 
 
 //TODO: зависит от даты, прикрутить модели IGRF и WWM https://upload.wikimedia.org/wikipedia/commons/d/de/World_Magnetic_Inclination_2015.pdf

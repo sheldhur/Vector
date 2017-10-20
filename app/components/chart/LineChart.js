@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {sprintf} from 'sprintf-js';
 import * as d3 from 'd3';

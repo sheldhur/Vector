@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react';
-import ReactDOM from 'react-dom';
+// @flow
+import React, {Component} from 'react';
 import * as d3 from 'd3';
 import Chart from './Chart';
 import World from './World';

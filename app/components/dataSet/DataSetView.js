@@ -1,8 +1,8 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Row, Col} from 'antd';
+import {Row} from 'antd';
 import DataSetImport from './DataSetImport';
 import DataSetChart from './DataSetChart';
 import DataSetGrid from './DataSetGrid';

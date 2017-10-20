@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {ResizeblePanel, Panel} from './../widgets/ResizeblePanel';
 import Hav from './../graphics/Hav';
 import DataSet from './DataSetChart';

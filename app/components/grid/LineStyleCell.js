@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {Icon, Popconfirm, Popover, Button, Form, Input, Tag} from 'antd';
 import {SketchPicker} from 'react-color';
 import FontAwesome from 'react-fontawesome';

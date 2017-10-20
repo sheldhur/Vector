@@ -1,4 +1,5 @@
-import React, {Component, PropTypes, ReactDOM} from 'react';
+// @flow
+import React, {Component} from 'react';
 
 
 class Chart extends Component {
@@ -16,7 +17,6 @@ class Chart extends Component {
   }
 }
 
-Chart.propTypes = {};
 Chart.defaultProps = {
   style: {},
 };

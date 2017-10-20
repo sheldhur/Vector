@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+// @flow
+import React, {Component} from 'react';
 import * as fs from 'fs';
 import * as topojson from 'topojson';
 import resourcePath from './../../../lib/resourcePath';

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes, ReactDOM} from 'react';
+// @flow
+import React, {Component} from 'react';
 
 
 class Graticule extends Component {
