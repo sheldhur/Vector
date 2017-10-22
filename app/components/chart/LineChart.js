@@ -19,40 +19,27 @@ import './../../utils/helper';
 //TODO: Убрать зависимости от redux, сделать компонент полностью универсальным
 //TODO: вынести ререндер Tooltip, TimeCursor, StationsVector в отдельный svg, т.к. они польностью перерисовываюь и жрет время
 class LineChart extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.handleResize = ::this.handleResize;
-
-    this.addPixels = 10;
-
-    this.state = {
-      axisSize: {},
-      wrapperSize: {
-        width: undefined,
-        height: undefined
-      }
+  addPixels = 10;
+  state = {
+    axisSize: {},
+    wrapperSize: {
+      width: undefined,
+      height: undefined
     }
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
     setTimeout(this.handleResize, 1);
     // this.handleResize();
 
     if (this.props.width == '100%' || this.props.height == '100%') {
       window.addEventListener('resize', this.handleResize);
     }
-
-    // let chart = d3.select(ReactDOM.findDOMNode(this.refs.testG));
-    // chart.call(d3.zoom().on('zoom', () => {
-    //   console.log(d3.event.transform);
-    // }));
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('resize', this.handleResize);
-  }
+  };
 
   // componentDidUpdate(nextProps) {
   //   console.log([this.props.lastRender, nextProps.lastRender]);
@@ -70,15 +57,15 @@ class LineChart extends Component {
   //   }
   // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // if (JSON.stringify(nextState.axisSize) === JSON.stringify(this.state.axisSize)) {
-    //return false;
-    // }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (JSON.stringify(nextState.axisSize) === JSON.stringify(this.state.axisSize)) {
+  //   return false;
+  //   }
+  //
+  //   return true;
+  // }
 
-    return true;
-  }
-
-  handleResize(e) {
+  handleResize = (e) => {
     let svgWrapper = ReactDOM.findDOMNode(this.refs.svgWrapper);
     let title = ReactDOM.findDOMNode(this.refs.title);
 
@@ -91,9 +78,9 @@ class LineChart extends Component {
         }
       });
     }
-  }
+  };
 
-  getAxisSize() {
+  getAxisSize = () => {
     let size = {
       x: {
         width: [],
@@ -103,7 +90,7 @@ class LineChart extends Component {
         width: [],
         height: []
       }
-    }
+    };
 
     let chart = d3.select(ReactDOM.findDOMNode(this.refs.chart));
 
@@ -122,11 +109,11 @@ class LineChart extends Component {
     return size;
   }
 
-  calculateAxisMargin(axisSize) {
+  calculateAxisMargin = (axisSize) => {
     let margin = {
       left: 0,
       bottom: 0
-    }
+    };
 
     if (axisSize.y !== undefined) {
       margin.left = axisSize.y.width.summ() + ((axisSize.y.width.length - 1) * this.addPixels);
@@ -137,9 +124,9 @@ class LineChart extends Component {
     }
 
     return margin;
-  }
+  };
 
-  calculateSize(wrapperSize, margin, axisMargin) {
+  calculateSize = (wrapperSize, margin, axisMargin) => {
     let containerSize = {
       width: (this.props.width == '100%') ? wrapperSize.width || 100 : this.props.width,
       height: (this.props.height == '100%') ? wrapperSize.height || 100 : this.props.height,
@@ -150,9 +137,9 @@ class LineChart extends Component {
       height: containerSize.height - margin.top - margin.bottom - axisMargin.bottom,
       container: containerSize
     }
-  }
+  };
 
-  prepareData(data, isGroupX = false, isGroupY = true) {
+  prepareData = (data, isGroupX = false, isGroupY = true) => {
     let extent = {
       x: [],
       y: []
@@ -203,12 +190,16 @@ class LineChart extends Component {
     });
 
     return {data: data, extent: extent};
-  }
+  };
 
-  getScale(extent, size) {
+  getScaleType = (value) => {
+    return Object.prototype.toString.call(value) === '[object Date]' ? d3.scaleTime() : d3.scaleLinear();
+  };
+
+  getScale = (extent, size) => {
     // + (item.y / 100 * 10)
     return {
-      x: d3.scaleTime().range([0, size.width]).domain(extent.x),
+      x: this.getScaleType(extent.x[0]).range([0, size.width]).domain(extent.x),
       y: extent.y.map(item => {
         let min = Math.min(...item);
         let max = Math.max(...item);
@@ -217,12 +208,12 @@ class LineChart extends Component {
         max += padding * 10;
         min -= padding * 5;
 
-        return d3.scaleLinear().range([size.height, 0]).domain([min, max]);
+        return this.getScaleType(min).range([size.height, 0]).domain([min, max]);
       })
     }
-  }
+  };
 
-  multiFormatDate(date) {
+  multiFormatDate = (date) => {
     let formatMillisecond = d3.timeFormat(":%S.%L"),
       formatSecond = d3.timeFormat(":%S"),
       formatMinute = d3.timeFormat("%H:%M"),
@@ -239,13 +230,21 @@ class LineChart extends Component {
       : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
       : d3.timeYear(date) < date ? formatMonth
       : formatYear)(date);
-  }
+  };
 
-  multiFormatFloat(float) {
+  multiFormatFloat = (float) => {
     return sprintf('%.5g', float);
-  }
+  };
 
-  render() {
+  multiFormat = (value) => {
+    if (Object.prototype.toString.call(value) === '[object Date]') {
+      return this.multiFormatDate(value);
+    }
+
+    return this.multiFormatFloat(value);
+  };
+
+  render = () => {
     console.info('RERENDER CHART');
     const {axisSize, wrapperSize} = this.state;
 
@@ -278,7 +277,7 @@ class LineChart extends Component {
                           orient="left"
                           scale={scale.y[linesGroupKey]}
                           ticks={ticks.y}
-                          format={this.multiFormatFloat}
+                          format={this.multiFormat}
                           translate={`translate(${currentMarginLeft}, 0)`}>
         <text x={-size.height / 2}
               y="5"
@@ -310,6 +309,11 @@ class LineChart extends Component {
       <div className="svg-wrapper" ref="svgWrapper">
         {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
         <Chart width={size.container.width} height={size.container.height} ref="chart" shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+          <defs>
+            <clipPath id="clip">
+              <rect width={size.width} height={size.height}/>
+            </clipPath>
+          </defs>
           <g transform={`translate(${margin.left}, ${margin.top})`}>
             {isRenderLines && <g>
               <g className="axisGrid" transform={`translate(${axisMargin.left}, 0)`}>
@@ -321,10 +325,10 @@ class LineChart extends Component {
                 <Grid orient="bottom"
                       scale={scale.x}
                       ticks={ticks.x}
-                      tickSize={-size.height} w
+                      tickSize={-size.height}
                       translate={`translate(0, ${size.height})`}/>
               </g>
-              <g className="lines" transform={`translate(${axisMargin.left}, 0)`}>
+              <g className="lines" transform={`translate(${axisMargin.left}, 0)`} clipPath="url(#clip)">
                 {LineList}
               </g>
             </g>}
@@ -335,7 +339,7 @@ class LineChart extends Component {
               <Axis orient="bottom"
                     scale={scale.x}
                     ticks={ticks.x}
-                    format={this.multiFormatDate}
+                    format={this.multiFormat}
                     translate={`translate(0, ${size.height})`}/>
             </g>
             {isRenderLines && <g>
