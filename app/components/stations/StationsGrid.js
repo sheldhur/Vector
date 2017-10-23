@@ -148,8 +148,8 @@ class StationGrid extends Component {
 }
 
 StationGrid.propTypes = {
-  width: PropTypes.string || PropTypes.number,
-  height: PropTypes.string || PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 StationGrid.defaultProps = {

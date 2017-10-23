@@ -173,8 +173,8 @@ class DataSetGrid extends Component {
 
 
 DataSetGrid.propTypes = {
-  width: PropTypes.string || PropTypes.number,
-  height: PropTypes.string || PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 DataSetGrid.defaultProps = {

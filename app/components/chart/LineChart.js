@@ -29,6 +29,11 @@ class LineChart extends Component {
   };
   uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
 
+  constructor(props) {
+    console.log(props);
+    super(props);
+  }
+
   componentDidMount = () => {
     setTimeout(this.handleResize, 1);
     // this.handleResize();
@@ -375,8 +380,8 @@ class LineChart extends Component {
 }
 
 LineChart.propTypes = {
-  width: PropTypes.string || PropTypes.number,
-  height: PropTypes.string || PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   lastRender: PropTypes.any,
   showTimeCursor: PropTypes.bool,
   showTooltip: PropTypes.bool,

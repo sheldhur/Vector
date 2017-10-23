@@ -62,7 +62,7 @@ class Axis extends Component {
 
 Axis.propTypes = {
   text: PropTypes.string,
-  transform: PropTypes.array || PropTypes.string,
+  transform: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   ticks: PropTypes.number,
 };
 

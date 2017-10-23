@@ -112,8 +112,8 @@ SettingsAvgChartLines.propTypes = {
   onCellChange: PropTypes.func,
   onLineAdd: PropTypes.func,
   onLineRemove: PropTypes.func,
-  width: PropTypes.string || PropTypes.number,
-  height: PropTypes.string || PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 SettingsAvgChartLines.defaultProps = {

@@ -109,8 +109,8 @@ class DataSetValuesChart extends Component {
 }
 
 DataSetValuesChart.propTypes = {
-  width: PropTypes.string || PropTypes.number,
-  height: PropTypes.string || PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 DataSetValuesChart.defaultProps = {

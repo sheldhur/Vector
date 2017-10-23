@@ -8,21 +8,14 @@ import '../../utils/helper';
 
 //TODO: переделать
 class MapChart extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.handleResize = ::this.handleResize;
-
-    this.state = {
-      wrapperSize: {
-        width: undefined,
-        height: undefined
-      }
+  state = {
+    wrapperSize: {
+      width: undefined,
+      height: undefined
     }
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
     if (this.props.width == '100%' || this.props.height == '100%') {
       window.addEventListener('resize', this.handleResize);
     }
@@ -30,13 +23,13 @@ class MapChart extends Component {
     setTimeout(() => {
       this.handleResize();
     }, 5);
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('resize', this.handleResize);
-  }
+  };
 
-  handleResize(e) {
+  handleResize = (e) => {
     let svgWrapper = ReactDOM.findDOMNode(this.refs.svgMapWrapper);
 
     this.setState({
@@ -45,9 +38,9 @@ class MapChart extends Component {
         height: svgWrapper.offsetHeight
       }
     });
-  }
+  };
 
-  getSize() {
+  getSize = () => {
     const {height, width} = this.state.wrapperSize;
 
     let size = {
@@ -65,9 +58,9 @@ class MapChart extends Component {
     }
 
     return size;
-  }
+  };
 
-  render() {
+  render = () => {
     const size = this.getSize();
     const {data, showCountries, projectionType, world} = this.props;
 
@@ -108,8 +101,9 @@ class MapChart extends Component {
         </div>;
       }
     }
+
     return <div className="svg-wrapper center" ref="svgMapWrapper"></div>
-  }
+  };
 }
 
 MapChart.defaultProps = {
