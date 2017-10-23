@@ -151,28 +151,32 @@ class LineChart extends Component {
         y: []
       };
 
-      linesGroup.lines.forEach((line, lineKey) => {
-        line.points.forEach((item, i) => {
-          if (typeof item.x === 'string') {
-            item.x = new Date(item.x);
-            data[linesGroupKey].lines[lineKey].points[i].x = item.x;
-          }
+      if (linesGroup.hasOwnProperty('extent')) {
+        result = linesGroup.extent;
+      } else {
+        linesGroup.lines.forEach((line, lineKey) => {
+          line.points.forEach((item, i) => {
+            if (typeof item.x === 'string') {
+              item.x = new Date(item.x);
+              data[linesGroupKey].lines[lineKey].points[i].x = item.x;
+            }
 
-          if (item.x !== null) {
-            if (result.x[0] === undefined) result.x.push(item.x);
-            if (result.x[1] === undefined) result.x.push(item.x);
-            if (item.x < result.x[0]) result.x[0] = item.x;
-            else if (item.x > result.x[1]) result.x[1] = item.x;
-          }
+            if (item.x !== null) {
+              if (result.x[0] === undefined) result.x.push(item.x);
+              if (result.x[1] === undefined) result.x.push(item.x);
+              if (item.x < result.x[0]) result.x[0] = item.x;
+              else if (item.x > result.x[1]) result.x[1] = item.x;
+            }
 
-          if (item.y !== null) {
-            if (result.y[0] === undefined) result.y.push(item.y);
-            if (result.y[1] === undefined) result.y.push(item.y);
-            if (item.y < result.y[0]) result.y[0] = item.y;
-            else if (item.y > result.y[1]) result.y[1] = item.y;
-          }
+            if (item.y !== null) {
+              if (result.y[0] === undefined) result.y.push(item.y);
+              if (result.y[1] === undefined) result.y.push(item.y);
+              if (item.y < result.y[0]) result.y[0] = item.y;
+              else if (item.y > result.y[1]) result.y[1] = item.y;
+            }
+          });
         });
-      });
+      }
 
       if (!isGroupX) {
         extent.x = extent.x.concat(...result.x);
@@ -225,11 +229,11 @@ class LineChart extends Component {
 
     return (d3.timeSecond(date) < date ? formatMillisecond
       : d3.timeMinute(date) < date ? formatSecond
-      : d3.timeHour(date) < date ? formatMinute
-      : d3.timeDay(date) < date ? formatHour
-      : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
-      : d3.timeYear(date) < date ? formatMonth
-      : formatYear)(date);
+        : d3.timeHour(date) < date ? formatMinute
+          : d3.timeDay(date) < date ? formatHour
+            : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+              : d3.timeYear(date) < date ? formatMonth
+                : formatYear)(date);
   };
 
   multiFormatFloat = (float) => {
@@ -257,12 +261,12 @@ class LineChart extends Component {
     const axisMargin = this.calculateAxisMargin(axisSize);
     const size = this.calculateSize(wrapperSize, margin, axisMargin);
     const isRenderLines = axisMargin.left > 0;
-    const ticks = {
-      x: Math.ceil(size.width / 90),
-      y: Math.ceil(size.height / 20)
-    };
     const {data, extent} = this.prepareData(this.props.data);
     const scale = this.getScale(extent, size);
+    const ticks = {
+      x: this.props.ticks ? this.props.ticks.x : Math.ceil(size.width / 90),
+      y: this.props.ticks ? this.props.ticks.y : Math.ceil(size.height / 20)
+    };
 
     let LineList = [];
     let AxisList = [];
@@ -284,7 +288,7 @@ class LineChart extends Component {
               dy="1em"
               fill={linesGroup.lines[0].style.stroke || '#000'}
               transform={(isRenderLines ? `translate(${-(axisSize.y.width[linesGroupKey] + 5.5)},0)` : '') + 'rotate(-90)'}>
-          {linesGroup.si}
+          {linesGroup.siX || linesGroup.si}
         </text>
       </Axis>);
 
@@ -308,7 +312,8 @@ class LineChart extends Component {
     return (
       <div className="svg-wrapper" ref="svgWrapper">
         {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
-        <Chart width={size.container.width} height={size.container.height} ref="chart" shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+        <Chart width={size.container.width} height={size.container.height} ref="chart"
+               shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
           <defs>
             <clipPath id="clip">
               <rect width={size.width} height={size.height}/>
@@ -336,11 +341,15 @@ class LineChart extends Component {
               {AxisList}
             </g>
             <g className="axisBottom" transform={`translate(${axisMargin.left}, 0)`}>
-              <Axis orient="bottom"
-                    scale={scale.x}
-                    ticks={ticks.x}
-                    format={this.multiFormat}
-                    translate={`translate(0, ${size.height})`}/>
+              <Axis
+                orient="bottom"
+                scale={scale.x}
+                ticks={ticks.x}
+                format={this.multiFormat}
+                translate={`translate(0, ${size.height})`}
+              >
+                {this.props.labelY && <text y={8+5} x={size.width / 2} dy="2em" style={{fill: 'red'}}>{this.props.labelY}</text>}
+              </Axis>
             </g>
             {isRenderLines && <g>
               {this.props.showTimeCursor && <TimeCursor width={size.width}
@@ -372,7 +381,10 @@ LineChart.propTypes = {
   showTimeCursor: PropTypes.bool,
   showTooltip: PropTypes.bool,
   tooltipDelay: PropTypes.number,
+  tick: PropTypes.array,
   groupName: PropTypes.string,
+  labelY: PropTypes.string,
+  antiAliasing: PropTypes.bool,
 };
 
 LineChart.defaultProps = {
@@ -382,7 +394,9 @@ LineChart.defaultProps = {
   showTimeCursor: true,
   showTooltip: true,
   tooltipDelay: 0,
+  tick: null,
   groupName: null,
+  labelY: null,
   antiAliasing: true,
 };
 
