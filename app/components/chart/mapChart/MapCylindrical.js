@@ -14,33 +14,29 @@ import './../../../utils/helper';
 
 
 class MapCylindrical extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isRenderMap: false,
-      axisMargin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
-      }
+  state = {
+    isRenderMap: false,
+    axisMargin: {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
     }
-  }
+  };
+  uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.setState({
       isRenderMap: true,
       axisMargin: this.calculateAxisMargin()
     });
-  }
+  };
 
-  formatAngle(d) {
+  formatAngle = (d) => {
     return d + '°';
-  }
+  };
 
-  calculateAxisMargin() {
+  calculateAxisMargin = () => {
     const chart = ReactDOM.findDOMNode(this.refs.chart);
     const axis = chart.querySelector('.map-axis').getBBox();
 
@@ -50,9 +46,9 @@ class MapCylindrical extends Component {
       top: -axis.y,
       bottom: axis.height - this.props.height + axis.y
     }
-  }
+  };
 
-  calculateSize(margin, axisMargin) {
+  calculateSize = (margin, axisMargin) => {
     const containerSize = {
       width: this.props.width,
       height: this.props.height,
@@ -89,9 +85,9 @@ class MapCylindrical extends Component {
     console.log(size);
 
     return size;
-  }
+  };
 
-  render() {
+  render = () => {
     const {width, height, data, graticuleStep} = this.props;
     const {isRenderMap, axisMargin} = this.state;
 
@@ -104,7 +100,7 @@ class MapCylindrical extends Component {
     const size = this.calculateSize(margin, axisMargin);
 
     const projection = d3.geoEquirectangular()
-      // .rotate([0, 0, 0])
+    // .rotate([0, 0, 0])
       .scale(size.height / Math.PI)
       .translate([size.width / 2, size.height / 2]);
 
@@ -121,14 +117,14 @@ class MapCylindrical extends Component {
       y: d3.range(-90, 90 + 0.1, graticuleStep[1])
     };
 
-    //2011, 7, 9, 7, 2
     return (
-      <Chart width={size.container.width} height={size.container.height} ref="chart" shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+      <Chart width={size.container.width} height={size.container.height} ref="chart"
+             shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
         <defs>
-          <filter id="blurMe">
+          <filter id={`${this.uid}-blur`}>
             <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
           </filter>
-          <clipPath id="clip">
+          <clipPath id={`${this.uid}-vector`}>
             <rect width={size.width} height={size.height}/>
           </clipPath>
         </defs>
@@ -137,9 +133,9 @@ class MapCylindrical extends Component {
             <World path={path} ocean={outline} size={{width, height}} {...this.props.world}/>
             <Graticule path={path} graticule={graticule} outline={outline}/>
             <GeomagEquator path={path}/>
-            <SolarTerminator path={path} date={this.props.terminator} filter="url(#blurMe)"/>
+            <SolarTerminator path={path} date={this.props.terminator} filter={`url(#${this.uid}-vector)`}/>
             <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5}
-                           projection={projection} clipPath="url(#clip)"/>
+                           projection={projection} clipPath={`url(#${this.uid}-vector)`}/>
             <Tooltip data={data} projection={projection}/>
           </g>}
           <g className="map-axis">
@@ -170,7 +166,7 @@ class MapCylindrical extends Component {
         </g>
       </Chart>
     );
-  }
+  };
 }
 
 MapCylindrical.defaultProps = {

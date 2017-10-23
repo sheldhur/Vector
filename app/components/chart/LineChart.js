@@ -27,6 +27,7 @@ class LineChart extends Component {
       height: undefined
     }
   };
+  uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
 
   componentDidMount = () => {
     setTimeout(this.handleResize, 1);
@@ -35,7 +36,7 @@ class LineChart extends Component {
     if (this.props.width == '100%' || this.props.height == '100%') {
       window.addEventListener('resize', this.handleResize);
     }
-  }
+  };
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.handleResize);
@@ -107,7 +108,7 @@ class LineChart extends Component {
     });
 
     return size;
-  }
+  };
 
   calculateAxisMargin = (axisSize) => {
     let margin = {
@@ -307,15 +308,13 @@ class LineChart extends Component {
       }
     });
 
-    // style={{opacity: (size.width === 100 && size.height === 100 ? 0 : 1), transition: 'opacity 1s ease-in-out'}}
-
     return (
       <div className="svg-wrapper" ref="svgWrapper">
         {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
         <Chart width={size.container.width} height={size.container.height} ref="chart"
                shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
           <defs>
-            <clipPath id="clip">
+            <clipPath id={`${this.uid}-lines`}>
               <rect width={size.width} height={size.height}/>
             </clipPath>
           </defs>
@@ -333,7 +332,7 @@ class LineChart extends Component {
                       tickSize={-size.height}
                       translate={`translate(0, ${size.height})`}/>
               </g>
-              <g className="lines" transform={`translate(${axisMargin.left}, 0)`} clipPath="url(#clip)">
+              <g className="lines" transform={`translate(${axisMargin.left}, 0)`} clipPath={`url(#${this.uid}-lines)`}>
                 {LineList}
               </g>
             </g>}
@@ -348,7 +347,8 @@ class LineChart extends Component {
                 format={this.multiFormat}
                 translate={`translate(0, ${size.height})`}
               >
-                {this.props.labelY && <text y={8+5} x={size.width / 2} dy="2em" style={{fill: 'red'}}>{this.props.labelY}</text>}
+                {this.props.labelY &&
+                <text y={8 + 5} x={size.width / 2} dy="2em" style={{fill: 'red'}}>{this.props.labelY}</text>}
               </Axis>
             </g>
             {isRenderLines && <g>

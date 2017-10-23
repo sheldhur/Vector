@@ -13,22 +13,18 @@ import './../../../utils/helper';
 
 
 class MapAzimuthal extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isRenderMap: true,
-      axisMargin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
-      }
+  state = {
+    isRenderMap: true,
+    axisMargin: {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
     }
-  }
+  };
+  uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
 
-  calculateSize(margin, axisMargin) {
+  calculateSize = (margin, axisMargin) => {
     return {
       width: this.props.width - 25,
       height: this.props.height - 25,
@@ -37,9 +33,9 @@ class MapAzimuthal extends Component {
         height: this.props.height,
       }
     }
-  }
+  };
 
-  render() {
+  render = () => {
     const {width, height, data, graticuleStep, clipAngle, rotate} = this.props;
     const {isRenderMap, axisMargin} = this.state;
 
@@ -78,12 +74,13 @@ class MapAzimuthal extends Component {
 
     //2011, 7, 9, 7, 2
     return (
-      <Chart width={size.container.width} height={size.container.height} ref="chart" shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+      <Chart width={size.container.width} height={size.container.height} ref="chart"
+             shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
         <defs>
           <filter id="blurMe">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
           </filter>
-          <clipPath id="clip">
+          <clipPath id={`${this.uid}-vector`}>
             <path d={path(outline)}/>
           </clipPath>
         </defs>
@@ -93,7 +90,8 @@ class MapAzimuthal extends Component {
             <Graticule path={path} graticule={graticule} outline={outline} shapeRendering="auto"/>
             <GeomagEquator path={path}/>
             <SolarTerminator path={path} date={this.props.terminator} filter="url(#blurMe)" clipPath="url(#clip)"/>
-            <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5} projection={projection} clipPath="url(#clip)"/>
+            <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5}
+                           projection={projection} clipPath={`url(#${this.uid}-vector)`}/>
             <Tooltip data={data} projection={projection} width={size.container.width} height={size.container.height}/>
             <circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/>
           </g>}
@@ -103,7 +101,7 @@ class MapAzimuthal extends Component {
         </g>
       </Chart>
     );
-  }
+  };
 }
 
 MapAzimuthal.propTypes = {};
