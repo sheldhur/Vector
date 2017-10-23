@@ -223,6 +223,27 @@ class LineChart extends Component {
     }
   };
 
+  getCurve = (value) => {
+    let type = Array.isArray(value) ? value : [value];
+
+    if (type.length) {
+      const curve = 'curve' + type[0];
+      if (d3.hasOwnProperty(curve)) {
+        if (['curveCardinal', 'curveCardinalClosed', 'curveCardinalOpen'].indexOf(curve) !== -1) {
+          return d3[curve].tension(type[1] || 0.5);
+        } else if (['curveCatmullRom', 'curveCatmullRomClosed', 'curveCatmullRomOpen'].indexOf(curve) !== -1) {
+          return d3[curve].alpha(type[1] || 0.5);
+        } else if (['curveBundle'].indexOf(curve) !== -1) {
+          return d3[curve].beta(type[1] || 0.5);
+        } else {
+          return d3[curve];
+        }
+      }
+    }
+
+    return d3.curveCatmullRom.alpha(0.5);
+  };
+
   multiFormatDate = (date) => {
     let formatMillisecond = d3.timeFormat(":%S.%L"),
       formatSecond = d3.timeFormat(":%S"),
@@ -299,13 +320,13 @@ class LineChart extends Component {
       </Axis>);
 
       if (isRenderLines) {
-        let path = d3.line()
-          .defined(d => d.y !== null)
-          .curve(d3.curveCatmullRom.alpha(0.5)) //curveCatmullRom.alpha(0)
-          .x(d => scale.x(d.x))
-          .y(d => scale.y[linesGroupKey](d.y));
-
         linesGroup.lines.forEach((line, lineKey) => {
+          let path = d3.line()
+            .defined(d => d.y !== null)
+            .curve(this.getCurve(line.curve))
+            .x(d => scale.x(d.x))
+            .y(d => scale.y[linesGroupKey](d.y));
+
           LineList.push(<Line key={'line-' + linesGroupKey + '-' + lineKey}
                               path={path(line.points)}
                               style={line.style}/>);
