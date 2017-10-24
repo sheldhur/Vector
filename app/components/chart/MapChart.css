@@ -62,9 +62,14 @@
   /*fill-opacity: 0.5;*/
 }
 
-.map-terminator {
+.map-terminator path {
   fill: black;
   fill-opacity: 0.3;
+}
+
+.map-terminator circle {
+  fill: yellow;
+  fill-opacity: 0.5;
 }
 
 .map-tooltip-text rect {

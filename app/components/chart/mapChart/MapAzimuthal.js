@@ -77,7 +77,7 @@ class MapAzimuthal extends Component {
       <Chart width={size.container.width} height={size.container.height} ref="chart"
              shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
         <defs>
-          <filter id="blurMe">
+          <filter id={`#${this.uid}-blur`}>
             <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
           </filter>
           <clipPath id={`${this.uid}-vector`}>
@@ -89,7 +89,7 @@ class MapAzimuthal extends Component {
             <World path={path} ocean={outline} size={{width, height}} {...this.props.world}/>
             <Graticule path={path} graticule={graticule} outline={outline} shapeRendering="auto"/>
             <GeomagEquator path={path}/>
-            <SolarTerminator path={path} date={this.props.terminator} filter="url(#blurMe)" clipPath="url(#clip)"/>
+            <SolarTerminator path={path} projection={projection} date={this.props.terminator} filter={`url(#${this.uid}-blur)`}/>
             <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5}
                            projection={projection} clipPath={`url(#${this.uid}-vector)`}/>
             <Tooltip data={data} projection={projection} width={size.container.width} height={size.container.height}/>

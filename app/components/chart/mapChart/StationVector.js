@@ -172,10 +172,12 @@ class StationVector extends Component {
             <stop offset="100%" style={style.circle.negative.end}/>
           </radialGradient>
         </defs>
-        {data.circles.positive}
-        {data.circles.negative}
-        {data.lines}
-        {data.points}
+        <g>
+          {data.circles.positive}
+          {data.circles.negative}
+        </g>
+        <g>{data.lines}</g>
+        <g>{data.points}</g>
       </g>
     );
   }
