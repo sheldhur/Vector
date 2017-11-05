@@ -382,6 +382,7 @@ class LineChart extends Component {
               {this.props.showTooltip && <Tooltip width={size.width}
                                                   height={size.height}
                                                   delay={this.props.tooltipDelay}
+                                                  onClick={this.props.tooltipOnClick}
                                                   transform={`translate(${axisMargin.left}, 0)`}
                                                   scale={scale}
                                                   data={data}
@@ -402,6 +403,7 @@ LineChart.propTypes = {
   showTimeCursor: PropTypes.bool,
   showTooltip: PropTypes.bool,
   tooltipDelay: PropTypes.number,
+  tooltipOnClick: PropTypes.func,
   tick: PropTypes.array,
   groupName: PropTypes.string,
   labelY: PropTypes.string,
@@ -415,6 +417,7 @@ LineChart.defaultProps = {
   showTimeCursor: true,
   showTooltip: true,
   tooltipDelay: 0,
+  tooltipOnClick: () => {},
   tick: null,
   groupName: null,
   labelY: null,

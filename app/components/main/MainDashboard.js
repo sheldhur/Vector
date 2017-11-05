@@ -13,14 +13,14 @@ class MainDashboard extends Component {
         <Panel>
           <ResizeblePanel type="vertical" eventWhen="mouseup" defaultSize={24}>
             <Panel>
-              <DataSetChart/>
+              <DataSetChart getStations={true}/>
             </Panel>
             <Panel>
               <VectorMapChart/>
             </Panel>
           </ResizeblePanel>
         </Panel>
-        <Panel className="test">
+        <Panel>
           <StationAvgChart/>
         </Panel>
       </ResizeblePanel>

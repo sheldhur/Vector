@@ -2,8 +2,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {remote} from 'electron';
-import {Icon} from 'antd';
+import {ChartAlert} from './../widgets/ChartAlert';
 import moment from 'moment';
 import LineChart from './../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
@@ -30,6 +29,10 @@ class StationAvgChart extends Component {
         prepareDataForCsv: this.prepareDataForCsv,
       });
     }
+  };
+
+  handlerMouseClick = (e) => {
+    this.props.stationActions.getStationsValue();
   };
 
   prepareDataForCsv = () => {
@@ -128,18 +131,6 @@ class StationAvgChart extends Component {
       })
     });
 
-    const Alert = (props) => {
-      return (
-        <div className="centered-box" onContextMenu={props.onContextMenu}>
-          <div>
-            <h1><Icon type={props.icon}/></h1>
-            <h3>{props.text}</h3>
-            <p>{props.description}</p>
-          </div>
-        </div>
-      );
-    };
-
     const AvgDataChart = (props) => {
       // if (props.itemKey !== 0) {
       const condition = props.itemKey !== latitudeRanges.length - 1 ? '≥ gLat >' : '≥ gLat ≥';
@@ -161,6 +152,7 @@ class StationAvgChart extends Component {
               height={'100%'}
               data={props.data}
               tooltipDelay={100}
+              tooltipOnClick={this.handlerMouseClick}
               lastRender={new Date()}
               antiAliasing={this.props.antiAliasing}
             >
@@ -172,7 +164,7 @@ class StationAvgChart extends Component {
       } else {
         return (
           <div key={props.itemKey} style={props.style} onContextMenu={this.handlerContextMenu}>
-            <Alert icon="info-circle" text="No data available"/>
+            <ChartAlert icon="info-circle" text="No data available"/>
           </div>
         );
       }
@@ -181,11 +173,11 @@ class StationAvgChart extends Component {
     let container = null;
 
     if (isEmpty) {
-      container = (<Alert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
+      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (isError) {
-      container = (<Alert
+      container = (<ChartAlert
         icon="exclamation-circle"
         text={isError.name}
         description={isError.message}
@@ -194,7 +186,7 @@ class StationAvgChart extends Component {
     }
 
     if (isLoading) {
-      container = (<Alert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {

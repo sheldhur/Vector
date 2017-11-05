@@ -1,26 +1,18 @@
 // @flow
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {sprintf} from 'sprintf-js';
 import * as d3 from 'd3';
 import * as ChartActions from './../../../actions/chart';
-import * as StationActions from './../../../actions/station';
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
 import './../../../utils/helper';
 
 class Tooltip extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.handlerMouseMove = ::this.handlerMouseMove;
-    this.handlerMouseOut = ::this.handlerMouseOut;
-    this.handlerMouseClick = ::this.handlerMouseClick;
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     const _handlerMouseMove = this.handlerMouseMove;
     const _handlerMouseClick = this.handlerMouseClick;
     const delay = this.props.delay;
@@ -45,31 +37,32 @@ class Tooltip extends Component {
       .on('click', function () {
         _handlerMouseClick(d3.mouse(this));
       });
-  }
+  };
 
-  handlerMouseClick(mouse) {
+  handlerMouseClick = (mouse) => {
     const points = this.getCurrentPointList(mouse[0], this.props.data, this.props.scale);
     if (points.length) {
       this.props.chartActions.setChartCurrentTime(points[0].x);
-      this.props.stationActions.getStationsValue();
+      //
+      this.props.onClick(points);
     }
-  }
+  };
 
-  handlerMouseOut() {
+  handlerMouseOut = () => {
     if (window.timeout !== undefined) {
       clearTimeout(window.timeout);
     }
     this.props.chartActions.setChartTooltipTime(null);
-  }
+  };
 
-  handlerMouseMove(mouse) {
+  handlerMouseMove = (mouse) => {
     const points = this.getCurrentPointList(mouse[0], this.props.data, this.props.scale);
     if (points[0] !== undefined) {
       this.props.chartActions.setChartTooltipTime(points[0].x);
     }
-  }
+  };
 
-  getCurrentPointList(mousePosition, data, scale) {
+  getCurrentPointList = (mousePosition, data, scale) => {
     const bisectDate = d3.bisector(d => d.x).left;
 
     let points = [];
@@ -98,9 +91,9 @@ class Tooltip extends Component {
     });
 
     return points;
-  }
+  };
 
-  render() {
+  render = () => {
     //const {points} = this.state;
 
     const points = this.getCurrentPointList(this.props.time, this.props.data, this.props.scale);
@@ -165,11 +158,18 @@ class Tooltip extends Component {
               pointerEvents="all"/>
       </g>
     );
-  }
+  };
 }
 
-Tooltip.propTypes = {};
+Tooltip.propTypes = {
+  onClick: PropTypes.func,
+  time: PropTypes.any,
+  delay: PropTypes.number,
+  group: PropTypes.bool,
+};
 Tooltip.defaultProps = {
+  onClick: () => {
+  },
   time: null,
   delay: 0,
   group: true,
@@ -185,7 +185,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     chartActions: bindActionCreators(ChartActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
   };
 }
 

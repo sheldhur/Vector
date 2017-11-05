@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {remote} from 'electron';
-import {Icon} from 'antd';
+import {ChartAlert} from './../widgets/ChartAlert';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import * as MainActions from './../../actions/main';
@@ -60,31 +59,19 @@ class DataSetValuesChart extends Component {
     const chartLines = this.prepareDataForChart(dataSets[dataSetId], dataSetValues[dataSetId]);
     const isEmpty = !chartLines.length;
 
-    const Alert = (props) => {
-      return (
-        <div className="centered-box" onContextMenu={props.onContextMenu}>
-          <div>
-            <h1><Icon type={props.icon}/></h1>
-            <h3>{props.text}</h3>
-            <p>{props.description}</p>
-          </div>
-        </div>
-      );
-    };
-
     let container = null;
 
     if (isEmpty) {
-      container = (<Alert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
+      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (isError) {
-      container = (<Alert icon="exclamation-circle" text={isError.name} description={isError.message}
+      container = (<ChartAlert icon="exclamation-circle" text={isError.name} description={isError.message}
                           onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (isLoading) {
-      container = (<Alert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
