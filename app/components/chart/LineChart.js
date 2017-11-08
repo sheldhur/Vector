@@ -368,8 +368,7 @@ class LineChart extends Component {
                 format={this.multiFormat}
                 translate={`translate(0, ${size.height})`}
               >
-                {this.props.labelY &&
-                <text y={8 + 5} x={size.width / 2} dy="2em" style={{fill: 'red'}}>{this.props.labelY}</text>}
+                {this.props.labelY && <text y={8 + 5} x={size.width / 2} dy="2em">{this.props.labelY}</text>}
               </Axis>
             </g>
             {isRenderLines && <g>
@@ -417,7 +416,8 @@ LineChart.defaultProps = {
   showTimeCursor: true,
   showTooltip: true,
   tooltipDelay: 0,
-  tooltipOnClick: () => {},
+  tooltipOnClick: () => {
+  },
   tick: null,
   groupName: null,
   labelY: null,
