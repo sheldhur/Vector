@@ -55,7 +55,15 @@ ipcRenderer.on('dispatchFromMain', (event, msg) => {
       store.dispatch(DataSetActions.getData());
     } else if (msg.action === 'openDataBase') {
       store.dispatch(MainActions.dialogOpenCreateDataBase());
+    } else if (msg.action === 'closeWindow') {
+      remote.getCurrentWindow().close();
     }
+  }
+});
+
+ipcRenderer.on('windowManger', (event, msg) => {
+  if (msg.push) {
+    hashHistory.push(msg.push);
   }
 });
 

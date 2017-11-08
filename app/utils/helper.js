@@ -54,8 +54,8 @@ String.prototype.toCamelCase = function () {
 
 Date.prototype.getUnixTS = function () {
   return this.getTime() / 1000;
-}
+};
 
 Date.prototype.toMinutes = function () {
   return this.getUnixTS() / 60;
-}
+};

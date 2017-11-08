@@ -4,24 +4,22 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
 import * as ChartActions from './../../../actions/chart';
-import * as StationActions from './../../../actions/station';
 import * as stationsCalc from './../../../lib/stationsCalc';
+import {openWindowStation} from './../../map/VectorMapMenu'
 
 
 class StationVector extends Component {
 
   handlerMouseEnter = (station) => {
-    this.selectedStation = station;
     this.props.chartActions.setMapTooltipStation(station);
   };
 
   handlerMouseOut = () => {
-    this.selectedStation = null;
     this.props.chartActions.setMapTooltipStation(null);
   };
 
   handlerMouseClick = (station) => {
-    this.props.stationActions.openWindowStation(station.id);
+    openWindowStation(station.id);
   };
 
   prepareStationsData = () => {
@@ -204,7 +202,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     chartActions: bindActionCreators(ChartActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
   };
 }
 

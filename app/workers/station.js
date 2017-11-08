@@ -101,7 +101,6 @@ function actionLatitudeAvgValues(data) {
 }
 
 function getStations() {
-  console.log('getStations');
   return db.Station.findAll({raw: true})
     .then((stations) => {
       let list = {};
@@ -119,8 +118,8 @@ function getStations() {
 }
 
 function getStationValues(stations, timePeriod) {
-  console.time('getStationValues');
   return new Promise((resolve, reject) => {
+    console.time('getStationValues');
     let sqlite = db.sequelize.connectionManager.connections.default;
     let components = {
       compX: null,
@@ -144,7 +143,7 @@ function getStationValues(stations, timePeriod) {
     `;
 
     process.send({consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ')});
-    sqlite.each(query, function (err, row) {
+    sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
       }
@@ -185,6 +184,7 @@ function getStationValues(stations, timePeriod) {
         values,
         extremes,
       });
+
       console.timeEnd('getStationValues');
     });
   });

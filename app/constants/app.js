@@ -17,6 +17,10 @@ export const DATASET_ENABLED = 1;
 export const DATA_SET_AXIS_Y = ['Linear', 'Log', 'Ordinal', 'Exponent'];
 export const DATA_SET_COLOR = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
+export const WINDOW_DATASET = 'WINDOW_DATASET';
+export const WINDOW_MAGNETOPAUSE = 'WINDOW_MAGNETOPAUSE';
+export const WINDOW_STATIONS = 'WINDOW_STATIONS';
+
 export const VALUES_RAW = 0;
 export const VALUES_AVG = 1;
 export const VALUES_MAX = 2;

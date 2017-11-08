@@ -1,12 +1,13 @@
 import {remote, screen} from 'electron';
 import childProcess from '../lib/childProcess';
-import {db} from './../database/dbConnect';
 import resourcePath from './../lib/resourcePath';
+import {db} from './../database/dbConnect';
 import {WORKER_PATH, IS_PROD} from './../constants/app';
 import * as types from './../constants/dataSet';
 
 let worker;
 let windowDataSet;
+let windowMagnetopause;
 
 export function setData(payload) {
   return {
@@ -183,51 +184,5 @@ function _updateDataSetValue(id, fields) {
     });
 
     dispatch(setData(data));
-  }
-}
-
-export function openWindowDataSet(id) {
-  return () => {
-    let url = '/dataSet';
-    if (id) {
-      url += `/${id}`;
-    }
-
-    const {width, height} = screen.getPrimaryDisplay().workAreaSize;
-    const windowOptions = {
-      minWidth: 800,
-      minHeight: 600,
-      width: Math.floor((width / 100) * 65),
-      height: Math.floor((height / 100) * 65),
-      // modal: true,
-      // parent: remote.getCurrentWindow(),
-      backgroundColor: '#292829',
-      title: 'Data series',
-      icon: resourcePath('./assets/icons/line-chart.png'),
-      webPreferences: {
-        devTools: true,
-      }
-    };
-
-    if (!windowDataSet) {
-      windowDataSet = new remote.BrowserWindow(windowOptions);
-      windowDataSet.setMenu(null);
-      windowDataSet.on('closed', () => {
-        windowDataSet = null;
-      });
-      windowDataSet.on('page-title-updated', (e, title) => {
-        if (title !== windowOptions.title) {
-          e.preventDefault();
-          windowDataSet.setTitle(windowOptions.title);
-        }
-      });
-      windowDataSet.once('ready-to-show', () => {
-        windowDataSet.show();
-      });
-      windowDataSet.loadURL(`${window.location.origin + window.location.pathname}#` + url);
-    } else {
-      windowDataSet.webContents.send('dispatchFromMain', {push: url});
-      windowDataSet.show();
-    }
   }
 }
