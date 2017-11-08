@@ -52,12 +52,12 @@ class MapCylindrical extends Component {
     const containerSize = {
       width: this.props.width,
       height: this.props.height,
-    }
+    };
 
     let marginSumm = {
       width: margin.left + margin.right + axisMargin.left + axisMargin.right,
       height: margin.top + margin.bottom + axisMargin.top + axisMargin.bottom
-    }
+    };
 
     let width = containerSize.width - marginSumm.width;
     let height = containerSize.height - marginSumm.height;
@@ -66,7 +66,7 @@ class MapCylindrical extends Component {
       width: width,
       height: height,
       container: containerSize
-    }
+    };
 
     if (height !== undefined && width !== undefined) {
       size.width = height * 2;
@@ -80,7 +80,7 @@ class MapCylindrical extends Component {
     size.container = {
       width: size.width + marginSumm.width,
       height: size.height + marginSumm.height,
-    }
+    };
 
     console.log(size);
 

@@ -58,7 +58,7 @@ class MainHeaderCapture extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentTime: state.chart.chartCurrentTime,
+    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null,
   };
 }
 

@@ -1,24 +1,29 @@
 import * as types from './../constants/chart';
 import './../utils/helper';
 
-export function setChartCurrentTime(time) {
+export function setChartCurrentTime(payload) {
+  if (Object.prototype.toString.call(payload) === '[object Date]') {
+    payload = payload.getTime();
+  }
+
   return {
     type: types.CHART_CURRENT_TIME,
-    payload: time
+    payload,
+    syncState: true,
   };
 }
 
-export function setChartTooltipTime(time) {
+export function setChartTooltipTime(payload) {
   return {
     type: types.CHART_TOOLTIP_TIME,
-    payload: time
+    payload
   };
 }
 
-export function setMapTooltipStation(station) {
+export function setMapTooltipStation(payload) {
   return {
     type: types.MAP_TOOLTIP_STATION,
-    payload: station
+    payload
   };
 }
 
@@ -30,7 +35,7 @@ export function shiftChartCurrentTime (value) {
     let timeStart = new Date(time.selected.start);
     let timeEnd = new Date(time.selected.end);
 
-    let timeCurrent = chartCurrentTime || timeStart;
+    let timeCurrent = chartCurrentTime ? new Date(chartCurrentTime) : timeStart;
 
     let timeNew = timeStart;
     if (timeCurrent) {

@@ -6,19 +6,32 @@ import {Row} from 'antd';
 import StationValueActions from './StationValueActions';
 import StationValuesChart from './StationValuesChart';
 import StationValuesGrid from './StationValuesGrid';
+import * as ChartActions from './../../actions/chart';
 
 
 class StationValuesView extends Component {
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate = (nextProps) => {
     if (nextProps.location.action === 'POP') {
       // return false;
     }
 
     return true;
-  }
+  };
 
-  render() {
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (nextProps.location.query.time && nextProps.location.query.time !== this.props.location.query.time) {
+  //     this.props.chartActions.setChartCurrentTime(new Date(nextProps.location.query.time));
+  //   }
+  // };
+  //
+  // componentWillMount = () => {
+  //   if (this.props.location.query.time) {
+  //     this.props.chartActions.setChartCurrentTime(new Date(this.props.location.query.time));
+  //   }
+  // };
+
+  render = () => {
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
         <Row style={{height:'150px'}}>
@@ -41,4 +54,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(StationValuesView);
+function mapDispatchToProps(dispatch) {
+  return {
+    chartActions: bindActionCreators(ChartActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StationValuesView);

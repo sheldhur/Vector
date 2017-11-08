@@ -95,7 +95,7 @@ class DataSetValuesGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       onCellClick: (record, event) => {
-        this.props.chartActions.setChartCurrentTime(moment(record.time, app.FORMAT_DATE_SQL).toDate());
+        this.props.chartActions.setChartCurrentTime(new Date(record.time));
       }
     }, {
       title: 'Value',
@@ -147,7 +147,7 @@ DataSetValuesGrid.defaultProps = {
 function mapStateToProps(state) {
   return {
     dataSetValues: state.dataSet.dataSetValues,
-    currentTime: state.chart.chartCurrentTime
+    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null
   };
 }
 

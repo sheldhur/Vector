@@ -12,9 +12,8 @@ class TimeCursor extends Component {
   // };
 
   render = () => {
-    let {time} = this.props;
-
-    const position = this.props.scale.x(time);
+    const {currentTime} = this.props;
+    const position = this.props.scale.x(currentTime);
 
     if (position > 0) {
       return (
@@ -23,7 +22,7 @@ class TimeCursor extends Component {
                 ref="lineX"
                 y1="0"
                 y2={this.props.height}
-                transform={`translate(${this.props.scale.x(time)}, 0)`}
+                transform={`translate(${this.props.scale.x(currentTime)}, 0)`}
                 shapeRendering="optimizeSpeed"/>
         </g>
       );
@@ -42,7 +41,7 @@ TimeCursor.defaultProps = {};
 
 function mapStateToProps(state) {
   return {
-    time: state.chart.chartCurrentTime
+    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null
   };
 }
 
