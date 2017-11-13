@@ -131,6 +131,11 @@ export const DEFAULT_SETTINGS = {
         {comp: 'dH', hemisphere: 'east', style: null, enabled: true},
         {comp: 'dH', hemisphere: 'west', style: null, enabled: true},
       ],
+    },
+    magnetopause: {
+      b: null,
+      bz: null,
+      pressureSolar: null,
     }
   }
 };

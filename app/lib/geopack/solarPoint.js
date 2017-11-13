@@ -5,22 +5,31 @@ const radians = PI / 180;
 const degrees = 180 / PI;
 
 export const antipode = (position) => {
-  return [position[0] + 180, -position[1]];
+  return {
+    longitude: position.longitude + 180,
+    latitude: -position.latitude
+  };
 };
 
 export const calculate = (time) => {
-  var centuries = (time - Date.UTC(2000, 0, 1, 12)) / 864e5 / 36525, // since J2000
-    longitude = (d3.utcDay.floor(time) - time) / 864e5 * 360 - 180;
-  return [
-    longitude - equationOfTime(centuries) * degrees,
-    solarDeclination(centuries) * degrees
-  ];
+  const centuries = (time - Date.UTC(2000, 0, 1, 12)) / 864e5 / 36525; // since J2000
+  const longitude = (d3.utcDay.floor(time) - time) / 864e5 * 360 - 180;
+
+  let result = {
+    longitude: longitude - equationOfTime(centuries) * degrees,
+    latitude: solarDeclination(centuries) * degrees,
+  };
+
+  const nr = Math.round(longitude / 360);
+  result.longitude = result.longitude - (360 * nr);
+
+  return result;
 };
 
 // Equations based on NOAA’s Solar Calculator; all angles in radians.
 // http://www.esrl.noaa.gov/gmd/grad/solcalc/
 const equationOfTime = (centuries) => {
-  var e = eccentricityEarthOrbit(centuries),
+  let e = eccentricityEarthOrbit(centuries),
     m = solarGeometricMeanAnomaly(centuries),
     l = solarGeometricMeanLongitude(centuries),
     y = Math.tan(obliquityCorrection(centuries) / 2);
@@ -49,12 +58,12 @@ const solarGeometricMeanAnomaly = (centuries) => {
 };
 
 const solarGeometricMeanLongitude = (centuries) => {
-  var l = (280.46646 + centuries * (36000.76983 + centuries * 0.0003032)) % 360;
+  let l = (280.46646 + centuries * (36000.76983 + centuries * 0.0003032)) % 360;
   return (l < 0 ? l + 360 : l) / 180 * PI;
 };
 
 const solarEquationOfCenter = (centuries) => {
-  var m = solarGeometricMeanAnomaly(centuries);
+  let m = solarGeometricMeanAnomaly(centuries);
   return (Math.sin(m) * (1.914602 - centuries * (0.004817 + 0.000014 * centuries))
     + Math.sin(m + m) * (0.019993 - 0.000101 * centuries)
     + Math.sin(m + m + m) * 0.000289) * radians;

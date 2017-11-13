@@ -256,6 +256,12 @@ export default class MenuBuilder {
                     this.mainWindow.webContents.send('dispatchFromMain', {push: '/station'});
                   }
                 },
+                {
+                  label: 'Magnetopause',
+                  click: () => {
+                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/magnetopause'});
+                  }
+                },
               ]
             }
           ]

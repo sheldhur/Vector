@@ -9,6 +9,7 @@ import DataSetValuesView from './components/dataSet/DataSetValuesView';
 import StationsView from './components/stations/StationsView';
 import StationValuesView from './components/stations/StationValuesView';
 import Capture from './components/capture/Capture';
+import MagnetopauseView from './components/magnetopause/MagnetopauseView';
 
 export default (
   <Route path="/" component={App}>
@@ -20,6 +21,7 @@ export default (
     <Route path="/station" component={StationsView}/>
     <Route path="/station/:id" component={StationValuesView}/>
     <Route path="/capture" component={Capture}/>
+    <Route path="/magnetopause" component={MagnetopauseView}/>
   </Route>
 );
 

@@ -1,4 +1,3 @@
-import {remote, screen} from 'electron';
 import childProcess from '../lib/childProcess';
 import {db} from './../database/dbConnect';
 import resourcePath from './../lib/resourcePath';
@@ -6,7 +5,6 @@ import {WORKER_PATH, IS_PROD} from './../constants/app';
 import * as types from './../constants/station';
 
 let worker;
-let windowStation;
 
 
 export function setError(payload) {

@@ -7,6 +7,7 @@ import dataSet from './dataSet';
 import dataSetImport from './dataSetImport';
 import stationImport from './stationImport';
 import station from './station';
+import magnetopause from './magnetopause';
 
 const rootReducer = combineReducers({
   routing,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   dataSetImport,
   stationImport,
   station,
+  magnetopause,
 });
 
 export default rootReducer;
