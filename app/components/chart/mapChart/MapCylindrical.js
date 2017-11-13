@@ -118,8 +118,12 @@ class MapCylindrical extends Component {
     };
 
     return (
-      <Chart width={size.container.width} height={size.container.height} ref="chart"
-             shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+      <Chart
+        width={size.container.width}
+        height={size.container.height}
+        ref="chart"
+        shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}
+      >
         <defs>
           <filter id={`${this.uid}-blur`}>
             <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
@@ -130,35 +134,63 @@ class MapCylindrical extends Component {
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
           {isRenderMap && <g transform={`translate(1,0)`}>
-            <World path={path} ocean={outline} size={{width, height}} {...this.props.world}/>
-            <Graticule path={path} graticule={graticule} outline={outline}/>
+            <World
+              path={path}
+              ocean={outline}
+              size={{width, height}}
+              {...this.props.world}
+            />
+            <Graticule
+              path={path}
+              graticule={graticule}
+              outline={outline}
+            />
             <GeomagEquator path={path}/>
-            <SolarTerminator path={path} projection={projection} date={this.props.terminator} filter={`url(#${this.uid}-blur)`}/>
-            <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5}
-                           projection={projection} clipPath={`url(#${this.uid}-vector)`}/>
-            <Tooltip data={data} projection={projection}/>
+            <SolarTerminator
+              path={path}
+              projection={projection}
+              date={this.props.terminator}
+            />
+            <StationVector
+              path={path}
+              data={data}
+              dataFilter={this.props.dataFilter}
+              pointSize={5}
+              projection={projection}
+              clipPath={`url(#${this.uid}-vector)`}
+            />
+            <Tooltip data={data} projection={projection}
+            />
           </g>}
           <g className="map-axis">
-            <Axis orient="left"
-                  scale={scale.y}
-                  tickValues={ticks.y}
-                  format={this.formatAngle}
-                  translate={`translate(0,0)`}>
-              <text x={0}
-                    y={-10}
-                    dy="-2em"
-                    transform={`translate(0, ${size.height / 2}) rotate(-90)`}>
+            <Axis
+              orient="left"
+              scale={scale.y}
+              tickValues={ticks.y}
+              format={this.formatAngle}
+              translate={`translate(0,0)`}
+            >
+              <text
+                x={0}
+                y={-10}
+                dy="-2em"
+                transform={`translate(0, ${size.height / 2}) rotate(-90)`}
+              >
                 gLat
               </text>
             </Axis>
-            <Axis orient="bottom"
-                  scale={scale.x}
-                  tickValues={ticks.x}
-                  format={this.formatAngle}
-                  translate={`translate(0, ${size.height})`}>
-              <text y={8}
-                    x={size.width / 2}
-                    dy="2em">
+            <Axis
+              orient="bottom"
+              scale={scale.x}
+              tickValues={ticks.x}
+              format={this.formatAngle}
+              translate={`translate(0, ${size.height})`}
+            >
+              <text
+                y={8}
+                x={size.width / 2}
+                dy="2em"
+              >
                 gLong
               </text>
             </Axis>

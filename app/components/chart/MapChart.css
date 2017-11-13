@@ -72,6 +72,12 @@
   fill-opacity: 0.5;
 }
 
+.map-solar-point line {
+  stroke: black;
+  stroke-width: 1;
+  border-radius: 50%;
+}
+
 .map-tooltip-text rect {
   rx: 5;
   fill-opacity: 0.75;

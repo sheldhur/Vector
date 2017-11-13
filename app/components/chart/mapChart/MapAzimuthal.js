@@ -74,8 +74,12 @@ class MapAzimuthal extends Component {
 
     //2011, 7, 9, 7, 2
     return (
-      <Chart width={size.container.width} height={size.container.height} ref="chart"
-             shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+      <Chart
+        width={size.container.width}
+        height={size.container.height}
+        ref="chart"
+        shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}
+      >
         <defs>
           <filter id={`#${this.uid}-blur`}>
             <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
@@ -86,14 +90,39 @@ class MapAzimuthal extends Component {
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
           {isRenderMap && <g transform={`translate(0,0)`}>
-            <World path={path} ocean={outline} size={{width, height}} {...this.props.world}/>
-            <Graticule path={path} graticule={graticule} outline={outline} shapeRendering="auto"/>
+            <World
+              path={path}
+              ocean={outline}
+              size={{width, height}}
+              {...this.props.world}
+            />
+            <Graticule
+              path={path}
+              graticule={graticule}
+              outline={outline}
+              shapeRendering="auto"
+            />
             <GeomagEquator path={path}/>
-            <SolarTerminator path={path} projection={projection} date={this.props.terminator} filter={`url(#${this.uid}-blur)`}/>
-            <StationVector path={path} data={data} dataFilter={this.props.dataFilter} pointSize={5}
-                           projection={projection} clipPath={`url(#${this.uid}-vector)`}/>
-            <Tooltip data={data} projection={projection} width={size.container.width} height={size.container.height}/>
-            <circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/>
+            <SolarTerminator
+              path={path}
+              projection={projection}
+              date={this.props.terminator}
+            />
+            <StationVector
+              path={path}
+              data={data}
+              dataFilter={this.props.dataFilter}
+              pointSize={5}
+              projection={projection}
+              clipPath={`url(#${this.uid}-vector)`}
+            />
+            <Tooltip
+              data={data}
+              projection={projection}
+              width={size.container.width}
+              height={size.container.height}
+            />
+            {/*<circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/>*/}
           </g>}
           <g className="map-axis azimuthal" transform={`translate(${size.width / 2},${size.height / 2})`}>
             {ticks}
