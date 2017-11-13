@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ChartAlert} from './../widgets/ChartAlert';
+import {LoadingAlert, ErrorAlert, NoDataAlert} from './../widgets/ChartAlert';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import DataSetChartMenu from './DataSetChartMenu';
@@ -77,39 +77,32 @@ class DataSetChart extends Component {
   render() {
     const {isLoading, isError, dataSets, dataSetValues} = this.props.data;
     const chartLines = this.prepareDataForChart(dataSets, dataSetValues);
-    const isEmpty = !chartLines.length;
 
     let container = null;
 
-    if (isEmpty) {
-      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
-    }
-
     if (isError) {
-      container = (<ChartAlert icon="exclamation-circle" text={isError.name} description={isError.message}
-                          onContextMenu={this.handlerContextMenu}/>);
+      container = (<ErrorAlert
+        text={isError.name}
+        description={isError.message}
+        onContextMenu={this.handlerContextMenu}
+      />);
     }
 
     if (isLoading) {
-      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
       container = (
-        <div
-          style={{width: this.props.width, height: this.props.height}}
-          onContextMenu={this.handlerContextMenu}
-          id="dataSetChart"
-        >
+        <div id="dataSetChart" style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
           <LineChart
             width={this.props.width}
             height={this.props.height}
             data={chartLines}
             tooltipDelay={100}
             tooltipOnClick={this.handlerMouseClick}
-            lastRender={new Date()}
-            ref="chart"
             antiAliasing={this.props.antiAliasing}
+            emptyMessage={<LoadingAlert onContextMenu={this.handlerContextMenu}/>}
           >
             <TitleCurrentTime/>
           </LineChart>

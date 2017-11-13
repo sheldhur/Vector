@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ChartAlert} from './../widgets/ChartAlert';
+import {NoDataAlert, ErrorAlert, LoadingAlert} from './../widgets/ChartAlert';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import * as MainActions from './../../actions/main';
@@ -57,33 +57,31 @@ class DataSetValuesChart extends Component {
   render() {
     const {dataSetId, data: {isLoading, isError, dataSets, dataSetValues}} = this.props;
     const chartLines = this.prepareDataForChart(dataSets[dataSetId], dataSetValues[dataSetId]);
-    const isEmpty = !chartLines.length;
 
     let container = null;
 
-    if (isEmpty) {
-      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
-    }
-
     if (isError) {
-      container = (<ChartAlert icon="exclamation-circle" text={isError.name} description={isError.message}
-                          onContextMenu={this.handlerContextMenu}/>);
+      container = (<ErrorAlert
+        text={isError.name}
+        description={isError.message}
+        onContextMenu={this.handlerContextMenu}
+      />);
     }
 
     if (isLoading) {
-      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<NoDataAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
       container = (
-        <div style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
+        <div style={{width: this.props.width, height: this.props.height}}  onContextMenu={this.handlerContextMenu}>
           <LineChart
             width={this.props.width}
             height={this.props.height}
             data={chartLines}
             tooltipDelay={100}
-            ref="chart" lastRender={new Date()}
             antiAliasing={this.props.antiAliasing}
+            emptyMessage={<LoadingAlert onContextMenu={this.handlerContextMenu}/>}
           >
             <TitleCurrentTime/>
           </LineChart>

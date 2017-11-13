@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ChartAlert} from './../widgets/ChartAlert';
+import {LoadingAlert, NoDataAlert, ErrorAlert} from './../widgets/ChartAlert';
 import moment from 'moment';
 import LineChart from './../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
@@ -132,53 +132,34 @@ class StationAvgChart extends Component {
     });
 
     const AvgDataChart = (props) => {
-      // if (props.itemKey !== 0) {
       const condition = props.itemKey !== latitudeRanges.length - 1 ? '≥ gLat >' : '≥ gLat ≥';
       const chartTitle = `${latitudeRanges[props.itemKey][0]}° ${condition} ${latitudeRanges[props.itemKey][1]}°`;
-      // }
 
-      let isHasValues = false;
-      props.data.forEach((item) => {
-        if (item.lines.length) {
-          isHasValues = true;
-        }
-      });
-
-      if (isHasValues) {
-        return (
-          <div key={props.itemKey} style={props.style} onContextMenu={this.handlerContextMenu}>
-            <LineChart
-              width={'100%'}
-              height={'100%'}
-              data={props.data}
-              tooltipDelay={100}
-              tooltipOnClick={this.handlerMouseClick}
-              lastRender={new Date()}
-              antiAliasing={this.props.antiAliasing}
-            >
-              {/*H<sub>av</sub> */}
-              {chartTitle}
-            </LineChart>
-          </div>
-        );
-      } else {
-        return (
-          <div key={props.itemKey} style={props.style} onContextMenu={this.handlerContextMenu}>
-            <ChartAlert icon="info-circle" text="No data available"/>
-          </div>
-        );
-      }
+      return (
+        <div key={props.itemKey} style={props.style} onContextMenu={this.handlerContextMenu}>
+          <LineChart
+            width={'100%'}
+            height={'100%'}
+            data={props.data}
+            tooltipDelay={100}
+            tooltipOnClick={this.handlerMouseClick}
+            antiAliasing={this.props.antiAliasing}
+            emptyMessage={<NoDataAlert />}
+          >
+            {chartTitle}
+          </LineChart>
+        </div>
+      );
     };
 
     let container = null;
 
     if (isEmpty) {
-      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
+      container = (<NoDataAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (isError) {
-      container = (<ChartAlert
-        icon="exclamation-circle"
+      container = (<ErrorAlert
         text={isError.name}
         description={isError.message}
         onContextMenu={this.handlerContextMenu}
@@ -186,7 +167,7 @@ class StationAvgChart extends Component {
     }
 
     if (isLoading) {
-      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {

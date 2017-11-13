@@ -51,12 +51,9 @@ class LineChart extends Component {
   //   //this.setState({axisSize: this.calculateAxisSize()});
   // }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log([this.props.lastRender, nextProps.lastRender]);
-  //   if (this.props.lastRender !== nextProps.lastRender) {
-  //     setTimeout(this.handleResize, 10);
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    this.handleResize();
+  }
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   if (JSON.stringify(nextState.axisSize) === JSON.stringify(this.state.axisSize)) {
@@ -146,55 +143,69 @@ class LineChart extends Component {
       y: []
     };
 
-    data.forEach((linesGroup, linesGroupKey) => {
-      let result = {
-        x: [],
-        y: []
-      };
+    let pointsCount = 0;
 
-      if (linesGroup.hasOwnProperty('extent')) {
-        result = linesGroup.extent;
-      } else {
-        linesGroup.lines.forEach((line, lineKey) => {
-          line.points.forEach((item, i) => {
-            if (typeof item.x === 'string') {
-              item.x = new Date(item.x);
-              data[linesGroupKey].lines[lineKey].points[i].x = item.x;
-            }
+    if (data && data.length) {
+      data.forEach((linesGroup, linesGroupKey) => {
+        let result = {
+          x: [],
+          y: []
+        };
 
-            if (item.x !== null) {
-              if (result.x[0] === undefined) result.x.push(item.x);
-              if (result.x[1] === undefined) result.x.push(item.x);
-              if (item.x < result.x[0]) result.x[0] = item.x;
-              else if (item.x > result.x[1]) result.x[1] = item.x;
-            }
+        if (linesGroup.hasOwnProperty('lines') && linesGroup.lines != null && linesGroup.lines.length) {
+          if (linesGroup.hasOwnProperty('extent')) {
+            result = linesGroup.extent;
+            linesGroup.lines.forEach((line, lineKey) => {
+              if (line.hasOwnProperty('points') && line.points != null && line.points.length) {
+                pointsCount += line.points.length;
+              }
+            });
+          } else {
+            linesGroup.lines.forEach((line, lineKey) => {
+              if (line.hasOwnProperty('points') && line.points != null && line.points.length) {
+                pointsCount += line.points.length;
+                line.points.forEach((item, i) => {
+                  if (typeof item.x === 'string') {
+                    item.x = new Date(item.x);
+                    data[linesGroupKey].lines[lineKey].points[i].x = item.x;
+                  }
 
-            if (item.y !== null) {
-              if (result.y[0] === undefined) result.y.push(item.y);
-              if (result.y[1] === undefined) result.y.push(item.y);
-              if (item.y < result.y[0]) result.y[0] = item.y;
-              else if (item.y > result.y[1]) result.y[1] = item.y;
-            }
-          });
-        });
-      }
+                  if (item.x !== null) {
+                    if (result.x[0] === undefined) result.x.push(item.x);
+                    if (result.x[1] === undefined) result.x.push(item.x);
+                    if (item.x < result.x[0]) result.x[0] = item.x;
+                    else if (item.x > result.x[1]) result.x[1] = item.x;
+                  }
 
-      if (!isGroupX) {
-        extent.x = extent.x.concat(...result.x);
-        extent.x = d3.extent(extent.x);
-      } else {
-        extent.x.push(result.x);
-      }
+                  if (item.y !== null) {
+                    if (result.y[0] === undefined) result.y.push(item.y);
+                    if (result.y[1] === undefined) result.y.push(item.y);
+                    if (item.y < result.y[0]) result.y[0] = item.y;
+                    else if (item.y > result.y[1]) result.y[1] = item.y;
+                  }
+                });
+              }
+            });
+          }
 
-      if (!isGroupY) {
-        extent.y = extent.y.concat(...result.y);
-        extent.y = d3.extent(extent.y);
-      } else {
-        extent.y.push(result.y);
-      }
-    });
+          if (!isGroupX) {
+            extent.x = extent.x.concat(...result.x);
+            extent.x = d3.extent(extent.x);
+          } else {
+            extent.x.push(result.x);
+          }
 
-    return {data: data, extent: extent};
+          if (!isGroupY) {
+            extent.y = extent.y.concat(...result.y);
+            extent.y = d3.extent(extent.y);
+          } else {
+            extent.y.push(result.y);
+          }
+        }
+      });
+    }
+
+    return {data, extent, pointsCount};
   };
 
   getScaleType = (value) => {
@@ -271,128 +282,139 @@ class LineChart extends Component {
   };
 
   render = () => {
-    console.info('RERENDER CHART');
-    const {axisSize, wrapperSize} = this.state;
+    const {data, extent, pointsCount} = this.prepareData(this.props.data);
 
-    const margin = {
-      left: 0,
-      right: 10,
-      top: 2,
-      bottom: 0
-    };
-    const axisMargin = this.calculateAxisMargin(axisSize);
-    const size = this.calculateSize(wrapperSize, margin, axisMargin);
-    const isRenderLines = axisMargin.left > 0;
-    const {data, extent} = this.prepareData(this.props.data);
-    const scale = this.getScale(extent, size);
-    const ticks = {
-      x: this.props.ticks ? this.props.ticks.x : Math.ceil(size.width / 90),
-      y: this.props.ticks ? this.props.ticks.y : Math.ceil(size.height / 20)
-    };
+    if (pointsCount) {
+      const {axisSize, wrapperSize} = this.state;
 
-    let LineList = [];
-    let AxisList = [];
-    let currentMarginLeft = 0;
-    data.forEach((linesGroup, linesGroupKey) => {
-      currentMarginLeft += isRenderLines ? axisSize.y.width[linesGroupKey] : 0;
-      if (linesGroupKey > 0) {
-        currentMarginLeft += this.addPixels;
-      }
+      const margin = {
+        left: 0,
+        right: 10,
+        top: 2,
+        bottom: 0
+      };
+      const axisMargin = this.calculateAxisMargin(axisSize);
+      const size = this.calculateSize(wrapperSize, margin, axisMargin);
+      const isRenderLines = axisMargin.left > 0;
+      const scale = this.getScale(extent, size);
+      const ticks = {
+        x: this.props.ticks ? this.props.ticks.x : Math.ceil(size.width / 90),
+        y: this.props.ticks ? this.props.ticks.y : Math.ceil(size.height / 20)
+      };
 
-      AxisList.push(<Axis key={'axis-y-' + linesGroupKey}
-                          orient="left"
-                          scale={scale.y[linesGroupKey]}
-                          ticks={ticks.y}
-                          format={this.multiFormat}
-                          translate={`translate(${currentMarginLeft}, 0)`}>
-        <text x={-size.height / 2}
-              y="5"
-              dy="1em"
-              fill={linesGroup.lines[0].style.stroke || '#000'}
-              transform={(isRenderLines ? `translate(${-(axisSize.y.width[linesGroupKey] + 5.5)},0)` : '') + 'rotate(-90)'}>
-          {linesGroup.siX || linesGroup.si}
-        </text>
-      </Axis>);
+      console.info('RERENDER CHART');
 
-      if (isRenderLines) {
-        linesGroup.lines.forEach((line, lineKey) => {
-          let path = d3.line()
-            .defined(d => d.y !== null)
-            .curve(this.getCurve(line.curve))
-            .x(d => scale.x(d.x))
-            .y(d => scale.y[linesGroupKey](d.y));
+      let LineList = [];
+      let AxisList = [];
+      let currentMarginLeft = 0;
+      data.forEach((linesGroup, linesGroupKey) => {
+        currentMarginLeft += isRenderLines ? axisSize.y.width[linesGroupKey] : 0;
+        if (linesGroupKey > 0) {
+          currentMarginLeft += this.addPixels;
+        }
 
-          LineList.push(<Line key={'line-' + linesGroupKey + '-' + lineKey}
-                              path={path(line.points)}
-                              style={line.style}/>);
-        });
-      }
-    });
+        AxisList.push(<Axis key={'axis-y-' + linesGroupKey}
+                            orient="left"
+                            scale={scale.y[linesGroupKey]}
+                            ticks={ticks.y}
+                            format={this.multiFormat}
+                            translate={`translate(${currentMarginLeft}, 0)`}>
+          <text x={-size.height / 2}
+                y="5"
+                dy="1em"
+                fill={linesGroup.lines[0].style.stroke || '#000'}
+                transform={(isRenderLines ? `translate(${-(axisSize.y.width[linesGroupKey] + 5.5)},0)` : '') + 'rotate(-90)'}>
+            {linesGroup.siX || linesGroup.si}
+          </text>
+        </Axis>);
 
-    return (
-      <div className="svg-wrapper" ref="svgWrapper">
-        {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
-        <Chart width={size.container.width} height={size.container.height} ref="chart"
-               shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
-          <defs>
-            <clipPath id={`${this.uid}-lines`}>
-              <rect width={size.width} height={size.height}/>
-            </clipPath>
-          </defs>
-          <g transform={`translate(${margin.left}, ${margin.top})`}>
-            {isRenderLines && <g>
-              <g className="axisGrid" transform={`translate(${axisMargin.left}, 0)`}>
-                <Grid orient="left"
-                      scale={scale.y[scale.y.length - 1]}
-                      ticks={ticks.y}
-                      tickSize={-size.width}
-                      translate={`translate(0, 0)`}/>
-                <Grid orient="bottom"
-                      scale={scale.x}
-                      ticks={ticks.x}
-                      tickSize={-size.height}
-                      translate={`translate(0, ${size.height})`}/>
+        if (isRenderLines) {
+          linesGroup.lines.forEach((line, lineKey) => {
+            let path = d3.line()
+              .defined(d => d.y !== null)
+              .curve(this.getCurve(line.curve))
+              .x(d => scale.x(d.x))
+              .y(d => scale.y[linesGroupKey](d.y));
+
+            LineList.push(<Line key={'line-' + linesGroupKey + '-' + lineKey}
+                                path={path(line.points)}
+                                style={line.style}/>);
+          });
+        }
+      });
+
+      return (
+        <div className="svg-wrapper" ref="svgWrapper">
+          {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
+          <Chart width={size.container.width} height={size.container.height} ref="chart"
+                 shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+            <defs>
+              <clipPath id={`${this.uid}-lines`}>
+                <rect width={size.width} height={size.height}/>
+              </clipPath>
+            </defs>
+            <g transform={`translate(${margin.left}, ${margin.top})`}>
+              {isRenderLines && <g>
+                <g className="axisGrid" transform={`translate(${axisMargin.left}, 0)`}>
+                  <Grid orient="left"
+                        scale={scale.y[scale.y.length - 1]}
+                        ticks={ticks.y}
+                        tickSize={-size.width}
+                        translate={`translate(0, 0)`}/>
+                  <Grid orient="bottom"
+                        scale={scale.x}
+                        ticks={ticks.x}
+                        tickSize={-size.height}
+                        translate={`translate(0, ${size.height})`}/>
+                </g>
+                <g className="lines" transform={`translate(${axisMargin.left}, 0)`}
+                   clipPath={`url(#${this.uid}-lines)`}>
+                  {LineList}
+                </g>
+              </g>}
+              <g className="axisLeft">
+                {AxisList}
               </g>
-              <g className="lines" transform={`translate(${axisMargin.left}, 0)`} clipPath={`url(#${this.uid}-lines)`}>
-                {LineList}
+              <g className="axisBottom" transform={`translate(${axisMargin.left}, 0)`}>
+                <Axis
+                  orient="bottom"
+                  scale={scale.x}
+                  ticks={ticks.x}
+                  format={this.multiFormat}
+                  translate={`translate(0, ${size.height})`}
+                >
+                  {this.props.labelY && <text y={8 + 5} x={size.width / 2} dy="2em">{this.props.labelY}</text>}
+                </Axis>
               </g>
-            </g>}
-            <g className="axisLeft">
-              {AxisList}
+              {isRenderLines && <g>
+                {this.props.showTimeCursor && <TimeCursor width={size.width}
+                                                          height={size.height}
+                                                          scale={scale}
+                                                          transform={`translate(${axisMargin.left}, 0)`}
+                                                          time={new Date(1999, 6 - 1, 28, 5, 37, 0, 0)}
+                                                          groupName={this.props.groupName}/>}
+                {this.props.showTooltip && <Tooltip width={size.width}
+                                                    height={size.height}
+                                                    delay={this.props.tooltipDelay}
+                                                    onClick={this.props.tooltipOnClick}
+                                                    transform={`translate(${axisMargin.left}, 0)`}
+                                                    scale={scale}
+                                                    data={data}
+                                                    groupName={this.props.groupName}/>}
+              </g>
+              }
             </g>
-            <g className="axisBottom" transform={`translate(${axisMargin.left}, 0)`}>
-              <Axis
-                orient="bottom"
-                scale={scale.x}
-                ticks={ticks.x}
-                format={this.multiFormat}
-                translate={`translate(0, ${size.height})`}
-              >
-                {this.props.labelY && <text y={8 + 5} x={size.width / 2} dy="2em">{this.props.labelY}</text>}
-              </Axis>
-            </g>
-            {isRenderLines && <g>
-              {this.props.showTimeCursor && <TimeCursor width={size.width}
-                                                        height={size.height}
-                                                        scale={scale}
-                                                        transform={`translate(${axisMargin.left}, 0)`}
-                                                        time={new Date(1999, 6 - 1, 28, 5, 37, 0, 0)}
-                                                        groupName={this.props.groupName}/>}
-              {this.props.showTooltip && <Tooltip width={size.width}
-                                                  height={size.height}
-                                                  delay={this.props.tooltipDelay}
-                                                  onClick={this.props.tooltipOnClick}
-                                                  transform={`translate(${axisMargin.left}, 0)`}
-                                                  scale={scale}
-                                                  data={data}
-                                                  groupName={this.props.groupName}/>}
-            </g>
-            }
-          </g>
-        </Chart>
-      </div>
-    );
-  }
+          </Chart>
+        </div>
+      );
+    } else {
+      return (
+        <div className='centered-box'>
+          {this.props.emptyMessage}
+        </div>
+      );
+    }
+  };
 }
 
 LineChart.propTypes = {
@@ -407,6 +429,7 @@ LineChart.propTypes = {
   groupName: PropTypes.string,
   labelY: PropTypes.string,
   antiAliasing: PropTypes.bool,
+  emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.element, PropTypes.func])
 };
 
 LineChart.defaultProps = {
@@ -422,6 +445,7 @@ LineChart.defaultProps = {
   groupName: null,
   labelY: null,
   antiAliasing: true,
+  emptyMessage: 'No Data'
 };
 
 export default LineChart;

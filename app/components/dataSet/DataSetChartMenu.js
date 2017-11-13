@@ -35,7 +35,7 @@ function openWindowDataSet(id) {
 function openWindowMagnetopause() {
   const url = '/magnetopause';
 
-  const [width, height] = [700, 500];
+  const [width, height] = [800, 500];
   const windowOptions = {
     minWidth: width,
     minHeight: height,
@@ -44,6 +44,7 @@ function openWindowMagnetopause() {
     backgroundColor: '#292829',
     title: 'Magnetopause',
     icon: resourcePath('./assets/icons/line-chart.png'),
+    parent: remote.getCurrentWindow()
   };
 
   let win = windowManager.get(WINDOW_MAGNETOPAUSE);

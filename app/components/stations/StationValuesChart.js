@@ -3,10 +3,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ChartAlert} from './../widgets/ChartAlert';
+import {LoadingAlert, NoDataAlert, ErrorAlert} from './../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
-// import DataSetChartMenu from './DataSetChartMenu';
 import * as MainActions from './../../actions/main';
 import * as app from './../../constants/app';
 import '../../utils/helper';
@@ -90,17 +89,16 @@ class StationValuesChart extends Component {
 
     let container = null;
 
-    if (isEmpty) {
-      container = (<ChartAlert icon="info-circle" text="No data available" onContextMenu={this.handlerContextMenu}/>);
-    }
-
     if (isError) {
-      container = (<ChartAlert icon="exclamation-circle" text={isError.name} description={isError.message}
-                          onContextMenu={this.handlerContextMenu}/>);
+      container = (<ErrorAlert
+        text={isError.name}
+        description={isError.message}
+        onContextMenu={this.handlerContextMenu}
+      />);
     }
 
     if (isLoading) {
-      container = (<ChartAlert icon="loading" text="Loading..." onContextMenu={this.handlerContextMenu}/>);
+      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
@@ -112,9 +110,8 @@ class StationValuesChart extends Component {
             height={this.props.height}
             data={chartLines}
             tooltipDelay={100}
-            ref="chart"
-            lastRender={new Date()}
             antiAliasing={this.props.antiAliasing}
+            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu}/>}
           >
             <TitleCurrentTime/>
           </LineChart>
