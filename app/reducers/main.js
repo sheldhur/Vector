@@ -6,7 +6,8 @@ import * as types from './../constants/main';
 
 const initialState = {
   settings: {...DEFAULT_SETTINGS},
-  error: null,
+  isLoading: false,
+  isError: false,
   dbPath: null,
   update: null
 };
@@ -23,9 +24,11 @@ export default function main(state = initialState, action) {
       settings.project.time.selected.start = moment(settings.project.time.selected.start);
       settings.project.time.selected.end = moment(settings.project.time.selected.end);
 
-      return {...state, settings};
+      return {...state, settings, isError: false, isLoading: false};
+    case types.LOADING:
+      return {...state, isLoading: action.payload};
     case types.ERROR:
-      return {...state, error: action.payload};
+      return {...state, isError: action.payload, isLoading: false};
     case types.UPDATE:
       return {...state, update: action.payload};
     case types.DB_PATH:

@@ -95,7 +95,7 @@ function mapStateToProps(state) {
   return {
     time: state.main.settings.project.time,
     dbPath: state.main.dbPath,
-    isError: state.main.error,
+    isError: state.main.isError,
   };
 }
 

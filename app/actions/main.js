@@ -5,13 +5,27 @@ import * as fs from 'fs';
 import moment from 'moment';
 import deepAssign from './../lib/deepAssign';
 import dbConnect from './../database/dbConnect';
-import {DEFAULT_SETTINGS, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB, FILE_EXT_DB, FILE_EXT_ALL, FORMAT_DATE_SQL} from './../constants/app';
+import {
+  DEFAULT_SETTINGS,
+  LS_KEY_APP_SETTINGS,
+  LS_KEY_LAST_DB,
+  FILE_EXT_DB,
+  FILE_EXT_ALL,
+  FORMAT_DATE_SQL
+} from './../constants/app';
 import * as types from './../constants/main';
 
 const {dialog} = remote;
 const currentWindow = remote.getCurrentWindow();
 let db;
 
+
+export function setLoading(payload) {
+  return {
+    type: types.LOADING,
+    payload
+  };
+}
 
 export function setError(payload) {
   return {
@@ -91,6 +105,7 @@ export function saveSettings(values, useDefault = false) {
 
 export function loadSettings(id = 1) {
   return (dispatch) => {
+    dispatch(setLoading(true));
     return db.Project.findById(id)
       .then((project) => {
 
