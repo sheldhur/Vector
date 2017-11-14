@@ -4,10 +4,19 @@ import PropTypes from 'prop-types';
 import {NoDataAlert} from './../widgets/ChartAlert';
 import LineChart from './../chart/LineChart';
 import {magnetopausePoint} from '../../lib/geopack';
+import MagnetopauseMapMenu from './MagnetopauseMapMenu';
 import './../../utils/helper';
 
 
 class MagnetopauseMapY extends Component {
+
+  handlerContextMenu = (e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      MagnetopauseMapMenu();
+    }
+  };
 
   getDotPosition = function (angle, ringRad) {
     const center = 0;
@@ -78,7 +87,7 @@ class MagnetopauseMapY extends Component {
     const data = this.prepareData(wind);
 
     return (
-      <div className="magnetopause-map">
+      <div id="magnetopauseMap" className="magnetopause-map" onContextMenu={this.handlerContextMenu}>
         <LineChart
           width={this.props.width}
           height={this.props.height}

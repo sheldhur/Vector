@@ -30,3 +30,8 @@
 .screencapture .map-axis text {
   fill: black;
 }
+
+/* MagnetopauseChart */
+.magnetopause-map.screencapture text{
+  fill: black !important;
+}

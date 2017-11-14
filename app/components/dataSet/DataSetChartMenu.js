@@ -43,7 +43,7 @@ function openWindowMagnetopause() {
     height,
     backgroundColor: '#292829',
     title: 'Magnetopause',
-    icon: resourcePath('./assets/icons/line-chart.png'),
+    icon: resourcePath('./assets/icons/magnetopause.png'),
     parent: remote.getCurrentWindow()
   };
 
@@ -71,14 +71,6 @@ export default function (props) {
       icon: resourcePath('./assets/icons/blue-document-excel-csv.png'),
       click: () => {
         console.log('"Export" clicked');
-      }
-    }, {
-      label: 'Show in window',
-      icon: resourcePath('./assets/icons/applications-blue.png'),
-      visible: process.env.NODE_ENV === 'development',
-      enabled: false,
-      click: () => {
-        console.log('item 1 clicked')
       }
     }, {
       enabled: props.dataNotEmpty,
@@ -109,6 +101,7 @@ export default function (props) {
     }, {
       enabled: props.dataNotEmpty,
       label: 'Magnetopause',
+      icon: resourcePath('./assets/icons/magnetopause.png'),
       click: () => {
         openWindowMagnetopause();
       }

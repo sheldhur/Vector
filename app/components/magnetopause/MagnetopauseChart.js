@@ -4,10 +4,23 @@ import PropTypes from 'prop-types';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import {NoDataAlert} from './../widgets/ChartAlert';
+import MagnetopauseChartMenu from './MagnetopauseChartMenu';
 import './../../utils/helper';
 
 
 class MagnetopauseChart extends Component {
+
+  handlerContextMenu = (e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      const {chart} = this.props;
+      MagnetopauseChartMenu({
+        data: chart,
+        dataNotEmpty: chart != null && chart.length > 0
+      });
+    }
+  };
 
   prepareDataForChart = (points) => {
     return [{
@@ -30,16 +43,18 @@ class MagnetopauseChart extends Component {
 
     const data = this.prepareDataForChart(chart);
     return (
-      <LineChart
-        width={this.props.width}
-        height={this.props.height}
-        data={data}
-        tooltipDelay={100}
-        antiAliasing={this.props.antiAliasing}
-        emptyMessage={<NoDataAlert/>}
-      >
-        <TitleCurrentTime/>
-      </LineChart>
+      <div id="magnetopauseChart" style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
+        <LineChart
+          width={this.props.width}
+          height={this.props.height}
+          data={data}
+          tooltipDelay={100}
+          antiAliasing={this.props.antiAliasing}
+          emptyMessage={<NoDataAlert/>}
+        >
+          <TitleCurrentTime/>
+        </LineChart>
+      </div>
     );
   }
 }

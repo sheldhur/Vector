@@ -4,10 +4,19 @@ import PropTypes from 'prop-types';
 import LineChart from './../chart/LineChart';
 import {NoDataAlert} from './../widgets/ChartAlert';
 import {magnetopausePoint} from '../../lib/geopack';
+import MagnetopauseMapMenu from './MagnetopauseMapMenu';
 import './../../utils/helper';
 
 
 class MagnetopauseMapX extends Component {
+
+  handlerContextMenu = (e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      MagnetopauseMapMenu();
+    }
+  };
 
   prepareData = (values) => {
     if (!values) {
@@ -66,7 +75,7 @@ class MagnetopauseMapX extends Component {
     const data = this.prepareData(wind);
 
     return (
-        <div className="magnetopause-map">
+        <div id="magnetopauseMap" className="magnetopause-map" onContextMenu={this.handlerContextMenu}>
           <LineChart
             width={this.props.width}
             height={this.props.height}
