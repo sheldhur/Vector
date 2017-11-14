@@ -109,7 +109,7 @@ class StationVector extends Component {
       }
 
       //should be so transform={'rotate(45,' + coordinates[0] + ',' + coordinates[1] + ')'}
-      //but in the electron 1.6.12+ it's a bug.
+      //but in the electron 1.6.12+ have bug.
       points.push(<rect
         key={'point-' + i}
         width={pointSize}
@@ -119,7 +119,7 @@ class StationVector extends Component {
         onClick={(e) => this.handlerMouseClick(item)}
         onMouseEnter={(e) => this.handlerMouseEnter(item)}
         onMouseOut={(e) => this.handlerMouseOut()}
-        transform={'rotate(45)'}
+        transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
         className={pointClass}
       />);
     });
