@@ -255,8 +255,8 @@ class LineChart extends Component {
       formatSecond = d3.timeFormat(":%S"),
       formatMinute = d3.timeFormat("%H:%M"),
       formatHour = d3.timeFormat("%H:%M"),
-      formatDay = d3.timeFormat("%d.%m.%y"),
-      formatWeek = d3.timeFormat("%d.%m.%y"),
+      formatDay = d3.timeFormat("%d.%m.%y"), //%d.%m.%y
+      formatWeek = d3.timeFormat("%d.%m.%y"), //%d.%m.%y
       formatMonth = d3.timeFormat("%B"),
       formatYear = d3.timeFormat("%Y");
 
@@ -288,10 +288,10 @@ class LineChart extends Component {
       const {axisSize, wrapperSize} = this.state;
 
       const margin = {
-        left: 0,
-        right: 10,
+        left: 5,
+        right: 27,
         top: 2,
-        bottom: 0
+        bottom: 2
       };
       const axisMargin = this.calculateAxisMargin(axisSize);
       const size = this.calculateSize(wrapperSize, margin, axisMargin);
