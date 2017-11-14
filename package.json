@@ -1,7 +1,7 @@
 {
   "name": "Vector",
   "productName": "Vector",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.4",
   "description": "App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data",
   "main": "main.js",
   "scripts": {
@@ -158,7 +158,7 @@
     "css-loader": "^0.28.7",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^1.7.9",
+    "electron": "^1.6.12",
     "electron-builder": "^19.45.4",
     "electron-devtools-installer": "^2.2.1",
     "electron-rebuild": "^1.6.0",
