@@ -42,14 +42,6 @@ export default function (props) {
         openWindowStation();
       }
     }, {
-      enabled: false,
-      label: 'Show in window',
-      visible: process.env.NODE_ENV === 'development',
-      icon: resourcePath('./assets/icons/applications-blue.png'),
-      click: () => {
-        console.log('item 1 clicked')
-      }
-    }, {
       enabled: props.dataNotEmpty,
       label: 'Save to image',
       icon: resourcePath('./assets/icons/image-export.png'),

@@ -2,6 +2,8 @@ import {remote} from 'electron';
 import domToImage from 'dom-to-image';
 import resourcePath from './../../lib/resourcePath';
 import * as fs from 'fs';
+import moment from 'moment';
+import {FORMAT_DATE_SQL} from './../../constants/app';
 
 const {dialog} = remote;
 const currentWindow = remote.getCurrentWindow();
@@ -16,7 +18,7 @@ export default function (props) {
       click: () => {
         dialog.showSaveDialog(currentWindow, {
           title: 'Select path',
-          defaultPath: 'latitudeAvgValues.csv',
+          defaultPath: 'magnetopausePosition.csv',
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save CSV',
           filters: [
@@ -24,18 +26,9 @@ export default function (props) {
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
-            let data = props.prepareDataForCsv();
-
-            let fileContent = '';
-            let columns = data[0];
-            for (let time in data) {
-              let string = [];
-              for (let colName in columns) {
-                string.push(data[time][colName] || null);
-              }
-
-              fileContent += string.join(';') + '\r\n';
-            }
+            let fileContent = props.data.map((item) => {
+              return `${moment(item.x).format(FORMAT_DATE_SQL)};${item.y}`;
+            }).join("\r\n");
 
             fs.writeFile(filePath, fileContent, (err) => {
               if (err) {
@@ -54,7 +47,7 @@ export default function (props) {
       click: () => {
         dialog.showSaveDialog(currentWindow, {
           title: 'Select path for image',
-          defaultPath: 'stationAvgChar.png',
+          defaultPath: 'magnetopauseChar.png',
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save image',
           filters: [
@@ -62,7 +55,7 @@ export default function (props) {
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
-            const chart = document.querySelector('#stationAvgChar');
+            const chart = document.querySelector('#magnetopauseChart');
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
@@ -72,12 +65,6 @@ export default function (props) {
             });
           }
         });
-      }
-    }, {type: 'separator'}, {
-      label: 'Update chart',
-      icon: resourcePath('./assets/icons/arrow-circle-double.png'),
-      click: () => {
-        props.stationActions.getLatitudeAvgValues();
       }
     }
   ]).popup(remote.getCurrentWindow());
