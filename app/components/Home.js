@@ -43,9 +43,9 @@ class Home extends Component {
     });
   };
 
-  handlerAvgValueChange = (e) => {
+  handlerAvgValueChange = (value) => {
     let {avg} = this.state;
-    avg.value = parseInt(e.target.value);
+    avg.value = parseInt(value);
     this.setState({
       avg: avg
     });

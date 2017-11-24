@@ -5,10 +5,9 @@ import {
   VALUES_MAX,
   VALUES_MIN,
   VALUES_RAW,
-  FORMAT_DATE_SQL
 } from '../constants/app';
 
-function calcTimeExtreme (period, data, avg, startOrEnd) {
+function calcTimeExtreme(period, data, avg, startOrEnd) {
   const timePeriod = period.valueOf();
   const timeData = data.valueOf();
 
@@ -37,14 +36,12 @@ function prepareValues(data, time, rowLength) {
 
   let format = VALUES_RAW;
   rows = prepareRawValues(rows, time, rowLength, data.properties.badValue || 99999);
-  if (time.extreme.frequency !== avg.time) {
-    if (time.extreme.frequency < avg.time) {
-      format = VALUES_AVG;
-      rows = prepareFormatedValues(rows, time, format);
-    } else if (time.extreme.frequency > avg.time) {
-      format = VALUES_INTERPOLATED;
-      rows = prepareInterpolatedValues(rows, time);
-    }
+  if (time.extreme.frequency < avg.time) {
+    format = VALUES_AVG;
+    rows = prepareFormatedValues(rows, time, format);
+  } else if (Math.abs(time.extreme.start - rows[0][0].valueOf()) > 0) {
+    format = VALUES_INTERPOLATED;
+    rows = prepareInterpolatedValues(rows, time);
   }
 
   return {

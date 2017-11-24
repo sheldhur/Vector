@@ -102,7 +102,7 @@ class DataSetChart extends Component {
             tooltipDelay={100}
             tooltipOnClick={this.handlerMouseClick}
             antiAliasing={this.props.antiAliasing}
-            emptyMessage={<LoadingAlert onContextMenu={this.handlerContextMenu}/>}
+            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu}/>}
           >
             <TitleCurrentTime/>
           </LineChart>
