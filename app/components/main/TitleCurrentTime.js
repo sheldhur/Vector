@@ -5,10 +5,11 @@ import moment from 'moment';
 
 class TitleCurrentTime extends Component {
   render() {
-    const {currentTime} = this.props;
+    const {currentTime, avg} = this.props;
+    const timeFormat = avg.by.startsWith('min') ? "DD-MM-YYYY HH:mm" : "DD-MM-YYYY HH:mm:ss";
 
     return (
-      <div>{currentTime ? moment(currentTime).format("DD-MM-YYYY HH:mm") : 'Time not selected'}</div>
+      <div>{currentTime ? moment(currentTime).format(timeFormat) : 'Time not selected'}</div>
     );
   }
 }
@@ -18,6 +19,7 @@ TitleCurrentTime.defaultProps = {};
 
 function mapStateToProps(state) {
   return {
+    avg: state.main.settings.project.time.avg,
     currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null,
   };
 }

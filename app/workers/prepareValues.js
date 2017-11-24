@@ -39,7 +39,7 @@ function prepareValues(data, time, rowLength) {
   if (time.extreme.frequency < avg.time) {
     format = VALUES_AVG;
     rows = prepareFormatedValues(rows, time, format);
-  } else if (Math.abs(time.extreme.start - rows[0][0].valueOf()) > 0) {
+  } else if (time.extreme.frequency > avg.time || Math.abs(time.extreme.start - rows[0][0].valueOf()) > 0) {
     format = VALUES_INTERPOLATED;
     rows = prepareInterpolatedValues(rows, time);
   }
