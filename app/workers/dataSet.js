@@ -24,7 +24,7 @@ export default function (dbSession, data) {
     .then((dataSets) => getDataSetValues(dataSets, time))
     .then((result) => prepareData(result))
     .then((result) => {
-      process.send({event: 'setData', result});
+      process.send({event: 'setData', data: result});
     })
     .catch((error) => {
       console.error(error);
@@ -58,7 +58,7 @@ function getDataSetValues(dataSets, time) {
       dataSets,
       dataSetValues,
     };
-  })
+  });
 }
 
 function prepareData(data) {

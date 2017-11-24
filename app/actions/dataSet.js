@@ -46,18 +46,18 @@ export function getData() {
             ELECTRON_RUN_AS_NODE: true
           }
         }
-      }, (data) => {
-        if (data) {
+      }, (response) => {
+        if (response) {
           console.timeEnd('dataSetWorker');
-          switch (data.event) {
+          switch (response.event) {
             case 'setData':
-              dispatch(setData(data.result));
+              dispatch(setData(response.data));
               break;
             case 'setError':
-              dispatch(setError(data.error));
+              dispatch(setError(response.data));
               break;
             default:
-              console.log(data);
+              console.log(response);
               break;
           }
         }
