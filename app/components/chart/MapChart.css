@@ -2,21 +2,25 @@
   fill: #d7c7ad;
   stroke: #766951;
 }
+
 .map-country {
   fill: none;
   stroke: #766951;
   stroke-opacity: 0.4;
 }
+
 .map-ocean {
   fill: #a4bac7;
 }
-.map-graticule path{
+
+.map-graticule path {
   fill: none;
   stroke: black;
   stroke-width: 1px;
   stroke-opacity: 0.2;
-  stroke-dasharray: 2,2;
+  stroke-dasharray: 2, 2;
 }
+
 .map-outline {
   fill: none;
   stroke: #888888;
@@ -28,9 +32,11 @@
   fill: #888888;
   font-size: 1.1em;
 }
+
 .map-axis.azimuthal text {
   font-size: 0.85em;
 }
+
 .map-axis.azimuthal line {
   fill: none;
   stroke: #888888;
@@ -39,7 +45,8 @@
 .map-point {
   opacity: 0.75;
 }
-.map-point rect{
+
+.map-point rect {
   fill: transparent;
   stroke: black;
   stroke-width: 1px;
@@ -51,7 +58,7 @@
   /*stroke: rgb(74,144,226);*/
 }
 
-.map-point line{
+.map-point line {
   fill: none;
   stroke: black;
   stroke-width: 2px;
@@ -60,6 +67,19 @@
 .map-point circle {
   stroke: none;
   /*fill-opacity: 0.5;*/
+}
+
+.map-point text {
+  font-family: Consolas;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.map-point text:hover {
+  opacity: 1;
+  fill: #d0021b;
 }
 
 .map-terminator path {
@@ -88,6 +108,7 @@
   font-family: Consolas;
   font-size: 0.82em;
 }
+
 /*
 .map-graticule :nth-child(2n+16) {
   stroke-dasharray: 2,2;

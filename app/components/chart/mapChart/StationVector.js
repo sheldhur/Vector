@@ -59,75 +59,96 @@ class StationVector extends Component {
     let circleStrength = mapLayer.dZ.scaleAuto ? maximum.dZ : mapLayer.dZ.scale; //486 * 2;
     let circleNormal = circleRadius / circleStrength;
 
-    data.forEach((item, i) => {
-      item.longitude = item.longitude > 180 ? item.longitude - 360 : item.longitude;
-      let coordinates = projection([item.longitude, item.latitude]);
 
-      let pointClass = 'defalut';
-      if (item.delta !== undefined) {
-        if (mapLayer.dH.enabled) {
-          if (item.delta.dX && item.delta.dY) {
-            let coordinates2 = [
-              item.longitude + (item.delta.vector.Y * vectorNormal),
-              item.latitude + (item.delta.vector.X * vectorNormal)
-            ];
-
-            if (coordinates2[0] > 180) {
-              coordinates2[0] += 360;
-            }
-            if (coordinates2[0] < 180) {
-              coordinates2[0] -= 360;
-            }
-
-            coordinates2 = projection(coordinates2);
-
-            lines.push(<line
-                key={'line-' + i}
-                x1={coordinates[0]}
-                y1={coordinates[1]}
-                x2={coordinates2[0]}
-                y2={coordinates2[1]}
-              />
-            );
-          }
-        }
-
-        if (mapLayer.dZ.enabled) {
-          if (item.delta.dZ) {
-            let circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
-            circles[circleClass].push(<circle
-              key={'circle-' + i}
-              cx={coordinates[0]}
-              cy={coordinates[1]}
-              r={Math.abs(item.delta.dZ * circleNormal)}
-              fill={`url(#circle-${circleClass})`}
-            />);
-          }
-        }
-      } else {
-        pointClass = 'bad-value';
+    let names = [];
+    if (this.props.currentTime == null || this.props.currentTime === this.props.settings.project.time.selected.start.valueOf()) {
+      for (let stationId in stations) {
+        const item = stations[stationId];
+        const coordinates = projection([item.longitude, item.latitude]);
+        names.push(
+          <text
+            key={'name-' + stationId}
+            x={coordinates[0]}
+            y={coordinates[1]}
+            onClick={(e) => this.handlerMouseClick(item)}
+            onMouseEnter={(e) => this.handlerMouseEnter(item)}
+            onMouseOut={(e) => this.handlerMouseOut()}
+          >
+            {item.name}
+          </text>
+        );
       }
+    } else {
+      data.forEach((item, i) => {
+        item.longitude = item.longitude > 180 ? item.longitude - 360 : item.longitude;
+        const coordinates = projection([item.longitude, item.latitude]);
 
-      //should be so transform={'rotate(45,' + coordinates[0] + ',' + coordinates[1] + ')'}
-      //but in the electron 1.6.12+ have bug.
-      points.push(<rect
-        key={'point-' + i}
-        width={pointSize}
-        height={pointSize}
-        x={coordinates[0] - pointSize / 2}
-        y={coordinates[1] - pointSize / 2}
-        onClick={(e) => this.handlerMouseClick(item)}
-        onMouseEnter={(e) => this.handlerMouseEnter(item)}
-        onMouseOut={(e) => this.handlerMouseOut()}
-        transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
-        className={pointClass}
-      />);
-    });
+        let pointClass = 'defalut';
+        if (item.delta !== undefined) {
+          if (mapLayer.dH.enabled) {
+            if (item.delta.dX && item.delta.dY) {
+              let coordinates2 = [
+                item.longitude + (item.delta.vector.Y * vectorNormal),
+                item.latitude + (item.delta.vector.X * vectorNormal)
+              ];
 
-    return {points, lines, circles};
+              if (coordinates2[0] > 180) {
+                coordinates2[0] += 360;
+              }
+              if (coordinates2[0] < 180) {
+                coordinates2[0] -= 360;
+              }
+
+              coordinates2 = projection(coordinates2);
+
+              lines.push(<line
+                  key={'line-' + i}
+                  x1={coordinates[0]}
+                  y1={coordinates[1]}
+                  x2={coordinates2[0]}
+                  y2={coordinates2[1]}
+                />
+              );
+            }
+          }
+
+          if (mapLayer.dZ.enabled) {
+            if (item.delta.dZ) {
+              let circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
+              circles[circleClass].push(<circle
+                key={'circle-' + i}
+                cx={coordinates[0]}
+                cy={coordinates[1]}
+                r={Math.abs(item.delta.dZ * circleNormal)}
+                fill={`url(#circle-${circleClass})`}
+              />);
+            }
+          }
+        } else {
+          pointClass = 'bad-value';
+        }
+
+        //should be so transform={'rotate(45,' + coordinates[0] + ',' + coordinates[1] + ')'}
+        //but in the electron 1.6.12+ have bug.
+        points.push(<rect
+          key={'point-' + i}
+          width={pointSize}
+          height={pointSize}
+          x={coordinates[0] - pointSize / 2}
+          y={coordinates[1] - pointSize / 2}
+          onClick={(e) => this.handlerMouseClick(item)}
+          onMouseEnter={(e) => this.handlerMouseEnter(item)}
+          onMouseOut={(e) => this.handlerMouseOut()}
+          transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
+          className={pointClass}
+        />);
+      });
+    }
+
+    return {points, lines, circles, names};
   };
 
-  render() {
+  render = () => {
     const {mapLayer} = this.props.settings.project;
     const data = this.prepareStationsData();
     const color = {
@@ -178,9 +199,10 @@ class StationVector extends Component {
         </g>
         <g>{data.lines}</g>
         <g>{data.points}</g>
+        <g>{data.names}</g>
       </g>
     );
-  }
+  };
 }
 
 StationVector.propTypes = {};
@@ -197,7 +219,7 @@ function mapStateToProps(state) {
     extremes: state.station.extremes,
     maximum: state.station.maximum,
     settings: state.main.settings,
-    // isStartTime: state.chart.chartCurrentTime && state.main.settings.project.time.selected.start.valueOf() === state.chart.chartCurrentTime.valueOf()
+    currentTime: state.chart.chartCurrentTime
   };
 }
 
