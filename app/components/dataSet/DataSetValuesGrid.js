@@ -103,9 +103,18 @@ class DataSetValuesGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('value', record.id, value, afterAction)
-        }/>),
+        (value, afterAction) => this.handleCellChange('value', record.id, value, afterAction)
+      }/>),
       width: 160
+    }, {
+      title: '',
+      dataIndex: 'format',
+      hasFilter: true,
+      hasSorter: true,
+      render: (text, record, index) => {
+        return app.VALUES_CONVERT_FORMAT[text];
+      },
+      width: 80
     }];
 
 
