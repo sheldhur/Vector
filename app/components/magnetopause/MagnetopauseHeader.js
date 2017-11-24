@@ -11,7 +11,6 @@ class MagnetopauseHeader extends Component {
   render = () => {
     const field = this.props.settings.project.magnetopause;
     const modalVisible = !(field && field.b && field.bz && field.pressureSolar);
-    console.log({modalVisible, field});
     return (
       <div className="main-page-header">
         <MagnetopauseSettings size={this.size} modalVisible={modalVisible}/>

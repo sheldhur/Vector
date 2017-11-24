@@ -15,33 +15,56 @@ export function setData(payload) {
   };
 }
 
-export function prepareDataSet() {
+function prepareDataSet(dataSetValues, field) {
+  let data;
+
+  if (field && dataSetValues.hasOwnProperty(field)) {
+    data = {};
+    dataSetValues[field].forEach((item) => {
+      data[item.time] = item.value;
+    });
+  }
+
+  return data;
+}
+
+export function calculateMagnetopause() {
   return (dispatch, getState) => {
     const field = getState().main.settings.project.magnetopause;
     const {dataSetValues} = getState().dataSet;
 
     let chartPoints = null;
     let data = null;
-    if (dataSetValues && field && field.b && field.bz && field.pressureSolar) {
-      chartPoints = [];
-      data = {};
-      dataSetValues[field.b].forEach((value, i) => {
-        let time = new Date(value.time);
+
+    if (dataSetValues && field) {
+      const fieldData = {
+        b: prepareDataSet(dataSetValues, field.b),
+        bz: prepareDataSet(dataSetValues, field.bz),
+        pressureSolar: prepareDataSet(dataSetValues, field.pressureSolar),
+      };
+
+      for (let timeStr in fieldData.b) {
+        const time = new Date(timeStr);
         let values = {
-          b: dataSetValues[field.b][i].value,
-          bz: dataSetValues[field.bz][i].value,
-          pressureSolar: dataSetValues[field.pressureSolar][i].value / 10,
-          time: new Date(time.getTime() - time.getTimezoneOffset() * 60000)
+          b: fieldData.b[timeStr],
+          bz: fieldData.bz[timeStr],
+          pressureSolar: fieldData.pressureSolar[timeStr],
+          time: new Date(time - time.getTimezoneOffset() * 60000)
         };
-        let point = new MagnetopausePoint(values).calculate(0, 0).toCartesian();
+        let point = new MagnetopausePoint(values).calculate(0, 0);
+
+        if (!chartPoints) {
+          chartPoints = [];
+          data = {}
+        }
 
         chartPoints.push({
           x: time,
-          y: point.x
+          y: point ? point.toCartesian().x : null,
         });
 
         data[time] = values;
-      });
+      }
     }
 
     dispatch(setChart(chartPoints));

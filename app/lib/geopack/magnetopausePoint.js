@@ -34,7 +34,7 @@ export default class MagnetopausePoint {
 
   constructor(props) {
     for (let name in this) {
-      if (props.hasOwnProperty(name)) {
+      if (props.hasOwnProperty(name) && props[name] != null) {
         this[name] = props[name];
       }
     }
@@ -52,9 +52,7 @@ export default class MagnetopausePoint {
     const latitudeRad = latitude * M2R;
     const longitudeRad = longitude * M2R;
 
-    if (pressureMagnetic < 0 || pressureSolar < 0 || bz < -200) {
-      return null;
-    } else {
+    if (pressureMagnetic > 0 && pressureSolar > 0 && bz > -200) {
       let te = Math.cos(latitudeRad) * Math.cos(longitudeRad);
       if (te > 1) {
         te = 1
@@ -116,5 +114,7 @@ export default class MagnetopausePoint {
         }
       }
     }
+
+    return null;
   }
 }

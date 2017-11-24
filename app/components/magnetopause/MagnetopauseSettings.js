@@ -25,7 +25,7 @@ class MagnetopauseSettings extends Component {
 
   handlerModalClose = () => {
     this.setState({modalVisible: false}, () => {
-      this.props.magnetopauseActions.prepareDataSet();
+      this.props.magnetopauseActions.calculateMagnetopause();
     });
   };
 

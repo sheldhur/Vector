@@ -50,7 +50,7 @@ export default function (filePath) {
             }
           } else {
             let lineSplit = line.split(/\s+/);
-            if (['UT','EPOCH_TIME','TIME','DATE'].indexOf(lineSplit[0]) !== -1) {
+            if (['UT','EPOCH_TIME','EPOCH','TIME','DATE'].indexOf(lineSplit[0]) !== -1) {
               lineSplit.forEach((item, i) => {
                 data.columns.push({
                   name: item,

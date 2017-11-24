@@ -10,7 +10,7 @@ import * as MagnetopauseActions from './../../actions/magnetopause';
 
 class MagnetopauseDashboard extends Component {
   componentWillMount = () => {
-    this.props.magnetopauseActions.prepareDataSet();
+    this.props.magnetopauseActions.calculateMagnetopause();
   };
 
   // componentWillReceiveProps = (nextProps) => {
