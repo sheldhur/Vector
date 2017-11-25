@@ -96,7 +96,7 @@ class MagnetopauseMapY extends Component {
           ticks={{x: 5, y: 5}}
           showTooltip={false}
           showTimeCursor={false}
-          labelY={'Z (Re)'}
+          labelY={'Y (Re)'}
           antiAliasing={this.props.antiAliasing}
           emptyMessage={<NoDataAlert/>}
         />
