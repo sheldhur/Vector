@@ -6,10 +6,10 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Icon, Popconfirm} from 'antd';
-import Grid from './../grid/Grid';
-import * as MainActions from './../../actions/main';
-import * as DataSetActions from './../../actions/dataSet';
-import * as app from './../../constants/app';
+import Grid from '../grid/Grid';
+import * as MainActions from '../../actions/main';
+import * as DataSetActions from '../../actions/dataSet';
+import * as app from '../../constants/app';
 
 class DataSetGrid extends Component {
 

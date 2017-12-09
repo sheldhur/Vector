@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import MainHeaderControls from './../main/MainHeaderControls';
-import MainHeaderCapture from './../main/MainHeaderCapture';
+import MainHeaderControls from '../main/MainHeaderControls';
+import MainHeaderCapture from '../main/MainHeaderCapture';
 import MagnetopauseSettings from './MagnetopauseSettings';
 import MagnetopauseSettingsChart from './MagnetopauseSettingsChart';
 

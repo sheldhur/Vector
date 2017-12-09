@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import models from './models';
-import consoleLogSQL from './../lib/consoleLogSQL';
+import consoleLogSQL from '../lib/consoleLogSQL';
 
 const Op = Sequelize.Op;
 const operatorsAliases = {

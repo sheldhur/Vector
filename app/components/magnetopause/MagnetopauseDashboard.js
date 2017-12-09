@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {ResizeblePanel, Panel} from './../widgets/ResizeblePanel';
+import {ResizeblePanel, Panel} from '../widgets/ResizeblePanel';
 import MagnetopauseMap from './MagnetopauseMap';
 import MagnetopauseChart from './MagnetopauseChart';
-import {NoDataAlert, ProgressAlert} from './../widgets/ChartAlert';
-import * as MagnetopauseActions from './../../actions/magnetopause';
+import {NoDataAlert, ProgressAlert} from '../widgets/ChartAlert';
+import * as MagnetopauseActions from '../../actions/magnetopause';
 
 
 class MagnetopauseDashboard extends Component {

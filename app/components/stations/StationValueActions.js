@@ -4,8 +4,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link, hashHistory} from 'react-router';
 import {Col, Button, Select, Menu, Dropdown, Icon} from 'antd';
-import * as StationActions from './../../actions/station';
-import * as app from './../../constants/app';
+import * as StationActions from '../../actions/station';
+import * as app from '../../constants/app';
 
 
 const STATION_DISABLE = 'STATION_DISABLE';

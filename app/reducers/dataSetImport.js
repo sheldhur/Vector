@@ -1,4 +1,4 @@
-import * as types from './../constants/dataSetImport';
+import * as types from '../constants/dataSetImport';
 
 const initialState = {
   showModal: false,

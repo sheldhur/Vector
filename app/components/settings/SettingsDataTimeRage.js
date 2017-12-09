@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {DatePicker} from 'antd';
 import moment from "moment";
-import * as app from './../../constants/app';
+import * as app from '../../constants/app';
 import {numberIsBetween} from "../../utils/helper";
 
 

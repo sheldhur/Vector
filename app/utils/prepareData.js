@@ -1,4 +1,4 @@
-import {DATA_SET_COLOR} from './../constants/app';
+import {DATA_SET_COLOR} from '../constants/app';
 
 
 export const dataSetsForChart = (dataSets, dataSetValues, filter) => {

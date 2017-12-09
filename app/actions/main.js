@@ -2,8 +2,8 @@ import {push} from 'react-router-redux';
 import {hashHistory} from 'react-router';
 import {remote} from 'electron';
 import * as fs from 'fs';
-import errorToObject from './../lib/errorToObject';
-import dbConnect from './../database/dbConnect';
+import errorToObject from '../lib/errorToObject';
+import dbConnect from '../database/dbConnect';
 import {
   DEFAULT_SETTINGS,
   LS_KEY_APP_SETTINGS,
@@ -11,8 +11,8 @@ import {
   FILE_EXT_DB,
   FILE_EXT_ALL,
   FORMAT_DATE_SQL
-} from './../constants/app';
-import * as types from './../constants/main';
+} from '../constants/app';
+import * as types from '../constants/main';
 
 const {dialog} = remote;
 const currentWindow = remote.getCurrentWindow();

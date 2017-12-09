@@ -6,9 +6,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import Grid from '../grid/Grid';
-import * as ChartActions from './../../actions/chart';
-import * as StationActions from './../../actions/station';
-import * as app from './../../constants/app';
+import * as ChartActions from '../../actions/chart';
+import * as StationActions from '../../actions/station';
+import * as app from '../../constants/app';
 
 class StationGrid extends Component {
 

@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {remote} from 'electron';
-import {Menu, Dropdown, Button, Icon, Modal, Progress, Tooltip} from 'antd';
+import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
-import * as DataSetActions from './../../actions/dataSet';
-import * as DataSetImportActions from './../../actions/dataSetImport';
-import * as app from './../../constants/app';
+import * as DataSetActions from '../../actions/dataSet';
+import * as DataSetImportActions from '../../actions/dataSetImport';
+import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];

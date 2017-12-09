@@ -2,9 +2,9 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import MapChart from './../chart/MapChart';
+import MapChart from '../chart/MapChart';
 import VectorMapMenu from './VectorMapMenu';
-import * as StationActions from './../../actions/station';
+import * as StationActions from '../../actions/station';
 
 
 class VectorMapChart extends Component {

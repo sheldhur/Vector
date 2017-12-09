@@ -5,7 +5,7 @@ import {
   VALUES_MAX,
   VALUES_MIN,
   VALUES_RAW,
-} from './../constants/app';
+} from '../constants/app';
 import {mathAvg, numberIsBetween} from './helper';
 
 function calcTimeExtreme(period, data, avg, startOrEnd) {

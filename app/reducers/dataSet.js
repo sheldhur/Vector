@@ -1,7 +1,6 @@
-import * as types from './../constants/dataSet';
+import * as types from '../constants/dataSet';
 
 const initialState = {
-  // chart: null,
   dataSets: null,
   dataSetValues: null,
   isLoading: false,

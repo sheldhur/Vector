@@ -1,4 +1,4 @@
-import * as types from './../constants/stationImport';
+import * as types from '../constants/stationImport';
 
 const initialState = {
   showModal: false,

@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {LoadingAlert, NoDataAlert, ErrorAlert} from './../widgets/ChartAlert';
-import LineChart from './../chart/LineChart';
-import TitleCurrentTime from './../main/TitleCurrentTime';
-import * as MainActions from './../../actions/main';
-import * as app from './../../constants/app';
+import {LoadingAlert, NoDataAlert, ErrorAlert} from '../widgets/ChartAlert';
+import LineChart from '../chart/LineChart';
+import TitleCurrentTime from '../main/TitleCurrentTime';
+import * as MainActions from '../../actions/main';
+import * as app from '../../constants/app';
 
 const COMP_XYZ = 'XYZ';
 const COMP_HDZ = 'HDZ';

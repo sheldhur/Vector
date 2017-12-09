@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
-import {ResizeblePanel, Panel} from './../widgets/ResizeblePanel';
-import Hav from './../graphics/Hav';
+import {ResizeblePanel, Panel} from '../widgets/ResizeblePanel';
+import Hav from '../graphics/Hav';
 import DataSet from './DataSetChart';
 import VectorMap from '../map/VectorMapChart';
 

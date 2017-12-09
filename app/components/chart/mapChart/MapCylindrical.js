@@ -8,7 +8,7 @@ import Graticule from './Graticule';
 import GeomagEquator from './GeomagEquator';
 import SolarTerminator from './SolarTerminator';
 import StationVector from './StationVector';
-import Axis from './../lineChart/Axis';
+import Axis from '../lineChart/Axis';
 import Tooltip from './Tooltip';
 
 

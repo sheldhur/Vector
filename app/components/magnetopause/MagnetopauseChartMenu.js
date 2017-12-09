@@ -1,9 +1,9 @@
 import {remote} from 'electron';
 import domToImage from 'dom-to-image';
-import resourcePath from './../../lib/resourcePath';
+import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
 import moment from 'moment';
-import {FORMAT_DATE_SQL} from './../../constants/app';
+import {FORMAT_DATE_SQL} from '../../constants/app';
 
 const {dialog} = remote;
 const currentWindow = remote.getCurrentWindow();

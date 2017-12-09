@@ -1,6 +1,6 @@
 import moment from 'moment';
-import {DEFAULT_SETTINGS} from './../constants/app';
-import * as types from './../constants/main';
+import {DEFAULT_SETTINGS} from '../constants/app';
+import * as types from '../constants/main';
 
 
 const initialState = {

@@ -1,6 +1,6 @@
 import {remote} from 'electron';
 import domToImage from 'dom-to-image';
-import resourcePath from './../../lib/resourcePath';
+import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
 
 const {dialog} = remote;

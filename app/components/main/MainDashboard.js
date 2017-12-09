@@ -1,8 +1,8 @@
 // @flow
 import React, {Component} from 'react';
-import {ResizeblePanel, Panel} from './../widgets/ResizeblePanel';
-import StationAvgChart from './../stationsAvg/StationAvgChart';
-import DataSetChart from './../dataSet/DataSetChart';
+import {ResizeblePanel, Panel} from '../widgets/ResizeblePanel';
+import StationAvgChart from '../stationsAvg/StationAvgChart';
+import DataSetChart from '../dataSet/DataSetChart';
 import VectorMapChart from '../map/VectorMapChart';
 
 

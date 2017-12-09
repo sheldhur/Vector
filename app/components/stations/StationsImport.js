@@ -5,9 +5,9 @@ import {connect} from 'react-redux';
 import {remote} from 'electron';
 import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
-import * as StationActions from './../../actions/station';
-import * as StationImportActions from './../../actions/stationImport';
-import * as app from './../../constants/app';
+import * as StationActions from '../../actions/station';
+import * as StationImportActions from '../../actions/stationImport';
+import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];

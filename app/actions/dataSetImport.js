@@ -1,7 +1,7 @@
 import childProcess from '../lib/childProcess';
-import resourcePath from './../lib/resourcePath';
-import {WORKER_PATH, IS_PROD} from './../constants/app';
-import * as types from './../constants/dataSetImport';
+import resourcePath from '../lib/resourcePath';
+import {WORKER_PATH, IS_PROD} from '../constants/app';
+import * as types from '../constants/dataSetImport';
 
 let worker;
 

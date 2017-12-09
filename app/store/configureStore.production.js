@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import {hashHistory} from 'react-router';
 import {routerMiddleware} from 'react-router-redux';
 import {electronEnhancer} from 'redux-electron-store';
-import rootReducer from './../reducers/index';
+import rootReducer from '../reducers/index';
 
 const router = routerMiddleware(hashHistory);
 

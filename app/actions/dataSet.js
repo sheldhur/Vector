@@ -1,8 +1,8 @@
 import childProcess from '../lib/childProcess';
-import resourcePath from './../lib/resourcePath';
-import {db} from './../database/dbConnect';
-import {WORKER_PATH, IS_PROD} from './../constants/app';
-import * as types from './../constants/dataSet';
+import resourcePath from '../lib/resourcePath';
+import {db} from '../database/dbConnect';
+import {WORKER_PATH, IS_PROD} from '../constants/app';
+import * as types from '../constants/dataSet';
 
 let worker;
 

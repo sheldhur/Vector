@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import * as fs from 'fs';
 import * as topojson from 'topojson';
-import resourcePath from './../../../lib/resourcePath';
+import resourcePath from '../../../lib/resourcePath';
 
 
 class World extends Component {

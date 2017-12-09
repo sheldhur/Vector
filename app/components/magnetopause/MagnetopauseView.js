@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import MagnetopauseHeader from './MagnetopauseHeader';
 import MagnetopauseDashboard from './MagnetopauseDashboard';
-import {LoadingAlert, ErrorAlert} from './../widgets/ChartAlert';
+import {LoadingAlert, ErrorAlert} from '../widgets/ChartAlert';
 
 
 class MagnetopauseView extends Component {

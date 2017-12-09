@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
 import moment from 'moment';
-import errorToObject from './../lib/errorToObject';
-import calcProgress from './../lib/calcProgress';
-import prepareImportData from './../utils/prepareImportData';
-import * as geomag from './../lib/geomagneticData';
+import errorToObject from '../lib/errorToObject';
+import calcProgress from '../lib/calcProgress';
+import prepareImportData from '../utils/prepareImportData';
+import * as geomag from '../lib/geomagneticData';
 
 let db;
 

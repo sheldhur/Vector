@@ -1,11 +1,11 @@
 // @flow
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import LineChart from './../chart/LineChart';
-import {NoDataAlert} from './../widgets/ChartAlert';
+import LineChart from '../chart/LineChart';
+import {NoDataAlert} from '../widgets/ChartAlert';
 import MagnetopauseMapMenu from './MagnetopauseMapMenu';
-import {magnetopausePoint} from './../../lib/geopack';
-import {numberIsBetween} from './../../utils/helper';
+import {magnetopausePoint} from '../../lib/geopack';
+import {numberIsBetween} from '../../utils/helper';
 
 
 class MagnetopauseMapX extends Component {

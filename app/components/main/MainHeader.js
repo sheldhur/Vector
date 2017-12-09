@@ -7,12 +7,12 @@ import moment from 'moment';
 import MainHeaderControls from './MainHeaderControls';
 import MainHeaderCapture from './MainHeaderCapture';
 import MainUpdateApp from './MainUpdateApp';
-import Settings from './../settings/Settings';
-import SettingsDataTimeRage from './../settings/SettingsDataTimeRage';
-import * as MainActions from './../../actions/main';
-import * as DataSetActions from './../../actions/dataSet';
-import * as StationActions from './../../actions/station';
-import * as ChartActions from './../../actions/chart';
+import Settings from '../settings/Settings';
+import SettingsDataTimeRage from '../settings/SettingsDataTimeRage';
+import * as MainActions from '../../actions/main';
+import * as DataSetActions from '../../actions/dataSet';
+import * as StationActions from '../../actions/station';
+import * as ChartActions from '../../actions/chart';
 import {IS_PROD} from "../../constants/app";
 
 

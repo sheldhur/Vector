@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
-import * as ChartActions from './../../../actions/chart';
-import * as stationsCalc from './../../../lib/stationsCalc';
-import {openWindowStation} from './../../map/VectorMapMenu'
+import * as ChartActions from '../../../actions/chart';
+import * as stationsCalc from '../../../lib/stationsCalc';
+import {openWindowStation} from '../../map/VectorMapMenu'
 
 
 class StationVector extends Component {

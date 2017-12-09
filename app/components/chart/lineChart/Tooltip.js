@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {sprintf} from 'sprintf-js';
 import * as d3 from 'd3';
-import * as ChartActions from './../../../actions/chart';
+import * as ChartActions from '../../../actions/chart';
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
 import {mathAvg} from "../../../utils/helper";

@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
 import moment from 'moment';
-import {STATION_DISABLED, STATION_ENABLED} from './../constants/app'
-import * as stationsCalc from './../lib/stationsCalc';
-import errorToObject from './../lib/errorToObject';
-import calcProgress from './../lib/calcProgress';
+import {STATION_DISABLED, STATION_ENABLED} from '../constants/app'
+import * as stationsCalc from '../lib/stationsCalc';
+import errorToObject from '../lib/errorToObject';
+import calcProgress from '../lib/calcProgress';
 import {mathAvg, numberIsBetween} from '../utils/helper';
 
 let db;

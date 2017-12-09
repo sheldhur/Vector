@@ -2,12 +2,12 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ProgressAlert, NoDataAlert} from './../widgets/ChartAlert';
+import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import moment from 'moment';
-import LineChart from './../chart/LineChart';
+import LineChart from '../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
-import * as StationActions from './../../actions/station';
-import * as app from './../../constants/app';
+import * as StationActions from '../../actions/station';
+import * as app from '../../constants/app';
 
 class StationAvgChart extends Component {
 

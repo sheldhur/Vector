@@ -1,4 +1,4 @@
-import * as types from './../constants/magnetopause';
+import * as types from '../constants/magnetopause';
 
 const initialState = {
   data: null,

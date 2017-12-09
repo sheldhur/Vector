@@ -1,4 +1,4 @@
-import * as types from './../constants/station';
+import * as types from '../constants/station';
 
 const initialState = {
   stations: null,

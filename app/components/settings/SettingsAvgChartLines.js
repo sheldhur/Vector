@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Popconfirm, Icon} from 'antd';
-import Grid from './../grid/Grid';
-import * as app from './../../constants/app';
+import Grid from '../grid/Grid';
+import * as app from '../../constants/app';
 
 class SettingsAvgChartLines extends Component {
 

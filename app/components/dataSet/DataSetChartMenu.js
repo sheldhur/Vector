@@ -1,8 +1,8 @@
 import {remote} from 'electron';
 import domToImage from 'dom-to-image';
-import resourcePath from './../../lib/resourcePath';
-import windowManager from './../../lib/windowManager';
-import {WINDOW_DATASET, WINDOW_MAGNETOPAUSE} from './../../constants/app';
+import resourcePath from '../../lib/resourcePath';
+import windowManager from '../../lib/windowManager';
+import {WINDOW_DATASET, WINDOW_MAGNETOPAUSE} from '../../constants/app';
 import * as fs from 'fs';
 
 const {dialog} = remote;

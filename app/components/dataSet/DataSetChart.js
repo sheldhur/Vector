@@ -3,15 +3,15 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {ProgressAlert, NoDataAlert} from './../widgets/ChartAlert';
-import LineChart from './../chart/LineChart';
-import TitleCurrentTime from './../main/TitleCurrentTime';
+import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
+import LineChart from '../chart/LineChart';
+import TitleCurrentTime from '../main/TitleCurrentTime';
 import DataSetChartMenu from './DataSetChartMenu';
-import * as MainActions from './../../actions/main';
-import * as DataSetActions from './../../actions/dataSet';
-import * as StationActions from './../../actions/station';
-import * as prepareData from './../../utils/prepareData';
-import * as app from './../../constants/app';
+import * as MainActions from '../../actions/main';
+import * as DataSetActions from '../../actions/dataSet';
+import * as StationActions from '../../actions/station';
+import * as prepareData from '../../utils/prepareData';
+import * as app from '../../constants/app';
 
 
 class DataSetChart extends Component {

@@ -1,8 +1,8 @@
-import {remote, nativeImage} from 'electron';
+import {remote} from 'electron';
 import domToImage from 'dom-to-image';
-import resourcePath from './../../lib/resourcePath';
-import windowManager from './../../lib/windowManager';
-import {WINDOW_STATIONS} from './../../constants/app';
+import resourcePath from '../../lib/resourcePath';
+import windowManager from '../../lib/windowManager';
+import {WINDOW_STATIONS} from '../../constants/app';
 import * as fs from 'fs';
 
 const {dialog} = remote;
@@ -33,7 +33,7 @@ export function openWindowStation(id) {
 }
 
 export default function (props) {
-  const {Menu, MenuItem} = remote;
+  const {Menu} = remote;
   const menu = Menu.buildFromTemplate([
     {
       label: 'Stations',

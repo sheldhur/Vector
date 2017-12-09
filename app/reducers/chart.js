@@ -1,4 +1,4 @@
-import * as types from './../constants/chart';
+import * as types from '../constants/chart';
 
 const initialState = {
   chartCurrentTime: null,

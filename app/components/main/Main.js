@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import MainHeader from './MainHeader';
 import MainDashboard from './MainDashboard';
-import {LoadingAlert, ErrorAlert} from './../widgets/ChartAlert';
+import {LoadingAlert, ErrorAlert} from '../widgets/ChartAlert';
 
 
 class Main extends Component {

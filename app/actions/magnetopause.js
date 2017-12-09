@@ -1,5 +1,5 @@
-import MagnetopausePoint from './../lib/geopack/magnetopausePoint';
-import * as types from './../constants/magnetopause';
+import MagnetopausePoint from '../lib/geopack/magnetopausePoint';
+import * as types from '../constants/magnetopause';
 
 export function setChart(payload) {
   return {

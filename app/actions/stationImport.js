@@ -1,8 +1,8 @@
 import childProcess from '../lib/childProcess';
-import resourcePath from './../lib/resourcePath';
-import {WORKER_PATH, IS_PROD} from './../constants/app';
-import * as types from './../constants/stationImport';
-import * as stationTypes from './../constants/station';
+import resourcePath from '../lib/resourcePath';
+import {WORKER_PATH, IS_PROD} from '../constants/app';
+import * as types from '../constants/stationImport';
+import * as stationTypes from '../constants/station';
 
 
 let worker;

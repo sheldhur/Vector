@@ -8,8 +8,8 @@ import SettingsAvgChartLines from "./SettingsAvgChartLines";
 import SettingsAvgChartLatitudes from "./SettingsAvgChartLatitudes";
 import SettingsDataTimeRage from "./SettingsDataTimeRage";
 import * as MainActions from "./../../actions/main";
-import * as DataSetActions from './../../actions/dataSet';
-import * as StationActions from './../../actions/station';
+import * as DataSetActions from '../../actions/dataSet';
+import * as StationActions from '../../actions/station';
 import * as app from "./../../constants/app"
 import {stringCamelCase, numberIsBetween} from "../../utils/helper";
 

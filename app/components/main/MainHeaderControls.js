@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Tooltip, Button, Input, Tag, Icon} from 'antd';
-import * as ChartActions from './../../actions/chart';
+import * as ChartActions from '../../actions/chart';
 
 class MainHeaderControls extends Component {
   state = {

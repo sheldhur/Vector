@@ -4,8 +4,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link, hashHistory} from 'react-router';
 import {Col, Button, Select, Menu, Dropdown, Icon} from 'antd';
-import * as DataSetActions from './../../actions/dataSet';
-import * as app from './../../constants/app';
+import * as DataSetActions from '../../actions/dataSet';
+import * as app from '../../constants/app';
 
 
 const DATASET_DISABLE = 'DATASET_DISABLE';

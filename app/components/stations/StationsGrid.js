@@ -7,9 +7,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Icon, Popconfirm} from 'antd';
 import Grid from '../grid/Grid';
-import * as MainActions from './../../actions/main';
-import * as StationActions from './../../actions/station';
-import * as app from './../../constants/app';
+import * as MainActions from '../../actions/main';
+import * as StationActions from '../../actions/station';
 
 
 class StationGrid extends Component {

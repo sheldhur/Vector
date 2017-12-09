@@ -6,9 +6,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import * as fs from 'fs';
-import MainDashboard from './../main/MainDashboard';
-import * as ChartActions from './../../actions/chart';
-import * as StationActions from './../../actions/station';
+import MainDashboard from '../main/MainDashboard';
+import * as ChartActions from '../../actions/chart';
+import * as StationActions from '../../actions/station';
 
 
 const captureWin = remote.getCurrentWindow();
