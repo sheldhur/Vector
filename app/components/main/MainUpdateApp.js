@@ -28,7 +28,8 @@ class MainUpdateApp extends Component {
           onCancel={() => this.handlerCancel()}
           okText={<span><Icon type="download"/> Install update</span>}
           wrapClassName="main-update-app"
-          maskClosable={false}
+          zIndex={999}
+          width={700}
         >
           <Row gutter={50}>
             <Col span={2}>

@@ -61,7 +61,7 @@ class StationValueActions extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        {station.status == app.STATION_ENABLED ?
+        {station.status === app.STATION_ENABLED ?
           <Menu.Item key={STATION_DISABLE}>Disable station</Menu.Item>
           :
           <Menu.Item key={STATION_ENABLE}>Enable Station</Menu.Item>

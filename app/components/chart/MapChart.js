@@ -16,7 +16,7 @@ class MapChart extends Component {
   };
 
   componentDidMount = () => {
-    if (this.props.width == '100%' || this.props.height == '100%') {
+    if (this.props.width === '100%' || this.props.height === '100%') {
       window.addEventListener('resize', this.handleResize);
     }
 

@@ -35,8 +35,24 @@
   background-color: #484c51;
 }
 
+.theme-night .ant-table .select-cell .ant-select-arrow {
+  color: rgba(255, 255, 255, 0.25)
+}
+
+.theme-night .ant-table .select-cell:hover .ant-select-arrow {
+  color: rgba(255, 255, 255, 0.75)
+}
+
 .theme-night .ant-table-empty .ant-table-placeholder {
   background-color: transparent;
   border-color: #464545;
   color: #b0b0b0;
+}
+
+.theme-night .ant-progress-circle .ant-progress-text {
+  color: #b0b0b0;
+}
+
+.theme-night .ant-progress-circle .ant-progress-circle-trail {
+  stroke: #464545;
 }

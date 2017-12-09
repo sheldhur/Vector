@@ -2,8 +2,7 @@ import {push} from 'react-router-redux';
 import {hashHistory} from 'react-router';
 import {remote} from 'electron';
 import * as fs from 'fs';
-import moment from 'moment';
-import deepAssign from './../lib/deepAssign';
+import errorToObject from './../lib/errorToObject';
 import dbConnect from './../database/dbConnect';
 import {
   DEFAULT_SETTINGS,
@@ -69,14 +68,14 @@ export function getLastDataBase(openMain = true) {
   return (dispatch) => {
     if (localStorage[LS_KEY_LAST_DB] && localStorage[LS_KEY_LAST_DB] !== '') {
       const path = localStorage[LS_KEY_LAST_DB];
-      // dispatch(setDataBasePath(null));
       try {
         const stat = fs.statSync(path);
         if (stat.isFile()) {
           dispatch(openDataBase(path, openMain));
         }
       } catch (e) {
-        console.log('Can\'t open last DataBase: ' + path, e);
+        console.error(e);
+        dispatch(setError(errorToObject(new Error('Can\'t open last database: ' + path))));
       }
     }
   }
@@ -84,18 +83,23 @@ export function getLastDataBase(openMain = true) {
 
 export function saveSettings(values, useDefault = false) {
   return (dispatch, getState) => {
-    let defaultSettings = useDefault ? {...DEFAULT_SETTINGS} : {...getState().main.settings};
-    let settings = deepAssign(defaultSettings, {...values}, (destination, source) => {
-      return source.length > 0 ? source : destination;
+    const defaultSettings = useDefault ? DEFAULT_SETTINGS : getState().main.settings;
+    const settings = {...defaultSettings, ...values};
+
+    const tmp = {app: {}, project: {}};
+    Object.keys(DEFAULT_SETTINGS).forEach((key) => {
+      let type = key.startsWith('project') ? 'project' : 'app';
+      let value = settings[key];
+
+      if (key === 'projectTimePeriod' || key === 'projectTimeSelected') {
+        value = value.map(item => item.format(FORMAT_DATE_SQL));
+      }
+
+      tmp[type][key] = value;
     });
 
-    settings.project.time.period.start = moment(settings.project.time.period.start).format(FORMAT_DATE_SQL);
-    settings.project.time.period.end = moment(settings.project.time.period.end).format(FORMAT_DATE_SQL);
-    settings.project.time.selected.start = moment(settings.project.time.selected.start).format(FORMAT_DATE_SQL);
-    settings.project.time.selected.end = moment(settings.project.time.selected.end).format(FORMAT_DATE_SQL);
-
-    let settingsProject = JSON.stringify(settings.project, null, 2);
-    let settingsApp = JSON.stringify(settings.app, null, 2);
+    let settingsProject = JSON.stringify(tmp.project, null, 2);
+    let settingsApp = JSON.stringify(tmp.app, null, 2);
 
     return db.Project.update({settings: settingsProject}, {where: {id: 1}})
       .then(() => localStorage[LS_KEY_APP_SETTINGS] = settingsApp)
@@ -108,21 +112,11 @@ export function loadSettings(id = 1) {
     dispatch(setLoading(true));
     return db.Project.findById(id)
       .then((project) => {
+        const settingsProject = {...project.settings};
+        const settingsAppString = localStorage[LS_KEY_APP_SETTINGS];
+        const settingsApp = (settingsAppString && settingsAppString !== '') ? JSON.parse(settingsAppString) : {};
 
-        project.settings.time.period.start = moment(project.settings.time.period.start, FORMAT_DATE_SQL);
-        project.settings.time.period.end = moment(project.settings.time.period.end, FORMAT_DATE_SQL);
-        project.settings.time.selected.start = moment(project.settings.time.selected.start, FORMAT_DATE_SQL);
-        project.settings.time.selected.end = moment(project.settings.time.selected.end, FORMAT_DATE_SQL);
-
-        return {app: {}, project: project.settings}
-      })
-      .then((settings) => {
-        const settingsApp = localStorage[LS_KEY_APP_SETTINGS];
-        if (settingsApp && settingsApp !== '') {
-          settings.app = JSON.parse(settingsApp);
-        }
-
-        return settings;
+        return {...settingsApp, ...settingsProject}
       })
       .then((settings) => dispatch(setSettings(settings)));
   }
@@ -137,17 +131,17 @@ export function openDataBase(path, openMain = true) {
       }
       db = dbConnect(path);
 
-      db.sequelize.authenticate().then(() => {
-        dispatch(loadSettings()).then(() => {
+      db.sequelize.authenticate()
+        .then(() => dispatch(loadSettings()))
+        .then(() => {
           dispatch(saveLastDataBase(path));
           if (openMain) {
             openMainPage();
           }
         });
-      });
     } catch (error) {
       console.error(error);
-      dispatch(setError(error));
+      dispatch(setError(errorToObject(error)));
     }
   }
 }

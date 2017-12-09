@@ -37,15 +37,6 @@ export const VALUES_CONVERT_FORMAT = {
 export const STATION_DISABLED = 0;
 export const STATION_ENABLED = 1;
 
-export const ROUTES = [
-  {component: 'Home', path: '/home',},
-  {component: 'Main', path: '/main',},
-  {component: 'DataSetsView', path: '/dataSet',},
-  {component: 'DataSetValuesView', path: '/dataSet/:id',},
-  {component: 'StationsView', path: '/station',},
-  {component: 'StationValuesView', path: '/station/:id',},
-];
-
 export const AVG_CHART_COMP = ['dH', 'dD', 'dZ'];
 export const AVG_CHART_HEMISPHERE = ['global', 'east', 'west'];
 
@@ -61,81 +52,59 @@ export const MAP_WORLD_SCALE = ['1:50', '1:110'];
 export const MAP_PROJECTION = ['Equirectangular', 'Stereographic'];
 
 export const DEFAULT_SETTINGS = {
-  app: {
-    theme: 'night',
-    language: 'en-US',
-    antiAliasing: true,
-    time: {
-      shiftStep: 10,
-      playDelay: 0.1
-    },
-    mapLayer: {
-      projectionType: 'equirectangular',
-      world: {
-        scale: '1:110',
-        countries: false,
-        color: {
-          water: '#a4bac7',
-          land: '#d7c7ad',
-          border: '#766951',
-        },
-      },
-    },
+  appTheme: 'night',
+  appLanguage: 'en-US',
+  appAntiAliasing: true,
+  appTimeShiftStep: 10,
+  appPlayDelay: 0.1,
+  appMapProjectionType: 'equirectangular',
+  appMapScale: '1:110',
+  appMapCountries: false,
+  appMapSolarPoint: true,
+  appMapTerminator: true,
+  appMapColor: {
+    water: '#a4bac7',
+    land: '#d7c7ad',
+    border: '#766951',
   },
-  project: {
-    time: {
-      avg: {
-        by: 'minutes',
-        value: 1,
-      },
-      period: {
-        start: null,
-        end: null,
-      },
-      selected: {
-        start: null,
-        end: null,
-      },
-    },
-    mapLayer: {
-      dH: {
-        enabled: true,
-        scaleAuto: true,
-        scale: 0,
-        color: '#000000',
-      },
-      dZ: {
-        enabled: true,
-        scaleAuto: true,
-        scale: 0,
-        view: 'circle',
-        color: {
-          positive: '#d0021b',
-          negative: '#2a47e2',
-        },
-      },
-    },
-    avgChart: {
-      latitudeRanges: [
-        [90, -90],
-        [90, 75],
-        [75, 60],
-        [60, 30],
-        [30, -30],
-        [-30, -60],
-        [-60, -75],
-        [-75, -90],
-      ],
-      lines: [
-        {comp: 'dH', hemisphere: 'global', style: null, enabled: true},
-        {comp: 'dH', hemisphere: 'east', style: null, enabled: true},
-        {comp: 'dH', hemisphere: 'west', style: null, enabled: true},
-      ],
-    },
-    magnetopause: {
-      b: null,
-      bz: null,
-      pressureSolar: null,
+  projectTimeAvg: {by: 'minutes', value: 1},
+  projectTimePeriod: [null, null],
+  projectTimeSelected: [null, null],
+  projectMapLayerH: {
+    enabled: true,
+    scaleAuto: false,
+    scale: 200,
+    color: "#000000"
+  },
+  projectMapLayerZ: {
+    enabled: true,
+    scaleAuto: false,
+    scale: 200,
+    view: "circle",
+    color: {
+      positive: "#d0021b",
+      negative: "#2a47e2"
     }
-  }
+  },
+  projectAvgComponentLines: [
+    {comp: 'dH', hemisphere: 'global', style: null, enabled: true},
+    {comp: 'dH', hemisphere: 'east', style: null, enabled: true},
+    {comp: 'dH', hemisphere: 'west', style: null, enabled: true},
+  ],
+  projectAvgLatitudeRanges: [
+    [90, -90],
+    [90, 75],
+    [75, 60],
+    [60, 30],
+    [30, -30],
+    [-30, -60],
+    [-60, -75],
+    [-75, -90],
+  ],
+  projectMagnetopause: {
+    b: null,
+    bz: null,
+    pressureSolar: null,
+  },
+  projectMagnetopauseDataSets: []
 };

@@ -11,19 +11,3 @@
 .stations-view .station-actions .ant-btn {
   line-height: normal;
 }
-
-.stations-view .station-import {
-  text-align: center;
-}
-
-.station-import.file-path.ant-tooltip .ant-tooltip-inner {
-  max-width: 350px;
-}
-
-.station-import .ant-progress .ant-progress-bg {
-  transition: width .6s ease-out;
-}
-
-.station-import .ant-progress.animation-off .ant-progress-bg {
-  transition: none;
-}

@@ -8,6 +8,8 @@ import SettingsAvgChartLines from "./SettingsAvgChartLines";
 import SettingsAvgChartLatitudes from "./SettingsAvgChartLatitudes";
 import SettingsDataTimeRage from "./SettingsDataTimeRage";
 import * as MainActions from "./../../actions/main";
+import * as DataSetActions from './../../actions/dataSet';
+import * as StationActions from './../../actions/station';
 import * as app from "./../../constants/app";
 import "./../../utils/helper";
 
@@ -105,35 +107,38 @@ class Settings extends Component {
     this.setState({modalVisible: true});
   };
 
-  handlerModalClose = () => {
-    this.setState({modalVisible: false});
+  handlerModalClose = (callback) => {
+    this.setState({modalVisible: false}, callback);
   };
 
   handlerReset = (e) => {
-    //TODO: SettingsAvgChartLines мутирует стейт
-    this.props.mainActions.loadSettings().then(() => {
-      this.handlerModalClose();
+    this.handlerModalClose(() => {
+      this.props.form.resetFields();
     });
   };
 
   handlerSave = (e) => {
     e.preventDefault();
-    let values = this.props.form.getFieldsValue();
+    const {settings} = this.props;
+    const values = this.props.form.getFieldsValue();
 
-    values.project.mapLayer.dH.scaleAuto = values.project.mapLayer.dH.scaleAuto === 'true';
-    values.project.mapLayer.dZ.scaleAuto = values.project.mapLayer.dZ.scaleAuto === 'true';
-
-    values.project.time.period = {
-      start: values.project.time.period[0].millisecond(0).toISOString(),
-      end: values.project.time.period[1].millisecond(0).toISOString(),
-    };
-
-    values.project.time.selected = {
-      start: values.project.time.selected[0].millisecond(0).toISOString(),
-      end: values.project.time.selected[1].millisecond(0).toISOString(),
-    };
+    values.projectMapLayerH.scaleAuto = values.projectMapLayerH.scaleAuto === true;
+    values.projectMapLayerZ.scaleAuto = values.projectMapLayerZ.scaleAuto === true;
 
     this.props.mainActions.saveSettings(values).then(() => {
+      if (
+        JSON.stringify(settings.projectTimePeriod) !== JSON.stringify(values.projectTimePeriod) ||
+        JSON.stringify(settings.projectTimeSelected) !== JSON.stringify(values.projectTimeSelected)
+      ) {
+        this.props.dataSetActions.getData();
+        this.props.stationActions.getLatitudeAvgValues();
+      } else if (
+        JSON.stringify(settings.projectAvgComponentLines.filter((item) => item.enabled)) !== JSON.stringify(values.projectAvgComponentLines.filter((item) => item.enabled)) ||
+        JSON.stringify(settings.projectAvgLatitudeRanges) !== JSON.stringify(values.projectAvgLatitudeRanges)
+      ) {
+        this.props.stationActions.getLatitudeAvgValues();
+      }
+
       this.handlerModalClose();
     });
   };
@@ -155,147 +160,150 @@ class Settings extends Component {
     const {setFieldsValue} = this.props.form;
 
     return {
-      'app.theme': {
-        initialValue: settings.app.theme,
+      'appTheme': {
+        initialValue: settings.appTheme,
         rules: [{
           type: 'string'
         }],
       },
-      'app.language': {
-        initialValue: settings.app.language,
+      'appLanguage': {
+        initialValue: settings.appLanguage,
         rules: [{
           type: 'string'
         }],
       },
-      'app.antiAliasing': {
-        initialValue: settings.app.antiAliasing,
+      'appAntiAliasing': {
+        initialValue: settings.appAntiAliasing,
         valuePropName: 'checked'
       },
-      'app.mapLayer.world.scale': {
-        initialValue: settings.app.mapLayer.world.scale,
+      'appMapScale': {
+        initialValue: settings.appMapScale,
         rules: [{
           type: 'string'
         }],
       },
-      'app.mapLayer.projectionType': {
-        initialValue: settings.app.mapLayer.projectionType,
+      'appMapProjectionType': {
+        initialValue: settings.appMapProjectionType,
         rules: [{
           type: 'string'
         }],
       },
-      'app.mapLayer.world.countries': {
-        initialValue: settings.app.mapLayer.world.countries,
+      'appMapCountries': {
+        initialValue: settings.appMapCountries,
         valuePropName: 'checked'
       },
-      'app.mapLayer.world.color.water': {
-        initialValue: settings.app.mapLayer.world.color.water,
+      'appMapColor.water': {
+        initialValue: settings.appMapColor.water,
         rules: [{
           type: 'float', message: 'Is not a integer!'
         }],
       },
-      'app.mapLayer.world.color.land': {
-        initialValue: settings.app.mapLayer.world.color.land,
+      'appMapColor.land': {
+        initialValue: settings.appMapColor.land,
         rules: [{
           type: 'float', message: 'Is not a integer!'
         }],
       },
-      'app.mapLayer.world.color.border': {
-        initialValue: settings.app.mapLayer.world.color.border,
+      'appMapColor.border': {
+        initialValue: settings.appMapColor.border,
         rules: [{
           type: 'float', message: 'Is not a integer!'
         }],
       },
-      'app.time.shiftStep': {
-        initialValue: settings.app.time.shiftStep,
+      'appTimeShiftStep': {
+        initialValue: settings.appTimeShiftStep,
         rules: [{
           type: 'integer', message: 'Is not a integer!',
         }]
       },
-      'app.time.playDelay': {
-        initialValue: settings.app.time.playDelay,
+      'appPlayDelay': {
+        initialValue: settings.appPlayDelay,
         rules: [{
           type: 'integer', message: 'Is not a integer!',
         }]
       },
-      'project.time.period': {
-        initialValue: [settings.project.time.period.start, settings.project.time.period.end],
+      'projectTimePeriod': {
+        initialValue: [...settings.projectTimePeriod].map(item => moment(item)),
         rules: [{
           type: 'array',
           fields: {
             0: {type: "object", required: true},
             1: {type: "object", required: true},
           },
-          message: 'Please select time!'
+          message: 'Please select time!',
+          transform: (value) => {
+            console.log(value);
+            setFieldsValue({
+              'projectTimePeriod': value.map(item => item.seconds(0).millisecond(0))
+            })
+          }
         }]
       },
-      'project.time.selected': {
-        initialValue: [settings.project.time.selected.start, settings.project.time.selected.end],
+      'projectTimeSelected': {
+        initialValue: [...settings.projectTimeSelected].map(item => moment(item)),
         rules: [{
           type: 'array',
           fields: {
             0: {type: "object", required: true},
             1: {type: "object", required: true},
           },
-          message: 'Please select time!'
-        },
-          // {
-          //   validator: (rule, value, callback) => {
-          //     let {form} = this.props;
-          //     let timePeriod = form.getFieldValue('time.period');
-          //     if (value) {
-          //
-          //     }
-          //     console.log({timePeriod, value});
-          //     callback();
-          //   }
-          // }
-        ],
+          message: 'Please select time!',
+          transform: (value) => {
+            console.log(value);
+            setFieldsValue({
+              'projectTimeSelected': value.map(item => item.seconds(0).millisecond(0))
+            })
+          }
+        }],
       },
-      'project.mapLayer.dH.enabled': {
-        initialValue: settings.project.mapLayer.dH.enabled,
+      'projectMapLayerH.enabled': {
+        initialValue: settings.projectMapLayerH.enabled,
         valuePropName: 'checked'
       },
-      'project.mapLayer.dZ.enabled': {
-        initialValue: settings.project.mapLayer.dZ.enabled,
+      'projectMapLayerZ.enabled': {
+        initialValue: settings.projectMapLayerZ.enabled,
         valuePropName: 'checked'
       },
-      'project.mapLayer.dH.scaleAuto': {
-        initialValue: settings.project.mapLayer.dH.scaleAuto.toString(),
+      'projectMapLayerH.scaleAuto': {
+        initialValue: settings.projectMapLayerH.scaleAuto.toString(),
+        type: 'boolean',
         rules: [{
           transform: (value) => {
             setFieldsValue({
-              'mapLayer.dH.scale': value !== 'true' ? settings.project.mapLayer.dH.scale : (maximum ? maximum.dH : NaN)
+              'projectMapLayerH.scale': value !== 'true' ? settings.projectMapLayerH.scale : (maximum ? maximum.dH : NaN)
             })
           }
         }]
       },
-      'project.mapLayer.dZ.scaleAuto': {
-        initialValue: settings.project.mapLayer.dZ.scaleAuto.toString(),
+      'projectMapLayerZ.scaleAuto': {
+        initialValue: settings.projectMapLayerZ.scaleAuto.toString(),
         rules: [{
           transform: (value) => {
             setFieldsValue({
-              'mapLayer.dZ.scale': value !== 'true' ? settings.project.mapLayer.dZ.scale : (maximum ? maximum.dZ : NaN)
+              'projectMapLayerZ.scale': value !== 'true' ? settings.projectMapLayerZ.scale : (maximum ? maximum.dZ : NaN)
             })
           }
         }]
       },
-      'project.mapLayer.dH.scale': {
-        initialValue: !settings.project.mapLayer.dH.scaleAuto ? settings.project.mapLayer.dH.scale : (maximum ? maximum.dH : NaN),
+      'projectMapLayerH.scale': {
+        initialValue: !settings.projectMapLayerH.scaleAuto ? settings.projectMapLayerH.scale : (maximum ? maximum.dH : NaN),
         rules: [{
           type: 'number', message: 'Is not a integer!',
         }]
       },
-      'project.mapLayer.dZ.scale': {
-        initialValue: !settings.project.mapLayer.dZ.scaleAuto ? settings.project.mapLayer.dZ.scale : (maximum ? maximum.dZ : NaN),
+      'projectMapLayerZ.scale': {
+        initialValue: !settings.projectMapLayerZ.scaleAuto ? settings.projectMapLayerZ.scale : (maximum ? maximum.dZ : NaN),
         rules: [{
           type: 'number', message: 'Is not a integer!',
         }]
       },
-      'project.mapLayer.dZ.view': {
-        initialValue: settings.project.mapLayer.dZ.view,
+      'projectMapLayerZ.view': {
+        initialValue: settings.projectMapLayerZ.view,
       },
-      'project.avgChart.lines': {
-        initialValue: settings.project.avgChart.lines,
+      'projectAvgComponentLines': {
+        initialValue: settings.projectAvgComponentLines.map(item => {
+          return {...item};
+        }),
         rules: [{
           type: 'array',
           // fields: {
@@ -305,8 +313,10 @@ class Settings extends Component {
           message: 'Please add lines!'
         }]
       },
-      'project.avgChart.latitudeRanges': {
-        initialValue: settings.project.avgChart.latitudeRanges,
+      'projectAvgLatitudeRanges': {
+        initialValue: settings.projectAvgLatitudeRanges.map(item => {
+          return [...item];
+        }),
         rules: [{
           type: 'array',
           // fields: {
@@ -333,7 +343,7 @@ class Settings extends Component {
     };
 
     const ScaleTypeSelect = (
-      <Select style={{width: 60}} size={this.props.size}>
+      <Select style={{width: 65}} size={this.props.size}>
         <Select.Option value={`true`}>auto</Select.Option>
         <Select.Option value={`false`}>fixed</Select.Option>
       </Select>
@@ -389,7 +399,6 @@ class Settings extends Component {
           onCancel={this.handlerReset}
           onOk={this.handlerSave}
           visible={this.state.modalVisible}
-          maskClosable={false}
         >
           <Form>
             <Tabs tabPosition="left" defaultActiveKey="1">
@@ -398,9 +407,10 @@ class Settings extends Component {
                 tab={(<span><Icon type="layout"/>Application</span>)}
                 style={{height: this.state.modalHeight}}
               >
-                {!localStorage[app.LS_KEY_APP_SETTINGS] && <Alert message="This is global settings" type="warning" showIcon/>}
+                {!localStorage[app.LS_KEY_APP_SETTINGS] &&
+                <Alert message="This is global settings" type="warning" showIcon/>}
                 <Form.Item {...formItemLayout} label="Theme">
-                  {wrappedField('app.theme')(
+                  {wrappedField('appTheme')(
                     <Select size={this.props.size} style={{width: 150}}>
                       {app.THEMES.map((item, i) => {
                         return <Select.Option value={item.toCamelCase()} key={i}>{item}</Select.Option>;
@@ -409,7 +419,7 @@ class Settings extends Component {
                   )}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Language">
-                  {wrappedField('app.language')(
+                  {wrappedField('appLanguage')(
                     <Select size={this.props.size} style={{width: 150}} disabled>
                       {app.LANGUAGES.map((item, i) => {
                         return <Select.Option value={item.code} key={i}>{item.name}</Select.Option>;
@@ -418,7 +428,7 @@ class Settings extends Component {
                   )}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Anti-aliasing">
-                  {wrappedField('app.antiAliasing')(
+                  {wrappedField('appAntiAliasing')(
                     <Switch size={this.props.size}/>
                   )}
                 </Form.Item>
@@ -427,12 +437,12 @@ class Settings extends Component {
                   <div>
                     {InputGroup({
                       label: "Shift step",
-                      name: "app.time.shiftStep",
-                      addonAfter: `× ${settings.project.time.avg.value} ${settings.project.time.avg.by}`
+                      name: "appTimeShiftStep",
+                      addonAfter: `× ${settings.projectTimeAvg.value} ${settings.projectTimeAvg.by}`
                     })}
                     {InputGroup({
                       label: "Play delay",
-                      name: "app.time.playDelay",
+                      name: "appPlayDelay",
                       addonAfter: "seconds"
                     })}
                   </div>
@@ -441,7 +451,7 @@ class Settings extends Component {
                   <legend>Map</legend>
                   <div>
                     <Form.Item {...formItemLayout} label="World scale">
-                      {wrappedField('app.mapLayer.world.scale')(
+                      {wrappedField('appMapScale')(
                         <Select size={this.props.size} style={{width: 150}}>
                           {app.MAP_WORLD_SCALE.map((item, i) => {
                             return <Select.Option value={item} key={i}>{item}</Select.Option>;
@@ -450,7 +460,7 @@ class Settings extends Component {
                       )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Default projection">
-                      {wrappedField('app.mapLayer.projectionType')(
+                      {wrappedField('appMapProjectionType')(
                         <Select size={this.props.size} style={{width: 150}}>
                           {app.MAP_PROJECTION.map((item, i) => {
                             return <Select.Option value={item.toCamelCase()} key={i}>{item}</Select.Option>;
@@ -459,27 +469,27 @@ class Settings extends Component {
                       )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Show countries">
-                      {wrappedField('app.mapLayer.world.countries')(
+                      {wrappedField('appMapCountries')(
                         <Switch size={this.props.size}/>
                       )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Water color">
                       <Col span={6}>
-                        {wrappedField('app.mapLayer.world.color.water')(
+                        {wrappedField('appMapColor.water')(
                           <Input placeholder="Color" size={this.props.size}/>
                         )}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Land color">
                       <Col span={6}>
-                        {wrappedField('app.mapLayer.world.color.land')(
+                        {wrappedField('appMapColor.land')(
                           <Input placeholder="Color" size={this.props.size}/>
                         )}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Borders color">
                       <Col span={6}>
-                        {wrappedField('app.mapLayer.world.color.border')(
+                        {wrappedField('appMapColor.border')(
                           <Input placeholder="Color" size={this.props.size}/>
                         )}
                       </Col>
@@ -493,14 +503,14 @@ class Settings extends Component {
                 style={{height: this.state.modalHeight}}
               >
                 <Form.Item {...formItemLayout} label="Time">
-                  {wrappedField('project.time.period')(
+                  {wrappedField('projectTimePeriod')(
                     <SettingsDataTimeRage
                       size={this.props.size}
                     />
                   )}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Selected time">
-                  {wrappedField('project.time.selected')(
+                  {wrappedField('projectTimeSelected')(
                     <SettingsDataTimeRage
                       size={this.props.size}
                       valueLimit={getFieldValue('time.period')}
@@ -515,14 +525,14 @@ class Settings extends Component {
                 style={{height: this.state.modalHeight}}
               >
                 <fieldset>
-                  <legend>ΔH {wrappedField('project.mapLayer.dH.enabled')(<Switch size={this.props.size}/>)}</legend>
-                  <div className={getFieldValue('project.mapLayer.dH.enabled') ? 'show' : 'hide'}>
+                  <legend>ΔH {wrappedField('projectMapLayerH.enabled')(<Switch size={this.props.size}/>)}</legend>
+                  <div className={getFieldValue('projectMapLayerH.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
                       label: "Scale",
-                      name: "project.mapLayer.dH.scale",
-                      disabled: getFieldValue('project.mapLayer.dH.scaleAuto') === 'true',
+                      name: "projectMapLayerH.scale",
+                      disabled: getFieldValue('projectMapLayerH.scaleAuto') === 'true',
                       addonAfter: "nT",
-                      addonBefore: wrappedField('project.mapLayer.dH.scaleAuto')({...ScaleTypeSelect})
+                      addonBefore: wrappedField('projectMapLayerH.scaleAuto')({...ScaleTypeSelect})
                     })}
                     <Form.Item {...formItemLayout} label="Color">
                       <Col span={6}>
@@ -532,17 +542,17 @@ class Settings extends Component {
                   </div>
                 </fieldset>
                 <fieldset>
-                  <legend>ΔZ {wrappedField('project.mapLayer.dZ.enabled')(<Switch size={this.props.size}/>)}</legend>
-                  <div className={getFieldValue('project.mapLayer.dZ.enabled') ? 'show' : 'hide'}>
+                  <legend>ΔZ {wrappedField('projectMapLayerZ.enabled')(<Switch size={this.props.size}/>)}</legend>
+                  <div className={getFieldValue('projectMapLayerZ.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
                       label: "Scale",
-                      name: "project.mapLayer.dZ.scale",
-                      disabled: getFieldValue('project.mapLayer.dZ.scaleAuto') === 'true',
+                      name: "projectMapLayerZ.scale",
+                      disabled: getFieldValue('projectMapLayerZ.scaleAuto') === 'true',
                       addonAfter: "nT",
-                      addonBefore: wrappedField('project.mapLayer.dZ.scaleAuto')({...ScaleTypeSelect})
+                      addonBefore: wrappedField('projectMapLayerZ.scaleAuto')({...ScaleTypeSelect})
                     })}
                     <Form.Item {...formItemLayout} label="View">
-                      {wrappedField('project.mapLayer.dZ.view')(
+                      {wrappedField('projectMapLayerZ.view')(
                         <Radio.Group>
                           <Radio.Button value="circle">
                             <div className="dz-view-select circle">
@@ -581,42 +591,42 @@ class Settings extends Component {
                 tab={<span><Icon type="line-chart"/>Charts</span>}
                 style={{height: this.state.modalHeight}}
               >
-                {wrappedField('project.avgChart.lines')(
+                {wrappedField('projectAvgComponentLines')(
                   <SettingsAvgChartLines
                     onCellChange={(field, index, value) => {
-                      let lines = getFieldValue('project.avgChart.lines');
-                      lines[index][field] = value;
-                      setFieldsValue({'avgChart.lines': lines});
+                      let items = getFieldValue('projectAvgComponentLines');
+                      items[index][field] = value;
+                      setFieldsValue({'projectAvgComponentLines': items});
                     }}
                     onLineAdd={() => {
-                      let lines = getFieldValue('project.avgChart.lines');
-                      lines.push({comp: null, hemisphere: null, style: null, enabled: true});
-                      setFieldsValue({'avgChart.lines': lines});
+                      let items = getFieldValue('projectAvgComponentLines');
+                      items.push({comp: null, hemisphere: null, style: null, enabled: true});
+                      setFieldsValue({'projectAvgComponentLines': items});
                     }}
                     onLineRemove={(index) => {
-                      let lines = getFieldValue('project.avgChart.lines');
-                      lines.remove(index);
-                      setFieldsValue({'project.avgChart.lines': lines});
+                      let items = getFieldValue('projectAvgComponentLines');
+                      items.splice(index, 1);
+                      setFieldsValue({'projectAvgComponentLines': items});
                     }}
                   />
                 )}
                 <br/>
-                {wrappedField('project.avgChart.latitudeRanges')(
+                {wrappedField('projectAvgLatitudeRanges')(
                   <SettingsAvgChartLatitudes
                     onCellChange={(field, index, value) => {
-                      let ranges = getFieldValue('project.avgChart.latitudeRanges');
-                      ranges[index][field] = value;
-                      setFieldsValue({'project.avgChart.latitudeRanges': ranges});
+                      let items = getFieldValue('projectAvgLatitudeRanges');
+                      items[index][field] = value;
+                      setFieldsValue({'projectAvgLatitudeRanges': items});
                     }}
                     onLineAdd={() => {
-                      let ranges = getFieldValue('project.avgChart.latitudeRanges');
-                      ranges.push({comp: null, hemisphere: null, style: null, enabled: true});
-                      setFieldsValue({'project.avgChart.latitudeRanges': ranges});
+                      let items = getFieldValue('projectAvgLatitudeRanges');
+                      items.push([null, null]);
+                      setFieldsValue({'projectAvgLatitudeRanges': items});
                     }}
                     onLineRemove={(index) => {
-                      let ranges = getFieldValue('project.avgChart.latitudeRanges');
-                      ranges.remove(index);
-                      setFieldsValue({'project.avgChart.latitudeRanges': ranges});
+                      let items = getFieldValue('projectAvgLatitudeRanges');
+                      items.splice(index, 1);
+                      setFieldsValue({'projectAvgLatitudeRanges': items});
                     }}
                   />
                 )}
@@ -639,6 +649,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     mainActions: bindActionCreators(MainActions, dispatch),
+    dataSetActions: bindActionCreators(DataSetActions, dispatch),
+    stationActions: bindActionCreators(StationActions, dispatch),
   };
 }
 

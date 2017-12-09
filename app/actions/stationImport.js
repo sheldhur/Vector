@@ -7,10 +7,10 @@ import * as stationTypes from './../constants/station';
 
 let worker;
 
-export function showModal(value) {
+export function showModal(payload) {
   return {
     type: types.SHOW_MODAL,
-    payload: value
+    payload
   };
 }
 
@@ -21,10 +21,17 @@ export function setProgressBar(payload) {
   };
 }
 
-export function setCurrentFile(value) {
+export function setCurrentFile(payload) {
   return {
     type: types.CURRENT_FILE,
-    payload: value
+    payload
+  };
+}
+
+export function setImportLog(payload) {
+  return {
+    type: types.IMPORT_LOG,
+    payload
   };
 }
 
@@ -47,8 +54,6 @@ export function addStation(station) {
 export function openModal() {
   return (dispatch) => {
     dispatch(showModal(true));
-    dispatch(setProgressBar());
-    dispatch(setCurrentFile(''));
   }
 }
 
@@ -58,8 +63,6 @@ export function closeModal() {
       worker.kill();
     }
     dispatch(showModal(false));
-    dispatch(setProgressBar());
-    dispatch(setCurrentFile(''));
   }
 }
 
@@ -81,13 +84,16 @@ export function importStations(filePaths, fileType) {
       if (response) {
         switch (response.event) {
           case 'addStation':
-            dispatch(addStation(response.value));
+            dispatch(addStation(response.data));
             break;
           case 'setCurrentFile':
-            dispatch(setCurrentFile(response.filePath));
+            dispatch(setCurrentFile(response.data));
             break;
           case 'setProgress':
-            dispatch(setProgressBar(response.progress));
+            dispatch(setProgressBar(response.data));
+            break;
+          case 'setImportLog':
+            dispatch(setImportLog(response.data));
             break;
           default:
             console.log(response);

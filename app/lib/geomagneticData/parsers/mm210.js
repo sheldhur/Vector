@@ -63,7 +63,7 @@ export default function (filePath) {
             let lineSplit = {};
             for (let block in structure) {
               lineSplit[block] = line.substring(structure[block][0] - 1, structure[block][1]);
-              if (['code', 'comp', 'org', 'blanks', 'data'].indexOf(block) == -1) {
+              if (['code', 'comp', 'org', 'blanks', 'data'].indexOf(block) === -1) {
                 lineSplit[block] = parseFloat(lineSplit[block]);
               }
             }

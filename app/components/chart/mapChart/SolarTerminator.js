@@ -19,7 +19,7 @@ class SolarTerminator extends Component {
       const coordinates = projection([center.longitude, center.latitude]);
 
       return (
-        <g className="map-terminator" filter={this.props.filter}>
+        <g className="map-terminator" filter={this.props.filter} clipPath={this.props.clipPath}>
           <g
             className="map-solar-point"
             transform={`translate(${coordinates[0] - pointRadius}, ${coordinates[1] - pointRadius})`}

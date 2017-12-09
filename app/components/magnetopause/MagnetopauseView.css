@@ -2,6 +2,14 @@
   fill: #888888;
 }
 
+.magnetopause-view-settings .ant-modal-body {
+  padding: 3px 8px;
+}
+
+.magnetopause-view-settings .ant-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
 /*.ant-modal .dataset-import {*/
   /*text-align: left;*/
 /*}*/

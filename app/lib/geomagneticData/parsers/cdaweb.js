@@ -60,7 +60,7 @@ export default function (filePath) {
               });
             } else {
               lineSplit[0] = lineSplit[0] + ' ' + lineSplit[1];
-              lineSplit.remove(1);
+              lineSplit.splice(1, 1);
               if (lineSplit[0].search(/^\d/) === -1) {
                 lineSplit.forEach((item, i) => {
                   data.columns[i]['si'] = item;

@@ -9,6 +9,9 @@ import {openWindowStation} from './../../map/VectorMapMenu'
 
 
 class StationVector extends Component {
+  state = {
+    hasError: false,
+  }
 
   handlerMouseEnter = (station) => {
     this.props.chartActions.setMapTooltipStation(station);
@@ -22,9 +25,13 @@ class StationVector extends Component {
     openWindowStation(station.id);
   };
 
+  componentDidCatch = (error, info) => {
+    this.setState({ hasError: true });
+    console.log(error, info);
+  };
+
   prepareStationsData = () => {
-    const {projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum} = this.props;
-    const {mapLayer} = this.props.settings.project;
+    const {projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum, mapLayerH, mapLayerZ, isShowNames} = this.props;
 
     let data = [];
 
@@ -48,20 +55,20 @@ class StationVector extends Component {
 
     let lines = [];
     let vectorLength = 50;
-    let vectorStrength = mapLayer.dH.scaleAuto ? maximum.dH : mapLayer.dH.scale; //660
+    let vectorStrength = mapLayerH.scaleAuto ? maximum.dH : mapLayerH.scale; //660
     let vectorNormal = vectorLength / vectorStrength;
 
     let circles = {
       positive: [],
       negative: [],
     };
-    let circleRadius = 50 * (mapLayer.dZ.view === 'circle' ? 1 : 2);
-    let circleStrength = mapLayer.dZ.scaleAuto ? maximum.dZ : mapLayer.dZ.scale; //486 * 2;
+    let circleRadius = 50 * (mapLayerZ.view === 'circle' ? 1 : 2);
+    let circleStrength = mapLayerZ.scaleAuto ? maximum.dZ : mapLayerZ.scale; //486 * 2;
     let circleNormal = circleRadius / circleStrength;
 
 
     let names = [];
-    if (this.props.currentTime == null || this.props.currentTime === this.props.settings.project.time.selected.start.valueOf()) {
+    if (isShowNames) {
       for (let stationId in stations) {
         const item = stations[stationId];
         const coordinates = projection([item.longitude, item.latitude]);
@@ -85,7 +92,7 @@ class StationVector extends Component {
 
         let pointClass = 'defalut';
         if (item.delta !== undefined) {
-          if (mapLayer.dH.enabled) {
+          if (mapLayerH.enabled) {
             if (item.delta.dX && item.delta.dY) {
               let coordinates2 = [
                 item.longitude + (item.delta.vector.Y * vectorNormal),
@@ -112,7 +119,7 @@ class StationVector extends Component {
             }
           }
 
-          if (mapLayer.dZ.enabled) {
+          if (mapLayerZ.enabled) {
             if (item.delta.dZ) {
               let circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
               circles[circleClass].push(<circle
@@ -149,59 +156,63 @@ class StationVector extends Component {
   };
 
   render = () => {
-    const {mapLayer} = this.props.settings.project;
-    const data = this.prepareStationsData();
-    const color = {
-      positive: hexToRgb(mapLayer.dZ.color.positive),
-      negative: hexToRgb(mapLayer.dZ.color.negative),
-    };
+    if (!this.state.hasError) {
+      const {mapLayerZ} = this.props;
+      const data = this.prepareStationsData();
+      const color = {
+        positive: hexToRgb(mapLayerZ.color.positive),
+        negative: hexToRgb(mapLayerZ.color.negative),
+      };
 
-    let style = {
-      circle: {
-        positive: {
-          start: {
-            stopColor: `rgba(${color.positive.join(',')}, 0.75)`,
-            stopOpacity: 1,
+      let style = {
+        circle: {
+          positive: {
+            start: {
+              stopColor: `rgba(${color.positive.join(',')}, 0.75)`,
+              stopOpacity: 1,
+            },
+            end: {
+              stopColor: `rgba(${color.positive.join(',')}, 0.5)`,
+              stopOpacity: mapLayerZ.view === 'circle' ? 1 : 0,
+            }
           },
-          end: {
-            stopColor: `rgba(${color.positive.join(',')}, 0.5)`,
-            stopOpacity: mapLayer.dZ.view === 'circle' ? 1 : 0,
-          }
-        },
-        negative: {
-          start: {
-            stopColor: `rgba(${color.negative.join(',')}, 0.75)`,
-            stopOpacity: 1,
-          },
-          end: {
-            stopColor: `rgba(${color.negative.join(',')}, 0.5)`,
-            stopOpacity: mapLayer.dZ.view === 'circle' ? 1 : 0,
+          negative: {
+            start: {
+              stopColor: `rgba(${color.negative.join(',')}, 0.75)`,
+              stopOpacity: 1,
+            },
+            end: {
+              stopColor: `rgba(${color.negative.join(',')}, 0.5)`,
+              stopOpacity: mapLayerZ.view === 'circle' ? 1 : 0,
+            }
           }
         }
-      }
-    };
+      };
 
-    return (
-      <g className="map-point" clipPath={this.props.clipPath} ref="points">
-        <defs>
-          <radialGradient id="circle-positive" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
-            <stop offset="0%" style={style.circle.positive.start}/>
-            <stop offset="100%" style={style.circle.positive.end}/>
-          </radialGradient>
-          <radialGradient id="circle-negative" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
-            <stop offset="0%" style={style.circle.negative.start}/>
-            <stop offset="100%" style={style.circle.negative.end}/>
-          </radialGradient>
-        </defs>
-        <g>
-          {data.circles.positive}
-          {data.circles.negative}
+      return (
+        <g className="map-point" clipPath={this.props.clipPath} ref="points">
+          <defs>
+            <radialGradient id="circle-positive" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
+              <stop offset="0%" style={style.circle.positive.start}/>
+              <stop offset="100%" style={style.circle.positive.end}/>
+            </radialGradient>
+            <radialGradient id="circle-negative" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
+              <stop offset="0%" style={style.circle.negative.start}/>
+              <stop offset="100%" style={style.circle.negative.end}/>
+            </radialGradient>
+          </defs>
+          <g>
+            {data.circles.positive}
+            {data.circles.negative}
+          </g>
+          <g>{data.lines}</g>
+          <g>{data.points}</g>
+          <g>{data.names}</g>
         </g>
-        <g>{data.lines}</g>
-        <g>{data.points}</g>
-        <g>{data.names}</g>
-      </g>
-    );
+      );
+    }
+
+    return null;
   };
 }
 
@@ -219,7 +230,11 @@ function mapStateToProps(state) {
     extremes: state.station.extremes,
     maximum: state.station.maximum,
     settings: state.main.settings,
-    currentTime: state.chart.chartCurrentTime
+    mapLayerH: state.main.settings.projectMapLayerH,
+    mapLayerZ: state.main.settings.projectMapLayerZ,
+    // timeStart: state.main.settings.projectTimeSelectedStart,
+    // currentTime: state.chart.chartCurrentTime,
+    isShowNames: state.chart.chartCurrentTime && state.chart.chartCurrentTime === state.main.settings.projectTimeSelected[0].valueOf()
   };
 }
 

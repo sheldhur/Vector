@@ -1,18 +1,3 @@
-//TODO: выпилить
-Array.prototype.summ = function () {
-  return this.reduce((pv, cv) => pv + cv, 0);
-};
-
-//TODO: выпилить
-Array.prototype.avg = function () {
-  let summ = this.summ();
-  if (typeof summ === 'string') {
-    return null;
-  }
-
-  return summ / this.length;
-};
-
 Math.sum = function () {
   let values = Array.isArray(arguments[0]) ? arguments[0] : [...arguments];
   return values.reduce((pv, cv) => pv + cv, 0);
@@ -21,12 +6,6 @@ Math.sum = function () {
 Math.avg = function () {
   let values = Array.isArray(arguments[0]) ? arguments[0] : [...arguments];
   return Math.sum(values) / values.length;
-};
-
-Array.prototype.remove = function (from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
 };
 
 Number.prototype.between = function (rangeArray, bool) {

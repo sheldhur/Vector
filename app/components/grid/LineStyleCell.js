@@ -1,8 +1,7 @@
 // @flow
 import React, {Component} from 'react';
-import {Icon, Popconfirm, Popover, Button, Form, Input, Tag} from 'antd';
+import {Icon, Popconfirm, Popover, Button, Form, Input} from 'antd';
 import {SketchPicker} from 'react-color';
-import FontAwesome from 'react-fontawesome';
 
 
 class LineStyleCell extends Component {
@@ -218,7 +217,7 @@ class LineStyleCell extends Component {
               {isSaved ?
                 <Icon type="loading" className="line-style-cell-icon"/>
                 :
-                <FontAwesome name="paint-brush" className="line-style-cell-icon"/>
+                <Icon type="line-chart" className="line-style-cell-icon"/>
               }
             </div>
           </Popover>

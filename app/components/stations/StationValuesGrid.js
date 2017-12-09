@@ -81,7 +81,8 @@ class StationGrid extends Component {
   };
 
   render() {
-    let columns = [{
+    const compWidth = 165;
+    const columns = [{
       title: 'Time',
       dataIndex: 'time',
       hasFilter: true,
@@ -97,7 +98,7 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('compX', record.id, value, afterAction)
         }/>),
-      width: 160
+      width: compWidth
     }, {
       title: 'Y',
       dataIndex: 'compY',
@@ -106,7 +107,7 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('compY', record.id, value, afterAction)
         }/>),
-      width: 160
+      width: compWidth
     }, {
       title: 'Z',
       dataIndex: 'compZ',
@@ -115,7 +116,7 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('compZ', record.id, value, afterAction)
         }/>),
-      width: 160
+      width: compWidth
     }, {
       title: '',
       dataIndex: 'format',

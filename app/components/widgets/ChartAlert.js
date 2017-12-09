@@ -1,7 +1,16 @@
 import React from 'react';
-import {Icon} from 'antd';
+import {Icon, Progress} from 'antd';
 
-export const ChartAlert = (props) => {
+const BlinkedDots = (props) => {
+  return (
+    <span>
+      {props.text}&nbsp;
+      {"...".split("").map((item, i) => <span key={i} className={"blink-dot"}>.</span>)}
+    </span>
+  )
+};
+
+const ChartAlert = (props) => {
   return (
     <div className={`centered-box ${props.className || ''}`} onContextMenu={props.onContextMenu}>
       <div>
@@ -13,26 +22,53 @@ export const ChartAlert = (props) => {
   );
 };
 
-export const LoadingAlert = (props) => {
+const NoDataAlert = (props) => {
+  return (<ChartAlert
+    icon="info-circle"
+    text="No data available"
+    {...props}
+  />)
+};
+
+const ErrorAlert = (props) => {
+  return (<ChartAlert
+    icon="warning"
+    text="No data available"
+    {...props}
+  />)
+};
+
+const LoadingAlert = (props) => {
   return (<ChartAlert
     icon="loading"
-    text="Loading..."
+    text={<BlinkedDots text="Loading"/>}
     {...props}
   />)
 };
 
-export const NoDataAlert = (props) => {
-  return (<ChartAlert
-    icon="info-circle"
-    text="No data available"
-    {...props}
-  />)
+const ProgressAlert = (props) => {
+  const status = props.error ? "exception" : "active";
+  return (
+    <div className={`progress-alert centered-box ${props.className || ''}`} onContextMenu={props.onContextMenu}>
+      <div>
+        <Progress
+          type="circle"
+          percent={props.percent || 0}
+          width={60}
+          strokeWidth={7}
+          status={status}
+        />
+        <h3>{props.error ? props.error.name : <BlinkedDots text={props.text || "Loading"}/>}</h3>
+        <p>{props.error ? props.error.message : props.description}</p>
+      </div>
+    </div>
+  );
 };
 
-export const ErrorAlert = (props) => {
-  return (<ChartAlert
-    icon="info-circle"
-    text="No data available"
-    {...props}
-  />)
-};
+export default {
+  ChartAlert,
+  NoDataAlert,
+  ErrorAlert,
+  LoadingAlert,
+  ProgressAlert
+}

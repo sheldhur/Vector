@@ -14,7 +14,7 @@ class VectorMapChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let {mapLayer} = this.props.settings.app;
+      let mapLayer = {};
       let props = {...mapLayer, ...this.state};
 
       VectorMapMenu({
@@ -27,8 +27,17 @@ class VectorMapChart extends Component {
   };
 
   render = () => {
-    let {mapLayer, antiAliasing} = this.props.settings.app;
-    let props = {...mapLayer, antiAliasing, ...this.state};
+    let {antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor} = this.props;
+    let props = {
+      antiAliasing,
+      world: {
+        scale: mapScale,
+        countries: mapCountries,
+        color: mapColor,
+      },
+      projectionType: mapProjectionType,
+      ...this.state
+    };
 
     return (
       <div style={{height: "100%", padding: '5px'}} onContextMenu={this.handlerContextMenu} id="mapChart">
@@ -45,12 +54,11 @@ class VectorMapChart extends Component {
 
 function mapStateToProps(state) {
   return {
-    settings: state.main.settings,
-    // test: state.main.settings,
-    // worldScale: state.main.settings.app.mapLayer.worldScale,
-    // projectionType: state.main.settings.app.mapLayer.projectionType,
-    // showCountries: state.main.settings.app.mapLayer.showCountries,
-    // color: state.main.settings.app.mapLayer.color,
+    antiAliasing: state.main.settings.appAntiAliasing,
+    mapProjectionType: state.main.settings.appMapProjectionType,
+    mapScale: state.main.settings.appMapScale,
+    mapCountries: state.main.settings.appMapCountries,
+    mapColor: state.main.settings.appMapColor,
   };
 }
 

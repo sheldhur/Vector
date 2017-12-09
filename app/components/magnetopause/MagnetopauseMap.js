@@ -16,7 +16,7 @@ class MagnetopauseMap extends Component {
   };
 
   componentDidMount = () => {
-    if (this.props.width == '100%' || this.props.height == '100%') {
+    if (this.props.width === '100%' || this.props.height === '100%') {
       window.addEventListener('resize', this.handleResize);
     }
 
@@ -99,7 +99,9 @@ MagnetopauseMap.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    data: state.magnetopause.data,
     currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null,
+    antiAliasing: state.main.settings.appAntiAliasing,
   };
 }
 

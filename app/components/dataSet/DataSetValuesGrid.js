@@ -140,9 +140,6 @@ class DataSetValuesGrid extends Component {
   }
 }
 
-// export default DataSetGrid;
-
-
 DataSetValuesGrid.propTypes = {
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

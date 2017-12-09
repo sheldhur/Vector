@@ -107,6 +107,7 @@ class MapAzimuthal extends Component {
               path={path}
               projection={projection}
               date={this.props.terminator}
+              clipPath={`url(#${this.uid}-vector)`}
             />
             <StationVector
               path={path}

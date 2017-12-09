@@ -27,19 +27,20 @@ export function setMapTooltipStation(payload) {
   };
 }
 
-export function shiftChartCurrentTime (value) {
+export function shiftChartCurrentTime(value) {
   return (dispatch, getState) => {
-    let {time} = getState().main.settings.project;
-    let {chartCurrentTime} = getState().chart;
+    const {projectTimeSelected, projectTimeAvg} = getState().main.settings;
+    const {chartCurrentTime} = getState().chart;
 
-    let timeStart = new Date(time.selected.start);
-    let timeEnd = new Date(time.selected.end);
+    const timeStart = new Date(projectTimeSelected[0]);
+    const timeEnd = new Date(projectTimeSelected[1]);
+    const timeAvg = (projectTimeAvg.by.startsWith('min') ? projectTimeAvg.value * 60 : projectTimeAvg.value) * 1000;
 
     let timeCurrent = chartCurrentTime ? new Date(chartCurrentTime) : timeStart;
 
     let timeNew = timeStart;
     if (timeCurrent) {
-      timeNew = new Date(timeCurrent.valueOf() + (getAvgTime(time.avg) * value));
+      timeNew = new Date(timeCurrent.valueOf() + (timeAvg * value));
       if (timeNew.valueOf() < timeStart.valueOf()) {
         timeNew = timeEnd;
       } else if (timeNew.valueOf() > timeEnd.valueOf()) {
@@ -49,8 +50,4 @@ export function shiftChartCurrentTime (value) {
 
     dispatch(setChartCurrentTime(timeNew));
   };
-}
-
-function getAvgTime(timeAvg) {
-  return (timeAvg.by.startsWith('min') ? timeAvg.value * 60 : timeAvg.value) * 1000; //ms
 }

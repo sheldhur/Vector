@@ -6,14 +6,6 @@ import * as types from './../constants/dataSet';
 
 let worker;
 
-export function setData(payload) {
-  return {
-    type: types.DATA,
-    ...payload,
-    syncState: true
-  };
-}
-
 export function setError(payload) {
   return {
     type: types.ERROR,
@@ -26,6 +18,22 @@ export function setLoading(payload = true) {
   return {
     type: types.LOADING,
     payload,
+    syncState: true
+  };
+}
+
+export function setProgress(payload) {
+  return {
+    type: types.PROGRESS,
+    payload,
+    syncState: true
+  };
+}
+
+export function setData(payload) {
+  return {
+    type: types.DATA,
+    ...payload,
     syncState: true
   };
 }
@@ -55,6 +63,9 @@ export function getData() {
               break;
             case 'setError':
               dispatch(setError(response.data));
+              break;
+            case 'setProgress':
+              dispatch(setProgress(response.data));
               break;
             default:
               console.log(response);

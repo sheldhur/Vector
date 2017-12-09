@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {LoadingAlert, NoDataAlert, ErrorAlert} from './../widgets/ChartAlert';
+import {ProgressAlert, NoDataAlert} from './../widgets/ChartAlert';
 import moment from 'moment';
 import LineChart from './../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
@@ -69,8 +69,7 @@ class StationAvgChart extends Component {
   };
 
   prepareDataForChart = () => {
-    const {data} = this.props;
-    const {latitudeRanges, lines} = {...this.props.settings.avgChart};
+    const {data, latitudeRanges, componentLines} = this.props;
     const colorGroup = app.DATA_SET_COLOR;
 
     let chartData = [];
@@ -82,7 +81,7 @@ class StationAvgChart extends Component {
           si: null,
           lines: []
         };
-        lines.forEach((line, lineKey) => {
+        componentLines.forEach((line, lineKey) => {
           let lineData = {
             name: line.comp.replace(/^d/, 'Δ') + ' ' + line.hemisphere,
             format: '%(name)s: %(y).2f nT',
@@ -121,8 +120,7 @@ class StationAvgChart extends Component {
   };
 
   render = () => {
-    const {isLoading, isError} = this.props;
-    const {latitudeRanges} = this.props.settings.avgChart;
+    const {isLoading, isError, progress, latitudeRanges} = this.props;
 
     const preparedData = this.prepareDataForChart();
     let isEmpty = !preparedData.some((latitudeRange) => {
@@ -158,16 +156,13 @@ class StationAvgChart extends Component {
       container = (<NoDataAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
-    if (isError) {
-      container = (<ErrorAlert
-        text={isError.name}
-        description={isError.message}
+    if (isLoading || isError) {
+      container = (<ProgressAlert
+        text={progress.title}
+        percent={progress.value}
+        error={isError}
         onContextMenu={this.handlerContextMenu}
       />);
-    }
-
-    if (isLoading) {
-      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
@@ -195,10 +190,11 @@ function mapStateToProps(state) {
     data: state.station.latitudeAvgValues,
     isLoading: state.station.isLoading,
     isError: state.station.isError,
+    progress: state.station.progress,
     settings: state.main.settings.project,
-    latitudeRanges: state.main.settings.project.avgChart.latitudeRanges,
-    lines: state.main.settings.project.avgChart.lines,
-    antiAliasing: state.main.settings.app.antiAliasing,
+    latitudeRanges: state.main.settings.projectAvgLatitudeRanges,
+    componentLines: state.main.settings.projectAvgComponentLines,
+    antiAliasing: state.main.settings.appAntiAliasing,
   };
 }
 

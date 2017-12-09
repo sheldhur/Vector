@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {remote} from 'electron';
-import {Menu, Dropdown, Button, Icon, Modal, Progress, Tooltip, message} from 'antd';
-import * as MainActions from './../../actions/main';
+import {Menu, Dropdown, Button, Icon, Modal, Progress, Tooltip} from 'antd';
+import {ImportProgress} from '../widgets/ImportProgress';
 import * as DataSetActions from './../../actions/dataSet';
 import * as DataSetImportActions from './../../actions/dataSetImport';
 import * as app from './../../constants/app';
@@ -16,10 +16,6 @@ const currentWindow = remote.getCurrentWindow();
 
 class DataSetOptions extends Component {
   fileTypes = app.IMPORT_TYPE_DATA_SET;
-
-  componentWillMount() {
-
-  }
 
   handlerDropdownSelect = (e) => {
     const fileType = this.fileTypes[e.key];
@@ -51,14 +47,9 @@ class DataSetOptions extends Component {
   };
 
   render() {
-    const {progressBar, showModal, currentFile} = this.props.dataSetImport;
+    const {progressBar, showModal, currentFile, importLog} = this.props.dataSetImport;
 
     this.setSystemProgressBar(progressBar.total);
-
-    const currentFileName = currentFile.replace(/^.*[\\\/]/, '');
-    const currentFileWbr = <span dangerouslySetInnerHTML={{__html: currentFile.replace(/\\/g, (str) => {
-      return str + '<wbr />';
-    })}}/>;
 
     const menuFileType = (
       <Menu onClick={this.handlerDropdownSelect} selectable={false}>
@@ -87,18 +78,11 @@ class DataSetOptions extends Component {
             <Button key="cancel" size="large" onClick={this.handlerCancelClick}>Cancel</Button>
           ]}
         >
-          <div className="dataset-import">
-            <Progress percent={Math.ceil(progressBar.total)} className="animation-off"/>
-            <small>
-              File:&nbsp;
-              <Tooltip
-                title={currentFileWbr}
-                placement="right"
-                overlayClassName="dataset-import file-path"
-              >{currentFileName}</Tooltip>
-            </small>
-            <Progress percent={Math.ceil(progressBar.current)} className="animation-off"/>
-          </div>
+          <ImportProgress
+            progressBar={progressBar}
+            currentFile={currentFile}
+            importLog={importLog}
+          />
         </Modal>
       </div>
     );
@@ -107,7 +91,6 @@ class DataSetOptions extends Component {
 
 function mapStateToProps(state) {
   return {
-    main: state.main,
     dataSetImport: state.dataSetImport
   };
 }
@@ -116,7 +99,6 @@ function mapDispatchToProps(dispatch) {
   return {
     dataSetImportActions: bindActionCreators(DataSetImportActions, dispatch),
     dataSetActions: bindActionCreators(DataSetActions, dispatch),
-    mainActions: bindActionCreators(MainActions, dispatch)
   };
 }
 

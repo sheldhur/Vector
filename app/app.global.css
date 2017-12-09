@@ -21,6 +21,27 @@ hr {
   margin: 18px 0;
 }
 
+*::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #777;
+}
+*::-webkit-scrollbar-thumb:active {
+  background-color: #999;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(24, 144, 255, 1);
+}
+
 .centered-box {
   display: flex;
   height: 100%;
@@ -33,6 +54,7 @@ hr {
   font-weight: normal;
   color: inherit;
 }
+
 /*.tooltip .tooltip-inner {*/
 /*background-color: rgba(0, 0, 0, 0.8);*/
 /*}*/
@@ -61,11 +83,13 @@ hr {
 
 @import "./components/magnetopause/MagnetopauseView.css";
 
+@import "./components/widgets/ChartAlert.css";
+@import "./components/widgets/ImportProgress.css";
+
 @import "./assets/styles/ThemeNight.css";
 @import "./assets/styles/ThemeLigth.css";
 
 @import "./assets/styles/Screencapture.css";
-
 
 .ant-modal-mask {
   background-color: rgba(0, 0, 0, 0.75);
@@ -88,15 +112,15 @@ hr {
   background-color: #eee;
 }
 
-.ant-input-group .ant-btn:hover{
+.ant-input-group .ant-btn:hover {
   color: white;
 }
 
-.ant-input-group .ant-btn-danger:hover{
+.ant-input-group .ant-btn-danger:hover {
   background-color: #f04134;
 }
 
-.ant-input-group .spin:hover i{
+.ant-input-group .spin:hover i {
   -webkit-animation-name: spinnerRotate;
   -webkit-animation-duration: 1.5s;
   -webkit-animation-iteration-count: infinite;
@@ -104,12 +128,17 @@ hr {
 }
 
 @-webkit-keyframes spinnerRotate {
-  from{-webkit-transform:rotate(0deg);}
-  to{-webkit-transform:rotate(360deg);}
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 .ant-input-group.custom-group .ant-input,
 .ant-input-group.custom-group .ant-input-number {
+  margin-top: 0;
   margin-right: 0 !important;
   border-right-width: 1px !important;
 }
@@ -122,8 +151,20 @@ hr {
   margin-top: 10px;
 }
 
+.ant-progress .ant-progress-bg {
+  transition: width .6s ease-out;
+}
+
+.ant-progress.animation-off .ant-progress-bg {
+  transition: none;
+}
+
+.centered-box .ant-progress {
+  padding-bottom: 4px;
+}
+
 /*.ant-spin-nested-loading > div > .ant-spin {*/
-  /*width: auto;*/
+/*width: auto;*/
 /*}*/
 
 body {

@@ -1,4 +1,3 @@
-import deepAssign from './../lib/deepAssign';
 import moment from 'moment';
 import {DEFAULT_SETTINGS} from './../constants/app';
 import * as types from './../constants/main';
@@ -15,19 +14,25 @@ const initialState = {
 export default function main(state = initialState, action) {
   switch (action.type) {
     case types.SETTINGS:
-      let settings = deepAssign({...DEFAULT_SETTINGS}, {...action.payload}, (destination, source) => {
-        return source.length > 0 ? source : destination;
+      const settings = {...DEFAULT_SETTINGS, ...action.payload};
+      Object.keys(settings).forEach((key) => {
+        const value = settings[key];
+        if (key === 'projectTimePeriod' || key === 'projectTimeSelected') {
+          settings[key] = value.map(item => moment(item));
+        } else if (typeof value === "object") {
+          if (!Array.isArray(value)) {
+            settings[key] = {...DEFAULT_SETTINGS[key], ...action.payload[key]};
+          } else {
+            settings[key] = action.payload[key] ? [...action.payload[key]] : [...DEFAULT_SETTINGS[key]];
+          }
+        }
       });
-
-      settings.project.time.period.start = moment(settings.project.time.period.start);
-      settings.project.time.period.end = moment(settings.project.time.period.end);
-      settings.project.time.selected.start = moment(settings.project.time.selected.start);
-      settings.project.time.selected.end = moment(settings.project.time.selected.end);
 
       return {...state, settings, isError: false, isLoading: false};
     case types.LOADING:
       return {...state, isLoading: action.payload};
     case types.ERROR:
+      console.log(action.payload);
       return {...state, isError: action.payload, isLoading: false};
     case types.UPDATE:
       return {...state, update: action.payload};

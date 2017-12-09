@@ -30,7 +30,7 @@ function prepareDataSet(dataSetValues, field) {
 
 export function calculateMagnetopause() {
   return (dispatch, getState) => {
-    const field = getState().main.settings.project.magnetopause;
+    const field = getState().main.settings.projectMagnetopause;
     const {dataSetValues} = getState().dataSet;
 
     let chartPoints = null;
@@ -59,8 +59,8 @@ export function calculateMagnetopause() {
         }
 
         chartPoints.push({
-          x: time,
-          y: point ? point.toCartesian().x : null,
+          time,
+          value: point ? point.toCartesian().x : null,
         });
 
         data[time] = values;

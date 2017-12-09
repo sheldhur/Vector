@@ -33,7 +33,7 @@ class LineChart extends Component {
     setTimeout(this.handleResize, 1);
     // this.handleResize();
 
-    if (this.props.width == '100%' || this.props.height == '100%') {
+    if (this.props.width === '100%' || this.props.height === '100%') {
       window.addEventListener('resize', this.handleResize);
     }
   };
@@ -114,11 +114,11 @@ class LineChart extends Component {
     };
 
     if (axisSize.y !== undefined) {
-      margin.left = axisSize.y.width.summ() + ((axisSize.y.width.length - 1) * this.addPixels);
+      margin.left = Math.sum(axisSize.y.width) + ((axisSize.y.width.length - 1) * this.addPixels);
     }
 
     if (axisSize.x !== undefined) {
-      margin.bottom = axisSize.x.height.summ();
+      margin.bottom = Math.sum(axisSize.x.height);
     }
 
     return margin;
@@ -126,8 +126,8 @@ class LineChart extends Component {
 
   calculateSize = (wrapperSize, margin, axisMargin) => {
     let containerSize = {
-      width: (this.props.width == '100%') ? wrapperSize.width || 100 : this.props.width,
-      height: (this.props.height == '100%') ? wrapperSize.height || 100 : this.props.height,
+      width: (this.props.width === '100%') ? wrapperSize.width || 100 : this.props.width,
+      height: (this.props.height === '100%') ? wrapperSize.height || 100 : this.props.height,
     };
 
     return {

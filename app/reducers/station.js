@@ -8,6 +8,10 @@ const initialState = {
     values: null,
     isLoading: false,
     isError: false,
+    progress: {
+      title: null,
+      value: 0
+    },
   },
   latitudeAvgValues: null,
   maximum: {
@@ -17,16 +21,22 @@ const initialState = {
   },
   isLoading: false,
   isError: false,
+  progress: {
+    title: null,
+    value: 0
+  },
 };
 
 export default function main(state = initialState, action) {
   switch (action.type) {
     case types.LATITUDE_AVG_VALUES:
-      return {...state, latitudeAvgValues: action.latitudeAvgValues, maximum: action.maximum, isError: false, isLoading: false};
+      return {...state, latitudeAvgValues: action.latitudeAvgValues, maximum: action.maximum, isError: false, isLoading: false, progress: {...initialState.progress}};
     case types.STATIONS:
       return {...state, stations: action.stations, extremes: action.extremes};
     case types.LOADING:
-      return {...state, isLoading: action.payload};
+      return {...state, isLoading: action.payload, isError: false, progress: {...initialState.progress}};
+    case types.PROGRESS:
+      return {...state, progress: action.payload};
     case types.STATIONS_VALUE:
       return {...state, stationsValue: action.payload};
     case types.STATION_VIEW_VALUES:

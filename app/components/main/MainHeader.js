@@ -20,14 +20,16 @@ class MainHeader extends Component {
   size = 'small';
 
   componentWillMount() {
-    this.handlerReload();
+    if (!this.props.isLoading) {
+      this.handlerReload();
+    }
     this.props.chartActions.setChartCurrentTime(null);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.dbPath && !nextProps.isError) {
-      this.handlerReload();
-    }
+    // if (nextProps.dbPath && !nextProps.isError) {
+    //   this.handlerReload();
+    // }
   }
 
   handlerReload = (e) => {
@@ -55,18 +57,18 @@ class MainHeader extends Component {
   };
 
   render() {
-    const {time} = this.props;
+    const {timeSelected, timePeriod, timeAvg} = this.props;
 
     return (
       <div className="main-page-header">
         <Input.Group size={this.size} className="custom-group" compact>
           <span className="ant-input-group-addon">Time</span>
           <SettingsDataTimeRage
-            defaultValue={[moment(time.selected.start), moment(time.selected.end)]}
-            valueLimit={[moment(time.period.start), moment(time.period.end)]}
+            defaultValue={timeSelected.map((item) => moment(item))}
+            valueLimit={timePeriod.map((item) => moment(item))}
             onOk={(value) => this.handlerDatePickerOk(value)}
           />
-          <span className="ant-input-group-addon">avg. {time.avg.value} {time.avg.by}</span>
+          <span className="ant-input-group-addon">{timeAvg.value} {timeAvg.by.substr(0, 3)}. data</span>
           <Button
             size={this.size}
             icon="reload"
@@ -82,7 +84,7 @@ class MainHeader extends Component {
           />}
         </Input.Group>
         <Settings size={this.size}/>
-        <MainHeaderControls size={this.size}/>
+        <MainHeaderControls size={this.size} onTick={this.props.stationActions.getStationsValue}/>
         <MainHeaderCapture size={this.size}/>
         <MainUpdateApp/>
       </div>
@@ -93,7 +95,16 @@ class MainHeader extends Component {
 
 function mapStateToProps(state) {
   return {
-    time: state.main.settings.project.time,
+    // timeAvgBy: state.main.settings.projectTimeAvg.by,
+    // timeAvgValue: state.main.settings.projectTimeAvg.value,
+    // timeStart: state.main.settings.projectTimeSelected[0],
+    // timeEnd: state.main.settings.projectTimeSelected[1],
+    // timePeriodStart: state.main.settings.projectTimePeriod[0],
+    // timePeriodEnd: state.main.settings.projectTimePeriod[1],
+    timeAvg: state.main.settings.projectTimeAvg,
+    timePeriod: state.main.settings.projectTimePeriod,
+    timeSelected: state.main.settings.projectTimeSelected,
+    isLoading: state.station.isLoading || state.dataSet.isLoading,
     dbPath: state.main.dbPath,
     isError: state.main.isError,
   };

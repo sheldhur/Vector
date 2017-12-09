@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {ResizeblePanel, Panel} from './../widgets/ResizeblePanel';
 import MagnetopauseMap from './MagnetopauseMap';
 import MagnetopauseChart from './MagnetopauseChart';
-import {NoDataAlert} from './../widgets/ChartAlert';
+import {NoDataAlert, ProgressAlert} from './../widgets/ChartAlert';
 import * as MagnetopauseActions from './../../actions/magnetopause';
 
 
@@ -13,22 +13,26 @@ class MagnetopauseDashboard extends Component {
     this.props.magnetopauseActions.calculateMagnetopause();
   };
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (JSON.stringify(nextProps.settings.project.magnetopause) !== JSON.stringify(this.props.settings.project.magnetopause)) {
-  //     // this.props.magnetopauseActions.prepareDataSet();
-  //   }
-  // };
-
   render = () => {
-    if (this.props.data != null) {
+    const {isLoading, isError, isEmpty, progress} = this.props;
+    if (isLoading || isError) {
+      return (<ProgressAlert
+        text={progress.title}
+        percent={progress.value}
+        error={isError}
+        onContextMenu={this.handlerContextMenu}
+      />);
+    }
+
+    if (isEmpty != null) {
       return (
         <div className={`magnetopause-view`}>
           <ResizeblePanel type="vertical" eventWhen="mouseup" defaultSize={24}>
             <Panel>
-              <MagnetopauseChart antiAliasing={this.props.antiAliasing} chart={this.props.chart}/>
+              <MagnetopauseChart/>
             </Panel>
             <Panel>
-              <MagnetopauseMap antiAliasing={this.props.antiAliasing} data={this.props.data}/>
+              <MagnetopauseMap/>
             </Panel>
           </ResizeblePanel>
         </div>
@@ -41,9 +45,10 @@ class MagnetopauseDashboard extends Component {
 
 function mapStateToProps(state) {
   return {
-    chart: state.magnetopause.chart,
-    data: state.magnetopause.data,
-    antiAliasing: state.main.settings.app.antiAliasing,
+    isEmpty: state.magnetopause.chart != null,
+    isLoading: state.dataSet.isLoading,
+    isError: state.dataSet.isError,
+    progress: state.dataSet.progress,
   };
 }
 

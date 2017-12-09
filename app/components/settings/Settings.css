@@ -44,24 +44,10 @@
   transition: max-height 0.8s ease-in;
 }
 
-.main-page-settings .ant-form-item-control > .ant-select-sm {
-  padding-top: 5px;
+.main-page-settings .ant-form-item-control > .ant-input-group-sm,
+.main-page-settings .ant-form-item-control > div > .ant-input-group-sm {
+  padding-top: 4px;
 }
-
-/*.main-page-settings .custom-group .ant-select-selection {*/
-  /*background-color: #eee;*/
-/*}*/
-
-/*.main-page-settings .custom-group .ant-select:hover .ant-select-selection,*/
-/*.main-page-settings .custom-group .ant-select-focused .ant-select-selection,*/
-/*.main-page-settings .custom-group .ant-select-open .ant-select-selection {*/
-  /*border-color: #d9d9d9;*/
-  /*box-shadow: none;*/
-/*}*/
-
-/*.main-page-settings .custom-group .ant-select-open .ant-select-selection {*/
-  /*color: #108ee9;*/
-/*}*/
 
 .dz-view-select {
   margin-top: 1px;

@@ -91,7 +91,9 @@ Capture.childContextTypes  = {
 function mapStateToProps(state) {
   return {
     currentTime: state.chart.chartCurrentTime,
-    time: state.main.settings.project.time.selected,
+    // time: state.main.settings.project.time.selected,
+    timeStart: state.main.settings.projectTimeSelected[0],
+    timeEnd: state.main.settings.projectTimeSelected[1],
     stationsValue: state.station.stationsValue,
   };
 }

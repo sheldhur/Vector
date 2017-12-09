@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import {Icon, Popconfirm, Popover, Button} from 'antd';
 import {SketchPicker} from 'react-color';
-import FontAwesome from 'react-fontawesome';
 
 
 class ColorCell extends Component {
@@ -108,7 +107,7 @@ class ColorCell extends Component {
               {isSaved ?
                 <Icon type="loading" className="color-cell-icon"/>
                 :
-                <FontAwesome name="eyedropper" className="color-cell-icon"/>
+                <Icon type="edit" className="color-cell-icon"/>
               }
             </div>
           </Popover>

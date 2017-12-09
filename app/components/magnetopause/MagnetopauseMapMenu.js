@@ -35,6 +35,27 @@ export default function (props) {
           }
         });
       }
+    }, {
+      label: 'Range',
+      icon: resourcePath('./assets/icons/globe-green.png'),
+      submenu: [
+        {
+          label: '40 Re',
+          type: 'radio',
+          checked: props.state.range === 40,
+          click: () => {
+            props.setState({range: 40});
+          }
+        },
+        {
+          label: '60 Re',
+          type: 'radio',
+          checked: props.state.range === 60,
+          click: () => {
+            props.setState({range: 60});
+          }
+        }
+      ]
     }
   ]).popup(remote.getCurrentWindow());
 

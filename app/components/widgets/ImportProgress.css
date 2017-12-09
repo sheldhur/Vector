@@ -1,0 +1,46 @@
+.import-log-list {
+  max-height: 200px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.import-log-list .ant-list-split .ant-list-item:last-child {
+  border-bottom: 1px solid #e8e8e8 !important;
+}
+
+.import-log-list a {
+  color: black;
+  border-bottom: 1px dashed black;
+}
+
+.import-log-list a:hover {
+  border-bottom: 1px solid black;
+}
+
+.import-log-list .ant-list-item-meta-description {
+  font-size: 12px;
+  line-height: 15px;
+  color: #000000;
+}
+
+.import-log-list .ant-list-item.error .anticon {
+  color: #f5222d;
+}
+
+.import-log-list .ant-list-item.info .anticon {
+  color: #faad14;
+}
+
+.import-log-list .ant-list-item .anticon {
+  position: relative;
+  top: 3px;
+  font-size: 20px;
+}
+
+.import-progress .import-log-list {
+  margin-top: 10px;
+}
+
+.import-progress.file-path.ant-tooltip .ant-tooltip-inner {
+  max-width: 350px;
+}

@@ -6,10 +6,10 @@ import * as types from './../constants/dataSetImport';
 let worker;
 
 
-export function showModal(value) {
+export function showModal(payload) {
   return {
     type: types.SHOW_MODAL,
-    payload: value
+    payload
   };
 }
 
@@ -20,18 +20,23 @@ export function setProgressBar(payload) {
   };
 }
 
-export function setCurrentFile(value) {
+export function setCurrentFile(payload) {
   return {
     type: types.CURRENT_FILE,
-    payload: value
+    payload
+  };
+}
+
+export function setImportLog(payload) {
+  return {
+    type: types.IMPORT_LOG,
+    payload
   };
 }
 
 export function openModal() {
   return (dispatch) => {
     dispatch(showModal(true));
-    dispatch(setProgressBar());
-    dispatch(setCurrentFile(''));
   }
 }
 
@@ -41,8 +46,6 @@ export function closeModal() {
       worker.kill();
     }
     dispatch(showModal(false));
-    dispatch(setProgressBar());
-    dispatch(setCurrentFile(''));
   }
 }
 
@@ -68,6 +71,9 @@ export function importDataSet(filePaths, fileType) {
             break;
           case 'setProgress':
             dispatch(setProgressBar(response.progress));
+            break;
+          case 'setImportLog':
+            dispatch(setImportLog(response.data));
             break;
           default:
             console.log(response);

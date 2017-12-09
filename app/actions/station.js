@@ -23,6 +23,14 @@ export function setLoading(payload = true) {
   };
 }
 
+export function setProgress(payload) {
+  return {
+    type: types.PROGRESS,
+    payload,
+    syncState: true
+  };
+}
+
 export function setLatitudeAvgValues(payload) {
   return {
     type: types.LATITUDE_AVG_VALUES,
@@ -66,6 +74,13 @@ export function setStationViewLoading() {
   };
 }
 
+export function setStationViewProgress(payload) {
+  return {
+    type: types.STATION_VIEW_PROGRESS,
+    payload,
+  };
+}
+
 export function getData(dispatch, getState, action, args) {
   const {main} = getState();
 
@@ -94,6 +109,9 @@ export function getData(dispatch, getState, action, args) {
           case 'setError':
             dispatch(setError(response.data));
             break;
+          case 'setProgress':
+            dispatch(setProgress(response.data));
+            break;
           case 'setStationsValue':
             dispatch(setStationsValue(response.data));
             break;
@@ -102,6 +120,9 @@ export function getData(dispatch, getState, action, args) {
             break;
           case 'getStationViewError':
             dispatch(setStationViewError(response.data));
+            break;
+          case 'setStationViewProgress':
+            dispatch(setStationViewProgress(response.data));
             break;
           default:
             console.log(response);

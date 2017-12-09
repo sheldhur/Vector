@@ -131,7 +131,7 @@ export default function (filePath) {
             }
           }
 
-          if (line.yy.toString().length == 2) {
+          if (line.yy.toString().length === 2) {
             line.yy += line.yy.between([82, 99]) ? 1900 : 2000;
           }
 

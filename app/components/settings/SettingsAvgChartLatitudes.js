@@ -22,24 +22,11 @@ class SettingsAvgChartLines extends Component {
   };
 
   render() {
-    const optionsComp = app.AVG_CHART_COMP.map((item) => {
-      return {
-        value: item,
-        text: item.replace(/^d/, 'Δ')
-      }
-    });
-    const optionsHemisphere = app.AVG_CHART_HEMISPHERE.map((item) => {
-      return {
-        value: item,
-        text: item
-      }
-    });
-
     let columns = [
       {
         title: 'Start',
         dataIndex: '0',
-        render: (text, record, index) => (<Grid.InputCell value={text} options={optionsHemisphere} onChange={
+        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('0', index, value, afterAction)
         }/>)
       }, {
@@ -54,7 +41,7 @@ class SettingsAvgChartLines extends Component {
         width: 30,
         render: (text, record, index) => {
           return (
-            (record.comp && record.hemisphere) ?
+            (record[0] && record[1]) ?
               <Popconfirm
                 placement="left"
                 title="Are you sure delete this range?"

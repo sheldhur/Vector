@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import moment from 'moment';
 import errorToObject from '../lib/errorToObject';
 import calcProgress from '../lib/calcProgress';
-import prepareValues from './prepareValues';
+import prepareImportData from '../utils/prepareImportData';
 import * as geomag from '../lib/geomagneticData';
 import '../utils/helper';
 
@@ -12,35 +12,43 @@ const M2R = Math.PI / (180 * 60);
 
 //TODO: обработка ошибок
 export default function (dbSession, data) {
-  if (!data.main.settings || !data.main.settings.project) {
+  if (!data.main.settings) {
     throw new Error("Can't get project settings");
   }
 
   db = dbSession;
 
-  let {filePaths, fileType} = data;
-  let {time} = data.main.settings.project;
+  const {filePaths, fileType} = data;
+  const time = {
+    period: {
+      start: moment(data.main.settings.projectTimePeriod[0]),
+      end: moment(data.main.settings.projectTimePeriod[1]),
+    },
+    avg: data.main.settings.projectTimeAvg,
+  };
 
-  time.period.start = moment(time.period.start);
-  time.period.end = moment(time.period.end);
+  (async () => {
+    for (const fileKey in filePaths) {
+      const filePath = filePaths[fileKey];
 
-  let fileCurrent = 0;
+      try {
+        process.send({event: 'setCurrentFile', data: filePath});
+        const readResult = await readFile(filePaths[fileKey], fileType);
+        const stationsData = Array.isArray(readResult) ? readResult : [readResult];
 
-  Promise.map(filePaths, (filePath) => {
-    process.send({event: 'setCurrentFile', filePath});
-    return readFile(filePath, fileType).then((readResult) => {
-      let stationsData = Array.isArray(readResult) ? readResult : [readResult];
+        for (const stationKey in stationsData) {
+          const stationData = stationsData[stationKey];
 
-      return Promise.map(stationsData, (stationData) => {
-        return saveStation(stationData, fileType)
-          .then((result) => prepareValues(result, time, 4))
-          .then((result) => saveStationValues(result, filePaths, stationsData, fileCurrent++))
-          .catch((error) => {
-            console.error(error);
-          });
-      }, {concurrency: 1});
-    });
-  }, {concurrency: 1});
+          const data = await saveStation(stationData, fileType);
+          const values = await prepareImportData(data, time, 4);
+          await saveStationValues(values, filePaths, stationsData, fileKey);
+        }
+      } catch (e) {
+        console.error(e);
+        process.send({event: 'setImportLog', data: {filePath: filePath, error: errorToObject(e)}})
+      }
+    }
+  })();
 }
 
 function readFile(filePath, fileType) {
@@ -82,7 +90,7 @@ function saveStation(data, fileType) {
       ...props
     };
 
-    process.send({event: 'addStation', value: data.station});
+    process.send({event: 'addStation', data: data.station});
 
     return data;
   });
@@ -108,7 +116,7 @@ function saveStationValues(data, files, stations, fileCurrent) {
           let newProgress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
           if (newProgress.current > progress.current) {
             progress = newProgress;
-            process.send({event: 'setProgress', progress});
+            process.send({event: 'setProgress', data: progress});
           }
 
           if (error) {

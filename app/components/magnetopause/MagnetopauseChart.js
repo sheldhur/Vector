@@ -1,10 +1,12 @@
 // @flow
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import {NoDataAlert} from './../widgets/ChartAlert';
 import MagnetopauseChartMenu from './MagnetopauseChartMenu';
+import * as prepareData from './../../utils/prepareData';
 import './../../utils/helper';
 
 
@@ -22,32 +24,40 @@ class MagnetopauseChart extends Component {
     }
   };
 
-  prepareDataForChart = (points) => {
-    return [{
-      si: 'Re',
-      lines: [{
-        si: 'Re',
-        name: 'Magnetopause',
-        format: '%(name)s: %(y).5g %(si)s',
-        style: {
-          stroke: '#ff7f0e',
-          strokeWidth: 1,
-        },
-        points
-      }]
-    }]
-  };
-
   render() {
-    const {chart} = this.props;
+    const dataSets = {};
+    const dataSetValues = {};
 
-    const data = this.prepareDataForChart(chart);
+    this.props.magnetopauseDataSets.forEach((id) => {
+      if (this.props.dataSets.hasOwnProperty(id)) {
+        dataSets[id] = this.props.dataSets[id];
+        dataSetValues[id] = this.props.dataSetValues[id];
+      }
+    });
+
+    dataSets["magnetopause"] = {
+      id: "magnetopause",
+      axisGroup: 0,
+      name: "Magnetopause",
+      si: "Re",
+      style: {stroke: '#ff7f0e'},
+      axisY: -1,
+      badValue: null,
+      status: 1
+    };
+    dataSetValues["magnetopause"] = this.props.chart;
+
+    const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues);
     return (
-      <div id="magnetopauseChart" style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
+      <div
+        id="magnetopauseChart"
+        style={{width: this.props.width, height: this.props.height}}
+        onContextMenu={this.handlerContextMenu}
+      >
         <LineChart
           width={this.props.width}
           height={this.props.height}
-          data={data}
+          data={chartLines}
           tooltipDelay={100}
           antiAliasing={this.props.antiAliasing}
           emptyMessage={<NoDataAlert/>}
@@ -69,4 +79,14 @@ MagnetopauseChart.defaultProps = {
   height: '100%',
 };
 
-export default MagnetopauseChart;
+function mapStateToProps(state) {
+  return {
+    chart: state.magnetopause.chart,
+    magnetopauseDataSets: state.main.settings.projectMagnetopauseDataSets,
+    dataSets: state.dataSet.dataSets,
+    dataSetValues: state.dataSet.dataSetValues,
+    antiAliasing: state.main.settings.appAntiAliasing,
+  };
+}
+
+export default connect(mapStateToProps, null)(MagnetopauseChart);

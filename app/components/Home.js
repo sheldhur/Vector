@@ -3,7 +3,7 @@ import {remote} from 'electron';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio} from 'antd';
+import {Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert} from 'antd';
 import moment from 'moment';
 import * as MainActions from './../actions/main';
 import * as app from './../constants/app';
@@ -84,6 +84,14 @@ class Home extends Component {
       <div className="home-page">
         <Row justify="center" align="middle">
           <Col span={12} offset={6}>
+            {this.props.isError && <Row justify="center" align="middle">
+              <Alert
+                message={this.props.isError.name}
+                description={this.props.isError.message}
+                type="error"
+                showIcon
+              />
+            </Row>}
             <Card title={remote.app.getName()} bordered={false}>
               <Row>
                 <Button
@@ -141,7 +149,7 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    // dbPath: state.main.dbPath,
+    isError: state.main.isError,
   };
 }
 

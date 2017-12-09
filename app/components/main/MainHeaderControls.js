@@ -4,7 +4,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Tooltip, Button, Input, Tag, Icon} from 'antd';
 import * as ChartActions from './../../actions/chart';
-import * as StationActions from './../../actions/station';
 
 class MainHeaderControls extends Component {
   state = {
@@ -78,7 +77,10 @@ class MainHeaderControls extends Component {
     }
 
     this.props.chartActions.shiftChartCurrentTime(value);
-    this.props.stationActions.getStationsValue();
+
+    if (this.props.onTick && typeof this.props.onTick === "function") {
+      this.props.onTick();
+    }
   };
 
   handlerPlay = (e) => {
@@ -162,15 +164,14 @@ class MainHeaderControls extends Component {
 
 function mapStateToProps(state) {
   return {
-    playDelay: state.main.settings.app.time.playDelay,
-    shiftStep: state.main.settings.app.time.shiftStep,
+    playDelay: state.main.settings.appPlayDelay,
+    shiftStep: state.main.settings.appTimeShiftStep,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     chartActions: bindActionCreators(ChartActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
   };
 }
 

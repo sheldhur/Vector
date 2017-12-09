@@ -134,8 +134,8 @@ class Tooltip extends Component {
         key={'tooltipText'}
         width={this.props.width}
         position={{
-          x: Math.round(tooltipTextPosition.x.avg()),
-          y: Math.round(tooltipTextPosition.y.avg())
+          x: Math.round(Math.avg(tooltipTextPosition.x)),
+          y: Math.round(Math.avg(tooltipTextPosition.y))
         }}>{tooltipTextList}</TooltipText>;
     }
 

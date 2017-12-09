@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import moment from 'moment';
 import errorToObject from '../lib/errorToObject';
 import calcProgress from '../lib/calcProgress';
-import prepareValues from './prepareValues';
+import prepareImportData from '../utils/prepareImportData';
 import * as geomag from '../lib/geomagneticData/index';
 
 let db;
@@ -10,24 +10,44 @@ let db;
 //TODO: обработка ошибок
 //TODO: подготовка данных: raw, интерполяция, среднее, etc
 export default function (dbSession, data) {
-  if (!data.main.settings || !data.main.settings.project) {
+  if (!data.main.settings) {
     throw new Error("Can't get project settings");
   }
 
   db = dbSession;
 
-  let {filePaths, fileType} = data;
-  let {time} = data.main.settings.project;
-
-  time.period.start = moment(time.period.start);
-  time.period.end = moment(time.period.end);
+  const {filePaths, fileType} = data;
+  const time = {
+    period: {
+      start: moment(data.main.settings.projectTimePeriod[0]),
+      end: moment(data.main.settings.projectTimePeriod[1]),
+    },
+    avg: data.main.settings.projectTimeAvg,
+  };
 
   let fileCurrent = 0;
+
+  (async () => {
+    for (const fileKey in filePaths) {
+      const filePath = filePaths[fileKey];
+
+      try {
+        process.send({event: 'setCurrentFile', data: filePath});
+        const readResult = await readFile(filePaths[fileKey], fileType);
+        const data = await prepareImportData(readResult, time);
+        const dataSets = await saveDataSets(data);
+        await saveDataSetValues(dataSets, filePaths, fileKey)
+      } catch (e) {
+        console.error(e);
+        process.send({event: 'setImportLog', data: {filePath: filePath, error: errorToObject(e)}})
+      }
+    }
+  })();
 
   Promise.map(filePaths, (filePath) => {
     process.send({event: 'setCurrentFile', filePath});
     return readFile(filePath, fileType)
-      .then((rows) => prepareValues(rows, time))
+      .then((rows) => prepareImportData(rows, time))
       .then((data) => saveDataSets(data))
       .then((rows) => saveDataSetValues(rows, filePaths, fileCurrent++))
       .catch((error) => {

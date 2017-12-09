@@ -4,16 +4,18 @@ import {connect} from 'react-redux';
 import MainHeaderControls from './../main/MainHeaderControls';
 import MainHeaderCapture from './../main/MainHeaderCapture';
 import MagnetopauseSettings from './MagnetopauseSettings';
+import MagnetopauseSettingsChart from './MagnetopauseSettingsChart';
 
 class MagnetopauseHeader extends Component {
   size = 'small';
 
   render = () => {
-    const field = this.props.settings.project.magnetopause;
+    const {field} = this.props;
     const modalVisible = !(field && field.b && field.bz && field.pressureSolar);
     return (
       <div className="main-page-header">
         <MagnetopauseSettings size={this.size} modalVisible={modalVisible}/>
+        <MagnetopauseSettingsChart size={this.size}/>
         <MainHeaderControls size={this.size}/>
         <MainHeaderCapture size={this.size}/>
       </div>
@@ -23,7 +25,7 @@ class MagnetopauseHeader extends Component {
 
 function mapStateToProps(state) {
   return {
-    settings: state.main.settings,
+    field: state.main.settings.projectMagnetopause,
   };
 }
 

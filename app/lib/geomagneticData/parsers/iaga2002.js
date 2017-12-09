@@ -67,7 +67,7 @@ export default function (filePath) {
             if (!line.startsWith('#')) {
               let lineSplit = line.split(/\s+/);
               lineSplit[0] = lineSplit[0] + ' ' + lineSplit[1];
-              lineSplit.remove(1, 2);
+              lineSplit.splice(1, 2);
 
               data.rows.push(lineSplit.map((cell, i) => {
                 if (i === 0) {

@@ -50,7 +50,7 @@ class StationValuesView extends Component {
 
 function mapStateToProps(state) {
   return {
-    theme: state.main.settings.app.theme,
+    theme: state.main.settings.appTheme,
   };
 }
 

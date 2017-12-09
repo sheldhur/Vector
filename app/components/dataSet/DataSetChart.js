@@ -3,13 +3,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {LoadingAlert, ErrorAlert, NoDataAlert} from './../widgets/ChartAlert';
+import {ProgressAlert, NoDataAlert} from './../widgets/ChartAlert';
 import LineChart from './../chart/LineChart';
 import TitleCurrentTime from './../main/TitleCurrentTime';
 import DataSetChartMenu from './DataSetChartMenu';
 import * as MainActions from './../../actions/main';
 import * as DataSetActions from './../../actions/dataSet';
 import * as StationActions from './../../actions/station';
+import * as prepareData from './../../utils/prepareData';
 import * as app from './../../constants/app';
 import './../../utils/helper';
 
@@ -20,10 +21,10 @@ class DataSetChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let {data} = this.props;
+      let {dataSets} = this.props;
 
       DataSetChartMenu({
-        dataNotEmpty: !!data.dataSets,
+        dataNotEmpty: !!dataSets,
         dataSetActions: this.props.dataSetActions,
       });
     }
@@ -35,61 +36,19 @@ class DataSetChart extends Component {
     }
   };
 
-  prepareDataForChart = (dataSets, dataSetValues) => {
-    const colorGroup = app.DATA_SET_COLOR;
-
-    let chartGroups = {};
-    for (let dataSetId in dataSets) {
-      const dataSet = dataSets[dataSetId];
-      if (dataSet && dataSet.status == app.DATASET_ENABLED) {
-        let dataSetLine = {
-          name: dataSet.name,
-          si: dataSet.si,
-          format: '%(name)s: %(y).5g %(si)s',
-          style: {
-            stroke: colorGroup[dataSetId % colorGroup.length],
-            strokeWidth: 1,
-            ...dataSet.style
-          },
-          points: dataSetValues[dataSet.id].map((dataSetValue) => {
-            return {
-              x: dataSetValue.time,
-              y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
-            };
-          })
-        };
-
-        if (chartGroups[dataSet.axisGroup] === undefined) {
-          chartGroups[dataSet.axisGroup] = {
-            si: null,
-            lines: [],
-          };
-        }
-
-        chartGroups[dataSet.axisGroup].lines.push(dataSetLine);
-        chartGroups[dataSet.axisGroup].si = chartGroups[dataSet.axisGroup].si || dataSetLine.si;
-      }
-    }
-
-    return Object.values(chartGroups);
-  };
-
   render() {
-    const {isLoading, isError, dataSets, dataSetValues} = this.props.data;
-    const chartLines = this.prepareDataForChart(dataSets, dataSetValues);
+    const {isLoading, isError, progress, dataSets, dataSetValues} = this.props;
+    const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues, (dataSet) => dataSet.status === app.DATASET_ENABLED);
 
     let container = null;
 
-    if (isError) {
-      container = (<ErrorAlert
-        text={isError.name}
-        description={isError.message}
+    if (isLoading || isError) {
+      container = (<ProgressAlert
+        text={progress.title}
+        percent={progress.value}
+        error={isError}
         onContextMenu={this.handlerContextMenu}
       />);
-    }
-
-    if (isLoading) {
-      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
     }
 
     if (!container) {
@@ -128,8 +87,12 @@ DataSetChart.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    data: state.dataSet,
-    antiAliasing: state.main.settings.app.antiAliasing,
+    isLoading: state.dataSet.isLoading,
+    isError: state.dataSet.isError,
+    progress: state.dataSet.progress,
+    dataSets: state.dataSet.dataSets,
+    dataSetValues: state.dataSet.dataSetValues,
+    antiAliasing: state.main.settings.appAntiAliasing,
   };
 }
 

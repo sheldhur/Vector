@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {remote} from 'electron';
-import {Menu, Dropdown, Button, Icon, Modal, Progress, Tooltip, message} from 'antd';
+import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
+import {ImportProgress} from '../widgets/ImportProgress';
 import * as StationActions from './../../actions/station';
 import * as StationImportActions from './../../actions/stationImport';
 import * as app from './../../constants/app';
@@ -15,10 +16,6 @@ const currentWindow = remote.getCurrentWindow();
 
 class StationImport extends Component {
   fileTypes = app.IMPORT_TYPE_STATION;
-
-  componentWillMount() {
-    // this.props.mainActions.getLastDataBase(false);
-  }
 
   handlerDropdownSelect = (e) => {
     const fileType = this.fileTypes[e.key];
@@ -49,14 +46,9 @@ class StationImport extends Component {
   };
 
   render() {
-    const {progressBar, showModal, currentFile} = this.props.stationImport;
+    const {progressBar, showModal, currentFile, importLog} = this.props.stationImport;
 
     this.setSystemProgressBar(progressBar.total);
-
-    const currentFileName = currentFile.replace(/^.*[\\\/]/, '');
-    const currentFileWbr = <span dangerouslySetInnerHTML={{__html: currentFile.replace(/\\/g, (str) => {
-      return str + '<wbr />';
-    })}}/>;
 
     const menuFileType = (
       <Menu onClick={this.handlerDropdownSelect} selectable={false}>
@@ -72,11 +64,13 @@ class StationImport extends Component {
 
     return (
       <div className="station-import">
-        <Button onClick={() => {this.props.stationActions.getLatitudeAvgValues()}}><Icon type="reload"/> Update stations</Button>{" "}
+        <Button onClick={this.props.stationActions.getLatitudeAvgValues}><Icon type="reload"/> Update stations</Button>
+        {" "}
         <Dropdown overlay={menuFileType} placement="bottomLeft" trigger={['click']}>
           <Button>{titleImport} <Icon type="down"/></Button>
         </Dropdown>
         <Modal
+          wrapClassName="station-import"
           title={titleImport}
           visible={showModal}
           onCancel={this.handlerCancelClick}
@@ -85,18 +79,11 @@ class StationImport extends Component {
             <Button key="cancel" size="large" onClick={this.handlerCancelClick}>Cancel</Button>
           ]}
         >
-          <div className="station-import">
-            <Progress percent={Math.ceil(progressBar.total)} className="animation-off"/>
-            <small>
-              File:&nbsp;
-              <Tooltip
-                title={currentFileWbr}
-                placement="right"
-                overlayClassName="station-import file-path"
-              >{currentFileName}</Tooltip>
-            </small>
-            <Progress percent={Math.ceil(progressBar.current)} className="animation-off"/>
-          </div>
+          <ImportProgress
+            progressBar={progressBar}
+            currentFile={currentFile}
+            importLog={importLog}
+          />
         </Modal>
       </div>
     );
@@ -105,7 +92,6 @@ class StationImport extends Component {
 
 function mapStateToProps(state) {
   return {
-    main: state.main,
     stationImport: state.stationImport
   };
 }

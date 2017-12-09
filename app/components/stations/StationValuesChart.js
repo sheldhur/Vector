@@ -136,7 +136,7 @@ StationValuesChart.defaultProps = {
 function mapStateToProps(state) {
   return {
     data: state.station.stationView,
-    antiAliasing: state.main.settings.app.antiAliasing,
+    antiAliasing: state.main.settings.appAntiAliasing,
   };
 }
 

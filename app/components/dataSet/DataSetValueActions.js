@@ -50,7 +50,7 @@ class DataSetValueActions extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        {dataSet.status == app.STATION_ENABLED ?
+        {dataSet.status === app.STATION_ENABLED ?
           <Menu.Item key={DATASET_DISABLE}>Disable data series</Menu.Item>
           :
           <Menu.Item key={DATASET_ENABLE}>Enable data series</Menu.Item>

@@ -6,7 +6,7 @@
   <script>
     (function () {
       const settings = JSON.parse(window.localStorage['appSettings'] || null);
-      document.documentElement.style.background = settings && settings.theme === 'night' ? '#222222' : 'white';
+      document.documentElement.style.background = settings && settings.appTheme === 'night' ? '#222222' : 'white';
 
       if (!process.env.HOT) {
         const link = document.createElement('link');
