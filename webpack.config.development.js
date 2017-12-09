@@ -155,7 +155,7 @@ export default merge(baseConfig, {
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     publicPath,
-    setup() {
+    before() {
       if (process.env.START_HOT) {
         spawn('npm', ['run', 'start-hot'], {shell: true, env: process.env, stdio: 'inherit'})
           .on('close', code => process.exit(code))
