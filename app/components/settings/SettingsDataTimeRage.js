@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {DatePicker} from 'antd';
 import moment from "moment";
 import * as app from './../../constants/app';
+import {numberIsBetween} from "../../utils/helper";
 
 
 //TODO: ресет значений, если отмена
@@ -61,7 +62,7 @@ class SettingsDataTimeRage extends Component {
           range.start.valueOf(),
           range.end.valueOf()
         ];
-        result = !currentMs.between(rangeMs, true);
+        result = !numberIsBetween(currentMs, rangeMs);
       } else {
         let nowMs = now.valueOf();
         result = current > nowMs;

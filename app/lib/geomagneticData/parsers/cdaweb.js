@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as fs from 'fs';
-import '../../../utils/helper';
+import {stringCamelCase} from '../../../utils/helper';
 
 export default function (filePath) {
   return new Promise((resolve) => {
@@ -39,7 +39,7 @@ export default function (filePath) {
               if (matches !== null) {
                 if (data[key] !== undefined) {
                   resultLastPropName = key;
-                  lastVarName = matches[1].trim().toCamelCase();
+                  lastVarName = stringCamelCase(matches[1]);
                   data[resultLastPropName][lastVarName] = matches[2].trim();
                 } else if (resultLastPropName !== undefined) {
                   data[resultLastPropName][lastVarName] += "\r\n" + matches[1].trim();

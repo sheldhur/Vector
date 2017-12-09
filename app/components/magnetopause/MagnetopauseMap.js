@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import MagnetopauseMapX from './MagnetopauseMapX';
-import MagnetopauseMapY from './MagnetopauseMapY';
-import './../../utils/helper';
+
 
 class MagnetopauseMap extends Component {
   state = {

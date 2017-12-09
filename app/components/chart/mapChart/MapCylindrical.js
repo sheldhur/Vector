@@ -10,7 +10,6 @@ import SolarTerminator from './SolarTerminator';
 import StationVector from './StationVector';
 import Axis from './../lineChart/Axis';
 import Tooltip from './Tooltip';
-import './../../../utils/helper';
 
 
 class MapCylindrical extends Component {

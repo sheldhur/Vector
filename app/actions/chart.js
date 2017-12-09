@@ -1,5 +1,4 @@
 import * as types from './../constants/chart';
-import './../utils/helper';
 
 export function setChartCurrentTime(payload) {
   if (Object.prototype.toString.call(payload) === '[object Date]') {

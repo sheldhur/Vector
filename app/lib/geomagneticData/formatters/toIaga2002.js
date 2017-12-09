@@ -1,5 +1,4 @@
 import {sprintf} from 'sprintf-js';
-import '../../../utils/helper';
 
 export default function (filePath, prop, dataRaw) {
   return new Promise((result) => {

@@ -8,7 +8,7 @@ import * as d3 from 'd3';
 import * as ChartActions from './../../../actions/chart';
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
-import './../../../utils/helper';
+import {mathAvg} from "../../../utils/helper";
 
 class Tooltip extends Component {
 
@@ -134,8 +134,8 @@ class Tooltip extends Component {
         key={'tooltipText'}
         width={this.props.width}
         position={{
-          x: Math.round(Math.avg(tooltipTextPosition.x)),
-          y: Math.round(Math.avg(tooltipTextPosition.y))
+          x: Math.round(mathAvg(tooltipTextPosition.x)),
+          y: Math.round(mathAvg(tooltipTextPosition.y))
         }}>{tooltipTextList}</TooltipText>;
     }
 

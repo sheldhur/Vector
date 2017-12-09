@@ -12,7 +12,6 @@ import * as DataSetActions from './../../actions/dataSet';
 import * as StationActions from './../../actions/station';
 import * as prepareData from './../../utils/prepareData';
 import * as app from './../../constants/app';
-import './../../utils/helper';
 
 
 class DataSetChart extends Component {

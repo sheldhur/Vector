@@ -2,10 +2,9 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert} from "antd";
+import {Modal, Icon, Button, Input, Select, Form} from "antd";
 import * as MainActions from "./../../actions/main";
 import * as MagnetopauseActions from "./../../actions/magnetopause";
-import "./../../utils/helper";
 
 
 class MagnetopauseSettings extends Component {

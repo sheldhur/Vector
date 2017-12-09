@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './../../utils/helper';
+import {numberIsBetween} from '../../utils/helper';
 
 
 export class ResizeblePanel extends Component {
@@ -33,9 +33,9 @@ export class ResizeblePanel extends Component {
 
     let size = 0;
     if (this.props.type === 'horizontal') {
-      size = (100 * event.clientX / document.body.clientWidth).between(this.props.resizeRange);
+      size = numberIsBetween(100 * event.clientX / document.body.clientWidth, this.props.resizeRange, true, false);
     } else if (this.props.type === 'vertical') {
-      size = (100 * event.clientY / document.body.clientHeight).between(this.props.resizeRange);
+      size = numberIsBetween(100 * event.clientY / document.body.clientHeight, this.props.resizeRange, true, false);
     }
 
     if (size !== this.state.size) {

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import * as fs from 'fs';
+import {stringCamelCase} from '../../../utils/helper';
 
 export default function (filePath) {
   return new Promise((resolve) => {
@@ -32,7 +33,7 @@ export default function (filePath) {
           if (isProperty) {
             let matches = line.match(regexp.properties);
             if (matches !== null) {
-              let varName = matches[1].trim().toCamelCase();
+              let varName = stringCamelCase(matches[1]);
               data.properties[varName] = matches[2] ? matches[2].trim() : null;
               if (['startTime', 'endTime'].indexOf(varName) !== -1) {
                 data.properties[varName] = moment(data.properties[varName], 'YYYY-MM-DD HH:mm:ss').toDate();

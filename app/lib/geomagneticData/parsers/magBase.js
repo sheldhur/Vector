@@ -1,7 +1,6 @@
-import moment from 'moment';
 import * as fs from 'fs';
 import {Parser} from 'binary-parser';
-import '../../../utils/helper';
+import {numberIsBetween} from '../../../utils/helper';
 
 const stationList = {
   ARS: {glon: 58.57, glat: 56.43},
@@ -124,15 +123,15 @@ export default function (filePath) {
 
           line.X = 1;
           if (line.sc !== NO_DATA) {
-            if (line.sc.between([4, 10], true)) {
+            if (numberIsBetween(line.sc, [4, 10])) {
               line.X = 2 ** (3 - line.sc);
-            } else if (line.sc.between([11, 20], true)) {
+            } else if (numberIsBetween(line.sc, [11, 20])) {
               line.X = 10 ** (10 - line.sc);
             }
           }
 
           if (line.yy.toString().length === 2) {
-            line.yy += line.yy.between([82, 99]) ? 1900 : 2000;
+            line.yy += numberIsBetween(line.yy, [82, 99]) ? 1900 : 2000;
           }
 
           line.v1.forEach((value, minute) => {

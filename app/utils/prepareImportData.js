@@ -5,7 +5,8 @@ import {
   VALUES_MAX,
   VALUES_MIN,
   VALUES_RAW,
-} from '../constants/app';
+} from './../constants/app';
+import {mathAvg, numberIsBetween} from './helper';
 
 function calcTimeExtreme(period, data, avg, startOrEnd) {
   const timePeriod = period.valueOf();
@@ -63,7 +64,7 @@ function prepareRawValues(rows, time, rowLength, badValue) {
   for (let i = 0; i < rows.length; i++) {
     let row = rows[i];
 
-    if (row[0].valueOf().between([period.start.valueOf(), period.end.valueOf()], true)) {
+    if (numberIsBetween(row[0].valueOf(), [period.start.valueOf(), period.end.valueOf()])) {
       if (row.length > rowLength) {
         row = row.slice(0, rowLength);
       } else if (row.length < rowLength) {
@@ -123,9 +124,9 @@ function prepareFormatedValues(rows, time, method = VALUES_RAW) {
               case VALUES_MIN:
                 return Math.min(...comp);
               case VALUES_AVG:
-                return Math.avg(...comp);
+                return mathAvg(...comp);
               default:
-                return Math.avg(...comp);
+                return mathAvg(...comp);
             }
           } else {
             return null;

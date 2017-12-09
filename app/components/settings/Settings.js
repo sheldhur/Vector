@@ -10,8 +10,8 @@ import SettingsDataTimeRage from "./SettingsDataTimeRage";
 import * as MainActions from "./../../actions/main";
 import * as DataSetActions from './../../actions/dataSet';
 import * as StationActions from './../../actions/station';
-import * as app from "./../../constants/app";
-import "./../../utils/helper";
+import * as app from "./../../constants/app"
+import {stringCamelCase, numberIsBetween} from "../../utils/helper";
 
 
 class Settings extends Component {
@@ -93,7 +93,7 @@ class Settings extends Component {
           range.start.valueOf(),
           range.end.valueOf()
         ];
-        result = !currentMs.between(rangeMs, true);
+        result = !numberIsBetween(currentMs, rangeMs);
       } else {
         let nowMs = now.valueOf();
         result = current > nowMs;
@@ -144,7 +144,7 @@ class Settings extends Component {
   };
 
   handlerInputNumberFix = (e) => {
-    if (e.keyCode.between([65, 90], true)) {
+    if (numberIsBetween(e.keyCode, [65, 90])) {
       e.preventDefault();
     }
   };
@@ -413,7 +413,7 @@ class Settings extends Component {
                   {wrappedField('appTheme')(
                     <Select size={this.props.size} style={{width: 150}}>
                       {app.THEMES.map((item, i) => {
-                        return <Select.Option value={item.toCamelCase()} key={i}>{item}</Select.Option>;
+                        return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
                       })}
                     </Select>
                   )}
@@ -463,7 +463,7 @@ class Settings extends Component {
                       {wrappedField('appMapProjectionType')(
                         <Select size={this.props.size} style={{width: 150}}>
                           {app.MAP_PROJECTION.map((item, i) => {
-                            return <Select.Option value={item.toCamelCase()} key={i}>{item}</Select.Option>;
+                            return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
                           })}
                         </Select>
                       )}

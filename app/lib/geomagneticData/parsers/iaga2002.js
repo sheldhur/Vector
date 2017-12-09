@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as fs from 'fs';
-import '../../../utils/helper';
+import {stringCamelCase} from '../../../utils/helper';
 
 export default function (filePath) {
   return new Promise((resolve) => {
@@ -32,7 +32,7 @@ export default function (filePath) {
             if (!line.startsWith('#')) {
               let matches = line.match(regexp.properties);
               if (matches !== null) {
-                let varName = matches[1].trim().toCamelCase();
+                let varName = stringCamelCase(matches[1]);
                 data.properties[varName] = matches[2].trim();
                 if (varName === 'iagaCode') {
                   data.properties['code'] = data.properties[varName];

@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import LineChart from './../chart/LineChart';
 import {NoDataAlert} from './../widgets/ChartAlert';
-import {magnetopausePoint} from '../../lib/geopack';
 import MagnetopauseMapMenu from './MagnetopauseMapMenu';
-import './../../utils/helper';
+import {magnetopausePoint} from './../../lib/geopack';
+import {numberIsBetween} from './../../utils/helper';
 
 
 class MagnetopauseMapX extends Component {
@@ -38,7 +38,7 @@ class MagnetopauseMapX extends Component {
       let point = magnetopause.calculate(i, 0);
       if (point) {
         point = point.toCartesian();
-        if (point.x.between([-50, 30], true)) {
+        if (numberIsBetween(point.x, [-50, 30])) {
           points.push({
             x: point.x,
             y: point.z

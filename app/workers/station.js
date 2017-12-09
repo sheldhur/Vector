@@ -1,10 +1,10 @@
 import Promise from 'bluebird';
 import moment from 'moment';
-import {STATION_DISABLED, STATION_ENABLED} from '../constants/app'
+import {STATION_DISABLED, STATION_ENABLED} from './../constants/app'
 import * as stationsCalc from './../lib/stationsCalc';
 import errorToObject from './../lib/errorToObject';
-import calcProgress from '../lib/calcProgress';
-import '../utils/helper';
+import calcProgress from './../lib/calcProgress';
+import {mathAvg, numberIsBetween} from '../utils/helper';
 
 let db;
 
@@ -269,7 +269,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
     if (latitudeAvgValues[compKey][latitudeRange][hemisphere] !== undefined) {
       if (latitudeAvgValues[compKey][latitudeRange][hemisphere][time] !== undefined) {
         let values = latitudeAvgValues[compKey][latitudeRange][hemisphere][time];
-        latitudeAvgValues[compKey][latitudeRange][hemisphere][time] = values.length > 0 ? Math.avg(values) : null;
+        latitudeAvgValues[compKey][latitudeRange][hemisphere][time] = values.length > 0 ? mathAvg(values) : null;
       }
       // if (latitudeAvgValues[compKey][latitudeRange][hemisphere][time] === undefined) {
       //   latitudeAvgValues[compKey][latitudeRange][hemisphere][time] = null;
@@ -305,7 +305,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
         let isInRange = stationValue.latitude <= range[0] && stationValue.latitude > range[1];
 
         if (isInRange) {
-          if (lastTime.between([timeSelected.start.valueOf(), timeSelected.end.valueOf()], true)) {
+          if (numberIsBetween(lastTime, [timeSelected.start.valueOf(), timeSelected.end.valueOf()])) {
             latitudeValuesAdd(compKey, latitudeRange, hemisphere, lastTime, delta[compKey]);
             latitudeValuesAdd(compKey, latitudeRange, 'global', lastTime, delta[compKey]);
           }

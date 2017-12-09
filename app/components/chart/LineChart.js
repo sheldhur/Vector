@@ -10,7 +10,7 @@ import Axis from './lineChart/Axis';
 import Grid from './lineChart/Grid';
 import Tooltip from './lineChart/Tooltip';
 import TimeCursor from './lineChart/TimeCursor';
-import './../../utils/helper';
+import {mathSum} from '../../utils/helper';
 
 
 //TODO: переделать всё.
@@ -114,11 +114,11 @@ class LineChart extends Component {
     };
 
     if (axisSize.y !== undefined) {
-      margin.left = Math.sum(axisSize.y.width) + ((axisSize.y.width.length - 1) * this.addPixels);
+      margin.left = mathSum(axisSize.y.width) + ((axisSize.y.width.length - 1) * this.addPixels);
     }
 
     if (axisSize.x !== undefined) {
-      margin.bottom = Math.sum(axisSize.x.height);
+      margin.bottom = mathSum(axisSize.x.height);
     }
 
     return margin;

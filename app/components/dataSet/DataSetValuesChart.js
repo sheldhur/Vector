@@ -10,7 +10,6 @@ import * as MainActions from './../../actions/main';
 import * as DataSetActions from './../../actions/dataSet';
 import * as app from './../../constants/app';
 import * as prepareData from './../../utils/prepareData';
-import './../../utils/helper';
 
 
 class DataSetValuesChart extends Component {

@@ -2,12 +2,11 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Modal, Icon, Button, Input, Row, Form} from "antd";
+import {Modal, Icon, Button, Input, Form} from "antd";
 import * as MainActions from "./../../actions/main";
 import * as MagnetopauseActions from "./../../actions/magnetopause";
 import MagnetopauseSettingsDataSets from "./MagnetopauseSettingsDataSets";
 import MagnetopauseSettingsSelector from "./MagnetopauseSettingsSelector";
-import "./../../utils/helper";
 
 
 class MagnetopauseSettingsChart extends Component {

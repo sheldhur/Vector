@@ -1,5 +1,5 @@
-import './../utils/helper';
 import moment from 'moment';
+import {dateToMinutes} from '../utils/helper';
 
 function delta(stationValue, stationExtremum) {
   let result = {};
@@ -47,8 +47,7 @@ function componentDelta(compKey, stationValue, stationExtremum) {
       dataEnd.time = moment(dataEnd.time).toDate();
     }
 
-    return stationValue[compKey] - dataStart.value - ((stationValue.time.toMinutes() - dataStart.time.toMinutes()) * (dataEnd.value - dataStart.value) / (dataEnd.time.toMinutes() - dataStart.time.toMinutes()));
-    //return stationValue[compKey] - dataStart.value - (stationValue.time.toMinutes() - dataStart.time.toMinutes()) * (dataEnd.value - dataStart.value) / (dataEnd.time.toMinutes() - dataStart.time.toMinutes());
+    return stationValue[compKey] - dataStart.value - ((dateToMinutes(stationValue.time) - dateToMinutes(dataStart.time)) * (dataEnd.value - dataStart.value) / (dateToMinutes(dataEnd.time) - dateToMinutes(dataStart.time)));
   }
 
   return null;

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as fs from 'fs';
-import './../../../utils/helper';
+import {stringCamelCase} from '../../../utils/helper';
 
 export default function (filePath) {
   return new Promise((resolve) => {
@@ -59,12 +59,12 @@ export default function (filePath) {
                   variables[matches[1]]['si'] = matches[3];
                 }
 
-                variables[matches[1]][matches[2].toCamelCase()] = matches[3];
+                variables[matches[1]][stringCamelCase(matches[2])] = matches[3];
               }
             } else if (dataBlock === IS_PROPERTY) {
               let matches = line.match(regexp.properties);
               if (matches !== null) {
-                data.properties[matches[1].toCamelCase()] = matches[2];
+                data.properties[stringCamelCase(matches[1])] = matches[2];
               }
             } else if (dataBlock === IS_SATELLITE_DATA || dataBlock === IS_DATA) {
               let columns = dataBlock === IS_SATELLITE_DATA ? 'satelliteColumns' : 'columns';

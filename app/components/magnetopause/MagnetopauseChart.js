@@ -7,7 +7,6 @@ import TitleCurrentTime from './../main/TitleCurrentTime';
 import {NoDataAlert} from './../widgets/ChartAlert';
 import MagnetopauseChartMenu from './MagnetopauseChartMenu';
 import * as prepareData from './../../utils/prepareData';
-import './../../utils/helper';
 
 
 class MagnetopauseChart extends Component {

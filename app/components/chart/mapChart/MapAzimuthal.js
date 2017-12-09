@@ -7,9 +7,7 @@ import Graticule from './Graticule';
 import GeomagEquator from './GeomagEquator';
 import SolarTerminator from './SolarTerminator';
 import StationVector from './StationVector';
-import Axis from './../lineChart/Axis';
 import Tooltip from './Tooltip';
-import './../../../utils/helper';
 
 
 class MapAzimuthal extends Component {
@@ -24,7 +22,7 @@ class MapAzimuthal extends Component {
   };
   uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
 
-  calculateSize = (margin, axisMargin) => {
+  calculateSize = () => {
     return {
       width: this.props.width - 25,
       height: this.props.height - 25,
