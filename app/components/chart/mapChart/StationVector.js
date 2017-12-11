@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
 import * as ChartActions from '../../../actions/chart';
-import * as stationsCalc from '../../../lib/stationsCalc';
+import * as stationsCalc from '../../../utils/stationsCalc';
 import {openWindowStation} from '../../map/VectorMapMenu'
 
 

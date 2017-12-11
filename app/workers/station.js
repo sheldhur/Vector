@@ -1,21 +1,20 @@
 import Promise from 'bluebird';
 import moment from 'moment';
 import {STATION_DISABLED, STATION_ENABLED} from '../constants/app'
-import * as stationsCalc from '../lib/stationsCalc';
+import * as stationsCalc from '../utils/stationsCalc';
 import errorToObject from '../lib/errorToObject';
 import calcProgress from '../lib/calcProgress';
 import {mathAvg, numberIsBetween} from '../utils/helper';
 
 let db;
 
+//TODO: прелоад данных
 //TODO: сделать выборку по частям
 //TODO: ipc send bigData, JSON length error
-//TODO: прогресс обработки данных
 // http://stackoverflow.com/questions/27321392/is-it-expensive-efficient-to-send-data-between-processes-in-node
 // http://stackoverflow.com/questions/33842489/node-js-sending-a-big-object-to-child-process-is-slow
 // https://github.com/nodejs/node/issues/3145
 // http://stackoverflow.com/questions/24582213/how-to-transfer-stream-big-data-from-to-child-processes-in-node-js-without-using
-//TODO: прелоад данных
 
 export default function (dbSession, data) {
   if (!data.main.settings) {
@@ -37,10 +36,12 @@ export default function (dbSession, data) {
 
 function getProgress(stageName, rowsLength) {
   let stageLength = 0;
-  const stages = {
+  const stages = stageName ? {
     getStations: {stage: stageLength++, message: "Loading stations list"},
     getStationValues: {stage: stageLength++, message: "Loading stations values"},
-    getLatitudeAvgValues: {stage: stageLength++, message: "Calculating average values"}
+    getLatitudeAvgValues: {stage: stageLength++, message: "Calculating average values"},
+  } : {
+    null: {stage: stageLength++, message: "Loading", event: 'setStationViewProgress'},
   };
 
   let lastProgress = null;
@@ -52,32 +53,75 @@ function getProgress(stageName, rowsLength) {
     };
 
     if (!lastProgress || lastProgress.value !== progress.value) {
-      process.send({event: 'setProgress', data: progress});
+      if (progress.value > 100) {
+        process.send({stageLength, rowsLength, rowCurrent});
+      }
+      process.send({event: stages[stageName].event || 'setProgress', data: progress});
       lastProgress = progress;
     }
   }
 }
 
 function actionStationViewValues(data) {
-  let {settings} = data.main;
+  return new Promise((resolve, reject) => {
+    console.time('actionStationViewValues');
+    const {settings} = data.main;
+    const sqlite = db.sequelize.connectionManager.connections.default;
 
-  if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
-    throw new Error("Can't get time period");
-  }
+    if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
+      throw new Error("Can't get time period");
+    }
 
-  db.StationValue.findAll({
-    where: {
-      ...data.args,
-      time: {
-        $between: settings.projectTimePeriod.map(item => moment(item).format(db.formatTime))
+    const timePeriod = {
+      start: moment(settings.projectTimePeriod[0]),
+      end: moment(settings.projectTimePeriod[1]),
+    };
+    const sendProgress = getProgress(null, timePeriod.end.valueOf() - timePeriod.start.valueOf());
+    const timeStart = timePeriod.start.valueOf();
+
+    const values = [];
+
+    const query = `
+      SELECT 
+        id,
+        stationId,
+        time,
+        compX,
+        compY,
+        compZ,
+        format
+      FROM StationValues 
+      WHERE stationId = ${data.args.stationId} AND (time BETWEEN '${timePeriod.start.format(db.formatTime)}' AND '${timePeriod.end.format(db.formatTime)}')
+      ORDER BY time
+    `;
+
+    sqlite.each(query, (err, row) => {
+      if (err) {
+        reject(err);
       }
-    },
-    raw: true
-  }).then((result) => {
-    process.send({event: 'setStationViewValues', data: result});
-  }).catch((error) => {
-    console.error(error);
-    process.send({event: 'setStationViewError', data: errorToObject(error)});
+
+      const time = new Date(row.time);
+
+      values.push({
+        id: row.id,
+        stationId: row.stationId,
+        time: row.time,
+        compX: row.compX,
+        compY: row.compY,
+        compZ: row.compZ,
+        format: row.format,
+      });
+
+      sendProgress(time.valueOf() - timeStart);
+    }, () => {
+      process.send({event: 'setStationViewValues', data: values});
+
+      resolve({
+        values,
+      });
+
+      console.timeEnd('actionStationViewValues');
+    });
   });
 }
 
@@ -153,7 +197,7 @@ function getStations() {
 function getStationValues(stations, timePeriod) {
   return new Promise((resolve, reject) => {
     console.time('getStationValues');
-    let sqlite = db.sequelize.connectionManager.connections.default;
+    const sqlite = db.sequelize.connectionManager.connections.default;
     let components = {
       compX: null,
       compY: null,
@@ -163,7 +207,7 @@ function getStationValues(stations, timePeriod) {
     let values = [];
     let extremes = {};
 
-    let query = `
+    const query = `
       SELECT 
         stationId,
         time,

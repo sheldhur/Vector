@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {LoadingAlert, NoDataAlert, ErrorAlert} from '../widgets/ChartAlert';
+import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
 import * as MainActions from '../../actions/main';
@@ -77,31 +77,25 @@ class StationValuesChart extends Component {
       }
     });
 
-    console.log(data);
-
     return data;
   };
 
   render() {
-    const {isLoading, isError, values} = this.props.data;
-    const isEmpty = values && !values.length;
+    const {isLoading, isError, data, progress} = this.props;
 
     let container = null;
 
-    if (isError) {
-      container = (<ErrorAlert
-        text={isError.name}
-        description={isError.message}
+    if (isLoading || isError) {
+      container = (<ProgressAlert
+        text={progress.title}
+        percent={progress.value}
+        error={isError}
         onContextMenu={this.handlerContextMenu}
       />);
     }
 
-    if (isLoading) {
-      container = (<LoadingAlert onContextMenu={this.handlerContextMenu}/>);
-    }
-
     if (!container) {
-      let chartLines = this.prepareValuesForChart(values);
+      let chartLines = this.prepareValuesForChart(data);
       container = (
         <div style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
           <LineChart
@@ -134,7 +128,10 @@ StationValuesChart.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    data: state.station.stationView,
+    isLoading: state.station.stationView.isLoading,
+    isError: state.station.stationView.isError,
+    progress: state.station.stationView.progress,
+    data: state.station.stationView.values,
     antiAliasing: state.main.settings.appAntiAliasing,
   };
 }

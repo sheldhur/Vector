@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {dateToMinutes} from '../utils/helper';
+import {dateToMinutes} from './helper';
 
 function delta(stationValue, stationExtremum) {
   let result = {};

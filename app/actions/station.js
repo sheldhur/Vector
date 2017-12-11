@@ -68,9 +68,10 @@ export function setStationViewError(payload) {
   }
 }
 
-export function setStationViewLoading() {
+export function setStationViewLoading(payload) {
   return {
     type: types.STATION_VIEW_LOADING,
+    payload
   };
 }
 
@@ -153,7 +154,7 @@ export function getStationsValue() {
 
 export function getStationViewValues(args) {
   return (dispatch, getState) => {
-    dispatch(setStationViewLoading());
+    dispatch(setStationViewLoading(true));
     return getData(dispatch, getState, 'getStationViewValues', args);
   }
 }
