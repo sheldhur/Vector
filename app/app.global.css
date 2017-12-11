@@ -87,7 +87,7 @@ hr {
 @import "./components/widgets/ImportProgress.css";
 
 @import "./assets/styles/ThemeNight.css";
-@import "./assets/styles/ThemeLigth.css";
+@import "assets/styles/ThemeLight.css";
 
 @import "./assets/styles/Screencapture.css";
 
