@@ -134,7 +134,7 @@ class MainHeaderControls extends Component {
     buttons = buttons.map((btn, i) => {
       //ref={(el) => button[buttonName] = el}
       let hotKey = (
-        <span className="hotkey">
+        <span key={i} className="hotkey">
           {btn.hotkey.map((item, i) => [i !== 0 && ' + ', <Tag>{item}</Tag>])}
         </span>
       );

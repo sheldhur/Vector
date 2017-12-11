@@ -46,7 +46,11 @@
 
 .main-page-settings .ant-form-item-control > .ant-input-group-sm,
 .main-page-settings .ant-form-item-control > div > .ant-input-group-sm {
-  padding-top: 4px;
+  padding-top: 8px;
+}
+
+.main-page-settings form .ant-table .ant-select-sm {
+  top: 0px;
 }
 
 .dz-view-select {
