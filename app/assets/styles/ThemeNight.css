@@ -6,7 +6,10 @@
 .theme-night .ant-table,
 .theme-night .ant-pagination-jump-prev:not(:hover):after,
 .theme-night .ant-pagination-jump-next:not(:hover):after,
-.theme-night .ant-pagination-options-quick-jumper{
+.theme-night .ant-pagination-prev a:not(:hover),
+.theme-night .ant-pagination-next a:not(:hover),
+.theme-night .ant-pagination-options-quick-jumper,
+.theme-night .ant-pagination-item:not(.ant-pagination-item-active):not(:hover) a {
   color: #b0b0b0;
 }
 
