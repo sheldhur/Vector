@@ -1,7 +1,7 @@
 {
   "name": "Vector",
   "productName": "Vector",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data",
   "main": "./main.js",
   "author": {
@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "sequelize": "^4.28.0",
+    "sequelize": "^4.28.1",
     "sqlite3-offline": "^3.2.0"
   },
   "theme": {
