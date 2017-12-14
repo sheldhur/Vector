@@ -122,8 +122,8 @@ class Settings extends Component {
     const {settings} = this.props;
     const values = this.props.form.getFieldsValue();
 
-    values.projectMapLayerH.scaleAuto = values.projectMapLayerH.scaleAuto === true;
-    values.projectMapLayerZ.scaleAuto = values.projectMapLayerZ.scaleAuto === true;
+    values.projectMapLayerH.scaleAuto = values.projectMapLayerH.scaleAuto === 'true';
+    values.projectMapLayerZ.scaleAuto = values.projectMapLayerZ.scaleAuto === 'true';
 
     this.props.mainActions.saveSettings(values).then(() => {
       if (
@@ -654,25 +654,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const WrappedSettingsForm = Form.create({
-  // mapPropsToFields: (props) => {
-  //   console.log(props.settings.avgChart.lines);
-  //   return {
-  //     'avgChart.lines': props.settings.avgChart.lines,
-  //   }
-  // },
-  // onFieldsChange: (props, fields) => {
-  //   console.log('onFieldsChange', {props, fields});
-  // },
-})(Settings);
+const WrappedSettingsForm = Form.create({})(Settings);
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedSettingsForm);
-
-// const WrappedSettingsForm = connect(mapStateToProps, mapDispatchToProps)(Settings);
-// export default Form.create({
-//   mapPropsToFields(props) {
-//     console.log(props.formState);
-//     return {
-//       // 'avgChart.lines': props
-//     }
-//   }
-// })(WrappedSettingsForm);
