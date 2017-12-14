@@ -23,6 +23,8 @@ class Tooltip extends Component {
     if (station !== null) {
       const position = projection([station.longitude, station.latitude]);
 
+      console.log(station);
+
       return (
         <TooltipText
           className="map-tooltip-text"
@@ -33,13 +35,13 @@ class Tooltip extends Component {
           <tspan dy="1em" x="2.5" style={{fontSize: '120%'}}>{station.name} {station.source}</tspan>
           <tspan dy="1em" x="2.5">lt {station.latitude.toFixed(3)}° lg {station.longitude.toFixed(3)}°</tspan>
           {station.delta != null &&
-          <g>
+          <tspan>
             <tspan dy="1em" x="2.5" xmlSpace="preserve">ΔH: {this.formatter(station.delta.dH)} nT</tspan>
             <tspan dy="1em" x="2.5" xmlSpace="preserve">ΔX: {this.formatter(station.delta.dX)} nT</tspan>
             <tspan dy="1em" x="2.5" xmlSpace="preserve">ΔY: {this.formatter(station.delta.dY)} nT</tspan>
             <tspan dy="1em" x="2.5" xmlSpace="preserve">ΔZ: {this.formatter(station.delta.dZ)} nT</tspan>
             <tspan dy="1em" x="2.5" xmlSpace="preserve">ΔD: {this.formatter(station.delta.dD)}</tspan>
-          </g>
+          </tspan>
           }
         </TooltipText>
       );
