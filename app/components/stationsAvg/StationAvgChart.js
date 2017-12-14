@@ -36,8 +36,7 @@ class StationAvgChart extends Component {
   };
 
   prepareDataForCsv = () => {
-    const {data} = this.props;
-    const {latitudeRanges, lines} = {...this.props.settings.avgChart};
+    const {data, latitudeRanges, componentLines} = this.props;
 
     let csvData = {
       0: {
@@ -45,7 +44,7 @@ class StationAvgChart extends Component {
       }
     };
 
-    let linesEnabled = lines.filter((line) => line.enabled);
+    let linesEnabled = componentLines.filter((line) => line.enabled);
 
     latitudeRanges.forEach((range, rangeKey) => {
       linesEnabled.forEach((line, lineKey) => {
