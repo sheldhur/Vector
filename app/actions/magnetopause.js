@@ -15,13 +15,13 @@ export function setData(payload) {
   };
 }
 
-function prepareDataSet(dataSetValues, field) {
+function prepareDataSet(dataSets, dataSetValues, field) {
   let data;
 
-  if (field && dataSetValues.hasOwnProperty(field)) {
+  if (field && dataSets.hasOwnProperty(field) && dataSetValues.hasOwnProperty(field)) {
     data = {};
     dataSetValues[field].forEach((item) => {
-      data[item.time] = item.value;
+      data[item.time] = item.value < dataSets[field].badValue ? item.value : null;
     });
   }
 
@@ -31,16 +31,16 @@ function prepareDataSet(dataSetValues, field) {
 export function calculateMagnetopause() {
   return (dispatch, getState) => {
     const field = getState().main.settings.projectMagnetopause;
-    const {dataSetValues} = getState().dataSet;
+    const {dataSets, dataSetValues} = getState().dataSet;
 
     let chartPoints = null;
     let data = null;
 
     if (dataSetValues && field) {
       const fieldData = {
-        b: prepareDataSet(dataSetValues, field.b),
-        bz: prepareDataSet(dataSetValues, field.bz),
-        pressureSolar: prepareDataSet(dataSetValues, field.pressureSolar),
+        b: prepareDataSet(dataSets, dataSetValues, field.b),
+        bz: prepareDataSet(dataSets, dataSetValues, field.bz),
+        pressureSolar: prepareDataSet(dataSets, dataSetValues, field.pressureSolar),
       };
 
       for (let timeStr in fieldData.b) {
@@ -63,7 +63,7 @@ export function calculateMagnetopause() {
           value: point ? point.toCartesian().x : null,
         });
 
-        data[time] = values;
+        data[time.valueOf()] = values;
       }
     }
 

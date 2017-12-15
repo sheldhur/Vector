@@ -56,7 +56,7 @@ export function getData() {
         }
       }, (response) => {
         if (response) {
-          console.timeEnd('dataSetWorker');
+          // console.timeEnd('dataSetWorker');
           switch (response.event) {
             case 'setData':
               dispatch(setData(response.data));
@@ -77,7 +77,7 @@ export function getData() {
 
     worker.send({worker: 'dataSet', main}, () => {
       dispatch(setLoading());
-      console.time('dataSetWorker');
+      // console.time('dataSetWorker');
     });
   }
 }

@@ -27,7 +27,7 @@ export default function (props) {
         }, (filePath) => {
           if (filePath && filePath.length) {
             let fileContent = props.data.map((item) => {
-              return `${moment(item.x).format(FORMAT_DATE_SQL)};${item.y}`;
+              return `${moment(item.time).format(FORMAT_DATE_SQL)};${item.value || ''}`;
             }).join("\r\n");
 
             fs.writeFile(filePath, fileContent, (err) => {

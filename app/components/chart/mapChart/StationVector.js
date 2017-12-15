@@ -11,7 +11,7 @@ import {openWindowStation} from '../../map/VectorMapMenu'
 class StationVector extends Component {
   state = {
     hasError: false,
-  }
+  };
 
   handlerMouseEnter = (station) => {
     this.props.chartActions.setMapTooltipStation(station);

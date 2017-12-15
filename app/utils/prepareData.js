@@ -21,12 +21,12 @@ export const dataSetsForChart = (dataSets, dataSetValues, filter) => {
           strokeWidth: 1,
           ...dataSet.style
         },
-        points: dataSetValues[dataSet.id].map((dataSetValue) => {
+        points: dataSetValues[dataSet.id] ? dataSetValues[dataSet.id].map((dataSetValue) => {
           return {
             x: dataSetValue.time,
             y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
           };
-        })
+        }) : null
       };
 
       if (chartGroups[dataSet.axisGroup] === undefined) {
