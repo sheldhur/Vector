@@ -14,7 +14,8 @@ const actionCreators = {
 
 const logger = createLogger({
   level: 'info',
-  collapsed: true
+  collapsed: true,
+  predicate: (getState, action) => !action.type.endsWith('/PROGRESS')
 });
 
 const router = routerMiddleware(hashHistory);
