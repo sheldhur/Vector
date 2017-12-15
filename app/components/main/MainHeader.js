@@ -20,16 +20,21 @@ class MainHeader extends Component {
   size = 'small';
 
   componentWillMount() {
-    if (!this.props.isLoading) {
-      this.handlerReload();
-    }
+    // if (!this.props.isLoading) {
+    //   this.handlerReload();
+    // }
     this.props.chartActions.setChartCurrentTime(null);
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.dbPath && !nextProps.isError) {
-    //   this.handlerReload();
-    // }
+    if (
+      nextProps.dbPath !== this.props.dbPath ||
+      nextProps.timeAvg !== this.props.timeAvg ||
+      nextProps.timePeriod !== this.props.timePeriod ||
+      nextProps.timeSelected !== this.props.timeSelected
+    ) {
+      this.handlerReload();
+    }
   }
 
   handlerReload = (e) => {
@@ -95,12 +100,6 @@ class MainHeader extends Component {
 
 function mapStateToProps(state) {
   return {
-    // timeAvgBy: state.main.settings.projectTimeAvg.by,
-    // timeAvgValue: state.main.settings.projectTimeAvg.value,
-    // timeStart: state.main.settings.projectTimeSelected[0],
-    // timeEnd: state.main.settings.projectTimeSelected[1],
-    // timePeriodStart: state.main.settings.projectTimePeriod[0],
-    // timePeriodEnd: state.main.settings.projectTimePeriod[1],
     timeAvg: state.main.settings.projectTimeAvg,
     timePeriod: state.main.settings.projectTimePeriod,
     timeSelected: state.main.settings.projectTimeSelected,
