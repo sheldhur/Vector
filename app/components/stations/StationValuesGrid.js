@@ -27,16 +27,18 @@ class StationGrid extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.state.availableSize === 'auto') {
-      setTimeout(() => {
-        this.calcPageSize();
-      }, 100);
+    if (!nextProps.isLoading) {
+      if (this.state.availableSize === 'auto') {
+        setTimeout(() => {
+          this.calcPageSize();
+        }, 100);
+      }
+      this.setState({pageCurrent: this.calcPageCurrent(nextProps)});
     }
-    this.setState({pageCurrent: this.calcPageCurrent(nextProps)});
   };
 
   calcPageCurrent = (props) => {
-    const {data: {values, isLoading}, currentTime} = props;
+    const {values, currentTime} = props;
     const data = values ? Object.values(values) : [];
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
     let currentPage = 0;
@@ -128,9 +130,7 @@ class StationGrid extends Component {
       width: 80
     }];
 
-    console.info('GRID RERENDER');
-
-    const {data: {values, isLoading}, currentTime} = this.props;
+    const {values, isLoading, currentTime} = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
 
     let data = values ? Object.values(values) : [];
@@ -165,7 +165,8 @@ StationGrid.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    data: state.station.stationView,
+    values: state.station.stationView.values,
+    isLoading: state.station.stationView.isLoading,
     currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null,
   };
 }
