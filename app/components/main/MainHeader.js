@@ -20,18 +20,17 @@ class MainHeader extends Component {
   size = 'small';
 
   componentWillMount() {
-    // if (!this.props.isLoading) {
-    //   this.handlerReload();
-    // }
+    if (!this.props.isLoading) {
+      this.handlerReload();
+    }
+
     this.props.chartActions.setChartCurrentTime(null);
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.dbPath !== this.props.dbPath ||
-      nextProps.timeAvg !== this.props.timeAvg ||
-      nextProps.timePeriod !== this.props.timePeriod ||
-      nextProps.timeSelected !== this.props.timeSelected
+      JSON.stringify([nextProps.dbPath, nextProps.timeAvg, nextProps.timePeriod, nextProps.timeSelected]) !==
+      JSON.stringify([this.props.dbPath, this.props.timeAvg, this.props.timePeriod, this.props.timeSelected])
     ) {
       this.handlerReload();
     }
@@ -49,16 +48,16 @@ class MainHeader extends Component {
   };
 
   handlerDatePickerOk = (value) => {
-    this.props.mainActions.saveSettings({
-      time: {
-        selected: {
-          start: value[0],
-          end: value[1],
-        }
-      }
-    }).then(() => {
-      this.handlerReload();
-    });
+    // this.props.mainActions.saveSettings({
+    //   time: {
+    //     selected: {
+    //       start: value[0],
+    //       end: value[1],
+    //     }
+    //   }
+    // }).then(() => {
+    //   this.handlerReload();
+    // });
   };
 
   render() {
