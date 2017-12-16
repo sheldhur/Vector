@@ -105,7 +105,7 @@ class DataSetValuesGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
         (value, afterAction) => this.handleCellChange('value', record.id, value, afterAction)
       }/>),
-      width: 160
+      width: 175
     }, {
       title: '',
       dataIndex: 'format',

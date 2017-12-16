@@ -126,8 +126,8 @@ class StationGrid extends Component {
       }
     ];
 
-    const {stations, isLoading} = this.props.data;
-    const data = stations ? Object.values(stations).filter((station) => station !== undefined) : [];
+    const {values, isLoading} = this.props;
+    const data = values ? Object.values(values).filter((station) => station !== undefined) : [];
 
     return (
       <div style={{height: this.state.availableSize}}>
@@ -158,7 +158,8 @@ StationGrid.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    data: state.station,
+    values: state.station.stations,
+    isLoading: state.station.isLoading
   };
 }
 

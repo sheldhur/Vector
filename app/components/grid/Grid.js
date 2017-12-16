@@ -8,6 +8,8 @@ import SelectCell from './SelectCell';
 import ColorCell from './ColorCell';
 import LineStyleCell from './LineStyleCell';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 //TODO: Таблица с фильтрами обновляется.
 //TODO: редактируемые ячейки возвразают [Object]
 class Grid extends Component {
@@ -171,6 +173,10 @@ class Grid extends Component {
 
     if (tableProps.pagination && tableProps.size === 'x-small' && tableProps.pagination !== undefined && !tableProps.pagination.size !== undefined) {
       tableProps.pagination.size = 'small';
+    }
+
+    if (!isProd) {
+      console.info('GRID RERENDER');
     }
 
     return (
