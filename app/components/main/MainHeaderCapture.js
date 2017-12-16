@@ -1,5 +1,6 @@
 // @flow
 import {remote, desktopCapturer, ipcRenderer} from 'electron';
+import {message} from 'antd';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -32,10 +33,11 @@ class MainHeaderCapture extends Component {
           chart.classList.remove('screencapture');
           fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
             if (error) {
+              message.error(error.message, 6);
               throw error;
+            } else {
+              message.success(filePath + ' was saved', 3);
             }
-
-            console.log(filePath + ' has been saved');
           });
         });
       }

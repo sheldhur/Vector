@@ -1,4 +1,5 @@
 import {remote} from 'electron';
+import {message} from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import windowManager from '../../lib/windowManager';
@@ -85,14 +86,19 @@ export default function (props) {
           filters: [
             {name: 'PNG', extensions: ['png']},
           ],
-        }, (filename) => {
-          if (filename && filename.length) {
+        }, (filePath) => {
+          if (filePath && filePath.length) {
             const chart = document.querySelector('#dataSetChart');
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
-              fs.writeFile(filename, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
-                console.log(error);
+              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
+                if (error) {
+                  message.error(error.message, 6);
+                  throw error;
+                } else {
+                  message.success(filePath + ' was saved', 3);
+                }
               });
             });
           }

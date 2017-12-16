@@ -1,4 +1,5 @@
 import {remote} from 'electron';
+import {message} from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
@@ -29,7 +30,12 @@ export default function (props) {
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
               fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
-                console.log(error);
+                if (error) {
+                  message.error(error.message, 6);
+                  throw error;
+                } else {
+                  message.success(filePath + ' was saved', 3);
+                }
               });
             });
           }

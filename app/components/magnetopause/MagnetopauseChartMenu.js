@@ -1,4 +1,5 @@
 import {remote} from 'electron';
+import {message} from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
@@ -30,12 +31,13 @@ export default function (props) {
               return `${moment(item.time).format(FORMAT_DATE_SQL)};${item.value || ''}`;
             }).join("\r\n");
 
-            fs.writeFile(filePath, fileContent, (err) => {
-              if (err) {
-                throw err;
+            fs.writeFile(filePath, fileContent, (error) => {
+              if (error) {
+                message.error(error.message, 6);
+                throw error;
+              } else {
+                message.success(filePath + ' was saved', 3);
               }
-
-              console.log(filePath + ' has been saved');
             });
           }
         });
@@ -60,7 +62,12 @@ export default function (props) {
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
               fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
-                console.log(error);
+                if (error) {
+                  message.error(error.message, 6);
+                  throw error;
+                } else {
+                  message.success(filePath + ' was saved', 3);
+                }
               });
             });
           }
