@@ -38,12 +38,13 @@ export default function (props) {
               fileContent += string.join(';') + '\r\n';
             }
 
-            fs.writeFile(filePath, fileContent, (err) => {
-              if (err) {
-                throw err;
+            fs.writeFile(filePath, fileContent, (error) => {
+              if (error) {
+                message.error(error.message, 6);
+                throw error;
+              } else {
+                message.success(filePath + ' was saved', 3);
               }
-
-              console.log(filePath + ' has been saved');
             });
           }
         });

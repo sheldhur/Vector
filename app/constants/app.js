@@ -51,6 +51,8 @@ export const LANGUAGES = [
 export const MAP_WORLD_SCALE = ['1:50', '1:110'];
 export const MAP_PROJECTION = ['Equirectangular', 'Stereographic'];
 
+export const CSV_DELIIMITER = [',',';'];
+
 export const DEFAULT_SETTINGS = {
   appTheme: 'night',
   appLanguage: 'en-US',
@@ -67,6 +69,7 @@ export const DEFAULT_SETTINGS = {
     land: '#d7c7ad',
     border: '#766951',
   },
+  appCsvDelimiter: ';',
   projectTimeAvg: {by: 'minutes', value: 1},
   projectTimePeriod: [null, null],
   projectTimeSelected: [null, null],

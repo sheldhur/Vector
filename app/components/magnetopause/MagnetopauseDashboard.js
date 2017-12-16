@@ -24,7 +24,7 @@ class MagnetopauseDashboard extends Component {
       />);
     }
 
-    if (isEmpty != null) {
+    if (!isEmpty) {
       return (
         <div className={`magnetopause-view`}>
           <ResizeblePanel type="vertical" eventWhen="mouseup" defaultSize={24}>
@@ -45,7 +45,7 @@ class MagnetopauseDashboard extends Component {
 
 function mapStateToProps(state) {
   return {
-    isEmpty: state.magnetopause.chart != null,
+    isEmpty: state.magnetopause.chart == null,
     isLoading: state.dataSet.isLoading,
     isError: state.dataSet.isError,
     progress: state.dataSet.progress,

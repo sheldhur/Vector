@@ -21,7 +21,7 @@ function prepareDataSet(dataSets, dataSetValues, field) {
   if (field && dataSets.hasOwnProperty(field) && dataSetValues.hasOwnProperty(field)) {
     data = {};
     dataSetValues[field].forEach((item) => {
-      data[item.time] = item.value < dataSets[field].badValue ? item.value : null;
+      data[item.time] = !dataSets[field].badValue || item.value < dataSets[field].badValue ? item.value : null;
     });
   }
 
@@ -43,27 +43,31 @@ export function calculateMagnetopause() {
         pressureSolar: prepareDataSet(dataSets, dataSetValues, field.pressureSolar),
       };
 
-      for (let timeStr in fieldData.b) {
-        const time = new Date(timeStr);
-        let values = {
-          b: fieldData.b[timeStr],
-          bz: fieldData.bz[timeStr],
-          pressureSolar: fieldData.pressureSolar[timeStr],
-          time: new Date(time - time.getTimezoneOffset() * 60000)
-        };
-        let point = new MagnetopausePoint(values).calculate(0, 0);
+      console.log(fieldData, field);
 
-        if (!chartPoints) {
-          chartPoints = [];
-          data = {}
+      if (fieldData.b && fieldData.bz && fieldData.pressureSolar) {
+        for (let timeStr in fieldData.b) {
+          const time = new Date(timeStr);
+          let values = {
+            b: fieldData.b[timeStr],
+            bz: fieldData.bz[timeStr],
+            pressureSolar: fieldData.pressureSolar[timeStr],
+            time: new Date(time - time.getTimezoneOffset() * 60000)
+          };
+          let point = new MagnetopausePoint(values).calculate(0, 0);
+
+          if (!chartPoints) {
+            chartPoints = [];
+            data = {}
+          }
+
+          chartPoints.push({
+            time,
+            value: point ? point.toCartesian().x : null,
+          });
+
+          data[time.valueOf()] = values;
         }
-
-        chartPoints.push({
-          time,
-          value: point ? point.toCartesian().x : null,
-        });
-
-        data[time.valueOf()] = values;
       }
     }
 
