@@ -20,25 +20,22 @@ class MainHeader extends Component {
   size = 'small';
 
   componentWillMount() {
-    if (!this.props.isLoading) {
-      this.handlerReload();
-    }
+    setTimeout(this.handlerReload, 100);
 
     this.props.chartActions.setChartCurrentTime(null);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      JSON.stringify([nextProps.dbPath, nextProps.timeAvg, nextProps.timePeriod, nextProps.timeSelected]) !==
-      JSON.stringify([this.props.dbPath, this.props.timeAvg, this.props.timePeriod, this.props.timeSelected])
-    ) {
+    if (nextProps.dbPath !== this.props.dbPath) {
       this.handlerReload();
     }
   }
 
   handlerReload = (e) => {
-    this.props.stationActions.getLatitudeAvgValues();
-    this.props.dataSetActions.getData();
+    if (!this.props.isLoading) {
+      this.props.stationActions.getLatitudeAvgValues();
+      this.props.dataSetActions.getData();
+    }
     // e.target.blur(); // TODO: focusout not working
   };
 
@@ -61,7 +58,7 @@ class MainHeader extends Component {
   };
 
   render() {
-    const {timeSelected, timePeriod, timeAvg} = this.props;
+    const {timeSelected, timePeriod, timeAvg, isLoading} = this.props;
 
     return (
       <div className="main-page-header">
@@ -78,6 +75,7 @@ class MainHeader extends Component {
             icon="reload"
             type="danger"
             className="spin"
+            loading={isLoading}
             onClick={(e) => this.handlerReload(e)}
           />
           {!IS_PROD && <Button
@@ -102,7 +100,7 @@ function mapStateToProps(state) {
     timeAvg: state.main.settings.projectTimeAvg,
     timePeriod: state.main.settings.projectTimePeriod,
     timeSelected: state.main.settings.projectTimeSelected,
-    isLoading: state.station.isLoading || state.dataSet.isLoading,
+    isLoading: state.station.isLoading || state.dataSet.isLoading || state.main.isLoading,
     dbPath: state.main.dbPath,
     isError: state.main.isError,
   };
