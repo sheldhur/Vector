@@ -92,9 +92,7 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 });
 
-autoUpdater.on('update-available', (info) => {
-  console.log(info);
-});
+
 autoUpdater.on('download-progress', (progressObj) => {
   log.info('Downloaded ' + Math.round(progressObj.percent) + '% (' + progressObj.transferred + "/" + progressObj.total + ')');
 });
