@@ -1,7 +1,12 @@
 export default function (sequelize, DataTypes) {
   let DataSet = sequelize.define('DataSet', {
     id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true},
-    axisGroup: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 0},
+    axisGroup: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      validate: {isInt: true}
+    },
     name: {type: DataTypes.TEXT, allowNull: false},
     //description: {type: DataTypes.TEXT, allowNull: true},
     si: {type: DataTypes.TEXT, allowNull: false},
@@ -24,7 +29,18 @@ export default function (sequelize, DataTypes) {
       }
     },
     axisY: {type: DataTypes.TEXT, allowNull: true},
-    badValue: {type: DataTypes.REAL, allowNull: true},
+    badValue: {
+      type: DataTypes.REAL,
+      allowNull: true,
+      validate: {isNumeric: true},
+      set(value) {
+        if (value === '') {
+          value = null
+        }
+
+        this.setDataValue('badValue', value);
+      }
+    },
     status: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: 1},
   }, {});
 

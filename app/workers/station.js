@@ -16,35 +16,17 @@ let db;
 // https://github.com/nodejs/node/issues/3145
 // http://stackoverflow.com/questions/24582213/how-to-transfer-stream-big-data-from-to-child-processes-in-node-js-without-using
 
-export default function (dbSession, data) {
-  if (!data.main.settings) {
-    throw new Error("Can't get project settings");
-  }
-
-  db = dbSession;
-
-  if (data && data.action !== undefined) {
-    if (data.action === 'getLatitudeAvgValues') {
-      actionLatitudeAvgValues(data);
-    } else if (data.action === 'getStationsValue') {
-      actionStationsValue(data);
-    } else if (data.action === 'getStationViewValues') {
-      actionStationViewValues(data);
-    }
-  }
-}
-
-function getProgress(stageName, rowsLength) {
+function getProgress(stageName, rowsLength, throttleMs = 150) {
   let stageLength = 0;
   const stages = stageName ? {
-    getStations: {stage: stageLength++, message: "Loading stations list"},
+    // getStations: {stage: stageLength++, message: "Loading stations list"},
     getStationValues: {stage: stageLength++, message: "Loading stations values"},
     getLatitudeAvgValues: {stage: stageLength++, message: "Calculating average values"},
   } : {
     null: {stage: stageLength++, message: "Loading", event: 'setStationViewProgress'},
   };
 
-  let lastProgress = null;
+  let lastSendTime = null;
 
   return (rowCurrent) => {
     const progress = {
@@ -52,14 +34,32 @@ function getProgress(stageName, rowsLength) {
       value: calcProgress(stageLength, stages[stageName].stage, rowsLength, rowCurrent).total
     };
 
-    if (!lastProgress || lastProgress.value !== progress.value) {
-      if (progress.value > 100) {
-        process.send({stageLength, rowsLength, rowCurrent});
-      }
+    const sendTime = new Date().valueOf();
+    if (!lastSendTime || sendTime - lastSendTime > throttleMs) {
       process.send({event: stages[stageName].event || 'setProgress', data: progress});
-      lastProgress = progress;
+      lastSendTime = sendTime;
     }
   }
+}
+
+export default function (dbSession, data) {
+  if (!data.main.settings) {
+    throw new Error("Can't get project settings");
+  }
+
+  db = dbSession;
+
+  (async () => {
+    if (data && data.action !== undefined) {
+      if (data.action === 'getLatitudeAvgValues') {
+        await actionLatitudeAvgValues(data);
+      } else if (data.action === 'getStationsValue') {
+        await actionStationsValue(data);
+      } else if (data.action === 'getStationViewValues') {
+        await actionStationViewValues(data);
+      }
+    }
+  })();
 }
 
 function actionStationViewValues(data) {
@@ -125,21 +125,22 @@ function actionStationViewValues(data) {
   });
 }
 
-function actionStationsValue(data) {
-  db.StationValue.findAll({
-    where: {
-      time: moment(data.args.currentTime).format(db.formatTime)
-    },
-    raw: true
-  }).then((result) => {
-    process.send({event: 'setStationsValue', data: result});
-  }).catch((error) => {
-    console.error(error);
+async function actionStationsValue(data) {
+  try {
+    const stationsValue = await db.StationValue.findAll({
+      where: {
+        time: moment(data.args.currentTime).format(db.formatTime)
+      },
+      raw: true
+    });
+    process.send({event: 'setStationsValue', data: stationsValue});
+  } catch (error) {
     process.send({event: 'setStationsValueError', data: errorToObject(error)});
-  });
+    console.error(error);
+  }
 }
 
-function actionLatitudeAvgValues(data) {
+async function actionLatitudeAvgValues(data) {
   const {settings} = data.main;
 
   if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
@@ -163,31 +164,34 @@ function actionLatitudeAvgValues(data) {
     lines: settings.projectAvgComponentLines,
   };
 
-  getStations()
-    .then((stations) => getStationValues(stations, timePeriod))
-    .then((result) => getLatitudeAvgValues(result, avgChart, timeSelected))
-    .catch((error) => {
-      console.error(error);
-      process.send({event: 'setError', data: errorToObject(error)});
-    });
+  try {
+    const stations = await getStations();
+    const stationValues = await getStationValues(stations, timePeriod);
+    const result = getLatitudeAvgValues(stationValues, avgChart, timeSelected);
+
+    process.send({event: 'setLatitudeAvgValues', data: result});
+  } catch (error) {
+    process.send({event: 'setError', data: errorToObject(error)});
+    console.error(error);
+  }
 }
 
 function getStations() {
   return db.Station.findAll({raw: true})
     .then((stations) => {
-      const sendProgress = getProgress('getStations', stations.length);
+      // const sendProgress = getProgress('getStations', stations.length);
 
       let list = {};
       let disabled = [];
 
-      sendProgress(0);
+      // sendProgress(0);
       stations.forEach((item, i) => {
         if (item.status === STATION_DISABLED) {
           disabled.push(item.id);
         }
         list[item.id] = item;
 
-        sendProgress(i);
+        // sendProgress(i);
       });
 
       return {list, disabled};
@@ -375,7 +379,8 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
   }
 
   console.timeEnd('getLatitudeAvgValues');
-  process.send({event: 'setLatitudeAvgValues', data: {latitudeAvgValues, maximum}});
+
+  return {latitudeAvgValues, maximum};
 }
 
 function getExtremes(extremes, compKeys, row) {

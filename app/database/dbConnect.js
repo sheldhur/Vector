@@ -42,7 +42,7 @@ const operatorsAliases = {
 
 export let db;
 
-let dbConnect = (dbPath) => {
+let dbConnect = async (dbPath) => {
   if (dbPath !== undefined && (db === undefined || db.sequelize === undefined)) {
     let sequelize = new Sequelize('database', null, null, {
       dialect: "sqlite",
@@ -85,7 +85,7 @@ let dbConnect = (dbPath) => {
       console.log(db.path + ' connection closed');
       db = {};
     };
-    db.setPragma = (values) => {
+    db.setPragma = async (values) => {
       if (!values) {
         values = [
           ['foreign_keys', 'ON'],
@@ -93,14 +93,18 @@ let dbConnect = (dbPath) => {
           ['journal_mode', 'MEMORY'],
         ];
       }
-      return Promise.all(values.map((item) => {
-        return db.sequelize.query("PRAGMA " + item[0] + " = " + item[1]);
-      }));
+
+      const result = [];
+      for (const key in values) {
+        result[key] = await db.sequelize.query("PRAGMA " + values[key][0] + " = " + values[key][1]);
+      }
+
+      return result;
     };
     db.path = dbPath;
     db.timeCreated = new Date();
 
-    db.setPragma();
+    await db.setPragma();
   }
 
   return db;

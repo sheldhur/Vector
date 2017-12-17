@@ -9,7 +9,7 @@ import workers from './workers';
 
 let db;
 
-process.on('message', (data) => {
+process.on('message', async (data) => {
   if (!data) {
     return;
   }
@@ -21,7 +21,7 @@ process.on('message', (data) => {
     }
 
     if (db === undefined) {
-      db = dbConnect(data.main.dbPath);
+      db = await dbConnect(data.main.dbPath);
     }
 
     try {
@@ -32,5 +32,3 @@ process.on('message', (data) => {
     }
   }
 });
-
-

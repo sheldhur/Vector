@@ -25,8 +25,6 @@ export default function (dbSession, data) {
     avg: data.main.settings.projectTimeAvg,
   };
 
-  let fileCurrent = 0;
-
   (async () => {
     for (const fileKey in filePaths) {
       const filePath = filePaths[fileKey];
@@ -43,17 +41,6 @@ export default function (dbSession, data) {
       }
     }
   })();
-
-  Promise.map(filePaths, (filePath) => {
-    process.send({event: 'setCurrentFile', filePath});
-    return readFile(filePath, fileType)
-      .then((rows) => prepareImportData(rows, time))
-      .then((data) => saveDataSets(data))
-      .then((rows) => saveDataSetValues(rows, filePaths, fileCurrent++))
-      .catch((error) => {
-        console.error(error);
-      })
-  }, {concurrency: 1});
 }
 
 function readFile(filePath, fileType) {
@@ -85,7 +72,7 @@ function saveDataSets(data) {
             results.push({
               dataSetId: id,
               time: moment(row[0]).format(db.formatTime),
-              value: row[i],
+              value: row[i].toFixed(5),
               format: data.format
             });
           });
@@ -103,7 +90,7 @@ function saveDataSets(data) {
 
 function saveDataSetValues(rows, files, fileCurrent) {
   return new Promise((resolve, reject) => {
-    let progress = {
+    let lastProgress = {
       current: 0,
       total: 0,
     };
@@ -114,9 +101,9 @@ function saveDataSetValues(rows, files, fileCurrent) {
       let stmt = sqlite.prepare(query);
       rows.forEach((row, rowCurrent) => {
         stmt.run(row.dataSetId, row.time, row.value, row.format, (error) => {
-          let newProgress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
-          if (newProgress.current > progress.current) {
-            progress = newProgress;
+          let progress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
+          if (progress.current > lastProgress.current) {
+            lastProgress = progress;
             process.send({event: 'setProgress', progress});
           }
 

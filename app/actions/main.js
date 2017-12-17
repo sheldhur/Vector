@@ -58,7 +58,6 @@ export function setDataBasePath(payload) {
 
 export function saveLastDataBase(path) {
   return (dispatch) => {
-    console.log('DB: ' + path);
     localStorage[LS_KEY_LAST_DB] = path;
     dispatch(setDataBasePath(path));
   }
@@ -82,7 +81,7 @@ export function getLastDataBase(openMain = true) {
 }
 
 export function saveSettings(values, useDefault = false) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const defaultSettings = useDefault ? DEFAULT_SETTINGS : getState().main.settings;
     const settings = {...defaultSettings, ...values};
 
@@ -98,73 +97,71 @@ export function saveSettings(values, useDefault = false) {
       tmp[type][key] = value;
     });
 
-    let settingsProject = JSON.stringify(tmp.project, null, 2);
-    let settingsApp = JSON.stringify(tmp.app, null, 2);
+    const settingsProject = JSON.stringify(tmp.project, null, 2);
+    const settingsApp = JSON.stringify(tmp.app, null, 2);
 
-    return db.Project.update({settings: settingsProject}, {where: {id: 1}})
-      .then(() => localStorage[LS_KEY_APP_SETTINGS] = settingsApp)
-      .then(() => dispatch(setSettings(settings)));
+    await db.Project.update({settings: settingsProject}, {where: {id: 1}});
+    localStorage[LS_KEY_APP_SETTINGS] = settingsApp;
+
+    return dispatch(setSettings(settings));
   }
 }
 
 export function loadSettings(id = 1) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(setLoading(true));
-    return db.Project.findById(id)
-      .then((project) => {
-        const settingsProject = {...project.settings};
-        const settingsAppString = localStorage[LS_KEY_APP_SETTINGS];
-        const settingsApp = (settingsAppString && settingsAppString !== '') ? JSON.parse(settingsAppString) : {};
 
-        return {...settingsApp, ...settingsProject}
-      })
-      .then((settings) => dispatch(setSettings(settings)));
+    try {
+      const project = await db.Project.findById(id);
+      const settingsProject = {...project.settings};
+      const settingsAppString = localStorage[LS_KEY_APP_SETTINGS];
+      const settingsApp = (settingsAppString && settingsAppString !== '') ? JSON.parse(settingsAppString) : {};
+
+      return dispatch(setSettings({...settingsApp, ...settingsProject}));
+    } catch (e) {
+      console.error(e);
+      dispatch(setError(errorToObject(e)));
+    }
   }
 }
 
-export function openDataBase(path, openMain = true) {
-  return (dispatch) => {
-    try {
-      if (db && db.sequelize !== undefined) {
-        db.close();
-        db = null;
-      }
-      db = dbConnect(path);
+async function createConnect(path) {
+  if (db && db.sequelize !== undefined) {
+    db.close();
+    db = null;
+  }
+  db = await dbConnect(path);
+}
 
-      db.sequelize.authenticate()
-        .then(() => dispatch(loadSettings()))
-        .then(() => {
-          dispatch(saveLastDataBase(path));
-          if (openMain) {
-            openMainPage();
-          }
-        });
-    } catch (error) {
-      console.error(error);
-      dispatch(setError(errorToObject(error)));
+export function openDataBase(path, openMain = true) {
+  return async (dispatch) => {
+    try {
+      await createConnect(path);
+      await db.sequelize.authenticate();
+      await dispatch(loadSettings());
+      dispatch(saveLastDataBase(path));
+      if (openMain) {
+        openMainPage();
+      }
+    } catch (e) {
+      console.error(e);
+      dispatch(setError(errorToObject(e)));
     }
   }
 }
 
 export function createDataBase(path, settings) {
-  return (dispatch) => {
+  return async (dispatch) => {
     try {
-      if (db && db.sequelize !== undefined) {
-        db.close();
-        db = null;
-      }
-      db = dbConnect(path);
-
-      db.sequelize.sync({force: true}).then(() => {
-        db.Project.upsert({id: 1}, {where: {_id: 1}}).then(() => {
-          dispatch(saveSettings(settings, true));
-          dispatch(saveLastDataBase(path));
-          dispatch(openMainPage());
-        });
-      });
-    } catch (error) {
-      console.error(error);
-      dispatch(setError(error));
+      await createConnect(path);
+      await db.sequelize.sync({force: true});
+      await db.Project.upsert({id: 1}, {where: {_id: 1}});
+      await dispatch(saveSettings(settings, true));
+      dispatch(saveLastDataBase(path));
+      openMainPage();
+    } catch (e) {
+      console.error(e);
+      dispatch(setError(e));
     }
   }
 }
@@ -174,13 +171,15 @@ export function closeDataBase() {
     if (db && db.sequelize !== undefined) {
       db.close();
       db = null;
-      dispatch(hashHistory.push('/home'));
+      hashHistory.push('/home');
     }
   }
 }
 
 function openMainPage() {
-  return hashHistory.push('/main');
+  if (hashHistory.getCurrentLocation().pathname !== '/main') {
+    hashHistory.push('/main');
+  }
 }
 
 export function dialogOpenCreateDataBase(settings) {

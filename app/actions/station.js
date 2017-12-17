@@ -99,7 +99,7 @@ export function getData(dispatch, getState, action, args) {
       }
     }, (response) => {
       if (response) {
-        console.timeEnd('stationWorker');
+        // console.timeEnd('stationWorker');
         switch (response.event) {
           case 'setStations':
             dispatch(setStations(response.data));
@@ -134,7 +134,7 @@ export function getData(dispatch, getState, action, args) {
   }
 
   worker.send({worker: 'station', action, main, args}, () => {
-    console.time('stationWorker');
+    // console.time('stationWorker');
   });
 }
 
@@ -160,21 +160,17 @@ export function getStationViewValues(args) {
 }
 
 export function updateStation(id, fields, callback) {
-  return (dispatch) => {
-    let result;
+  return async (dispatch) => {
+    try {
+      const result = await db.Station.update(fields, {where: {id}});
+      const station = await db.Station.find({where: {id}});
+      dispatch(_updateStation(id, station.get({plain: true})));
 
-    db.Station
-      .update(fields, {where: {id}})
-      .then((res) => result = res)
-      .then(() => db.Station.find({where: {id}}))
-      .then((stationValue) => dispatch(_updateStation(id, stationValue.get({plain: true}))))
-      .then(() => callback ? callback({result}) : result)
-      .catch((error) => {
-        if (callback) {
-          callback({error})
-        }
-        throw error;
-      });
+      if (callback) callback({result});
+    } catch (error) {
+      if (callback) callback({error});
+      throw error;
+    }
   };
 }
 
@@ -193,22 +189,18 @@ function _updateStation(id, fields) {
 }
 
 export function updateStationValue(id, fields, callback) {
-  return (dispatch) => {
-    let result;
+  return async (dispatch) => {
+    try {
+      const result = await db.StationValue.update(fields, {where: {id}});
+      const stationValue = await db.StationValue.find({where: {id}});
+      dispatch(_updateStationValue(id, stationValue.get({plain: true})));
 
-    db.StationValue
-      .update(fields, {where: {id}})
-      .then((res) => result = res)
-      .then(() => db.StationValue.find({where: {id}}))
-      .then((stationValue) => dispatch(_updateStationValue(id, stationValue.get({plain: true}))))
-      .then(() => callback ? callback({result}) : result)
-      .catch((error) => {
-        if (callback) {
-          callback({error})
-        }
-        throw error;
-      });
-  }
+      if (callback) callback({result});
+    } catch (error) {
+      if (callback) callback({error});
+      throw error;
+    }
+  };
 }
 
 function _updateStationValue(id, fields) {
@@ -226,21 +218,18 @@ function _updateStationValue(id, fields) {
 }
 
 export function deleteStation(fields) {
-  return (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(setLoading());
-    db.Station
-      .findAll({attributes: ['id'], where: fields})
-      .then((stations) => stations.map((station) => station.id))
-      .then((stationIds) => {
-        return Promise.all([
-          db.StationValue.destroy({where: {stationId: stationIds}}),
-          db.Station.destroy({where: {id: stationIds}})
-        ]).then(() => stationIds);
-      })
-      .then((stationIds) => {
-        dispatch(_deleteStation(stationIds));
-        dispatch(setLoading(false));
-      });
+
+    const stations = await db.Station.findAll({attributes: ['id'], where: fields});
+    const stationIds = stations.map((dataSet) => dataSet.id);
+    await Promise.all([
+      db.StationValue.destroy({where: {stationId: stationIds}}),
+      db.Station.destroy({where: {id: stationIds}})
+    ]);
+
+    dispatch(_deleteStation(stationIds));
+    dispatch(setLoading(false));
   }
 }
 

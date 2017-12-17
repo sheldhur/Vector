@@ -5,6 +5,28 @@ import calcProgress from '../lib/calcProgress';
 
 let db;
 
+function getProgress(stageName, rowsLength, throttleMs = 150) {
+  let stageLength = 0;
+  const stages = {
+    getDataSetValues: {stage: stageLength++, message: "Loading datasets values"},
+  };
+
+  let lastSendTime = null;
+
+  return (rowCurrent) => {
+    const progress = {
+      title: stages[stageName].message,
+      value: calcProgress(stageLength, stages[stageName].stage, rowsLength, rowCurrent).total
+    };
+
+    const sendTime = new Date().valueOf();
+    if (!lastSendTime || sendTime - lastSendTime > throttleMs) {
+      process.send({event: 'setProgress', data: progress});
+      lastSendTime = sendTime;
+    }
+  }
+}
+
 export default function (dbSession, data) {
   if (!data.main.settings) {
     throw new Error("Can't get project settings");
@@ -17,39 +39,16 @@ export default function (dbSession, data) {
     throw new Error("Can't get time period");
   }
 
-  getDataSets()
-    .then((dataSets) => getDataSetValues(dataSets, projectTimeSelected))
-    .then((result) => prepareData(result))
-    .then((result) => {
+  (async () => {
+    try {
+      const dataSets = await getDataSets();
+      const result = await getDataSetValues(dataSets, projectTimeSelected);
       process.send({event: 'setData', data: result});
-    })
-    .catch((error) => {
-      console.error(error);
+    } catch (error) {
       process.send({event: 'setError', data: errorToObject(error)});
-    });
-}
-
-function getProgress(stageName, rowsLength) {
-  let stageLength = 0;
-  const stages = {
-    // getDataSets: {stage: stageLength++, message: "Loading datasets"},
-    getDataSetValues: {stage: stageLength++, message: "Loading datasets values"},
-    prepareData: {stage: stageLength++, message: "Prepare data"}
-  };
-
-  let lastProgress = null;
-
-  return (rowCurrent) => {
-    const progress = {
-      title: stages[stageName].message,
-      value: calcProgress(stageLength, stages[stageName].stage, rowsLength, rowCurrent).total
-    };
-
-    if (!lastProgress || lastProgress.value !== progress.value) {
-      process.send({event: 'setProgress', data: progress});
-      lastProgress = progress;
+      console.error(error);
     }
-  }
+  })();
 }
 
 function getDataSets() {
@@ -59,14 +58,20 @@ function getDataSets() {
   });
 }
 
-function getDataSetValues(dataSets, time) {
+async function getDataSetValues(dataSets, time) {
   const sendProgress = getProgress('getDataSetValues', dataSets.length);
   let count = 0;
 
-  sendProgress(0);
+  sendProgress(count);
 
-  return Promise.map(dataSets, (dataSet) => {
-    return db.DataSetValue.findAll({
+  const result = {
+    dataSets: {},
+    dataSetValues: {}
+  };
+
+  await Promise.map(dataSets, async (dataSet) => {
+    result.dataSets[dataSet.id] = {...dataSet, style: JSON.parse(dataSet.style)};
+    result.dataSetValues[dataSet.id] = await db.DataSetValue.findAll({
       where: {
         dataSetId: dataSet.id,
         time: {
@@ -74,31 +79,9 @@ function getDataSetValues(dataSets, time) {
         }
       },
       raw: true
-    }).then((result) => {
-      sendProgress(count++);
-      return result;
     });
-  }).then((dataSetValues) => {
-    return {
-      dataSets,
-      dataSetValues,
-    };
-  });
-}
 
-function prepareData(data) {
-  let result = {
-    dataSets: {},
-    dataSetValues: {}
-  };
-
-  const sendProgress = getProgress('prepareData', data.dataSets.length);
-  data.dataSets.forEach((dataSet, dataSetKey) => {
-    dataSet.style = JSON.parse(dataSet.style);
-    result.dataSets[dataSet.id] = dataSet;
-    result.dataSetValues[dataSet.id] = data.dataSetValues[dataSetKey];
-
-    sendProgress(dataSetKey);
+    sendProgress(count++);
   });
 
   return result;

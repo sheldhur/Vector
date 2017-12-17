@@ -83,21 +83,17 @@ export function getData() {
 }
 
 export function updateDataSet(id, fields, callback) {
-  return (dispatch) => {
-    let result;
+  return async (dispatch) => {
+    try {
+      const result = await db.DataSet.update(fields, {where: {id}});
+      const dataSet = await db.DataSet.find({where: {id}});
+      dispatch(_updateDataSet(id, dataSet.get({plain: true})));
 
-    db.DataSet
-      .update(fields, {where: {id}})
-      .then((res) => result = res)
-      .then(() => db.DataSet.find({where: {id}}))
-      .then((dataSet) => dispatch(_updateDataSet(id, dataSet.get({plain: true}))))
-      .then(() => callback ? callback({result}) : result)
-      .catch((error) => {
-        if (callback) {
-          callback({error})
-        }
-        throw error;
-      });
+      if (callback) callback({result});
+    } catch (error) {
+      if (callback) callback({error});
+      throw error;
+    }
   }
 }
 
@@ -118,21 +114,18 @@ function _updateDataSet(id, fields) {
 }
 
 export function deleteDataSet(fields) {
-  return (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(setLoading());
-    db.DataSet
-      .findAll({attributes: ['id'], where: fields})
-      .then((dataSets) => dataSets.map((dataSet) => dataSet.id))
-      .then((dataSetIds) => {
-        return Promise.all([
-          db.DataSetValue.destroy({where: {dataSetId: dataSetIds}}),
-          db.DataSet.destroy({where: {id: dataSetIds}})
-        ]).then(() => dataSetIds);
-      })
-      .then((dataSetIds) => {
-        dispatch(_deleteDataSet(dataSetIds));
-        dispatch(setLoading(false));
-      });
+
+    const dataSets = await db.DataSet.findAll({attributes: ['id'], where: fields});
+    const dataSetIds = dataSets.map((dataSet) => dataSet.id);
+    await Promise.all([
+      db.DataSetValue.destroy({where: {dataSetId: dataSetIds}}),
+      db.DataSet.destroy({where: {id: dataSetIds}})
+    ]);
+
+    dispatch(_deleteDataSet(dataSetIds));
+    dispatch(setLoading(false));
   }
 }
 
@@ -156,21 +149,17 @@ function _deleteDataSet(dataSetIds) {
 }
 
 export function updateDataSetValue(id, fields, callback) {
-  return (dispatch) => {
-    let result;
+  return async (dispatch) => {
+    try {
+      const result = await db.DataSetValue.update(fields, {where: {id}});
+      const dataSetValue = await db.DataSetValue.find({where: {id}});
+      dispatch(_updateDataSetValue(id, dataSetValue.get({plain: true})));
 
-    db.DataSetValue
-      .update(fields, {where: {id}})
-      .then((res) => result = res)
-      .then(() => db.DataSetValue.find({where: {id}}))
-      .then((dataSetValue) => dispatch(_updateDataSetValue(id, dataSetValue.get({plain: true}))))
-      .then(() => callback ? callback({result}) : result)
-      .catch((error) => {
-        if (callback) {
-          callback({error})
-        }
-        throw error;
-      });
+      if (callback) callback({result});
+    } catch (error) {
+      if (callback) callback({error});
+      throw error;
+    }
   }
 }
 

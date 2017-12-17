@@ -223,6 +223,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^3.0.2",
     "react-router-redux": "^4.0.7",
+    "react-throttle-render": "^2.0.0",
     "redux": "^3.7.2",
     "redux-electron-store": "^0.4.1",
     "redux-ignore": "^1.2.5",

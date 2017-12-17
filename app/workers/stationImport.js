@@ -37,8 +37,11 @@ export default function (dbSession, data) {
 
         for (const stationKey in stationsData) {
           const stationData = stationsData[stationKey];
+          process.send({stationData});
 
           const data = await saveStation(stationData, fileType);
+          process.send({event: 'addStation', data: data.station});
+
           const values = await prepareImportData(data, time, 4);
           await saveStationValues(values, filePaths, stationsData, fileKey);
         }
@@ -70,7 +73,7 @@ function readFile(filePath, fileType) {
   }
 }
 
-function saveStation(data, fileType) {
+async function saveStation(data, fileType) {
   let props = {
     name: data.properties.code.toUpperCase(),
     source: fileType,
@@ -79,27 +82,24 @@ function saveStation(data, fileType) {
     longitude: Number(data.properties.geodeticLongitude.toFixed(3))
   };
 
-  return db.Station.findOrCreate({
+  const station = await db.Station.findOrCreate({
     where: {name: props.name, source: props.source},
     defaults: props
-  }).then((station) => {
-    data.station = station[0];
-    data.properties = {
-      ...data.properties,
-      ...props
-    };
-
-    process.send({event: 'addStation', data: data.station});
-
-    return data;
   });
+
+  data.station = station[0];
+  data.properties = {
+    ...data.properties,
+    ...props
+  };
+  return data;
 }
 
 function saveStationValues(data, files, stations, fileCurrent) {
   let {station, format, rows} = data;
 
   return new Promise((resolve, reject) => {
-    let progress = {
+    let lastProgress = {
       current: 0,
       total: 0,
     };
@@ -109,12 +109,18 @@ function saveStationValues(data, files, stations, fileCurrent) {
       let query = "INSERT INTO StationValues (id, time, compX, compY, compZ, stationId, format) VALUES(NULL, ?, ?, ?, ?, ?, ?);";
       let stmt = sqlite.prepare(query);
       rows.forEach((row, rowCurrent) => {
-        row = convertToXY(row, station.reported);
-        row[0] = moment(row[0]).format(db.formatTime);
+        row = convertToXY(row, station.reported).map((item, i) => {
+          if (i === 0) {
+            return moment(item).format(db.formatTime);
+          } else if (i >= 1 && i <= 3) {
+            return item.toFixed(5);
+          }
+        });
         stmt.run(...row, station.id, format, (error) => {
-          let newProgress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
-          if (newProgress.current > progress.current) {
-            progress = newProgress;
+          let progress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
+          let saveTime = new Date().valueOf();
+          if (progress.current > lastProgress.current) {
+            lastProgress = progress;
             process.send({event: 'setProgress', data: progress});
           }
 
