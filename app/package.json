@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "sequelize": "^4.28.1",
+    "sequelize": "^4.28.5",
     "sqlite3-offline": "^3.2.0"
   },
   "theme": {
