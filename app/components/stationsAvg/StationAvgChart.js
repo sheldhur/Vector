@@ -59,7 +59,7 @@ class StationAvgChart extends Component {
               0: moment(parseInt(time)).format(app.FORMAT_DATE_SQL)
             };
           }
-          csvData[time][colKey] = pointsValue[time]
+          csvData[time][colKey] = pointsValue[time] ? pointsValue[time].toFixed(5).replace('.',',') : null;
         }
       });
     });
