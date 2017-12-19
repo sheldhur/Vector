@@ -22,7 +22,8 @@
   border-color: #464545;
 }
 
-.theme-night .ant-table thead > tr > th {
+.theme-night .ant-table .ant-table-thead > tr > th,
+.theme-night .ant-table .ant-table-tbody > tr.ant-table-row-selected > td {
   background-color: #515050;
   color: #b0b0b0;
 }
