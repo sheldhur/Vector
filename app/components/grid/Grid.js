@@ -14,25 +14,26 @@ const isProd = process.env.NODE_ENV === 'production';
 //TODO: редактируемые ячейки возвразают [Object]
 class Grid extends Component {
 
+  state = {
+    filterDropdownVisible: false,
+    filterValue: {},
+    data: null
+  };
+
   constructor(props) {
     super(props);
 
     this.handlerFilterChange = ::this.handlerFilterChange;
     this.handlerFilter = ::this.handlerFilter;
 
-    this.state = {
-      filterDropdownVisible: false,
-      filterValue: {},
-      data: null
-    };
   }
 
-  columnSorter(dataIndex, a, b) {
+  columnSorter = (dataIndex, a, b) => {
     return -(a[dataIndex] < b[dataIndex]) || +(a[dataIndex] != b[dataIndex]);
     // return true;
-  }
+  };
 
-  columnFilter(item, reg) {
+  columnFilter = (item, reg) => {
     let props = {};
     for (let dataIndex in reg) {
       let value = item[dataIndex].toString();
@@ -53,13 +54,13 @@ class Grid extends Component {
       }
     }
     return {...item, ...props};
-  }
+  };
 
-  onChange(pagination, filters, sorter) {
+  onChange = (pagination, filters, sorter) => {
     console.log('params', pagination, filters, sorter);
-  }
+  };
 
-  findParentElement(el, selector) {
+  findParentElement = (el, selector) => {
     let popupEl = el;
     while ((popupEl = popupEl.parentElement) !== null) {
       if (popupEl.matches(selector)) {
@@ -67,9 +68,9 @@ class Grid extends Component {
         break;
       }
     }
-  }
+  };
 
-  handlerFilter(e, reset = false) {
+  handlerFilter = (e, reset = false) => {
     this.handlerFilterChange(e, reset);
 
     let filterValue = this.state.filterValue;
@@ -88,9 +89,9 @@ class Grid extends Component {
       data,
       filterValue
     });
-  }
+  };
 
-  filterData (data, reg) {
+  filterData = (data, reg) => {
     if (data) {
       data = data.map((item, i) => {
         return this.columnFilter(item, reg);
@@ -98,9 +99,9 @@ class Grid extends Component {
     }
 
     return data;
-  }
+  };
 
-  handlerFilterChange(e, reset = false) {
+  handlerFilterChange = (e, reset = false) => {
     let input = this.findParentElement(e.target, '.custom-filter-dropdown').querySelector('input');
     if (reset) {
       input.value = '';
@@ -114,9 +115,9 @@ class Grid extends Component {
         filterValue
       });
     }
-  }
+  };
 
-  prepareColumns(columns) {
+  prepareColumns = (columns) => {
     let {filterValue, filterDropdownVisible} = this.state;
     return columns.map((item, i) => {
       let propsSorter = item.hasSorter ? {
@@ -153,9 +154,9 @@ class Grid extends Component {
 
       return {...item, ...propsSorter, ...propsFilter};
     });
-  }
+  };
 
-  filterProps(props, removeProps) {
+  filterProps = (props, removeProps) => {
     let tableProps = {};
     for (let name in props) {
       if (removeProps.indexOf(name)) {
@@ -164,14 +165,14 @@ class Grid extends Component {
     }
 
     return tableProps;
-  }
+  };
 
-  render() {
-    let columns = this.prepareColumns(this.props.columns);
-    let data = this.state.data ? this.state.data : this.props.data;
+  render = () => {
+    const columns = this.prepareColumns(this.props.columns);
+    const data = this.state.data ? this.state.data : this.props.data;
     const tableProps = this.filterProps(this.props, ['data', 'columns']);
 
-    if (tableProps.pagination && tableProps.size === 'x-small' && tableProps.pagination !== undefined && !tableProps.pagination.size !== undefined) {
+    if (tableProps.pagination && tableProps.size === 'x-small') {
       tableProps.pagination.size = 'small';
     }
 
@@ -186,7 +187,7 @@ class Grid extends Component {
         dataSource={data}
       />
     );
-  }
+  };
 }
 
 
