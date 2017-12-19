@@ -7,7 +7,7 @@ import configureStore from './store/configureStore';
 import appPackage from './package.json';
 
 autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = process.env.NODE_ENV === 'development' ? ['error', 'warn', 'info', 'verbose', 'debug', 'silly'] : 'info';
+autoUpdater.logger.transports.file.level = process.env.NODE_ENV === 'development' ? 'debug' : 'info';
 log.info('App starting...');
 
 const store = configureStore();
