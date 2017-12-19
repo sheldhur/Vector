@@ -73,6 +73,7 @@ class MapAzimuthal extends Component {
     //2011, 7, 9, 7, 2
     return (
       <Chart
+        ready={isRenderMap}
         width={size.container.width}
         height={size.container.height}
         ref="chart"

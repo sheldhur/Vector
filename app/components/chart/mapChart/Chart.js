@@ -6,6 +6,7 @@ class Chart extends Component {
   render() {
     return (
       <svg
+        className={this.props.ready ? 'ready' : null}
         width={this.props.width}
         height={this.props.height}
         style={this.props.style}

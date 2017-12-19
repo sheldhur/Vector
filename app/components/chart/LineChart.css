@@ -8,8 +8,14 @@
   position: relative;
 }
 
-svg {
+.svg-wrapper > svg {
   padding: 0;
+  opacity: 0;
+  transition: opacity 0.20s ease-out;
+}
+
+.svg-wrapper > svg.ready {
+  opacity: 1;
 }
 
 .axis line, .axis path {

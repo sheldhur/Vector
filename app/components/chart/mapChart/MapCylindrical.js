@@ -118,6 +118,7 @@ class MapCylindrical extends Component {
 
     return (
       <Chart
+        ready={isRenderMap}
         width={size.container.width}
         height={size.container.height}
         ref="chart"

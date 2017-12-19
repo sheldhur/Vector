@@ -346,8 +346,13 @@ class LineChart extends Component {
       return (
         <div className="svg-wrapper" ref="svgWrapper">
           {this.props.children !== undefined && <div ref="title" className="chart-title">{this.props.children}</div>}
-          <Chart width={size.container.width} height={size.container.height} ref="chart"
-                 shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}>
+          <Chart
+            ready={isRenderLines}
+            width={size.container.width}
+            height={size.container.height}
+            ref="chart"
+            shapeRendering={this.props.antiAliasing ? 'auto' : 'optimizeSpeed'}
+          >
             <defs>
               <clipPath id={`${this.uid}-lines`}>
                 <rect width={size.width} height={size.height}/>
