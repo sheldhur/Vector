@@ -13,6 +13,9 @@ const {dialog, BrowserWindow} = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 const currentWindow = remote.getCurrentWindow();
 
+const STATIONS_DELETE_ALL = 'STATIONS_DELETE_ALL';
+const STATIONS_DELETE_SELECTED = 'STATIONS_DELETE_SELECTED';
+const STATIONS_VALUES_DELETE_SELECTED = 'STATIONS_VALUES_DELETE_SELECTED';
 
 class StationsImport extends Component {
   fileTypes = app.IMPORT_TYPE_STATION;
@@ -35,6 +38,21 @@ class StationsImport extends Component {
 
   handlerCancelClick = (e) => {
     this.props.stationImportActions.closeModal();
+  };
+
+  handlerActionSelect = (e) => {
+    switch (e.key) {
+      case STATIONS_DELETE_SELECTED:
+        this.props.stationActions.deleteSelectedStations();
+        break;
+      case STATIONS_VALUES_DELETE_SELECTED:
+        this.props.stationActions.deleteSelectedStationsValues('stationId');
+        break;
+      case STATIONS_DELETE_ALL:
+        break;
+      default:
+        break;
+    }
   };
 
   setSystemProgressBar = (value) => {
@@ -62,15 +80,27 @@ class StationsImport extends Component {
       <span><Icon type="file-add"/> Import data</span>
     );
 
+    const menuActions = (
+      <Menu onClick={this.handlerActionSelect} selectable={false}>
+        <Menu.Item key={STATIONS_DELETE_SELECTED}>Delete selected stations</Menu.Item>
+        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable>Delete values selected stations</Menu.Item>
+        <Menu.Item key={STATIONS_DELETE_ALL}>Delete all stations</Menu.Item>
+      </Menu>
+    );
+
     return (
       <div className="station-import">
-        <Button onClick={this.props.stationActions.getLatitudeAvgValues}><Icon type="reload"/> Update stations</Button>
+        <Button onClick={this.props.stationActions.getLatitudeAvgValues}>
+          <Icon type="reload"/> Update stations
+        </Button>
         {" "}
         <Dropdown overlay={menuFileType} placement="bottomLeft" trigger={['click']}>
           <Button>{titleImport} <Icon type="down"/></Button>
         </Dropdown>
         {" "}
-        <Button><Icon type="delete" /> Delete selected</Button>
+        <Dropdown overlay={menuActions} placement="bottomLeft" trigger={['click']}>
+          <Button>Actions <Icon type="down"/></Button>
+        </Dropdown>
         <Modal
           wrapClassName="station-import"
           title={titleImport}

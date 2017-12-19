@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Icon, Popconfirm} from 'antd';
 import Grid from '../grid/Grid';
-import * as MainActions from '../../actions/main';
-import * as StationActions from '../../actions/station';
+import * as uiActions from '../../actions/ui';
+import * as stationActions from '../../actions/station';
 
 
 class StationGrid extends Component {
@@ -27,6 +27,8 @@ class StationGrid extends Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.calcPageSize);
     window.removeEventListener('load', this.fixPageSize);
+
+    this.props.uiActions.setGridSelectedRows(null);
   };
 
   fixPageSize = () => {
@@ -129,6 +131,13 @@ class StationGrid extends Component {
     const {values, isLoading} = this.props;
     const data = values ? Object.values(values).filter((station) => station !== undefined) : [];
 
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.props.uiActions.setGridSelectedRows(selectedRows);
+      },
+      selections: true
+    };
+
     return (
       <div style={{height: this.state.availableSize}}>
         <Grid
@@ -137,6 +146,7 @@ class StationGrid extends Component {
           columns={columns}
           data={data}
           loading={isLoading}
+          rowSelection={rowSelection}
           pagination={{size: 'small', pageSize: this.state.pageSize}}
           size="x-small"
           bordered={true}
@@ -165,8 +175,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch)
+    uiActions: bindActionCreators(uiActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch)
   };
 }
 

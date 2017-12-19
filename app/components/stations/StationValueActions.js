@@ -11,7 +11,8 @@ import * as app from '../../constants/app';
 const STATION_DISABLE = 'STATION_DISABLE';
 const STATION_ENABLE = 'STATION_ENABLE';
 const STATION_DELETE = 'STATION_DELETE';
-const STATION_VALUES_DELETE = 'STATION_VALUES_DELETE';
+const STATION_DELETE_VALUES = 'STATION_DELETE_VALUES';
+const STATION_DELETE_ALL_VALUES = 'STATION_DELETE_ALL_VALUES';
 
 class StationValueActions extends Component {
 
@@ -42,7 +43,11 @@ class StationValueActions extends Component {
       case STATION_DELETE:
         this.props.stationActions.deleteStation({id: stationId});
         break;
-      case STATION_VALUES_DELETE:
+      case STATION_DELETE_VALUES:
+        this.props.stationActions.deleteSelectedStationsValues('id');
+        break;
+      case STATION_DELETE_ALL_VALUES:
+        this.props.stationActions.deleteStationValue({stationId});
         break;
       default:
         break;
@@ -68,7 +73,8 @@ class StationValueActions extends Component {
         }
         <Menu.SubMenu title={'Delete'}>
           <Menu.Item key={STATION_DELETE}>Station</Menu.Item>
-          <Menu.Item key={STATION_VALUES_DELETE} disabled>Values</Menu.Item>
+          <Menu.Item key={STATION_DELETE_VALUES}>Values</Menu.Item>
+          <Menu.Item key={STATION_DELETE_ALL_VALUES}>All values</Menu.Item>
         </Menu.SubMenu>
       </Menu>
     );

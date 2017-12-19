@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {Icon, Popconfirm} from 'antd';
 import moment from 'moment';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
@@ -128,12 +129,35 @@ class StationGrid extends Component {
         return app.VALUES_CONVERT_FORMAT[text];
       },
       width: 80
+    }, {
+      title: '',
+      dataIndex: 'delete',
+      width: 30,
+      render: (text, record, index) => (
+        <Popconfirm
+          placement="left"
+          title="Are you sure delete this station?"
+          onConfirm={() => {
+            this.props.stationActions.deleteStationValue({id: record.id})
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          <a href="#"><Icon type="delete"/></a>
+        </Popconfirm>
+      )
     }];
 
     const {values, isLoading, currentTime} = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
+    const data = values ? Object.values(values) : [];
 
-    let data = values ? Object.values(values) : [];
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.props.uiActions.setGridSelectedRows(selectedRows);
+      },
+      selections: true
+    };
 
     return (
       <div style={{height: this.state.availableSize}}>
@@ -144,6 +168,7 @@ class StationGrid extends Component {
           columns={columns}
           data={data}
           loading={isLoading}
+          rowSelection={rowSelection}
           pagination={{pageSize: this.state.pageSize, showQuickJumper: true, current: this.state.pageCurrent, onChange: this.handlerPageChange}}
           size="x-small"
           bordered={true}

@@ -44,7 +44,7 @@ export default function main(state = initialState, action) {
     case types.STATION_VIEW_ERROR:
       return {...state, stationView: {...state.stationView, values: null, isError: action.payload, isLoading: false}};
     case types.STATION_VIEW_LOADING:
-      return {...state, stationView: {...state.stationView, values: null, isLoading: action.payload, isError: false, progress: {...initialState.progress}}};
+      return {...state, stationView: {...state.stationView, isLoading: action.payload, isError: false, progress: {...initialState.progress}}};
     case types.STATION_VIEW_PROGRESS:
       return {...state, stationView: {...state.stationView, progress: action.payload}};
     case types.ERROR:

@@ -15,7 +15,7 @@ export function setError(payload) {
   }
 }
 
-export function setLoading(payload = true) {
+export function setLoading(payload) {
   return {
     type: types.LOADING,
     payload,
@@ -140,20 +140,21 @@ export function getData(dispatch, getState, action, args) {
 
 export function getLatitudeAvgValues() {
   return (dispatch, getState) => {
-    dispatch(setLoading());
+    dispatch(setLoading(true));
     getData(dispatch, getState, 'getLatitudeAvgValues');
   };
 }
 
 export function getStationsValue() {
   return (dispatch, getState) => {
-    const {chartCurrentTime} = getState().chart;
+    const {chartCurrentTime} = getState().ui;
     return getData(dispatch, getState, 'getStationsValue', {currentTime: chartCurrentTime});
   }
 }
 
 export function getStationViewValues(args) {
   return (dispatch, getState) => {
+    dispatch(setStationViewValues(null));
     dispatch(setStationViewLoading(true));
     return getData(dispatch, getState, 'getStationViewValues', args);
   }
@@ -219,10 +220,16 @@ function _updateStationValue(id, fields) {
 
 export function deleteStation(fields) {
   return async (dispatch) => {
-    dispatch(setLoading());
+    dispatch(setLoading(true));
 
-    const stations = await db.Station.findAll({attributes: ['id'], where: fields});
-    const stationIds = stations.map((dataSet) => dataSet.id);
+    let stationIds;
+    if (fields.hasOwnProperty('id') && Object.keys(fields).length === 1) {
+      stationIds = Array.isArray(fields.id) ? fields.id : [fields.id];
+    } else {
+      const stations = await db.Station.findAll({attributes: ['id'], where: fields});
+      stationIds = stations.map((station) => station.id);
+    }
+
     await Promise.all([
       db.StationValue.destroy({where: {stationId: stationIds}}),
       db.Station.destroy({where: {id: stationIds}})
@@ -235,9 +242,8 @@ export function deleteStation(fields) {
 
 function _deleteStation(stationIds) {
   return (dispatch, getState) => {
-    let {stations, extremes} = getState().station;
-
-    let data = {
+    const {stations, extremes} = getState().station;
+    const data = {
       stations: {...stations},
       extremes: {...extremes},
     };
@@ -249,5 +255,55 @@ function _deleteStation(stationIds) {
     });
 
     dispatch(setStations(data));
+  }
+}
+
+export function deleteStationValue(fields) {
+  return async (dispatch) => {
+    dispatch(setStationViewLoading(true));
+
+    let stationValueIds;
+    if (!fields.id && !fields.stationId) {
+      const stationValues = await db.StationValue.findAll({attributes: ['id'], where: fields});
+      stationValueIds = stationValues.map((stationValue) => stationValue.id);
+    }
+    await db.StationValue.destroy({where: fields});
+
+    if (fields.id) {
+      dispatch(_deleteStationValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
+    } else if (fields.stationId) {
+      dispatch(setStationViewValues(null));
+    } else {
+      dispatch(_deleteStationValue(stationValueIds));
+    }
+
+    dispatch(setStationViewLoading(false));
+  }
+}
+
+function _deleteStationValue(stationValueIds) {
+  return (dispatch, getState) => {
+    const {values} = getState().station.stationView;
+    const newValues = values.filter(stationValue => stationValueIds.indexOf(stationValue.id) === -1);
+
+    dispatch(setStationViewValues(newValues));
+  }
+}
+
+export function deleteSelectedStations() {
+  return (dispatch, getState) => {
+    const {gridSelectedRows} = getState().ui;
+    dispatch(deleteStation({
+      id: gridSelectedRows.map(item => item.id)
+    }))
+  }
+}
+
+export function deleteSelectedStationsValues(field) {
+  return (dispatch, getState) => {
+    const {gridSelectedRows} = getState().ui;
+    dispatch(deleteStationValue({
+      [field]: gridSelectedRows.map(item => item.id)
+    }))
   }
 }
