@@ -5,7 +5,7 @@ import {ResizeblePanel, Panel} from '../widgets/ResizeblePanel';
 import MagnetopauseMap from './MagnetopauseMap';
 import MagnetopauseChart from './MagnetopauseChart';
 import {NoDataAlert, ProgressAlert} from '../widgets/ChartAlert';
-import * as MagnetopauseActions from '../../actions/magnetopause';
+import * as magnetopauseActions from '../../actions/magnetopause';
 
 
 class MagnetopauseDashboard extends Component {
@@ -54,7 +54,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    magnetopauseActions: bindActionCreators(MagnetopauseActions, dispatch),
+    magnetopauseActions: bindActionCreators(magnetopauseActions, dispatch),
   };
 }
 

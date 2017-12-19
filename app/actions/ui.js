@@ -1,13 +1,11 @@
-import * as types from '../constants/chart';
+import * as types from '../constants/ui';
 
 export function setChartCurrentTime(payload) {
-  if (Object.prototype.toString.call(payload) === '[object Date]') {
-    payload = payload.getTime();
-  }
+  const isDate = Object.prototype.toString.call(payload) === '[object Date]';
 
   return {
     type: types.CHART_CURRENT_TIME,
-    payload,
+    payload: isDate ? payload.getTime() : payload,
     syncState: true,
   };
 }
@@ -49,4 +47,11 @@ export function shiftChartCurrentTime(value) {
 
     dispatch(setChartCurrentTime(timeNew));
   };
+}
+
+export function setGridSelectedRows(payload) {
+  return {
+    type: types.GRID_SELECTED_ROWS,
+    payload,
+  }
 }

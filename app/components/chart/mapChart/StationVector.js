@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
-import * as ChartActions from '../../../actions/chart';
-import * as stationsCalc from '../../../utils/stationsCalc';
 import {openWindowStation} from '../../map/VectorMapMenu'
+import * as uiActions from '../../../actions/ui';
+import * as stationsCalc from '../../../utils/stationsCalc';
 
 
 class StationVector extends Component {
@@ -14,11 +14,11 @@ class StationVector extends Component {
   };
 
   handlerMouseEnter = (station) => {
-    this.props.chartActions.setMapTooltipStation(station);
+    this.props.uiActions.setMapTooltipStation(station);
   };
 
   handlerMouseOut = () => {
-    this.props.chartActions.setMapTooltipStation(null);
+    this.props.uiActions.setMapTooltipStation(null);
   };
 
   handlerMouseClick = (station) => {
@@ -240,7 +240,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
   };
 }
 

@@ -19,6 +19,7 @@ const currentWindow = remote.getCurrentWindow();
 let db;
 
 
+
 export function setLoading(payload) {
   return {
     type: types.LOADING,

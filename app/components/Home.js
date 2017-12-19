@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert} from 'antd';
 import moment from 'moment';
-import * as MainActions from '../actions/main';
+import * as mainActions from '../actions/main';
 import * as app from '../constants/app';
 // import IconResizer from './_IconResizer';
 // import './../lib/geomagneticData/_test';
@@ -155,7 +155,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch)
+    mainActions: bindActionCreators(mainActions, dispatch)
   };
 }
 

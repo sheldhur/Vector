@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Tooltip, Button, Input, Tag, Icon} from 'antd';
-import * as ChartActions from '../../actions/chart';
+import * as uiActions from '../../actions/ui';
 
 class MainHeaderControls extends Component {
   state = {
@@ -76,7 +76,7 @@ class MainHeaderControls extends Component {
       e.preventDefault();
     }
 
-    this.props.chartActions.shiftChartCurrentTime(value);
+    this.props.uiActions.shiftChartCurrentTime(value);
 
     if (this.props.onTick && typeof this.props.onTick === "function") {
       this.props.onTick();
@@ -171,7 +171,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
   };
 }
 

@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
-import * as MainActions from '../../actions/main';
+import * as mainActions from '../../actions/main';
 import * as app from '../../constants/app';
 
 const COMP_XYZ = 'XYZ';
@@ -138,7 +138,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
+    mainActions: bindActionCreators(mainActions, dispatch),
   };
 }
 

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Row, Col} from 'antd';
+import {Row} from 'antd';
 import StationsImport from './StationsImport';
 import StationsGrid from './StationsGrid';
 

@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import moment from 'moment';
 import Grid from '../grid/Grid';
-import * as ChartActions from '../../actions/chart';
-import * as DataSetActions from '../../actions/dataSet';
+import * as uiActions from '../../actions/ui';
+import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
 class DataSetValuesGrid extends Component {
@@ -95,7 +95,7 @@ class DataSetValuesGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       onCellClick: (record, event) => {
-        this.props.chartActions.setChartCurrentTime(new Date(record.time));
+        this.props.uiActions.setChartCurrentTime(new Date(record.time));
       }
     }, {
       title: 'Value',
@@ -159,8 +159,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch)
+    uiActions: bindActionCreators(uiActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch)
   };
 }
 

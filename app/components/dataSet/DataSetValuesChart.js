@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 import {NoDataAlert, ProgressAlert} from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
-import * as MainActions from '../../actions/main';
-import * as DataSetActions from '../../actions/dataSet';
+import * as mainActions from '../../actions/main';
+import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 import * as prepareData from '../../utils/prepareData';
 
@@ -113,8 +113,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch)
+    mainActions: bindActionCreators(mainActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch)
   };
 }
 

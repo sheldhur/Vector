@@ -2,7 +2,7 @@
 import {combineReducers} from 'redux';
 import {routerReducer as routing} from 'react-router-redux';
 import main from './main';
-import chart from './chart';
+import chart from './ui';
 import dataSet from './dataSet';
 import dataSetImport from './dataSetImport';
 import stationImport from './stationImport';

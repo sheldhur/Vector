@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Modal, Icon, Button, Input, Select, Form} from "antd";
-import * as MainActions from "./../../actions/main";
-import * as MagnetopauseActions from "./../../actions/magnetopause";
+import * as mainActions from "./../../actions/main";
+import * as magnetopauseActions from "./../../actions/magnetopause";
 
 
 class MagnetopauseSettings extends Component {
@@ -166,8 +166,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    magnetopauseActions: bindActionCreators(MagnetopauseActions, dispatch),
+    mainActions: bindActionCreators(mainActions, dispatch),
+    magnetopauseActions: bindActionCreators(magnetopauseActions, dispatch),
   };
 }
 

@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import {remote} from 'electron';
 import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
-import * as DataSetActions from '../../actions/dataSet';
-import * as DataSetImportActions from '../../actions/dataSetImport';
+import * as dataSetActions from '../../actions/dataSet';
+import * as dataSetImportActions from '../../actions/dataSetImport';
 import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
@@ -97,8 +97,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    dataSetImportActions: bindActionCreators(DataSetImportActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch),
+    dataSetImportActions: bindActionCreators(dataSetImportActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch),
   };
 }
 

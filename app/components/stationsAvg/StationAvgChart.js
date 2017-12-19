@@ -6,7 +6,7 @@ import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import moment from 'moment';
 import LineChart from '../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
-import * as StationActions from '../../actions/station';
+import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
 class StationAvgChart extends Component {
@@ -199,7 +199,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    stationActions: bindActionCreators(StationActions, dispatch)
+    stationActions: bindActionCreators(stationActions, dispatch)
   };
 }
 

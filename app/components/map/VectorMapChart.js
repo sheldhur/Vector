@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import MapChart from '../chart/MapChart';
 import VectorMapMenu from './VectorMapMenu';
-import * as StationActions from '../../actions/station';
+import * as stationActions from '../../actions/station';
 
 
 class VectorMapChart extends Component {
@@ -64,7 +64,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    stationActions: bindActionCreators(StationActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from 'react-redux';
 import {Modal, Icon, Row, Col} from "antd";
-import * as MainActions from "./../../actions/main";
+import * as mainActions from "./../../actions/main";
 
 
 class MainUpdateApp extends Component {
@@ -29,7 +29,7 @@ class MainUpdateApp extends Component {
           okText={<span><Icon type="download"/> Install update</span>}
           wrapClassName="main-update-app"
           zIndex={999}
-          width={700}
+          width={600}
         >
           <Row gutter={50}>
             <Col span={2}>
@@ -40,7 +40,7 @@ class MainUpdateApp extends Component {
               <i>{new Date(update.releaseDate).toLocaleString()}</i>
             </Col>
           </Row>
-          <Row style={{fontSize: '125%'}}>
+          <Row>
             <div dangerouslySetInnerHTML={{__html: update.releaseNotes}}/>
           </Row>
         </Modal>
@@ -62,7 +62,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
+    mainActions: bindActionCreators(mainActions, dispatch),
   };
 }
 

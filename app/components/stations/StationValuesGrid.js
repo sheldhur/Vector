@@ -6,8 +6,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import Grid from '../grid/Grid';
-import * as ChartActions from '../../actions/chart';
-import * as StationActions from '../../actions/station';
+import * as uiActions from '../../actions/ui';
+import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
 class StationGrid extends Component {
@@ -90,7 +90,7 @@ class StationGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       onCellClick: (record, event) => {
-        this.props.chartActions.setChartCurrentTime(new Date(record.time));
+        this.props.uiActions.setChartCurrentTime(new Date(record.time));
       }
     }, {
       title: 'X',
@@ -173,8 +173,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch)
+    uiActions: bindActionCreators(uiActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch)
   };
 }
 

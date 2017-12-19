@@ -6,7 +6,7 @@ import {Row} from 'antd';
 import StationValueActions from './StationValueActions';
 import StationValuesChart from './StationValuesChart';
 import StationValuesGrid from './StationValuesGrid';
-import * as ChartActions from '../../actions/chart';
+import * as uiActions from '../../actions/ui';
 
 
 class StationValuesView extends Component {
@@ -44,7 +44,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
   };
 }
 

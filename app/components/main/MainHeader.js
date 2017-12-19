@@ -9,10 +9,10 @@ import MainHeaderCapture from './MainHeaderCapture';
 import MainUpdateApp from './MainUpdateApp';
 import Settings from '../settings/Settings';
 import SettingsDataTimeRage from '../settings/SettingsDataTimeRage';
-import * as MainActions from '../../actions/main';
-import * as DataSetActions from '../../actions/dataSet';
-import * as StationActions from '../../actions/station';
-import * as ChartActions from '../../actions/chart';
+import * as mainActions from '../../actions/main';
+import * as dataSetActions from '../../actions/dataSet';
+import * as stationActions from '../../actions/station';
+import * as uiActions from '../../actions/ui';
 import {IS_PROD} from "../../constants/app";
 
 
@@ -22,7 +22,7 @@ class MainHeader extends Component {
   componentWillMount() {
     setTimeout(this.handlerReload, 100);
 
-    this.props.chartActions.setChartCurrentTime(null);
+    this.props.uiActions.setChartCurrentTime(null);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,10 +108,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
-    chartActions: bindActionCreators(ChartActions, dispatch),
+    mainActions: bindActionCreators(mainActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
   };
 }
 

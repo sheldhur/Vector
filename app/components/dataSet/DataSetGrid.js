@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Icon, Popconfirm} from 'antd';
 import Grid from '../grid/Grid';
-import * as MainActions from '../../actions/main';
-import * as DataSetActions from '../../actions/dataSet';
+import * as mainActions from '../../actions/main';
+import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
 class DataSetGrid extends Component {
@@ -190,8 +190,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch)
+    mainActions: bindActionCreators(mainActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch)
   };
 }
 

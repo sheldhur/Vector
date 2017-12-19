@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link, hashHistory} from 'react-router';
 import {Col, Button, Select, Menu, Dropdown, Icon} from 'antd';
-import * as StationActions from '../../actions/station';
+import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
 
@@ -111,7 +111,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    stationActions: bindActionCreators(StationActions, dispatch)
+    stationActions: bindActionCreators(stationActions, dispatch)
   };
 }
 

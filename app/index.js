@@ -8,9 +8,9 @@ import Root from './containers/Root';
 import configureStore from './store/configureStore';
 import {LocaleProvider} from 'antd';
 import locale from 'antd/lib/locale-provider/ru_RU';
-import * as MainActions from './actions/main';
-import * as StationActions from './actions/station';
-import * as DataSetActions from './actions/dataSet';
+import * as mainActions from './actions/main';
+import * as stationActions from './actions/station';
+import * as dataSetActions from './actions/dataSet';
 import './app.global.less';
 import './app.global.css';
 
@@ -46,15 +46,15 @@ ipcRenderer.on('dispatchFromMain', (event, msg) => {
   if (msg.push) {
     hashHistory.push(msg.push);
   } else if (msg.update) {
-    store.dispatch(MainActions.setUpdate(msg.update));
+    store.dispatch(mainActions.setUpdate(msg.update));
   } else if (msg.action) {
     if (msg.action === 'getLastDataBase') {
-      store.dispatch(MainActions.getLastDataBase(false));
+      store.dispatch(mainActions.getLastDataBase(false));
     } else if (msg.action === 'getData') {
-      store.dispatch(StationActions.getLatitudeAvgValues());
-      store.dispatch(DataSetActions.getData());
+      store.dispatch(stationActions.getLatitudeAvgValues());
+      store.dispatch(dataSetActions.getData());
     } else if (msg.action === 'openDataBase') {
-      store.dispatch(MainActions.dialogOpenCreateDataBase());
+      store.dispatch(mainActions.dialogOpenCreateDataBase());
     } else if (msg.action === 'closeWindow') {
       remote.getCurrentWindow().close();
     }
@@ -67,4 +67,4 @@ ipcRenderer.on('windowManger', (event, msg) => {
   }
 });
 
-store.dispatch(MainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));
+store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));

@@ -5,10 +5,10 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {sprintf} from 'sprintf-js';
 import * as d3 from 'd3';
-import * as ChartActions from '../../../actions/chart';
+import {mathAvg} from "../../../utils/helper";
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
-import {mathAvg} from "../../../utils/helper";
+import * as uiActions from '../../../actions/ui';
 
 class Tooltip extends Component {
 
@@ -42,7 +42,7 @@ class Tooltip extends Component {
   handlerMouseClick = (mouse) => {
     const points = this.getCurrentPointList(mouse[0], this.props.data, this.props.scale);
     if (points.length) {
-      this.props.chartActions.setChartCurrentTime(points[0].x);
+      this.props.uiActions.setChartCurrentTime(points[0].x);
       //
       this.props.onClick(points);
     }
@@ -52,13 +52,13 @@ class Tooltip extends Component {
     if (window.timeout !== undefined) {
       clearTimeout(window.timeout);
     }
-    this.props.chartActions.setChartTooltipTime(null);
+    this.props.uiActions.setChartTooltipTime(null);
   };
 
   handlerMouseMove = (mouse) => {
     const points = this.getCurrentPointList(mouse[0], this.props.data, this.props.scale);
     if (points[0] !== undefined) {
-      this.props.chartActions.setChartTooltipTime(points[0].x);
+      this.props.uiActions.setChartTooltipTime(points[0].x);
     }
   };
 
@@ -184,7 +184,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
   };
 }
 

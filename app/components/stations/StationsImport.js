@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import {remote} from 'electron';
 import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
-import * as StationActions from '../../actions/station';
-import * as StationImportActions from '../../actions/stationImport';
+import * as stationActions from '../../actions/station';
+import * as stationImportActions from '../../actions/stationImport';
 import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
@@ -14,7 +14,7 @@ const mainWindow = BrowserWindow.getAllWindows()[0];
 const currentWindow = remote.getCurrentWindow();
 
 
-class StationImport extends Component {
+class StationsImport extends Component {
   fileTypes = app.IMPORT_TYPE_STATION;
 
   handlerDropdownSelect = (e) => {
@@ -69,6 +69,8 @@ class StationImport extends Component {
         <Dropdown overlay={menuFileType} placement="bottomLeft" trigger={['click']}>
           <Button>{titleImport} <Icon type="down"/></Button>
         </Dropdown>
+        {" "}
+        <Button><Icon type="delete" /> Delete selected</Button>
         <Modal
           wrapClassName="station-import"
           title={titleImport}
@@ -92,15 +94,16 @@ class StationImport extends Component {
 
 function mapStateToProps(state) {
   return {
-    stationImport: state.stationImport
+    stationImport: state.stationImport,
+    // isLoading: state.stations.isLoading
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    stationImportActions: bindActionCreators(StationImportActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
+    stationImportActions: bindActionCreators(stationImportActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StationImport);
+export default connect(mapStateToProps, mapDispatchToProps)(StationsImport);

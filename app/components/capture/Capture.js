@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import * as fs from 'fs';
 import MainDashboard from '../main/MainDashboard';
-import * as ChartActions from '../../actions/chart';
-import * as StationActions from '../../actions/station';
+import * as uiActions from '../../actions/ui';
+import * as stationActions from '../../actions/station';
 
 
 const captureWin = remote.getCurrentWindow();
@@ -65,10 +65,10 @@ class Capture extends Component {
 
   timeShift = (value) => {
     if (value instanceof Date) {
-      console.log('this.props.chartActions.setChartCurrentTime', value);
-      this.props.chartActions.setChartCurrentTime(value);
+      console.log('this.props.uiActions.setChartCurrentTime', value);
+      this.props.uiActions.setChartCurrentTime(value);
     } else {
-      this.props.chartActions.shiftChartCurrentTime(value);
+      this.props.uiActions.shiftChartCurrentTime(value);
     }
     return this.props.stationActions.getStationsValue();
   };
@@ -100,8 +100,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    chartActions: bindActionCreators(ChartActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 

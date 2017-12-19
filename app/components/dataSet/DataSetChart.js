@@ -7,9 +7,9 @@ import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
 import DataSetChartMenu from './DataSetChartMenu';
-import * as MainActions from '../../actions/main';
-import * as DataSetActions from '../../actions/dataSet';
-import * as StationActions from '../../actions/station';
+import * as mainActions from '../../actions/main';
+import * as dataSetActions from '../../actions/dataSet';
+import * as stationActions from '../../actions/station';
 import * as prepareData from '../../utils/prepareData';
 import * as app from '../../constants/app';
 
@@ -97,9 +97,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(MainActions, dispatch),
-    dataSetActions: bindActionCreators(DataSetActions, dispatch),
-    stationActions: bindActionCreators(StationActions, dispatch),
+    mainActions: bindActionCreators(mainActions, dispatch),
+    dataSetActions: bindActionCreators(dataSetActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 
