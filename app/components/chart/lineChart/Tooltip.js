@@ -178,7 +178,7 @@ Tooltip.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    time: state.chart.chartTooltipTime
+    time: state.ui.chartTooltipTime
   };
 }
 

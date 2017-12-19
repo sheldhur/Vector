@@ -99,7 +99,7 @@ MagnetopauseMap.defaultProps = {
 function mapStateToProps(state) {
   return {
     data: state.magnetopause.data,
-    currentTime: state.chart.chartCurrentTime ? state.chart.chartCurrentTime : null,
+    currentTime: state.ui.chartCurrentTime ? state.ui.chartCurrentTime : null,
     antiAliasing: state.main.settings.appAntiAliasing,
   };
 }

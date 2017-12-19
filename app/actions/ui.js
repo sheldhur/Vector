@@ -27,7 +27,7 @@ export function setMapTooltipStation(payload) {
 export function shiftChartCurrentTime(value) {
   return (dispatch, getState) => {
     const {projectTimeSelected, projectTimeAvg} = getState().main.settings;
-    const {chartCurrentTime} = getState().chart;
+    const {chartCurrentTime} = getState().ui;
 
     const timeStart = new Date(projectTimeSelected[0]);
     const timeEnd = new Date(projectTimeSelected[1]);

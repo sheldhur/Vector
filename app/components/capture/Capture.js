@@ -90,7 +90,7 @@ Capture.childContextTypes  = {
 
 function mapStateToProps(state) {
   return {
-    currentTime: state.chart.chartCurrentTime,
+    currentTime: state.ui.chartCurrentTime,
     // time: state.main.settings.project.time.selected,
     timeStart: state.main.settings.projectTimeSelected[0],
     timeEnd: state.main.settings.projectTimeSelected[1],

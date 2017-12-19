@@ -41,7 +41,7 @@ TimeCursor.defaultProps = {};
 
 function mapStateToProps(state) {
   return {
-    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null
+    currentTime: state.ui.chartCurrentTime ? new Date(state.ui.chartCurrentTime) : null
   };
 }
 

@@ -60,7 +60,7 @@ Tooltip.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    station: state.chart.mapTooltipStation
+    station: state.ui.mapTooltipStation
   };
 }
 

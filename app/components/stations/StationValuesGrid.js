@@ -167,7 +167,7 @@ function mapStateToProps(state) {
   return {
     values: state.station.stationView.values,
     isLoading: state.station.stationView.isLoading,
-    currentTime: state.chart.chartCurrentTime,
+    currentTime: state.ui.chartCurrentTime,
   };
 }
 

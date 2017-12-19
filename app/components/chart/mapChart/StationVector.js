@@ -234,7 +234,7 @@ function mapStateToProps(state) {
     mapLayerZ: state.main.settings.projectMapLayerZ,
     // timeStart: state.main.settings.projectTimeSelectedStart,
     // currentTime: state.chart.chartCurrentTime,
-    isShowNames: state.chart.chartCurrentTime && state.chart.chartCurrentTime === state.main.settings.projectTimeSelected[0].valueOf()
+    isShowNames: state.ui.chartCurrentTime && state.ui.chartCurrentTime === state.main.settings.projectTimeSelected[0].valueOf()
   };
 }
 

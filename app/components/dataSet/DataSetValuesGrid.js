@@ -153,7 +153,7 @@ DataSetValuesGrid.defaultProps = {
 function mapStateToProps(state) {
   return {
     dataSetValues: state.dataSet.dataSetValues,
-    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null
+    currentTime: state.ui.chartCurrentTime ? new Date(state.ui.chartCurrentTime) : null
   };
 }
 

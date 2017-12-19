@@ -20,7 +20,7 @@ TitleCurrentTime.defaultProps = {};
 function mapStateToProps(state) {
   return {
     timeAvg: state.main.settings.projectTimeAvg,
-    currentTime: state.chart.chartCurrentTime ? new Date(state.chart.chartCurrentTime) : null,
+    currentTime: state.ui.chartCurrentTime ? new Date(state.ui.chartCurrentTime) : null,
   };
 }
 
