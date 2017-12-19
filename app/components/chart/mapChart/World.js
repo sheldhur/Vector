@@ -48,15 +48,18 @@ class World extends Component {
   prepareWorldMap = (props) => {
     let {worldData} = this.state;
     let {path, ocean} = props;
-    this.setState({
-      world: {
-        ocean: path(ocean),
-        land: path(topojson.feature(worldData, worldData.objects.land)),
-        country: path(topojson.mesh(worldData, worldData.objects.countries, (a, b) => {
-          return a !== b;
-        })),
-      }
-    });
+
+    if (worldData.objects) {
+      this.setState({
+        world: {
+          ocean: path(ocean),
+          land: path(topojson.feature(worldData, worldData.objects.land)),
+          country: path(topojson.mesh(worldData, worldData.objects.countries, (a, b) => {
+            return a !== b;
+          })),
+        }
+      });
+    }
   };
 
   render() {
