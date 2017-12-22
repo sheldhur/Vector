@@ -33,6 +33,7 @@ class StationValueActions extends Component {
 
   handlerActionSelect = (e) => {
     const {stationId} = this.props;
+    console.log(e.key);
     switch (e.key) {
       case STATION_DISABLE:
         this.props.stationActions.updateStation(stationId, {status: app.STATION_DISABLED});
@@ -66,16 +67,14 @@ class StationValueActions extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        {station.status === app.STATION_ENABLED ?
-          <Menu.Item key={STATION_DISABLE}>Disable station</Menu.Item>
+        {station.status == app.STATION_ENABLED ?
+          <Menu.Item key={STATION_DISABLE}><Icon type="close-square-o" /> Disable station</Menu.Item>
           :
-          <Menu.Item key={STATION_ENABLE}>Enable Station</Menu.Item>
+          <Menu.Item key={STATION_ENABLE}><Icon type="check-square-o" /> Enable station</Menu.Item>
         }
-        <Menu.SubMenu title={'Delete'}>
-          <Menu.Item key={STATION_DELETE}>Station</Menu.Item>
-          <Menu.Item key={STATION_DELETE_VALUES}>Values</Menu.Item>
-          <Menu.Item key={STATION_DELETE_ALL_VALUES}>All values</Menu.Item>
-        </Menu.SubMenu>
+        <Menu.Item key={STATION_DELETE_VALUES}><Icon type="bars" /> Delete selected values</Menu.Item>
+        <Menu.Item key={STATION_DELETE_ALL_VALUES}><Icon type="table" /> Clear station data</Menu.Item>
+        <Menu.Item key={STATION_DELETE}><Icon type="delete" /> Delete station</Menu.Item>
       </Menu>
     );
 
@@ -87,7 +86,7 @@ class StationValueActions extends Component {
         <Col span={8} style={{textAlign: 'center'}}>
           <Select
             value={stationId}
-            style={{ width: 150 }}
+            style={{width: 150}}
             placeholder="Select station"
             optionFilterProp="children"
             showSearch
@@ -99,7 +98,7 @@ class StationValueActions extends Component {
             })}
           </Select>
           {" "}
-          <Dropdown overlay={menuActions} placement="bottomLeft" trigger={['click']}>
+          <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
             <Button>Actions <Icon type="down"/></Button>
           </Dropdown>
         </Col>

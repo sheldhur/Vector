@@ -49,6 +49,7 @@ class StationsImport extends Component {
         this.props.stationActions.deleteSelectedStationsValues('stationId');
         break;
       case STATIONS_DELETE_ALL:
+        this.props.stationActions.clearStations();
         break;
       default:
         break;
@@ -82,9 +83,9 @@ class StationsImport extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={STATIONS_DELETE_SELECTED}>Delete selected stations</Menu.Item>
-        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable>Delete values selected stations</Menu.Item>
-        <Menu.Item key={STATIONS_DELETE_ALL}>Delete all stations</Menu.Item>
+        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected stations</Menu.Item>
+        <Menu.Item key={STATIONS_DELETE_SELECTED}><Icon type="bars" /> Delete selected stations</Menu.Item>
+        <Menu.Item key={STATIONS_DELETE_ALL}><Icon type="delete" /> Delete all stations</Menu.Item>
       </Menu>
     );
 
@@ -94,11 +95,11 @@ class StationsImport extends Component {
           <Icon type="reload"/> Update stations
         </Button>
         {" "}
-        <Dropdown overlay={menuFileType} placement="bottomLeft" trigger={['click']}>
+        <Dropdown overlay={menuFileType} placement="bottomCenter" trigger={['click']}>
           <Button>{titleImport} <Icon type="down"/></Button>
         </Dropdown>
         {" "}
-        <Dropdown overlay={menuActions} placement="bottomLeft" trigger={['click']}>
+        <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
           <Button>Actions <Icon type="down"/></Button>
         </Dropdown>
         <Modal

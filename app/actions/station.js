@@ -1,3 +1,4 @@
+import {hashHistory} from 'react-router';
 import childProcess from '../lib/childProcess';
 import {db} from '../database/dbConnect';
 import resourcePath from '../lib/resourcePath';
@@ -80,6 +81,13 @@ export function setStationViewProgress(payload) {
     type: types.STATION_VIEW_PROGRESS,
     payload,
   };
+}
+
+export function resetStation() {
+  return {
+    type: types.RESET,
+    syncState: true
+  }
 }
 
 export function getData(dispatch, getState, action, args) {
@@ -230,6 +238,7 @@ export function deleteStation(fields) {
       stationIds = stations.map((station) => station.id);
     }
 
+    openStationPage();
     await Promise.all([
       db.StationValue.destroy({where: {stationId: stationIds}}),
       db.Station.destroy({where: {id: stationIds}})
@@ -293,17 +302,49 @@ function _deleteStationValue(stationValueIds) {
 export function deleteSelectedStations() {
   return (dispatch, getState) => {
     const {gridSelectedRows} = getState().ui;
-    dispatch(deleteStation({
-      id: gridSelectedRows.map(item => item.id)
-    }))
+
+    if (gridSelectedRows && gridSelectedRows.length) {
+      dispatch(deleteStation({
+        id: gridSelectedRows.map(item => item.id)
+      }))
+    }
   }
 }
 
 export function deleteSelectedStationsValues(field) {
   return (dispatch, getState) => {
     const {gridSelectedRows} = getState().ui;
-    dispatch(deleteStationValue({
-      [field]: gridSelectedRows.map(item => item.id)
-    }))
+
+    if (gridSelectedRows && gridSelectedRows.length) {
+      dispatch(deleteStationValue({
+        [field]: gridSelectedRows.map(item => item.id)
+      }))
+    }
+  }
+}
+
+export function clearStations() {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+
+    await Promise.all([
+      db.Station.destroy({where: {}}),
+      db.StationValue.destroy({where: {}}),
+      db.sequelize.query('DELETE FROM sqlite_sequence WHERE name IN (:name)', {
+        replacements: {
+          name: [db.Station.getTableName(), db.StationValue.getTableName()]
+        },
+        type: db.sequelize.QueryTypes.DELETE
+      })
+    ]);
+
+    dispatch(resetStation());
+    dispatch(setLoading(false));
+  }
+}
+
+function openStationPage() {
+  if (hashHistory.getCurrentLocation().pathname !== '/station') {
+    hashHistory.push('/station');
   }
 }
