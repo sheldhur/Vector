@@ -29,7 +29,7 @@ class World extends Component {
   }
 
   loadWorldData = (scale) => {
-    let files = {
+    const files = {
       '1:50': 'world-50m.v1.json',
       '1:110': 'world-110m.v1.json',
     };
@@ -46,8 +46,8 @@ class World extends Component {
   };
 
   prepareWorldMap = (props) => {
-    let {worldData} = this.state;
-    let {path, ocean} = props;
+    const {worldData} = this.state;
+    const {path, ocean} = props;
 
     if (worldData.objects) {
       this.setState({

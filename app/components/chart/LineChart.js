@@ -330,15 +330,19 @@ class LineChart extends Component {
 
         if (isRenderLines) {
           linesGroup.lines.forEach((line, lineKey) => {
-            let path = d3.line()
-              .defined(d => d.y !== null)
-              .curve(this.getCurve(line.curve))
-              .x(d => scale.x(d.x))
-              .y(d => scale.y[linesGroupKey](d.y));
+            if (line.hasOwnProperty('points') && line.points != null && line.points.length) {
+              const path = d3.line()
+                .defined(d => d.y !== null)
+                .curve(this.getCurve(line.curve))
+                .x(d => scale.x(d.x))
+                .y(d => scale.y[linesGroupKey](d.y));
 
-            LineList.push(<Line key={'line-' + linesGroupKey + '-' + lineKey}
-                                path={path(line.points)}
-                                style={line.style}/>);
+              LineList.push(<Line
+                key={'line-' + linesGroupKey + '-' + lineKey}
+                path={path(line.points)}
+                style={line.style}
+              />);
+            }
           });
         }
       });
