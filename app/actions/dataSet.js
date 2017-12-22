@@ -1,3 +1,4 @@
+import {hashHistory} from 'react-router';
 import childProcess from '../lib/childProcess';
 import resourcePath from '../lib/resourcePath';
 import {db} from '../database/dbConnect';
@@ -33,7 +34,14 @@ export function setProgress(payload) {
 export function setData(payload) {
   return {
     type: types.DATA,
-    ...payload,
+    payload,
+    syncState: true
+  };
+}
+
+export function resetDataSet() {
+  return {
+    type: types.RESET,
     syncState: true
   };
 }
@@ -119,6 +127,8 @@ export function deleteDataSet(fields) {
 
     const dataSets = await db.DataSet.findAll({attributes: ['id'], where: fields});
     const dataSetIds = dataSets.map((dataSet) => dataSet.id);
+
+    openDataSetPage();
     await Promise.all([
       db.DataSetValue.destroy({where: {dataSetId: dataSetIds}}),
       db.DataSet.destroy({where: {id: dataSetIds}})
@@ -129,19 +139,25 @@ export function deleteDataSet(fields) {
   }
 }
 
-function _deleteDataSet(dataSetIds) {
+function _deleteDataSet(dataSetIds, dataKeys) {
   return (dispatch, getState) => {
     const {dataSets, dataSetValues} = getState().dataSet;
 
-    let data = {
+    const data = {
       dataSets: {...dataSets},
       dataSetValues: {...dataSetValues}
     };
 
+    if (!dataKeys) {
+      dataKeys = Object.keys(data);
+    } else if (!Array.isArray(dataKeys)) {
+      dataKeys = [dataKeys];
+    }
+
     dataSetIds.forEach((dataSetId) => {
-      for (let dataKey in data) {
+      dataKeys.forEach((dataKey) => {
         data[dataKey][dataSetId] = undefined;
-      }
+      });
     });
 
     dispatch(setData(data));
@@ -167,7 +183,7 @@ function _updateDataSetValue(id, fields) {
   return (dispatch, getState) => {
     const {dataSets, dataSetValues} = getState().dataSet;
 
-    let data = {
+    const data = {
       dataSets,
       dataSetValues: {...dataSetValues}
     };
@@ -181,5 +197,94 @@ function _updateDataSetValue(id, fields) {
     });
 
     dispatch(setData(data));
+  }
+}
+
+export function deleteDataSetValue(fields) {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+
+    let dataSetValuesIds;
+    if (!fields.id && !fields.dataSetId) {
+      const dataSetValues = await db.DataSetValue.findAll({attributes: ['id'], where: fields});
+      dataSetValuesIds = dataSetValues.map((dataSetValue) => dataSetValue.id);
+    }
+    await db.DataSetValue.destroy({where: fields});
+
+    if (fields.id) {
+      dispatch(_deleteDataSetValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
+    } else if (fields.dataSetId) {
+      dispatch(_deleteDataSet(Array.isArray(fields.dataSetId) ? fields.dataSetId : [fields.dataSetId], 'dataSetValues'));
+    } else {
+      dispatch(_deleteDataSetValue(dataSetValuesIds));
+    }
+
+    dispatch(setLoading(false));
+  }
+}
+
+function _deleteDataSetValue(dataSetValueIds) {
+  return (dispatch, getState) => {
+    const {dataSets, dataSetValues} = getState().dataSet;
+
+    const newDataSetValues = {};
+    for (const dataSetId in dataSetValues) {
+      newDataSetValues[dataSetId] = dataSetValues[dataSetId].filter(value => dataSetValueIds.indexOf(value.id) === -1);
+    }
+
+    dispatch(setData({
+      dataSets,
+      dataSetValues: newDataSetValues
+    }));
+  }
+}
+
+export function deleteSelectedDataSets() {
+  return (dispatch, getState) => {
+    const {gridSelectedRows} = getState().ui;
+
+    if (gridSelectedRows && gridSelectedRows.length) {
+      dispatch(deleteDataSet({
+        id: gridSelectedRows.map(item => item.id)
+      }))
+    }
+  }
+}
+
+export function deleteSelectedDataSetValues(field) {
+  return (dispatch, getState) => {
+    const {gridSelectedRows} = getState().ui;
+
+    if (gridSelectedRows && gridSelectedRows.length) {
+      dispatch(deleteDataSetValue({
+        [field]: gridSelectedRows.map(item => item.id)
+      }))
+    }
+  }
+}
+
+export function clearDataSets() {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+
+    await Promise.all([
+      db.DataSet.destroy({where: {}}),
+      db.DataSetValue.destroy({where: {}}),
+      db.sequelize.query('DELETE FROM sqlite_sequence WHERE name IN (:name)', {
+        replacements: {
+          name: [db.DataSet.getTableName(), db.DataSetValue.getTableName()]
+        },
+        type: db.sequelize.QueryTypes.DELETE
+      })
+    ]);
+
+    dispatch(resetDataSet());
+    dispatch(setLoading(false));
+  }
+}
+
+function openDataSetPage() {
+  if (hashHistory.getCurrentLocation().pathname !== '/dataSet') {
+    hashHistory.push('/dataSet');
   }
 }

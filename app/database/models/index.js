@@ -1,13 +1,13 @@
-import dataSet from './dataSet';
-import dataSetValue from './dataSetValue';
-import project from './project';
-import station from './station';
-import stationValue from './stationValue';
+import DataSet from './dataSet';
+import DataSetValue from './dataSetValue';
+import Project from './project';
+import Station from './station';
+import StationValue from './stationValue';
 
 export default {
-  dataSet,
-  dataSetValue,
-  project,
-  station,
-  stationValue
+  DataSet,
+  DataSetValue,
+  Project,
+  Station,
+  StationValue
 }

@@ -13,8 +13,11 @@ const {dialog, BrowserWindow} = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 const currentWindow = remote.getCurrentWindow();
 
+const DATASET_DELETE_ALL = 'DATASET_DELETE_ALL';
+const DATASET_DELETE_SELECTED = 'DATASET_DELETE_SELECTED';
+const DATASET_VALUES_DELETE_SELECTED = 'DATASET_VALUES_DELETE_SELECTED';
 
-class DataSetOptions extends Component {
+class DataSetImport extends Component {
   fileTypes = app.IMPORT_TYPE_DATA_SET;
 
   handlerDropdownSelect = (e) => {
@@ -36,6 +39,22 @@ class DataSetOptions extends Component {
   handlerCancelClick = (e) => {
     this.props.dataSetImportActions.closeModal();
     this.props.dataSetActions.getData();
+  };
+
+  handlerActionSelect = (e) => {
+    switch (e.key) {
+      case DATASET_DELETE_SELECTED:
+        this.props.dataSetActions.deleteSelectedDataSets();
+        break;
+      case DATASET_VALUES_DELETE_SELECTED:
+        this.props.dataSetActions.deleteSelectedDataSetValues('dataSetId');
+        break;
+      case DATASET_DELETE_ALL:
+        this.props.dataSetActions.clearDataSets();
+        break;
+      default:
+        break;
+    }
   };
 
   setSystemProgressBar = (value) => {
@@ -63,11 +82,24 @@ class DataSetOptions extends Component {
       <span><Icon type="file-add"/> Import data</span>
     );
 
+    const menuActions = (
+      <Menu onClick={this.handlerActionSelect} selectable={false}>
+        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected data sets</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected  data sets</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all data sets</Menu.Item>
+      </Menu>
+    );
+
     return (
       <div className="dataset-import">
-        <Button onClick={() => {this.props.dataSetActions.getData()}}><Icon type="reload" /> Update chart</Button>{" "}
-        <Dropdown overlay={menuFileType} placement="bottomLeft" trigger={['click']}>
+        <Button onClick={this.props.dataSetActions.getData}>
+          <Icon type="reload" /> Update chart
+        </Button>{" "}
+        <Dropdown overlay={menuFileType} placement="bottomCenter" trigger={['click']}>
           <Button>{titleImport} <Icon type="down" /></Button>
+        </Dropdown>{" "}
+        <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
+          <Button>Actions <Icon type="down"/></Button>
         </Dropdown>
         <Modal
           title={titleImport}
@@ -102,4 +134,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetOptions);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSetImport);

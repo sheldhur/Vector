@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Icon, Popconfirm} from 'antd';
 import Grid from '../grid/Grid';
-import * as mainActions from '../../actions/main';
+import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
@@ -152,6 +152,13 @@ class DataSetGrid extends Component {
     const {dataSets, isLoading} = this.props.data;
     const data = dataSets ? Object.values(dataSets).filter((dataSet) => dataSet !== undefined) : [];
 
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.props.uiActions.setGridSelectedRows(selectedRows);
+      },
+      selections: true
+    };
+
     return (
       <div className="dataset-grid" style={{height: this.state.availableSize}}>
         <Grid
@@ -160,6 +167,7 @@ class DataSetGrid extends Component {
           columns={columns}
           data={data}
           loading={isLoading}
+          rowSelection={rowSelection}
           pagination={{pageSize: this.state.pageSize }}
           size="x-small"
           bordered={true}
@@ -190,7 +198,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    mainActions: bindActionCreators(mainActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
     dataSetActions: bindActionCreators(dataSetActions, dispatch)
   };
 }

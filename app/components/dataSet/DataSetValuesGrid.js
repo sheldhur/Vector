@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import moment from 'moment';
+import {Icon, Popconfirm, Table} from 'antd';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
@@ -115,12 +116,36 @@ class DataSetValuesGrid extends Component {
         return app.VALUES_CONVERT_FORMAT[text];
       },
       width: 80
+    }, {
+      title: '',
+      dataIndex: 'delete',
+      width: 30,
+      render: (text, record, index) => (
+        <Popconfirm
+          placement="left"
+          title="Are you sure delete this station?"
+          onConfirm={() => {
+            this.props.dataSetActions.deleteDataSetValue({id: record.id})
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          <a href="#"><Icon type="delete"/></a>
+        </Popconfirm>
+      )
     }];
 
 
     const {dataSetValues, dataSetId, isLoading, currentTime} = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
     const data = dataSetValues[dataSetId] || [];
+
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.props.uiActions.setGridSelectedRows(selectedRows);
+      },
+      selections: true
+    };
 
     return (
       <div style={{height: this.state.availableSize}}>
@@ -131,6 +156,7 @@ class DataSetValuesGrid extends Component {
           columns={columns}
           data={data}
           loading={isLoading}
+          rowSelection={rowSelection}
           pagination={{pageSize: this.state.pageSize, showQuickJumper: true, current: this.state.pageCurrent, onChange: this.handlerPageChange}}
           size="x-small"
           bordered={true}

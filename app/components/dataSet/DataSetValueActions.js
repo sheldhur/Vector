@@ -11,7 +11,8 @@ import * as app from '../../constants/app';
 const DATASET_DISABLE = 'DATASET_DISABLE';
 const DATASET_ENABLE = 'DATASET_ENABLE';
 const DATASET_DELETE = 'DATASET_DELETE';
-const DATASET_VALUES_DELETE = 'DATASET_VALUES_DELETE';
+const DATASET_DELETE_VALUES = 'DATASET_DELETE_VALUES';
+const DATASET_DELETE_ALL_VALUES= 'DATASET_DELETE_ALL_VALUES';
 
 class DataSetValueActions extends Component {
 
@@ -20,18 +21,22 @@ class DataSetValueActions extends Component {
   };
 
   handlerActionSelect = (e) => {
-    const {stationId} = this.props;
+    const {dataSetId} = this.props;
     switch (e.key) {
       case DATASET_DISABLE:
-        this.props.dataSetActions.updateStation(stationId, {status: app.STATION_DISABLED});
+        this.props.dataSetActions.updateDataSet(dataSetId, {status: app.STATION_DISABLED});
         break;
       case DATASET_ENABLE:
-        this.props.dataSetActions.updateStation(stationId, {status: app.STATION_ENABLED});
+        this.props.dataSetActions.updateDataSet(dataSetId, {status: app.STATION_ENABLED});
         break;
       case DATASET_DELETE:
-        this.props.dataSetActions.deleteStation({id: stationId});
+        this.props.dataSetActions.deleteDataSet({id: dataSetId});
         break;
-      case DATASET_VALUES_DELETE:
+      case DATASET_DELETE_VALUES:
+        this.props.dataSetActions.deleteSelectedDataSetValues('id');
+        break;
+      case DATASET_DELETE_ALL_VALUES:
+        this.props.dataSetActions.deleteDataSetValue({dataSetId});
         break;
       default:
         break;
@@ -50,15 +55,14 @@ class DataSetValueActions extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        {dataSet.status === app.STATION_ENABLED ?
-          <Menu.Item key={DATASET_DISABLE}>Disable data series</Menu.Item>
+        {dataSet.status == app.STATION_ENABLED ?
+          <Menu.Item key={DATASET_DISABLE}><Icon type="close-square-o" /> Disable data set</Menu.Item>
           :
-          <Menu.Item key={DATASET_ENABLE}>Enable data series</Menu.Item>
+          <Menu.Item key={DATASET_ENABLE}><Icon type="check-square-o" /> Enable data set</Menu.Item>
         }
-        <Menu.SubMenu title={'Delete'}>
-          <Menu.Item key={DATASET_DELETE}>Data series</Menu.Item>
-          <Menu.Item key={DATASET_VALUES_DELETE} disabled>Values</Menu.Item>
-        </Menu.SubMenu>
+        <Menu.Item key={DATASET_DELETE_VALUES}><Icon type="bars" /> Delete selected values</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_ALL_VALUES}><Icon type="table" /> Clear data set</Menu.Item>
+        <Menu.Item key={DATASET_DELETE}><Icon type="delete" /> Delete data set</Menu.Item>
       </Menu>
     );
 
@@ -82,7 +86,7 @@ class DataSetValueActions extends Component {
             })}
           </Select>
           {" "}
-          <Dropdown overlay={menuActions} placement="bottomLeft" trigger={['click']}>
+          <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
             <Button>Actions <Icon type="down"/></Button>
           </Dropdown>
         </Col>
