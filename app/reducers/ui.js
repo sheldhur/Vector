@@ -5,6 +5,13 @@ const initialState = {
   chartTooltipTime: null,
   mapTooltipStation: null,
   gridSelectedRows: [],
+  importShowModal: false,
+  importCurrentFile: null,
+  importProgress: {
+    total: 0,
+    current: 0,
+  },
+  importLog: [],
 };
 
 export default function chart(state = initialState, action) {
@@ -17,6 +24,26 @@ export default function chart(state = initialState, action) {
       return {...state, mapTooltipStation: action.payload};
     case types.GRID_SELECTED_ROWS:
       return {...state, gridSelectedRows: action.payload || []};
+    case types.IMPORT_SHOW_MODAL:
+      if (!action.payload) {
+        return {
+          ...state,
+          importShowModal: false,
+          importCurrentFile: null,
+          importProgress: {
+            total: 0,
+            current: 0,
+          },
+          importLog: []
+        }
+      }
+      return {...state, importShowModal: action.payload};
+    case types.IMPORT_CURRENT_FILE:
+      return {...state, importCurrentFile: action.payload};
+    case types.IMPORT_PROGRESS:
+      return {...state, importProgress: action.payload || {...initialState.progressBar}};
+    case types.IMPORT_LOG:
+      return {...state, importLog: action.payload ? [...state.importLog, action.payload] : []};
     default:
       return state;
   }

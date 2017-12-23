@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Row} from 'antd';
-import DataSetImport from './DataSetImport';
+import DataSetImport from './DataSetActions';
 import DataSetChart from './DataSetChart';
 import DataSetGrid from './DataSetGrid';
 

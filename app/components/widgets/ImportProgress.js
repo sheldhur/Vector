@@ -90,8 +90,8 @@ const ImportLogList = (props) => {
 const ImportProgress = (props) => {
   return (
     <div className={'import-progress' + (props.className ? ` ${props.className}` : '')}>
-      <ImportProgressBar currentFile={props.currentFile} progressBar={props.progressBar}/>
-      {props.importLog && props.importLog.length > 0 && <ImportLogList data={props.importLog}/>}
+      <ImportProgressBar currentFile={props.currentFile} progressBar={props.progress}/>
+      {props.log && props.log.length > 0 && <ImportLogList data={props.log}/>}
     </div>
   )
 };

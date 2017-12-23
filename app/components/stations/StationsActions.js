@@ -6,7 +6,7 @@ import {remote} from 'electron';
 import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
 import * as stationActions from '../../actions/station';
-import * as stationImportActions from '../../actions/stationImport';
+import * as uiActions from '../../actions/ui';
 import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
@@ -17,7 +17,7 @@ const STATIONS_DELETE_ALL = 'STATIONS_DELETE_ALL';
 const STATIONS_DELETE_SELECTED = 'STATIONS_DELETE_SELECTED';
 const STATIONS_VALUES_DELETE_SELECTED = 'STATIONS_VALUES_DELETE_SELECTED';
 
-class StationsImport extends Component {
+class StationsActions extends Component {
   fileTypes = app.IMPORT_TYPE_STATION;
 
   handlerDropdownSelect = (e) => {
@@ -30,14 +30,26 @@ class StationsImport extends Component {
       buttonLabel: 'Import ' + fileType + ' data',
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
-        this.props.stationImportActions.openModal();
-        this.props.stationImportActions.importStations(filePaths, fileType);
+        this.props.uiActions.importStations(filePaths, fileType);
       }
     });
   };
 
   handlerCancelClick = (e) => {
-    this.props.stationImportActions.closeModal();
+    if (this.props.progress.current < 100 || this.props.progress.total < 100) {
+      Modal.confirm({
+        title: 'Abort import stations',
+        content: 'Are you sure want abort import stations?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk: () => {
+          this.props.uiActions.importCloseModal();
+        },
+      });
+    } else {
+      this.props.uiActions.importCloseModal();
+    }
   };
 
   handlerActionSelect = (e) => {
@@ -92,9 +104,9 @@ class StationsImport extends Component {
   };
 
   render() {
-    const {progressBar, showModal, currentFile, importLog} = this.props.stationImport;
+    const {progress, showModal, currentFile, log} = this.props;
 
-    this.setSystemProgressBar(progressBar.total);
+    this.setSystemProgressBar(progress.total);
 
     const menuFileType = (
       <Menu onClick={this.handlerDropdownSelect} selectable={false}>
@@ -134,15 +146,14 @@ class StationsImport extends Component {
           title={titleImport}
           visible={showModal}
           onCancel={this.handlerCancelClick}
-          maskClosable={false}
           footer={[
             <Button key="cancel" size="large" onClick={this.handlerCancelClick}>Cancel</Button>
           ]}
         >
           <ImportProgress
-            progressBar={progressBar}
+            progress={progress}
             currentFile={currentFile}
-            importLog={importLog}
+            log={log}
           />
         </Modal>
       </div>
@@ -152,16 +163,18 @@ class StationsImport extends Component {
 
 function mapStateToProps(state) {
   return {
-    stationImport: state.stationImport,
-    // isLoading: state.stations.isLoading
+    showModal: state.ui.importShowModal,
+    currentFile: state.ui.importCurrentFile,
+    progress: state.ui.importProgress,
+    log: state.ui.importLog,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    stationImportActions: bindActionCreators(stationImportActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
     stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StationsImport);
+export default connect(mapStateToProps, mapDispatchToProps)(StationsActions);

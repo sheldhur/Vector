@@ -6,7 +6,7 @@ import {remote} from 'electron';
 import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
 import {ImportProgress} from '../widgets/ImportProgress';
 import * as dataSetActions from '../../actions/dataSet';
-import * as dataSetImportActions from '../../actions/dataSetImport';
+import * as uiActions from '../../actions/ui';
 import * as app from '../../constants/app';
 
 const {dialog, BrowserWindow} = remote;
@@ -17,7 +17,7 @@ const DATASET_DELETE_ALL = 'DATASET_DELETE_ALL';
 const DATASET_DELETE_SELECTED = 'DATASET_DELETE_SELECTED';
 const DATASET_VALUES_DELETE_SELECTED = 'DATASET_VALUES_DELETE_SELECTED';
 
-class DataSetImport extends Component {
+class DataSetActions extends Component {
   fileTypes = app.IMPORT_TYPE_DATA_SET;
 
   handlerDropdownSelect = (e) => {
@@ -30,15 +30,28 @@ class DataSetImport extends Component {
       buttonLabel: 'Import ' + fileType + ' data',
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
-        this.props.dataSetImportActions.openModal();
-        this.props.dataSetImportActions.importDataSet(filePaths, fileType);
+        this.props.uiActions.importDataSets(filePaths, fileType);
       }
     });
   };
 
   handlerCancelClick = (e) => {
-    this.props.dataSetImportActions.closeModal();
-    this.props.dataSetActions.getData();
+    if (this.props.progress.current < 100 || this.props.progress.total < 100) {
+      Modal.confirm({
+        title: 'Abort import stations',
+        content: 'Are you sure want abort import stations?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk: () => {
+          this.props.uiActions.importCloseModal();
+          this.props.dataSetActions.getData();
+        },
+      });
+    } else {
+      this.props.uiActions.importCloseModal();
+      this.props.dataSetActions.getData();
+    }
   };
 
   handlerActionSelect = (e) => {
@@ -93,9 +106,9 @@ class DataSetImport extends Component {
   };
 
   render() {
-    const {progressBar, showModal, currentFile, importLog} = this.props.dataSetImport;
+    const {progress, showModal, currentFile, log} = this.props;
 
-    this.setSystemProgressBar(progressBar.total);
+    this.setSystemProgressBar(progress.total);
 
     const menuFileType = (
       <Menu onClick={this.handlerDropdownSelect} selectable={false}>
@@ -132,15 +145,14 @@ class DataSetImport extends Component {
           title={titleImport}
           visible={showModal}
           onCancel={this.handlerCancelClick}
-          maskClosable={false}
           footer={[
             <Button key="cancel" size="large" onClick={this.handlerCancelClick}>Cancel</Button>
           ]}
         >
           <ImportProgress
-            progressBar={progressBar}
+            progress={progress}
             currentFile={currentFile}
-            importLog={importLog}
+            log={log}
           />
         </Modal>
       </div>
@@ -150,15 +162,18 @@ class DataSetImport extends Component {
 
 function mapStateToProps(state) {
   return {
-    dataSetImport: state.dataSetImport
+    showModal: state.ui.importShowModal,
+    currentFile: state.ui.importCurrentFile,
+    progress: state.ui.importProgress,
+    log: state.ui.importLog,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    dataSetImportActions: bindActionCreators(dataSetImportActions, dispatch),
+    uiActions: bindActionCreators(uiActions, dispatch),
     dataSetActions: bindActionCreators(dataSetActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetImport);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSetActions);
