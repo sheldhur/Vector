@@ -124,9 +124,9 @@ function prepareFormatedValues(rows, time, method = VALUES_RAW) {
               case VALUES_MIN:
                 return Math.min(...comp);
               case VALUES_AVG:
-                return mathAvg(...comp);
+                return mathAvg(comp);
               default:
-                return mathAvg(...comp);
+                return mathAvg(comp);
             }
           } else {
             return null;
