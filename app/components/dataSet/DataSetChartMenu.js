@@ -6,7 +6,7 @@ import windowManager from '../../lib/windowManager';
 import {WINDOW_DATASET, WINDOW_MAGNETOPAUSE} from '../../constants/app';
 import * as fs from 'fs';
 
-const {dialog} = remote;
+const {dialog, Menu} = remote;
 const currentWindow = remote.getCurrentWindow();
 
 function openWindowDataSet(id) {
@@ -57,7 +57,6 @@ function openWindowMagnetopause() {
 }
 
 export default function (props) {
-  const {Menu} = remote;
   const menu = Menu.buildFromTemplate([
     {
       label: 'Data series',

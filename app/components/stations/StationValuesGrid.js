@@ -1,4 +1,5 @@
 // @flow
+import {remote} from 'electron';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -6,15 +7,19 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Icon, Popconfirm} from 'antd';
 import moment from 'moment';
+import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
+const {Menu} = remote;
+
+
 class StationGrid extends Component {
 
   state = {
-    availableSize: 'auto',
+    availableHeight: 'auto',
     pageSize: 5,
     pageCurrent: null,
   };
@@ -29,7 +34,7 @@ class StationGrid extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     if (!nextProps.isLoading) {
-      if (this.state.availableSize === 'auto') {
+      if (this.state.availableHeight === 'auto') {
         setTimeout(() => {
           this.calcPageSize();
         }, 100);
@@ -55,19 +60,18 @@ class StationGrid extends Component {
 
   //TODO: прибить пагинатор к низу
   calcPageSize = () => {
-    let grid = ReactDOM.findDOMNode(this.refs.grid);
-    let pagination = grid.querySelector('.ant-pagination');
+    const grid = ReactDOM.findDOMNode(this.refs.grid);
+    const pagination = grid.querySelector('.ant-pagination');
 
-    let theadHeight = grid.querySelector('thead').clientHeight || 0;
-    let paginationHeight = pagination ? pagination.clientHeight : 0;
-    let row = grid.querySelector('tbody > tr');
-    let availableSize = window.innerHeight - grid.getBoundingClientRect().top;
+    const theadHeight = grid.querySelector('thead').clientHeight || 0;
+    const paginationHeight = pagination ? pagination.clientHeight : 0;
+    const row = grid.querySelector('tbody > tr');
+    const rowHeight = row ? row.offsetHeight : 28;
+    const availableHeight = window.innerHeight - grid.getBoundingClientRect().top;
 
-    if (row) {
-      let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / row.offsetHeight);
-      if (pageSize > 0) {
-        this.setState({availableSize, pageSize});
-      }
+    const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
+    if (pageSize > 0) {
+      this.setState({availableHeight, pageSize});
     }
   };
 
@@ -75,12 +79,34 @@ class StationGrid extends Component {
     this.setState({pageCurrent: page});
   };
 
-  handleCellChange = (field, id, value, afterAction) => {
+  handlerCellChange = (field, id, value, afterAction) => {
     console.log(id, {[field]: value});
     if (['compX', 'compY', 'compZ'].indexOf(field) !== -1 && value.trim() === '') {
       value = null;
     }
     this.props.stationActions.updateStationValue(id, {[field]: value}, afterAction);
+  };
+
+  handlerRowOnContextMenu = (record, index, e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      return Menu.buildFromTemplate([
+        {
+          label: 'Clear values',
+          icon: resourcePath('./assets/icons/eraser.png'),
+          click: () => this.props.stationActions.updateStationValue(record.id, {
+            compX: null,
+            compY: null,
+            compZ: null
+          })
+        }, {
+          label: 'Delete values',
+          icon: resourcePath('./assets/icons/table-delete-row.png'),
+          click: () => this.props.stationActions.deleteStationValue({id: record.id})
+        }
+      ]).popup(remote.getCurrentWindow());
+    }
   };
 
   render() {
@@ -90,17 +116,17 @@ class StationGrid extends Component {
       dataIndex: 'time',
       hasFilter: true,
       hasSorter: true,
-      onCellClick: (record, event) => {
-        this.props.uiActions.setChartCurrentTime(new Date(record.time));
-      }
+      onCell: (record) => ({
+        onClick: () => this.props.uiActions.setChartCurrentTime(new Date(record.time))
+      }),
     }, {
       title: 'X',
       dataIndex: 'compX',
       hasFilter: true,
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('compX', record.id, value, afterAction)
-        }/>),
+        (value, afterAction) => this.handlerCellChange('compX', record.id, value, afterAction)
+      }/>),
       width: compWidth
     }, {
       title: 'Y',
@@ -108,8 +134,8 @@ class StationGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('compY', record.id, value, afterAction)
-        }/>),
+        (value, afterAction) => this.handlerCellChange('compY', record.id, value, afterAction)
+      }/>),
       width: compWidth
     }, {
       title: 'Z',
@@ -117,8 +143,8 @@ class StationGrid extends Component {
       hasFilter: true,
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('compZ', record.id, value, afterAction)
-        }/>),
+        (value, afterAction) => this.handlerCellChange('compZ', record.id, value, afterAction)
+      }/>),
       width: compWidth
     }, {
       title: '',
@@ -129,23 +155,6 @@ class StationGrid extends Component {
         return app.VALUES_CONVERT_FORMAT[text];
       },
       width: 80
-    }, {
-      title: '',
-      dataIndex: 'delete',
-      width: 30,
-      render: (text, record, index) => (
-        <Popconfirm
-          placement="left"
-          title="Are you sure delete this station?"
-          onConfirm={() => {
-            this.props.stationActions.deleteStationValue({id: record.id})
-          }}
-          okText="Yes"
-          cancelText="No"
-        >
-          <a href="#"><Icon type="delete"/></a>
-        </Popconfirm>
-      )
     }];
 
     const {values, isLoading, currentTime} = this.props;
@@ -160,18 +169,28 @@ class StationGrid extends Component {
     };
 
     return (
-      <div style={{height: this.state.availableSize}}>
+      <div style={{height: this.state.availableHeight}}>
         <Grid
-          rowClassName = {(record) => {return record.time === currentTimeStr ? 'select-row' : ''}}
+          rowClassName={(record) => {
+            return record.time === currentTimeStr ? 'select-row' : ''
+          }}
           ref="grid"
           rowKey="id"
           columns={columns}
           data={data}
           loading={isLoading}
           rowSelection={rowSelection}
-          pagination={{pageSize: this.state.pageSize, showQuickJumper: true, current: this.state.pageCurrent, onChange: this.handlerPageChange}}
+          pagination={{
+            pageSize: this.state.pageSize,
+            showQuickJumper: true,
+            current: this.state.pageCurrent,
+            onChange: this.handlerPageChange
+          }}
           size="x-small"
           bordered={true}
+          onRow={(record, index) => ({
+            onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
+          })}
         />
       </div>
     );

@@ -68,12 +68,12 @@ class StationValueActions extends Component {
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
         {station.status == app.STATION_ENABLED ?
-          <Menu.Item key={STATION_DISABLE}><Icon type="close-square-o" /> Disable station</Menu.Item>
+          <Menu.Item key={STATION_DISABLE}><Icon type="close-square-o" /> Disable</Menu.Item>
           :
-          <Menu.Item key={STATION_ENABLE}><Icon type="check-square-o" /> Enable station</Menu.Item>
+          <Menu.Item key={STATION_ENABLE}><Icon type="check-square-o" /> Enable</Menu.Item>
         }
         <Menu.Item key={STATION_DELETE_VALUES}><Icon type="bars" /> Delete selected values</Menu.Item>
-        <Menu.Item key={STATION_DELETE_ALL_VALUES}><Icon type="table" /> Clear station data</Menu.Item>
+        <Menu.Item key={STATION_DELETE_ALL_VALUES}><Icon type="table" /> Delete all values</Menu.Item>
         <Menu.Item key={STATION_DELETE}><Icon type="delete" /> Delete station</Menu.Item>
       </Menu>
     );

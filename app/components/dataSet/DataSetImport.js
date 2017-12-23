@@ -84,9 +84,9 @@ class DataSetImport extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected data sets</Menu.Item>
-        <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected  data sets</Menu.Item>
-        <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all data sets</Menu.Item>
+        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
     );
 

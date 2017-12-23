@@ -56,12 +56,12 @@ class DataSetValueActions extends Component {
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
         {dataSet.status == app.STATION_ENABLED ?
-          <Menu.Item key={DATASET_DISABLE}><Icon type="close-square-o" /> Disable data set</Menu.Item>
+          <Menu.Item key={DATASET_DISABLE}><Icon type="close-square-o" /> Disable</Menu.Item>
           :
-          <Menu.Item key={DATASET_ENABLE}><Icon type="check-square-o" /> Enable data set</Menu.Item>
+          <Menu.Item key={DATASET_ENABLE}><Icon type="check-square-o" /> Enable</Menu.Item>
         }
         <Menu.Item key={DATASET_DELETE_VALUES}><Icon type="bars" /> Delete selected values</Menu.Item>
-        <Menu.Item key={DATASET_DELETE_ALL_VALUES}><Icon type="table" /> Clear data set</Menu.Item>
+        <Menu.Item key={DATASET_DELETE_ALL_VALUES}><Icon type="table" /> Delete all values</Menu.Item>
         <Menu.Item key={DATASET_DELETE}><Icon type="delete" /> Delete data set</Menu.Item>
       </Menu>
     );

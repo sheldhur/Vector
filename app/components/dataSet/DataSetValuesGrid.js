@@ -1,4 +1,5 @@
 // @flow
+import {remote} from 'electron';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -6,16 +7,20 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import moment from 'moment';
-import {Icon, Popconfirm, Table} from 'antd';
+import {Modal} from 'antd';
+import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
+const {Menu} = remote;
+
+
 class DataSetValuesGrid extends Component {
 
   state = {
-    availableSize: 'auto',
+    availableHeight: 'auto',
     pageSize: 5,
     pageCurrent: null,
   };
@@ -64,19 +69,18 @@ class DataSetValuesGrid extends Component {
 
   //TODO: прибить пагинатор к низу
   calcPageSize = () => {
-    let grid = ReactDOM.findDOMNode(this.refs.grid);
-    let pagination = grid.querySelector('.ant-pagination');
+    const grid = ReactDOM.findDOMNode(this.refs.grid);
+    const pagination = grid.querySelector('.ant-pagination');
 
-    let theadHeight = grid.querySelector('thead').clientHeight || 0;
-    let paginationHeight = pagination ? pagination.clientHeight : 0;
-    let row = grid.querySelector('tbody > tr');
-    let availableSize = window.innerHeight - grid.getBoundingClientRect().top;
+    const theadHeight = grid.querySelector('thead').clientHeight || 0;
+    const paginationHeight = pagination ? pagination.clientHeight : 0;
+    const row = grid.querySelector('tbody > tr');
+    const rowHeight = row ? row.offsetHeight : 28;
+    const availableSize = window.innerHeight - grid.getBoundingClientRect().top;
 
-    if (row) {
-      let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / row.offsetHeight);
-      if (pageSize > 0) {
-        this.setState({availableSize, pageSize});
-      }
+    const pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
+    if (pageSize > 0) {
+      this.setState({availableSize, pageSize});
     }
   };
 
@@ -84,27 +88,38 @@ class DataSetValuesGrid extends Component {
     this.setState({pageCurrent: page});
   };
 
-  handleCellChange = (field, id, value, afterAction) => {
-    console.log({[field]: value});
+  handlerCellChange = (field, id, value, afterAction) => {
     this.props.dataSetActions.updateDataSetValue(id, {[field]: value}, afterAction);
   };
 
+  handlerRowOnContextMenu = (record, index, e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      return Menu.buildFromTemplate([{
+        label: 'Delete value',
+        icon: resourcePath('./assets/icons/table-delete-row.png'),
+        click: () => this.props.dataSetActions.deleteDataSetValue({id: record.id})
+      }]).popup(remote.getCurrentWindow());
+    }
+  };
+
   render() {
-    let columns = [{
+    const columns = [{
       title: 'Time',
       dataIndex: 'time',
       hasFilter: true,
       hasSorter: true,
-      onCellClick: (record, event) => {
-        this.props.uiActions.setChartCurrentTime(new Date(record.time));
-      }
+      onCell: (record) => ({
+        onClick: () => this.props.uiActions.setChartCurrentTime(new Date(record.time))
+      }),
     }, {
       title: 'Value',
       dataIndex: 'value',
       hasFilter: true,
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-        (value, afterAction) => this.handleCellChange('value', record.id, value, afterAction)
+        (value, afterAction) => this.handlerCellChange('value', record.id, value, afterAction)
       }/>),
       width: 175
     }, {
@@ -116,23 +131,6 @@ class DataSetValuesGrid extends Component {
         return app.VALUES_CONVERT_FORMAT[text];
       },
       width: 80
-    }, {
-      title: '',
-      dataIndex: 'delete',
-      width: 30,
-      render: (text, record, index) => (
-        <Popconfirm
-          placement="left"
-          title="Are you sure delete this station?"
-          onConfirm={() => {
-            this.props.dataSetActions.deleteDataSetValue({id: record.id})
-          }}
-          okText="Yes"
-          cancelText="No"
-        >
-          <a href="#"><Icon type="delete"/></a>
-        </Popconfirm>
-      )
     }];
 
 
@@ -150,16 +148,26 @@ class DataSetValuesGrid extends Component {
     return (
       <div style={{height: this.state.availableSize}}>
         <Grid
-          rowClassName = {(record) => {return record.time === currentTimeStr ? 'select-row' : ''}}
+          rowClassName={(record) => {
+            return record.time === currentTimeStr ? 'select-row' : ''
+          }}
           ref="grid"
           rowKey="id"
           columns={columns}
           data={data}
           loading={isLoading}
           rowSelection={rowSelection}
-          pagination={{pageSize: this.state.pageSize, showQuickJumper: true, current: this.state.pageCurrent, onChange: this.handlerPageChange}}
+          pagination={{
+            pageSize: this.state.pageSize,
+            showQuickJumper: true,
+            current: this.state.pageCurrent,
+            onChange: this.handlerPageChange
+          }}
           size="x-small"
           bordered={true}
+          onRow={(record, index) => ({
+            onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
+          })}
         />
       </div>
     );

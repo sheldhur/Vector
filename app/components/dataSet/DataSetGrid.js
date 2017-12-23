@@ -1,20 +1,25 @@
 // @flow
+import {remote} from 'electron';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import {Icon, Popconfirm} from 'antd';
+import {Modal, Icon} from 'antd';
+import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
+const {Menu} = remote;
+
+
 class DataSetGrid extends Component {
 
   state = {
-    availableSize: 'auto',
+    availableHeight: 'auto',
     pageSize: 5
   };
 
@@ -37,36 +42,74 @@ class DataSetGrid extends Component {
   };
 
   calcPageSize = () => {
-    let grid = ReactDOM.findDOMNode(this.refs.grid);
-    let pagination = grid.querySelector('.ant-pagination');
+    const grid = ReactDOM.findDOMNode(this.refs.grid);
+    const pagination = grid.querySelector('.ant-pagination');
 
-    let theadHeight = grid.querySelector('thead').clientHeight || 0;
-    let paginationHeight = pagination ? pagination.clientHeight : 0;
-    let row = grid.querySelector('tbody > tr');
-    let availableSize = window.innerHeight - grid.getBoundingClientRect().top;
+    const theadHeight = grid.querySelector('thead').clientHeight || 0;
+    const paginationHeight = pagination ? pagination.clientHeight : 0;
+    const row = grid.querySelector('tbody > tr');
+    const rowHeight = row ? row.offsetHeight : 28;
+    const availableHeight = window.innerHeight - grid.getBoundingClientRect().top;
 
-    if (row) {
-      let pageSize = Math.floor((availableSize - theadHeight - (paginationHeight + 16 * 2)) / row.offsetHeight);
-      if (pageSize > 0) {
-        this.setState({availableSize, pageSize});
-      }
+    const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
+    if (pageSize > 0) {
+      this.setState({availableHeight, pageSize});
     }
   };
 
-  handleCellChange = (field, id, value, afterAction) => {
+  handlerCellChange = (field, id, value, afterAction) => {
     this.props.dataSetActions.updateDataSet(id, {[field]: value}, afterAction);
   };
 
+  handlerRowOnContextMenu = (record, index, e) => {
+    if (!e.ctrlKey) {
+      e.preventDefault();
+
+      return Menu.buildFromTemplate([
+        {
+          label: 'Delete',
+          icon: resourcePath('./assets/icons/blue-folder--minus.png'),
+          click: () => {
+            Modal.confirm({
+              title: 'Delete data set',
+              content: 'Are you sure have delete this data set?',
+              okText: 'Yes',
+              okType: 'danger',
+              cancelText: 'No',
+              onOk: () => {
+                this.props.dataSetActions.deleteDataSet({id: record.id})
+              },
+            });
+          }
+        }, {
+          label: 'Clear values',
+          icon: resourcePath('./assets/icons/eraser.png'),
+          click: () => {
+            Modal.confirm({
+              title: 'Clear data set values',
+              content: 'Are you sure have clear this data set?',
+              okText: 'Yes',
+              okType: 'danger',
+              cancelText: 'No',
+              onOk: () => {
+                this.props.dataSetActions.deleteDataSetValue({stationId: record.id})
+              },
+            });
+          }
+        }
+      ]).popup(remote.getCurrentWindow());
+    }
+  };
+
   render() {
-    let optionsAxisY = app.DATA_SET_AXIS_Y.map((item) => {
+    const optionsAxisY = app.DATA_SET_AXIS_Y.map((item) => {
       return {
         value: item.toString().toLowerCase(),
         text: item
       }
     });
 
-
-    let columns = [
+    const columns = [
       {
         title: '',
         dataIndex: 'chart',
@@ -78,7 +121,7 @@ class DataSetGrid extends Component {
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('name', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('name', record.id, value, afterAction)
         }/>)
       }, {
         title: 'SI',
@@ -87,7 +130,7 @@ class DataSetGrid extends Component {
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('si', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('si', record.id, value, afterAction)
         }/>)
       }, {
         title: 'Bad value',
@@ -96,14 +139,14 @@ class DataSetGrid extends Component {
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('badValue', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('badValue', record.id, value, afterAction)
         }/>)
       }, {
         title: 'Style',
         dataIndex: 'style',
         width: 75,
         render: (text, record, index) => (<Grid.LineStyleCell value={record.style} onChange={
-          (value, afterAction) => this.handleCellChange('style', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('style', record.id, value, afterAction)
         }/>)
       }, {
         title: 'Axis Y',
@@ -112,7 +155,7 @@ class DataSetGrid extends Component {
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsAxisY} onChange={
-          (value, afterAction) => this.handleCellChange('axisY', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('axisY', record.id, value, afterAction)
         }/>)
       }, {
         title: 'Group',
@@ -121,30 +164,15 @@ class DataSetGrid extends Component {
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('axisGroup', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('axisGroup', record.id, value, afterAction)
         }/>)
       }, {
         title: '',
         dataIndex: 'status',
         width: 30,
         render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
-          (value, afterAction) => this.handleCellChange('status', record.id, value, afterAction)
+          (value, afterAction) => this.handlerCellChange('status', record.id, value, afterAction)
         }/>)
-      }, {
-        title: '',
-        dataIndex: 'delete',
-        width: 30,
-        render: (text, record, index) => (
-          <Popconfirm
-            placement="left"
-            title="Are you sure delete this dataset?"
-            onConfirm={() => {this.props.dataSetActions.deleteDataSet({id: record.id})}}
-            okText="Delete"
-            cancelText="No"
-          >
-            <a href="#"><Icon type="delete"/></a>
-          </Popconfirm>
-        )
       }
     ];
 
@@ -160,7 +188,7 @@ class DataSetGrid extends Component {
     };
 
     return (
-      <div className="dataset-grid" style={{height: this.state.availableSize}}>
+      <div className="dataset-grid" style={{height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1)}}>
         <Grid
           ref="grid"
           rowKey="id"
@@ -168,9 +196,12 @@ class DataSetGrid extends Component {
           data={data}
           loading={isLoading}
           rowSelection={rowSelection}
-          pagination={{pageSize: this.state.pageSize }}
+          pagination={{pageSize: this.state.pageSize}}
           size="x-small"
           bordered={true}
+          onRow={(record, index) => ({
+            onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
+          })}
         />
       </div>
     );

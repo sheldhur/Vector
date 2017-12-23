@@ -83,9 +83,9 @@ class StationsImport extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected stations</Menu.Item>
-        <Menu.Item key={STATIONS_DELETE_SELECTED}><Icon type="bars" /> Delete selected stations</Menu.Item>
-        <Menu.Item key={STATIONS_DELETE_ALL}><Icon type="delete" /> Delete all stations</Menu.Item>
+        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected</Menu.Item>
+        <Menu.Item key={STATIONS_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
+        <Menu.Item key={STATIONS_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
     );
 
