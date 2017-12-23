@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Link, hashHistory} from 'react-router';
-import {Col, Button, Select, Menu, Dropdown, Icon} from 'antd';
+import {Col, Button, Select, Menu, Dropdown, Icon, Modal} from 'antd';
 import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
@@ -41,14 +41,41 @@ class StationValueActions extends Component {
       case STATION_ENABLE:
         this.props.stationActions.updateStation(stationId, {status: app.STATION_ENABLED});
         break;
-      case STATION_DELETE:
-        this.props.stationActions.deleteStation({id: stationId});
-        break;
       case STATION_DELETE_VALUES:
-        this.props.stationActions.deleteSelectedStationsValues('id');
+        Modal.confirm({
+          title: 'Delete selected values',
+          content: 'Are you sure want delete selected values for this station?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.deleteSelectedStationsValues('id')
+          },
+        });
         break;
       case STATION_DELETE_ALL_VALUES:
-        this.props.stationActions.deleteStationValue({stationId});
+        Modal.confirm({
+          title: 'Delete all values',
+          content: 'Are you sure want delete all values for this station?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.deleteStationValue({stationId})
+          },
+        });
+        break;
+      case STATION_DELETE:
+        Modal.confirm({
+          title: 'Delete station',
+          content: 'Are you sure want delete this station?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.deleteStation({id: stationId})
+          },
+        });
         break;
       default:
         break;

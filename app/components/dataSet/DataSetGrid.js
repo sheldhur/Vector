@@ -32,6 +32,8 @@ class DataSetGrid extends Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.calcPageSize);
     window.removeEventListener('load', this.fixPageSize);
+
+    this.props.uiActions.setGridSelectedRows(null);
   };
 
   //TODO: may be HOC?
@@ -72,7 +74,7 @@ class DataSetGrid extends Component {
           click: () => {
             Modal.confirm({
               title: 'Delete data set',
-              content: 'Are you sure have delete this data set?',
+              content: 'Are you sure want delete this data set?',
               okText: 'Yes',
               okType: 'danger',
               cancelText: 'No',
@@ -87,7 +89,7 @@ class DataSetGrid extends Component {
           click: () => {
             Modal.confirm({
               title: 'Clear data set values',
-              content: 'Are you sure have clear this data set?',
+              content: 'Are you sure want clear this data set?',
               okText: 'Yes',
               okType: 'danger',
               cancelText: 'No',

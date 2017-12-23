@@ -34,6 +34,8 @@ class DataSetValuesGrid extends Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.calcPageSize);
     window.removeEventListener('load', this.fixPageSize);
+
+    this.props.uiActions.setGridSelectedRows(null);
   };
 
   //TODO: may be HOC?

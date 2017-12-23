@@ -42,14 +42,41 @@ class StationsImport extends Component {
 
   handlerActionSelect = (e) => {
     switch (e.key) {
-      case STATIONS_DELETE_SELECTED:
-        this.props.stationActions.deleteSelectedStations();
-        break;
       case STATIONS_VALUES_DELETE_SELECTED:
-        this.props.stationActions.deleteSelectedStationsValues('stationId');
+        Modal.confirm({
+          title: 'Delete data for selected stations',
+          content: 'Are you sure want delete data for selected stations?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.deleteSelectedStationsValues('stationId');
+          },
+        });
+        break;
+      case STATIONS_DELETE_SELECTED:
+        Modal.confirm({
+          title: 'Delete selected stations',
+          content: 'Are you sure want delete selected stations?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.deleteSelectedStations();
+          },
+        });
         break;
       case STATIONS_DELETE_ALL:
-        this.props.stationActions.clearStations();
+        Modal.confirm({
+          title: 'Delete all stations',
+          content: 'Are you sure want delete all stations?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.stationActions.clearStations();
+          },
+        });
         break;
       default:
         break;

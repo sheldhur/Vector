@@ -30,6 +30,8 @@ class StationGrid extends Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.calcPageSize);
+
+    this.props.uiActions.setGridSelectedRows(null);
   };
 
   componentWillReceiveProps = (nextProps) => {

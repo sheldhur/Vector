@@ -43,14 +43,41 @@ class DataSetImport extends Component {
 
   handlerActionSelect = (e) => {
     switch (e.key) {
-      case DATASET_DELETE_SELECTED:
-        this.props.dataSetActions.deleteSelectedDataSets();
-        break;
       case DATASET_VALUES_DELETE_SELECTED:
-        this.props.dataSetActions.deleteSelectedDataSetValues('dataSetId');
+        Modal.confirm({
+          title: 'Delete data for selected data sets',
+          content: 'Are you sure want delete data for selected data sets?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.dataSetActions.deleteSelectedDataSetValues('dataSetId');
+          },
+        });
+        break;
+      case DATASET_DELETE_SELECTED:
+        Modal.confirm({
+          title: 'Delete selected data sets',
+          content: 'Are you sure want delete selected data sets?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.dataSetActions.deleteSelectedDataSets();
+          },
+        });
         break;
       case DATASET_DELETE_ALL:
-        this.props.dataSetActions.clearDataSets();
+        Modal.confirm({
+          title: 'Delete all data sets',
+          content: 'Are you sure want delete all data sets?',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk: () => {
+            this.props.dataSetActions.clearDataSets();
+          },
+        });
         break;
       default:
         break;
@@ -84,7 +111,7 @@ class DataSetImport extends Component {
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected</Menu.Item>
+        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Delete data for selected</Menu.Item>
         <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
         <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
