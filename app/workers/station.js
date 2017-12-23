@@ -95,6 +95,7 @@ function actionStationViewValues(data) {
       ORDER BY time
     `;
 
+    process.send({consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ')});
     sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
