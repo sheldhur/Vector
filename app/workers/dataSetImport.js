@@ -7,8 +7,6 @@ import * as geomag from '../lib/geomagneticData/index';
 
 let db;
 
-//TODO: обработка ошибок
-//TODO: подготовка данных: raw, интерполяция, среднее, etc
 export default function (dbSession, data) {
   if (!data.main.settings) {
     throw new Error("Can't get project settings");
@@ -104,7 +102,7 @@ function saveDataSetValues(rows, files, fileCurrent) {
           let progress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
           if (progress.current > lastProgress.current) {
             lastProgress = progress;
-            process.send({event: 'setProgress', progress});
+            process.send({event: 'setProgress', data: progress});
           }
 
           if (error) {

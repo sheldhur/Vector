@@ -9,7 +9,6 @@ let db;
 
 const M2R = Math.PI / (180 * 60);
 
-//TODO: обработка ошибок
 export default function (dbSession, data) {
   if (!data.main.settings) {
     throw new Error("Can't get project settings");
