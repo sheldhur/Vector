@@ -10,8 +10,6 @@ import LineStyleCell from './LineStyleCell';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-//TODO: Таблица с фильтрами обновляется.
-//TODO: редактируемые ячейки возвразают [Object]
 class Grid extends Component {
 
   state = {
@@ -20,13 +18,11 @@ class Grid extends Component {
     data: null
   };
 
-  constructor(props) {
-    super(props);
-
-    this.handlerFilterChange = ::this.handlerFilterChange;
-    this.handlerFilter = ::this.handlerFilter;
-
-  }
+  componentWillReceiveProps = (nextProp) => {
+    if (this.props.data.length !== nextProp.data.length) {
+      this.handlerFilter(null, nextProp.data);
+    }
+  };
 
   columnSorter = (dataIndex, a, b) => {
     return -(a[dataIndex] < b[dataIndex]) || +(a[dataIndex] != b[dataIndex]);
@@ -34,9 +30,9 @@ class Grid extends Component {
   };
 
   columnFilter = (item, reg) => {
-    let props = {};
+    const props = {};
     for (let dataIndex in reg) {
-      let value = item[dataIndex].toString();
+      const value = item[dataIndex].toString();
       const match = value.match(reg[dataIndex]);
       if (!match) {
         return null;
@@ -70,19 +66,21 @@ class Grid extends Component {
     }
   };
 
-  handlerFilter = (e, reset = false) => {
-    this.handlerFilterChange(e, reset);
+  handlerFilter = (e, rawData, reset = false) => {
+    if (e) {
+      this.handlerFilterChange(e, reset);
+    }
 
-    let filterValue = this.state.filterValue;
+    const filterValue = this.state.filterValue;
 
-    let reg = {};
+    const reg = {};
     for (let dataIndex in filterValue) {
       if (filterValue[dataIndex] !== '') {
         reg[dataIndex] = new RegExp('(' + filterValue[dataIndex] + ')+', 'gi');
       }
     }
 
-    let data = this.filterData(this.props.data, reg);
+    const data = this.filterData(rawData, reg);
 
     this.setState({
       filterDropdownVisible: false,
@@ -102,13 +100,13 @@ class Grid extends Component {
   };
 
   handlerFilterChange = (e, reset = false) => {
-    let input = this.findParentElement(e.target, '.custom-filter-dropdown').querySelector('input');
+    const input = this.findParentElement(e.target, '.custom-filter-dropdown').querySelector('input');
     if (reset) {
       input.value = '';
     }
 
-    let filterDropdownVisible = input.name;
-    let {filterValue} = this.state;
+    const filterDropdownVisible = input.name;
+    const {filterValue} = this.state;
     if (filterDropdownVisible) {
       filterValue[filterDropdownVisible] = input.value;
       this.setState({
@@ -118,27 +116,25 @@ class Grid extends Component {
   };
 
   prepareColumns = (columns) => {
-    let {filterValue, filterDropdownVisible} = this.state;
+    const {filterValue, filterDropdownVisible} = this.state;
     return columns.map((item, i) => {
-      let propsSorter = item.hasSorter ? {
+      const propsSorter = item.hasSorter ? {
         sorter: (a, b) => this.columnSorter(item.dataIndex, a, b),
       } : {};
-      let propsFilter = item.hasFilter ? {
+      const propsFilter = item.hasFilter ? {
         filterDropdown: (
           <div className="custom-filter-dropdown">
             <Input
               placeholder="Search"
               ref={(el) => this.searchInput = el}
-              onPressEnter={this.handlerFilter}
+              onPressEnter={e => this.handlerFilter(e, this.props.data)}
               name={item.dataIndex}
             />
             <Button.Group>
-              <Button type="primary" onClick={this.handlerFilter}>
+              <Button type="primary" onClick={e => this.handlerFilter(e, this.props.data)}>
                 <Icon type="search"/>
               </Button>
-              <Button onClick={(e) => {
-                this.handlerFilter(e, true)
-              }}>
+              <Button onClick={e => this.handlerFilter(e, this.props.data, true)}>
                 <Icon type="delete"/>
               </Button>
             </Button.Group>
