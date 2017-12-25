@@ -33,7 +33,7 @@ class StationValueActions extends Component {
 
   handlerActionSelect = (e) => {
     const {stationId} = this.props;
-    console.log(e.key);
+
     switch (e.key) {
       case STATION_DISABLE:
         this.props.stationActions.updateStation(stationId, {status: app.STATION_DISABLED});

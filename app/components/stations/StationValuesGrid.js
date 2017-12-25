@@ -101,7 +101,6 @@ class StationGrid extends Component {
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
-    console.log(id, {[field]: value});
     if (['compX', 'compY', 'compZ'].indexOf(field) !== -1 && value.trim() === '') {
       value = null;
     }

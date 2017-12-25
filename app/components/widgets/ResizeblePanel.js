@@ -21,7 +21,7 @@ export class ResizeblePanel extends Component {
 
   sendResizeEvent() {
     window.dispatchEvent(new CustomEvent('resize'));
-    console.log('Event resize');
+    console.info('EVENT RESIZE');
   }
 
   handleResize(event) {

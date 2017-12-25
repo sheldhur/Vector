@@ -81,8 +81,6 @@ class MapCylindrical extends Component {
       height: size.height + marginSumm.height,
     };
 
-    console.log(size);
-
     return size;
   };
 

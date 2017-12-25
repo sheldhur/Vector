@@ -44,7 +44,6 @@ class Grid extends Component {
             this.setState({
               data: this.filterData(this.props.data, reg)
             });
-            console.log('updateFilter');
           }
         }
       }
@@ -52,9 +51,9 @@ class Grid extends Component {
     return {...item, ...props};
   };
 
-  onChange = (pagination, filters, sorter) => {
-    console.log('params', pagination, filters, sorter);
-  };
+  // onChange = (pagination, filters, sorter) => {
+  //   console.log('params', pagination, filters, sorter);
+  // };
 
   findParentElement = (el, selector) => {
     let popupEl = el;

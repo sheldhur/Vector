@@ -66,11 +66,6 @@ class MagnetopauseMapY extends Component {
       lines.push(line);
     }
 
-    console.log(tmp.map((item) => {
-      return '[' + item.toString() + ']'
-    }).join('\r\n'));
-
-
     let chartLines = [
       {
         si: 'Z (Re)',

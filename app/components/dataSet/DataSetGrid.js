@@ -67,7 +67,6 @@ class DataSetGrid extends Component {
       let currentPage = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === lastOpenItem) {
-          console.log(data[i]);
           currentPage = Math.floor(i / pageSize) + 1;
           break;
         }

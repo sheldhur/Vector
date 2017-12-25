@@ -232,7 +232,6 @@ class Settings extends Component {
           },
           message: 'Please select time!',
           transform: (value) => {
-            console.log(value);
             setFieldsValue({
               'projectTimePeriod': value.map(item => item.seconds(0).millisecond(0))
             })
@@ -249,7 +248,6 @@ class Settings extends Component {
           },
           message: 'Please select time!',
           transform: (value) => {
-            console.log(value);
             setFieldsValue({
               'projectTimeSelected': value.map(item => item.seconds(0).millisecond(0))
             })

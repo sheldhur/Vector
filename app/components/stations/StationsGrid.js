@@ -66,7 +66,6 @@ class StationGrid extends Component {
       let currentPage = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === lastOpenItem) {
-          console.log(data[i]);
           currentPage = Math.floor(i / pageSize) + 1;
           break;
         }
@@ -147,7 +146,7 @@ class StationGrid extends Component {
         title: '',
         dataIndex: 'chart',
         width: 30,
-        render: (text, record, index) => (<Link to={`/station/${record.id}`} onClick={() => console.log(record)}>
+        render: (text, record, index) => (<Link to={`/station/${record.id}`}>
           <Icon type="line-chart"/>
         </Link>)
       }, {

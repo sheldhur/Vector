@@ -23,8 +23,6 @@ class Tooltip extends Component {
     if (station !== null) {
       const position = projection([station.longitude, station.latitude]);
 
-      console.log(station);
-
       return (
         <TooltipText
           className="map-tooltip-text"
@@ -48,7 +46,7 @@ class Tooltip extends Component {
     }
 
     return null;
-  }
+  };
 }
 
 Tooltip.propTypes = {};
