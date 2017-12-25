@@ -173,7 +173,7 @@ class Grid extends Component {
     }
 
     if (!isProd) {
-      console.info('GRID RERENDER');
+      console.info('GRID RERENDER ' + window.location.href);
     }
 
     return (

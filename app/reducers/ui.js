@@ -5,6 +5,7 @@ const initialState = {
   chartTooltipTime: null,
   mapTooltipStation: null,
   gridSelectedRows: [],
+  gridLastOpenItem: null,
   importShowModal: false,
   importCurrentFile: null,
   importProgress: {
@@ -24,6 +25,8 @@ export default function chart(state = initialState, action) {
       return {...state, mapTooltipStation: action.payload};
     case types.GRID_SELECTED_ROWS:
       return {...state, gridSelectedRows: action.payload || []};
+    case types.GRID_LAST_OPEN_ITEM:
+      return {...state, gridLastOpenItem: action.payload};
     case types.IMPORT_SHOW_MODAL:
       if (!action.payload) {
         return {

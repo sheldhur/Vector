@@ -20,27 +20,63 @@ class DataSetGrid extends Component {
 
   state = {
     availableHeight: 'auto',
-    pageSize: 5
+    pageSize: 5,
+    pageCurrent: null,
   };
 
   componentDidMount = () => {
-    this.calcPageSize();
-    window.addEventListener('resize', this.calcPageSize);
+    this.setPagination(this.props);
+    window.addEventListener('resize', this.handlerResize);
     window.addEventListener('load', this.fixPageSize);
   };
 
   componentWillUnmount = () => {
-    window.removeEventListener('resize', this.calcPageSize);
+    window.removeEventListener('resize', this.handlerResize);
     window.removeEventListener('load', this.fixPageSize);
 
     this.props.uiActions.setGridSelectedRows(null);
   };
 
-  //TODO: may be HOC?
+  handlerResize = () => {
+    const {pageSize, availableHeight} = this.calcPageSize();
+    this.setState({
+      availableHeight,
+      pageSize,
+    });
+  };
+
   fixPageSize = () => {
-    setTimeout(() => {
-      this.calcPageSize();
-    }, 300);
+    setTimeout(() => this.setPagination(this.props), 300);
+  };
+
+  setPagination = (props) => {
+    const {availableHeight, pageSize} = this.calcPageSize();
+    const pageCurrent = this.calcPageCurrent(props, pageSize);
+    this.setState({
+      availableHeight,
+      pageSize,
+      pageCurrent,
+    })
+  };
+
+  calcPageCurrent = (props, pageSize) => {
+    const {dataSets, lastOpenItem} = props;
+    if (lastOpenItem) {
+      const data = dataSets ? Object.values(dataSets) : [];
+
+      let currentPage = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === lastOpenItem) {
+          console.log(data[i]);
+          currentPage = Math.floor(i / pageSize) + 1;
+          break;
+        }
+      }
+
+      return currentPage;
+    }
+
+    return null;
   };
 
   calcPageSize = () => {
@@ -54,9 +90,12 @@ class DataSetGrid extends Component {
     const availableHeight = window.innerHeight - grid.getBoundingClientRect().top;
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
-    if (pageSize > 0) {
-      this.setState({availableHeight, pageSize});
-    }
+
+    return {availableHeight, pageSize};
+  };
+
+  handlerPageChange = (page) => {
+    this.setState({pageCurrent: page});
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
@@ -150,16 +189,18 @@ class DataSetGrid extends Component {
         render: (text, record, index) => (<Grid.LineStyleCell value={record.style} onChange={
           (value, afterAction) => this.handlerCellChange('style', record.id, value, afterAction)
         }/>)
-      }, {
-        title: 'Axis Y',
-        dataIndex: 'axisY',
-        width: 30,
-        hasFilter: true,
-        hasSorter: true,
-        render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsAxisY} onChange={
-          (value, afterAction) => this.handlerCellChange('axisY', record.id, value, afterAction)
-        }/>)
-      }, {
+      },
+      // {
+      //   title: 'Axis Y',
+      //   dataIndex: 'axisY',
+      //   width: 30,
+      //   hasFilter: true,
+      //   hasSorter: true,
+      //   render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsAxisY} onChange={
+      //     (value, afterAction) => this.handlerCellChange('axisY', record.id, value, afterAction)
+      //   }/>)
+      // },
+      {
         title: 'Group',
         dataIndex: 'axisGroup',
         width: 50,
@@ -190,15 +231,24 @@ class DataSetGrid extends Component {
     };
 
     return (
-      <div className="dataset-grid" style={{height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1)}}>
+      <div className="dataset-grid"
+           style={{height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1)}}>
         <Grid
+          rowClassName={(record) => {
+            return record.id === this.props.lastOpenItem ? 'select-row' : ''
+          }}
           ref="grid"
           rowKey="id"
           columns={columns}
           data={data}
           loading={isLoading}
           rowSelection={rowSelection}
-          pagination={{pageSize: this.state.pageSize}}
+          pagination={{
+            pageSize: this.state.pageSize,
+            showQuickJumper: true,
+            current: this.state.pageCurrent,
+            onChange: this.handlerPageChange
+          }}
           size="x-small"
           bordered={true}
           onRow={(record, index) => ({
@@ -226,6 +276,8 @@ DataSetGrid.defaultProps = {
 function mapStateToProps(state) {
   return {
     data: state.dataSet,
+    isLoading: state.dataSet.isLoading,
+    lastOpenItem: state.ui.gridLastOpenItem,
   };
 }
 

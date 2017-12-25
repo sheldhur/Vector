@@ -22,7 +22,7 @@ class StationValuesView extends Component {
   render = () => {
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
-        <Row style={{height:'150px'}}>
+        <Row style={{height:'175px'}}>
           <StationValuesChart />
         </Row>
         <Row>

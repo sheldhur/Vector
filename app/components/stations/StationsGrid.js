@@ -19,29 +19,65 @@ class StationGrid extends Component {
 
   state = {
     availableHeight: 'auto',
-    pageSize: 5
+    pageSize: 5,
+    pageCurrent: null,
   };
 
   componentDidMount = () => {
-    this.calcPageSize();
-    window.addEventListener('resize', this.calcPageSize);
+    this.setPagination(this.props);
+    window.addEventListener('resize', this.handlerResize);
     window.addEventListener('load', this.fixPageSize);
   };
 
   componentWillUnmount = () => {
-    window.removeEventListener('resize', this.calcPageSize);
+    window.removeEventListener('resize', this.handlerResize);
     window.removeEventListener('load', this.fixPageSize);
 
     this.props.uiActions.setGridSelectedRows(null);
   };
 
-  fixPageSize = () => {
-    setTimeout(() => {
-      this.calcPageSize();
-    }, 300);
+  handlerResize = () => {
+    const {pageSize, availableHeight} = this.calcPageSize();
+    this.setState({
+      availableHeight,
+      pageSize,
+    });
   };
 
-  //TODO: прибить пагинатор к низу
+  fixPageSize = () => {
+    setTimeout(() => this.setPagination(this.props), 300);
+  };
+
+  setPagination = (props) => {
+    const {availableHeight, pageSize} = this.calcPageSize();
+    const pageCurrent = this.calcPageCurrent(props, pageSize);
+    this.setState({
+      availableHeight,
+      pageSize,
+      pageCurrent,
+    })
+  };
+
+  calcPageCurrent = (props, pageSize) => {
+    const {values, lastOpenItem} = props;
+    if (lastOpenItem) {
+      const data = values ? Object.values(values) : [];
+
+      let currentPage = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === lastOpenItem) {
+          console.log(data[i]);
+          currentPage = Math.floor(i / pageSize) + 1;
+          break;
+        }
+      }
+
+      return currentPage;
+    }
+
+    return null;
+  };
+
   calcPageSize = () => {
     const grid = ReactDOM.findDOMNode(this.refs.grid);
     const pagination = grid.querySelector('.ant-pagination');
@@ -53,9 +89,12 @@ class StationGrid extends Component {
     const availableHeight = window.innerHeight - grid.getBoundingClientRect().top;
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
-    if (pageSize > 0) {
-      this.setState({availableHeight, pageSize});
-    }
+
+    return {availableHeight, pageSize};
+  };
+
+  handlerPageChange = (page) => {
+    this.setState({pageCurrent: page});
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
@@ -102,13 +141,15 @@ class StationGrid extends Component {
     }
   };
 
-  render() {
+  render = () => {
     const columns = [
       {
         title: '',
         dataIndex: 'chart',
         width: 30,
-        render: (text, record, index) => (<Link to={`/station/${record.id}`}><Icon type="line-chart"/></Link>)
+        render: (text, record, index) => (<Link to={`/station/${record.id}`} onClick={() => console.log(record)}>
+          <Icon type="line-chart"/>
+        </Link>)
       }, {
         title: 'Name',
         dataIndex: 'name',
@@ -168,13 +209,21 @@ class StationGrid extends Component {
     return (
       <div style={{height: this.state.availableHeight}}>
         <Grid
+          rowClassName={(record) => {
+            return record.id === this.props.lastOpenItem ? 'select-row' : ''
+          }}
           ref="grid"
           rowKey="id"
           columns={columns}
           data={data}
           loading={isLoading}
           rowSelection={rowSelection}
-          pagination={{size: 'small', pageSize: this.state.pageSize}}
+          pagination={{
+            pageSize: this.state.pageSize,
+            showQuickJumper: true,
+            current: this.state.pageCurrent,
+            onChange: this.handlerPageChange
+          }}
           size="x-small"
           bordered={true}
           onRow={(record, index) => ({
@@ -183,7 +232,7 @@ class StationGrid extends Component {
         />
       </div>
     );
-  }
+  };
 }
 
 StationGrid.propTypes = {
@@ -199,7 +248,8 @@ StationGrid.defaultProps = {
 function mapStateToProps(state) {
   return {
     values: state.station.stations,
-    isLoading: state.station.isLoading
+    isLoading: state.station.isLoading,
+    lastOpenItem: state.ui.gridLastOpenItem,
   };
 }
 

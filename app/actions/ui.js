@@ -64,6 +64,13 @@ export function setGridSelectedRows(payload) {
   }
 }
 
+export function setGridLastOpenItem(payload) {
+  return {
+    type: types.GRID_LAST_OPEN_ITEM,
+    payload,
+  }
+}
+
 export function setImportShowModal(payload) {
   return {
     type: types.IMPORT_SHOW_MODAL,

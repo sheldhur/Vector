@@ -25,11 +25,12 @@ class StationGrid extends Component {
   };
 
   componentDidMount = () => {
-    window.addEventListener('resize', this.calcPageSize);
+    this.props.uiActions.setGridLastOpenItem(parseInt(this.props.stationId));
+    window.addEventListener('resize', this.handlerResize);
   };
 
   componentWillUnmount = () => {
-    window.removeEventListener('resize', this.calcPageSize);
+    window.removeEventListener('resize', this.handlerResize);
 
     this.props.uiActions.setGridSelectedRows(null);
   };
@@ -38,21 +39,41 @@ class StationGrid extends Component {
     if (!nextProps.isLoading) {
       if (this.state.availableHeight === 'auto') {
         setTimeout(() => {
-          this.calcPageSize();
-        }, 100);
+          this.setPagination(nextProps);
+        }, 300);
+      } else {
+        this.setState({pageCurrent: this.calcPageCurrent(nextProps, this.state.pageSize)});
       }
-      this.setState({pageCurrent: this.calcPageCurrent(nextProps)});
     }
   };
 
-  calcPageCurrent = (props) => {
+  handlerResize = () => {
+    const {pageSize, availableHeight} = this.calcPageSize();
+    this.setState({
+      availableHeight,
+      pageSize,
+    });
+  };
+
+  setPagination = (props) => {
+    const {availableHeight, pageSize} = this.calcPageSize();
+    const pageCurrent = this.calcPageCurrent(props, pageSize);
+    this.setState({
+      availableHeight,
+      pageSize,
+      pageCurrent,
+    })
+  };
+
+  calcPageCurrent = (props, pageSize) => {
     const {values, currentTime} = props;
     const data = values ? Object.values(values) : [];
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
+
     let currentPage = 0;
     for (let i = 0; i < data.length; i++) {
       if (data[i].time === currentTimeStr) {
-        currentPage = Math.floor(i / this.state.pageSize) + 1;
+        currentPage = Math.floor(i / pageSize) + 1;
         break;
       }
     }
@@ -60,7 +81,6 @@ class StationGrid extends Component {
     return currentPage;
   };
 
-  //TODO: прибить пагинатор к низу
   calcPageSize = () => {
     const grid = ReactDOM.findDOMNode(this.refs.grid);
     const pagination = grid.querySelector('.ant-pagination');
@@ -72,9 +92,8 @@ class StationGrid extends Component {
     const availableHeight = window.innerHeight - grid.getBoundingClientRect().top;
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
-    if (pageSize > 0) {
-      this.setState({availableHeight, pageSize});
-    }
+
+    return {availableHeight, pageSize};
   };
 
   handlerPageChange = (page) => {
@@ -111,7 +130,7 @@ class StationGrid extends Component {
     }
   };
 
-  render() {
+  render = () => {
     const compWidth = 165;
     const columns = [{
       title: 'Time',
