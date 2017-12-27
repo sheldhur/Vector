@@ -10,7 +10,7 @@ import StationsView from './components/stations/StationsView';
 import StationValuesView from './components/stations/StationValuesView';
 import Capture from './components/capture/Capture';
 import MagnetopauseView from './components/magnetopause/MagnetopauseView';
-import _SettingsFormat from './components/_SettingsFormat';
+
 
 export default () => (
   <App>
@@ -23,7 +23,6 @@ export default () => (
       <Route path="/station" component={StationsView}/>
       <Route path="/capture" component={Capture}/>
       <Route path="/magnetopause" component={MagnetopauseView}/>
-      <Route path="/test" component={_SettingsFormat}/>
       <Route path="/" component={Home}/>
     </Switch>
   </App>
