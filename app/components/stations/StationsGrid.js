@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import {Icon, Modal} from 'antd';
 import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';

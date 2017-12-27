@@ -1,11 +1,9 @@
 import {ipcRenderer, remote} from 'electron';
 import React from 'react';
 import {render} from 'react-dom';
-import {hashHistory} from 'react-router';
 import {AppContainer} from 'react-hot-loader';
-import {syncHistoryWithStore, push} from 'react-router-redux';
 import Root from './containers/Root';
-import configureStore from './store/configureStore';
+import {configureStore, history} from './store/configureStore';
 import {LocaleProvider} from 'antd';
 import locale from 'antd/lib/locale-provider/ru_RU';
 import * as mainActions from './actions/main';
@@ -14,10 +12,8 @@ import * as dataSetActions from './actions/dataSet';
 import './app.global.less';
 import './app.global.css';
 
-
 const currentWin = remote.getCurrentWindow();
 const store = configureStore();
-const history = syncHistoryWithStore(hashHistory, store);
 
 render(
   <LocaleProvider locale={locale}>
@@ -44,7 +40,7 @@ if (module.hot) {
 
 ipcRenderer.on('dispatchFromMain', (event, msg) => {
   if (msg.push) {
-    hashHistory.push(msg.push);
+    history.push(msg.push);
   } else if (msg.update) {
     store.dispatch(mainActions.setUpdate(msg.update));
   } else if (msg.action) {
@@ -63,7 +59,7 @@ ipcRenderer.on('dispatchFromMain', (event, msg) => {
 
 ipcRenderer.on('windowManger', (event, msg) => {
   if (msg.push) {
-    hashHistory.push(msg.push);
+    history.push(msg.push);
   }
 });
 

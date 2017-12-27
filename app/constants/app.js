@@ -41,7 +41,7 @@ export const AVG_CHART_COMP = ['dH', 'dD', 'dZ'];
 export const AVG_CHART_HEMISPHERE = ['global', 'east', 'west'];
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
-export const WORKER_PATH = IS_PROD ? './worker.js' : './worker.development.js';
+export const WORKER_PATH = `./worker.${IS_PROD ? 'prod' : 'dev'}.js`;
 
 export const THEMES = ['Night', 'Light'];
 export const LANGUAGES = [

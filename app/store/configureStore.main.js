@@ -1,19 +1,37 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import { hashHistory } from 'react-router';
-import { routerMiddleware, push } from 'react-router-redux';
-import { electronEnhancer } from 'redux-electron-store';
-import { ipcMain } from 'electron';
+import {ipcMain} from 'electron';
+import {electronEnhancer} from 'redux-electron-store';
+import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
+// import {createHashHistory} from 'history';
+// import {routerMiddleware, routerActions} from 'react-router-redux';
 import rootReducer from '../reducers';
 
-const router = routerMiddleware(hashHistory);
+// const history = createHashHistory();
 
-let enhancer = compose(
-  applyMiddleware(thunk, router),
-  electronEnhancer({})
-);
 
 export default function configureStore(initialState) {
+  // Redux Configuration
+  const middleware = [];
+  const enhancers = [];
+
+  // Thunk Middleware
+  middleware.push(thunk);
+
+  // Router Middleware
+  // const router = routerMiddleware(history);
+  // middleware.push(router);
+
+  enhancers.push(applyMiddleware(...middleware));
+  enhancers.push(electronEnhancer({
+    actionFilter: (action) => {
+      if (action.syncState === true) {
+        return true;
+      }
+      return false;
+    }
+  }));
+  const enhancer = compose(...enhancers);
+
   const store = createStore(rootReducer, initialState, enhancer);
 
   ipcMain.on('renderer-reload', (event, action) => {

@@ -2,7 +2,8 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Link, hashHistory} from 'react-router';
+import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router';
 import {Col, Button, Select, Menu, Dropdown, Icon, Modal} from 'antd';
 import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
@@ -23,12 +24,13 @@ class StationValueActions extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     const {stationId} = nextProps;
-    this.props.stationActions.getStationViewValues({stationId});
+    if (stationId !== this.props.stationId) {
+      this.props.stationActions.getStationViewValues({stationId});
+    }
   };
 
   handlerStationChange = (stationId) => {
-    this.props.stationActions.getStationViewValues({stationId});
-    hashHistory.replace(`/station/${stationId}`);
+    this.props.history.push(`/station/${stationId}`);
   };
 
   handlerActionSelect = (e) => {
@@ -147,4 +149,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StationValueActions);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StationValueActions));

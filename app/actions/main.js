@@ -1,5 +1,5 @@
 import {push} from 'react-router-redux';
-import {hashHistory} from 'react-router';
+// import {HashRouter} from 'react-router-re';
 import {remote} from 'electron';
 import * as fs from 'fs';
 import errorToObject from '../lib/errorToObject';
@@ -142,7 +142,7 @@ export function openDataBase(path, openMain = true) {
       await dispatch(loadSettings());
       dispatch(saveLastDataBase(path));
       if (openMain) {
-        openMainPage();
+        dispatch(openMainPage());
       }
     } catch (e) {
       console.error(e);
@@ -178,9 +178,12 @@ export function closeDataBase() {
 }
 
 function openMainPage() {
-  if (hashHistory.getCurrentLocation().pathname !== '/main') {
-    hashHistory.push('/main');
+  // if (HashRouter.getCurrentLocation().pathname !== '/main') {
+  return (dispatch) => {
+    dispatch(push('/main'));
   }
+
+  // }
 }
 
 export function dialogOpenCreateDataBase(settings) {

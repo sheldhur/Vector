@@ -1,6 +1,6 @@
-// @flow
+/* eslint flowtype-errors/show-errors: 0 */
 import React from 'react';
-import {Route, IndexRoute, browserHistory} from 'react-router';
+import {Switch, Route} from 'react-router';
 import App from './containers/App';
 import Home from './components/Home';
 import Main from './components/main/Main';
@@ -10,18 +10,21 @@ import StationsView from './components/stations/StationsView';
 import StationValuesView from './components/stations/StationValuesView';
 import Capture from './components/capture/Capture';
 import MagnetopauseView from './components/magnetopause/MagnetopauseView';
+import _SettingsFormat from './components/_SettingsFormat';
 
-export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={Home}/>
-    <Route path="/home" component={Home}/>
-    <Route path="/main" component={Main}/>
-    <Route path="/dataSet" component={DataSetView}/>
-    <Route path="/dataSet/:id" component={DataSetValuesView}/>
-    <Route path="/station" component={StationsView}/>
-    <Route path="/station/:id" component={StationValuesView}/>
-    <Route path="/capture" component={Capture}/>
-    <Route path="/magnetopause" component={MagnetopauseView}/>
-  </Route>
+export default () => (
+  <App>
+    <Switch>
+      <Route path="/home" component={Home}/>
+      <Route path="/main" component={Main}/>
+      <Route path="/dataSet/:id" component={DataSetValuesView}/>
+      <Route path="/dataSet" component={DataSetView}/>
+      <Route path="/station/:id" component={StationValuesView}/>
+      <Route path="/station" component={StationsView}/>
+      <Route path="/capture" component={Capture}/>
+      <Route path="/magnetopause" component={MagnetopauseView}/>
+      <Route path="/test" component={_SettingsFormat}/>
+      <Route path="/" component={Home}/>
+    </Switch>
+  </App>
 );
-

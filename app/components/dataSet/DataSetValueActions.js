@@ -2,7 +2,8 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Link, hashHistory} from 'react-router';
+import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router';
 import {Col, Button, Select, Menu, Dropdown, Icon, Modal} from 'antd';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
@@ -17,7 +18,7 @@ const DATASET_DELETE_ALL_VALUES= 'DATASET_DELETE_ALL_VALUES';
 class DataSetValueActions extends Component {
 
   handlerStationChange = (dataSetId) => {
-    hashHistory.replace(`/dataSet/${dataSetId}`);
+    this.props.history.push(`/dataSet/${dataSetId}`);
   };
 
   handlerActionSelect = (e) => {
@@ -135,4 +136,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetValueActions);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DataSetValueActions));

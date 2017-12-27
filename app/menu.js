@@ -1,18 +1,15 @@
 // @flow
-import {app, Menu, shell, BrowserWindow, dialog, ipcMain} from 'electron';
-import {push} from 'react-router-redux';
-import {autoUpdater} from "electron-updater";
+import {app, Menu, shell, BrowserWindow} from 'electron';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
-  constructor(mainWindow: BrowserWindow, store) {
+  constructor(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
-    this.store = store;
   }
 
   buildMenu() {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
       this.setupDevelopmentEnvironment();
     }
 
@@ -35,12 +32,14 @@ export default class MenuBuilder {
     this.mainWindow.webContents.on('context-menu', (e, props) => {
       const {x, y} = props;
 
-      Menu.buildFromTemplate([{
-        label: 'Inspect element',
-        click: () => {
-          this.mainWindow.inspectElement(x, y);
-        }
-      }]).popup(this.mainWindow);
+      Menu
+        .buildFromTemplate([{
+          label: 'Inspect element',
+          click: () => {
+            this.mainWindow.inspectElement(x, y);
+          }
+        }])
+        .popup(this.mainWindow);
     });
   }
 
@@ -79,25 +78,19 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         {
-          label: 'Reload',
-          accelerator: 'Command+R',
-          click: () => {
-            this.mainWindow.webContents.reload();
-          }
+          label: 'Reload', accelerator: 'Command+R', click: () => {
+          this.mainWindow.webContents.reload();
+        }
         },
         {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
+          label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => {
+          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+        }
         },
         {
-          label: 'Toggle Developer Tools',
-          accelerator: 'Alt+Command+I',
-          click: () => {
-            this.mainWindow.toggleDevTools();
-          }
+          label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => {
+          this.mainWindow.toggleDevTools();
+        }
         }
       ]
     };
@@ -146,7 +139,9 @@ export default class MenuBuilder {
       ]
     };
 
-    const subMenuView = process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
+    const subMenuView = process.env.NODE_ENV === 'development'
+      ? subMenuViewDev
+      : subMenuViewProd;
 
     return [
       subMenuAbout,
@@ -159,125 +154,125 @@ export default class MenuBuilder {
 
   buildDefaultTemplate() {
     const templateDefault = [
-        {
-          label: '&File',
-          submenu: [
-            {
-              label: '&Open',
-              accelerator: 'Ctrl+O',
-              click: () => {
-                this.mainWindow.webContents.send('dispatchFromMain', {action: 'openDataBase'});
-              }
-            },
-            {
-              label: '&New',
-              accelerator: 'Ctrl+N',
-              click: () => {
-                this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
-              }
-            },
-            {
-              label: '&Reload settings',
-              accelerator: 'Ctrl+Shift+O',
-              visible: process.env.NODE_ENV === 'development',
-              click: () => {
-                this.mainWindow.webContents.send('dispatchFromMain', {action: 'getLastDataBase'});
-              }
-            },
-            {
-              label: '&Reload data',
-              accelerator: 'Ctrl+Shift+R',
-              visible: process.env.NODE_ENV === 'development',
-              click: () => {
-                this.mainWindow.webContents.send('dispatchFromMain', {action: 'getData'});
-              }
-            },
-            {type: 'separator'},
-            {
-              label: '&Close',
-              accelerator: 'Ctrl+W',
-              click: () => {
-                this.mainWindow.close();
-              }
+      {
+        label: '&File',
+        submenu: [
+          {
+            label: '&Open',
+            accelerator: 'Ctrl+O',
+            click: () => {
+              this.mainWindow.webContents.send('dispatchFromMain', {action: 'openDataBase'});
             }
-          ]
-        },
-        {
-          label: '&View',
-          submenu: [
-            {
-              label: 'Toggle &Full Screen',
-              accelerator: 'F11',
-              click: () => {
-                this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-              }
-            },
-            {
-              label: '&Reload',
-              accelerator: 'Ctrl+R',
-              visible: process.env.NODE_ENV === 'development',
-              click: () => {
-                this.mainWindow.webContents.reload();
-              }
-            },
-            {
-              label: 'Toggle &Developer Tools',
-              accelerator: 'Alt+Ctrl+I',
-              visible: process.env.NODE_ENV === 'development',
-              click: () => {
-                this.mainWindow.toggleDevTools();
-              }
-            },
-            {
-              label: 'Open page',
-              visible: process.env.NODE_ENV === 'development',
-              submenu: [
-                {
-                  label: 'Home',
-                  click: () => {
-                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
-                  }
-                },
-                {
-                  label: 'Main',
-                  click: () => {
-                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/main'});
-                  }
-                },
-                {
-                  label: 'DataSet',
-                  click: () => {
-                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/dataSet'});
-                  }
-                },
-                {
-                  label: 'Station list',
-                  click: () => {
-                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/station'});
-                  }
-                },
-                {
-                  label: 'Magnetopause',
-                  click: () => {
-                    this.mainWindow.webContents.send('dispatchFromMain', {push: '/magnetopause'});
-                  }
-                },
-              ]
+          },
+          {
+            label: '&New',
+            accelerator: 'Ctrl+N',
+            click: () => {
+              this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
             }
-          ]
-        },
-        {
-          label: 'Help',
-          submenu: [
-            {
-              label: 'About',
-              click() {
-                shell.openExternal('https://github.com/sheldhur/Vector/');
-              }
+          },
+          {
+            label: '&Reload settings',
+            accelerator: 'Ctrl+Shift+O',
+            visible: process.env.NODE_ENV === 'development',
+            click: () => {
+              this.mainWindow.webContents.send('dispatchFromMain', {action: 'getLastDataBase'});
             }
-          ]
-        }
-      ];
+          },
+          {
+            label: '&Reload data',
+            accelerator: 'Ctrl+Shift+R',
+            visible: process.env.NODE_ENV === 'development',
+            click: () => {
+              this.mainWindow.webContents.send('dispatchFromMain', {action: 'getData'});
+            }
+          },
+          {type: 'separator'},
+          {
+            label: '&Close',
+            accelerator: 'Ctrl+W',
+            click: () => {
+              this.mainWindow.close();
+            }
+          }
+        ]
+      },
+      {
+        label: '&View',
+        submenu: [
+          {
+            label: 'Toggle &Full Screen',
+            accelerator: 'F11',
+            click: () => {
+              this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            }
+          },
+          {
+            label: '&Reload',
+            accelerator: 'Ctrl+R',
+            visible: process.env.NODE_ENV === 'development',
+            click: () => {
+              this.mainWindow.webContents.reload();
+            }
+          },
+          {
+            label: 'Toggle &Developer Tools',
+            accelerator: 'Alt+Ctrl+I',
+            visible: process.env.NODE_ENV === 'development',
+            click: () => {
+              this.mainWindow.toggleDevTools();
+            }
+          },
+          {
+            label: 'Open page',
+            visible: process.env.NODE_ENV === 'development',
+            submenu: [
+              {
+                label: 'Home',
+                click: () => {
+                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
+                }
+              },
+              {
+                label: 'Main',
+                click: () => {
+                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/main'});
+                }
+              },
+              {
+                label: 'DataSet',
+                click: () => {
+                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/dataSet'});
+                }
+              },
+              {
+                label: 'Station list',
+                click: () => {
+                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/station'});
+                }
+              },
+              {
+                label: 'Magnetopause',
+                click: () => {
+                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/magnetopause'});
+                }
+              },
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Help',
+        submenu: [
+          {
+            label: 'About',
+            click() {
+              shell.openExternal('https://github.com/sheldhur/Vector/');
+            }
+          }
+        ]
+      }
+    ];
 
     return templateDefault;
   }

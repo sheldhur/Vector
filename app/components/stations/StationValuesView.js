@@ -20,16 +20,18 @@ class StationValuesView extends Component {
   };
 
   render = () => {
+    const stationId = this.props.match.params.id;
+
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
         <Row style={{height:'175px'}}>
           <StationValuesChart />
         </Row>
         <Row>
-          <StationValueActions stationId={this.props.params.id}/>
+          <StationValueActions stationId={stationId}/>
         </Row>
         <Row>
-          <StationValuesGrid stationId={this.props.params.id} />
+          <StationValuesGrid stationId={stationId} />
         </Row>
       </div>
     );
