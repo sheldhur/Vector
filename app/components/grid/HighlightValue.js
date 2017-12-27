@@ -8,7 +8,7 @@ export default function HighlightValue(props) {
         __html: props.value.replace(props.search, (str) => {
           return '<span class="highlight">' + str + '</span>';
         })
-      }}/>
+      }} />
     );
   }
 

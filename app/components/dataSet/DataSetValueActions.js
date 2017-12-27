@@ -1,10 +1,10 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {withRouter} from 'react-router';
-import {Col, Button, Select, Menu, Dropdown, Icon, Modal} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Col, Button, Select, Menu, Dropdown, Icon, Modal } from 'antd';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
@@ -13,7 +13,7 @@ const DATASET_DISABLE = 'DATASET_DISABLE';
 const DATASET_ENABLE = 'DATASET_ENABLE';
 const DATASET_DELETE = 'DATASET_DELETE';
 const DATASET_DELETE_SELECTED_VALUES = 'DATASET_DELETE_SELECTED_VALUES';
-const DATASET_DELETE_ALL_VALUES= 'DATASET_DELETE_ALL_VALUES';
+const DATASET_DELETE_ALL_VALUES = 'DATASET_DELETE_ALL_VALUES';
 
 class DataSetValueActions extends Component {
 
@@ -22,13 +22,13 @@ class DataSetValueActions extends Component {
   };
 
   handlerActionSelect = (e) => {
-    const {dataSetId} = this.props;
+    const { dataSetId } = this.props;
     switch (e.key) {
       case DATASET_DISABLE:
-        this.props.dataSetActions.updateDataSet(dataSetId, {status: app.STATION_DISABLED});
+        this.props.dataSetActions.updateDataSet(dataSetId, { status: app.STATION_DISABLED });
         break;
       case DATASET_ENABLE:
-        this.props.dataSetActions.updateDataSet(dataSetId, {status: app.STATION_ENABLED});
+        this.props.dataSetActions.updateDataSet(dataSetId, { status: app.STATION_ENABLED });
         break;
       case DATASET_DELETE_SELECTED_VALUES:
         Modal.confirm({
@@ -50,7 +50,7 @@ class DataSetValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.dataSetActions.deleteDataSetValue({dataSetId})
+            this.props.dataSetActions.deleteDataSetValue({ dataSetId })
           },
         });
         break;
@@ -62,7 +62,7 @@ class DataSetValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.dataSetActions.deleteDataSet({id: dataSetId})
+            this.props.dataSetActions.deleteDataSet({ id: dataSetId })
           },
         });
         break;
@@ -72,7 +72,7 @@ class DataSetValueActions extends Component {
   };
 
   render() {
-    const {dataSets, dataSetId} = this.props;
+    const { dataSets, dataSetId } = this.props;
     const dataSet = dataSets[dataSetId];
 
     const dataSetSorted = dataSets ? Object.values(dataSets).filter((dataSet) => dataSet !== undefined).sort(function (a, b) {
@@ -99,7 +99,7 @@ class DataSetValueActions extends Component {
         <Col span={8}>
           <Link to="/dataset"><Button icon="arrow-left">Data series</Button></Link>
         </Col>
-        <Col span={8} style={{textAlign: 'center'}}>
+        <Col span={8} style={{ textAlign: 'center' }}>
           <Select
             value={dataSetId}
             style={{ width: 150 }}
@@ -115,7 +115,7 @@ class DataSetValueActions extends Component {
           </Select>
           {" "}
           <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
-            <Button>Actions <Icon type="down"/></Button>
+            <Button>Actions <Icon type="down" /></Button>
           </Dropdown>
         </Col>
         <Col span={8}></Col>

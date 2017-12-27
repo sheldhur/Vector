@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import TooltipText from '../lineChart/TooltipText';
 
 
@@ -18,7 +18,7 @@ class Tooltip extends Component {
   };
 
   render = () => {
-    const {station, projection, width, height} = this.props;
+    const { station, projection, width, height } = this.props;
 
     if (station !== null) {
       const position = projection([station.longitude, station.latitude]);
@@ -26,11 +26,11 @@ class Tooltip extends Component {
       return (
         <TooltipText
           className="map-tooltip-text"
-          position={{x: position[0], y: position[1]}} width={width}
+          position={{ x: position[0], y: position[1] }} width={width}
           height={height}
           stroke="silver"
         >
-          <tspan dy="1em" x="2.5" style={{fontSize: '120%'}}>{station.name} {station.source}</tspan>
+          <tspan dy="1em" x="2.5" style={{ fontSize: '120%' }}>{station.name} {station.source}</tspan>
           <tspan dy="1em" x="2.5">lt {station.latitude.toFixed(3)}° lg {station.longitude.toFixed(3)}°</tspan>
           {station.delta != null &&
           <tspan>

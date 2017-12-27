@@ -1,14 +1,13 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import MainHeader from './MainHeader';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { ErrorAlert, LoadingAlert } from '../widgets/ChartAlert';
 import MainDashboard from './MainDashboard';
-import {LoadingAlert, ErrorAlert} from '../widgets/ChartAlert';
+import MainHeader from './MainHeader';
 
 
 class Main extends Component {
-  render() {
+  render = () => {
     if (this.props.isError) {
       return (<ErrorAlert
         className={`theme-${this.props.theme}`}
@@ -18,7 +17,7 @@ class Main extends Component {
     }
 
     if (this.props.isLoading) {
-      return (<LoadingAlert className={`theme-${this.props.theme}`}/>);
+      return (<LoadingAlert className={`theme-${this.props.theme}`} />);
     }
 
     return (
@@ -26,13 +25,13 @@ class Main extends Component {
         <tbody>
         <tr>
           <td className="header">
-            <MainHeader/>
+            <MainHeader />
           </td>
         </tr>
         <tr>
-          <td className="content" style={{position: 'relative'}}>
+          <td className="content" style={{ position: 'relative' }}>
             <div className="box" id="mainView">
-              <MainDashboard/>
+              <MainDashboard />
             </div>
           </td>
         </tr>

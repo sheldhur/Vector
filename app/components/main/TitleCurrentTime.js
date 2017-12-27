@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 
 class TitleCurrentTime extends Component {
-  render() {
-    const {currentTime, timeAvg} = this.props;
+  render = () => {
+    const { currentTime, timeAvg } = this.props;
     const timeFormat = timeAvg.by.startsWith('min') ? "DD-MM-YYYY HH:mm" : "DD-MM-YYYY HH:mm:ss";
 
     return (
       <div>{currentTime ? moment(currentTime).format(timeFormat) : 'Time not selected'}</div>
     );
-  }
+  };
 }
 
 TitleCurrentTime.propTypes = {};

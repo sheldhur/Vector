@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { ProgressAlert, NoDataAlert } from '../widgets/ChartAlert';
 import moment from 'moment';
 import LineChart from '../chart/LineChart';
 import StationAvgMenu from './StationAvgMenu';
@@ -21,7 +21,7 @@ class StationAvgChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let {data} = this.props;
+      let { data } = this.props;
 
       StationAvgMenu({
         dataNotEmpty: !!data,
@@ -36,7 +36,7 @@ class StationAvgChart extends Component {
   };
 
   prepareDataForCsv = () => {
-    const {data, latitudeRanges, componentLines} = this.props;
+    const { data, latitudeRanges, componentLines } = this.props;
 
     let csvData = {
       0: {
@@ -59,7 +59,7 @@ class StationAvgChart extends Component {
               0: moment(parseInt(time)).format(app.FORMAT_DATE_SQL)
             };
           }
-          csvData[time][colKey] = pointsValue[time] ? pointsValue[time].toFixed(5).replace('.',',') : null;
+          csvData[time][colKey] = pointsValue[time] ? pointsValue[time].toFixed(5).replace('.', ',') : null;
         }
       });
     });
@@ -68,7 +68,7 @@ class StationAvgChart extends Component {
   };
 
   prepareDataForChart = () => {
-    const {data, latitudeRanges, componentLines} = this.props;
+    const { data, latitudeRanges, componentLines } = this.props;
     const colorGroup = app.DATA_SET_COLOR;
 
     let chartData = [];
@@ -119,7 +119,7 @@ class StationAvgChart extends Component {
   };
 
   render = () => {
-    const {isLoading, isError, progress, latitudeRanges} = this.props;
+    const { isLoading, isError, progress, latitudeRanges } = this.props;
 
     const preparedData = this.prepareDataForChart();
     let isEmpty = !preparedData.some((latitudeRange) => {
@@ -152,7 +152,7 @@ class StationAvgChart extends Component {
     let container = null;
 
     if (isEmpty) {
-      container = (<NoDataAlert onContextMenu={this.handlerContextMenu}/>);
+      container = (<NoDataAlert onContextMenu={this.handlerContextMenu} />);
     }
 
     if (isLoading || isError) {
@@ -170,9 +170,9 @@ class StationAvgChart extends Component {
       };
 
       container = (
-        <div style={{height: "100%", width: '100%'}} id="stationAvgChar">
+        <div style={{ height: "100%", width: '100%' }} id="stationAvgChar">
           {latitudeRanges.map((item, i) => {
-            return <AvgDataChart key={i} itemKey={i} style={chartStyle} data={preparedData[i] || []}/>;
+            return <AvgDataChart key={i} itemKey={i} style={chartStyle} data={preparedData[i] || []} />;
           })}
         </div>
       );

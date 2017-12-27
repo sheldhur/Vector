@@ -1,18 +1,18 @@
 // @flow
-import {remote} from 'electron';
-import React, {Component} from 'react';
+import { remote } from 'electron';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {Icon, Modal} from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Icon, Modal } from 'antd';
 import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as stationActions from '../../actions/station';
 
-const {Menu} = remote;
+const { Menu } = remote;
 
 
 class StationGrid extends Component {
@@ -37,7 +37,7 @@ class StationGrid extends Component {
   };
 
   handlerResize = () => {
-    const {pageSize, availableHeight} = this.calcPageSize();
+    const { pageSize, availableHeight } = this.calcPageSize();
     this.setState({
       availableHeight,
       pageSize,
@@ -49,7 +49,7 @@ class StationGrid extends Component {
   };
 
   setPagination = (props) => {
-    const {availableHeight, pageSize} = this.calcPageSize();
+    const { availableHeight, pageSize } = this.calcPageSize();
     const pageCurrent = this.calcPageCurrent(props, pageSize);
     this.setState({
       availableHeight,
@@ -59,7 +59,7 @@ class StationGrid extends Component {
   };
 
   calcPageCurrent = (props, pageSize) => {
-    const {values, lastOpenItem} = props;
+    const { values, lastOpenItem } = props;
     if (lastOpenItem) {
       const data = values ? Object.values(values) : [];
 
@@ -89,15 +89,15 @@ class StationGrid extends Component {
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
 
-    return {availableHeight, pageSize};
+    return { availableHeight, pageSize };
   };
 
   handlerPageChange = (page) => {
-    this.setState({pageCurrent: page});
+    this.setState({ pageCurrent: page });
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
-    this.props.stationActions.updateStation(id, {[field]: value}, afterAction);
+    this.props.stationActions.updateStation(id, { [field]: value }, afterAction);
   };
 
   handlerRowOnContextMenu = (record, index, e) => {
@@ -116,7 +116,7 @@ class StationGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.stationActions.deleteStation({id: record.id})
+                this.props.stationActions.deleteStation({ id: record.id })
               },
             });
           }
@@ -131,7 +131,7 @@ class StationGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.stationActions.deleteStationValue({stationId: record.id})
+                this.props.stationActions.deleteStationValue({ stationId: record.id })
               },
             });
           }
@@ -147,7 +147,7 @@ class StationGrid extends Component {
         dataIndex: 'chart',
         width: 30,
         render: (text, record, index) => (<Link to={`/station/${record.id}`}>
-          <Icon type="line-chart"/>
+          <Icon type="line-chart" />
         </Link>)
       }, {
         title: 'Name',
@@ -156,7 +156,7 @@ class StationGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('name', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'Source',
         dataIndex: 'source',
@@ -165,7 +165,7 @@ class StationGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('source', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'Lat',
         dataIndex: 'latitude',
@@ -174,7 +174,7 @@ class StationGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('latitude', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'Long',
         dataIndex: 'longitude',
@@ -183,7 +183,7 @@ class StationGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('longitude', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: '',
         dataIndex: 'status',
@@ -191,11 +191,11 @@ class StationGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('status', record.id, value, afterAction)
-        }/>)
+        } />)
       }
     ];
 
-    const {values, isLoading} = this.props;
+    const { values, isLoading } = this.props;
     const data = values ? Object.values(values).filter((station) => station !== undefined) : [];
 
     const rowSelection = {
@@ -206,7 +206,7 @@ class StationGrid extends Component {
     };
 
     return (
-      <div style={{height: this.state.availableHeight}}>
+      <div style={{ height: this.state.availableHeight }}>
         <Grid
           rowClassName={(record) => {
             return record.id === this.props.lastOpenItem ? 'select-row' : ''

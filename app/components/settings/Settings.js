@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from "react";
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
-import {Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert} from "antd";
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert } from "antd";
 import moment from "moment";
 import SettingsAvgChartLines from "./SettingsAvgChartLines";
 import SettingsAvgChartLatitudes from "./SettingsAvgChartLatitudes";
@@ -11,7 +11,7 @@ import * as mainActions from "./../../actions/main";
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
 import * as app from "./../../constants/app"
-import {stringCamelCase, numberIsBetween} from "../../utils/helper";
+import { stringCamelCase, numberIsBetween } from "../../utils/helper";
 
 
 class Settings extends Component {
@@ -26,7 +26,7 @@ class Settings extends Component {
       modalHeight = 250;
     }
 
-    this.setState({modalHeight});
+    this.setState({ modalHeight });
   };
 
   componentWillMount = () => {
@@ -104,11 +104,11 @@ class Settings extends Component {
   };
 
   handlerModalOpen = () => {
-    this.setState({modalVisible: true});
+    this.setState({ modalVisible: true });
   };
 
   handlerModalClose = (callback) => {
-    this.setState({modalVisible: false}, callback);
+    this.setState({ modalVisible: false }, callback);
   };
 
   handlerReset = (e) => {
@@ -119,7 +119,7 @@ class Settings extends Component {
 
   handlerSave = (e) => {
     e.preventDefault();
-    const {settings} = this.props;
+    const { settings } = this.props;
     const values = this.props.form.getFieldsValue();
 
     values.projectMapLayerH.scaleAuto = values.projectMapLayerH.scaleAuto === 'true';
@@ -156,8 +156,8 @@ class Settings extends Component {
   };
 
   getValidationRules = () => {
-    const {settings, maximum} = this.props;
-    const {setFieldsValue} = this.props.form;
+    const { settings, maximum } = this.props;
+    const { setFieldsValue } = this.props.form;
 
     return {
       'appTheme': {
@@ -227,8 +227,8 @@ class Settings extends Component {
         rules: [{
           type: 'array',
           fields: {
-            0: {type: "object", required: true},
-            1: {type: "object", required: true},
+            0: { type: "object", required: true },
+            1: { type: "object", required: true },
           },
           message: 'Please select time!',
           transform: (value) => {
@@ -243,8 +243,8 @@ class Settings extends Component {
         rules: [{
           type: 'array',
           fields: {
-            0: {type: "object", required: true},
-            1: {type: "object", required: true},
+            0: { type: "object", required: true },
+            1: { type: "object", required: true },
           },
           message: 'Please select time!',
           transform: (value) => {
@@ -300,7 +300,7 @@ class Settings extends Component {
       },
       'projectAvgComponentLines': {
         initialValue: settings.projectAvgComponentLines.map(item => {
-          return {...item};
+          return { ...item };
         }),
         rules: [{
           type: 'array',
@@ -327,9 +327,9 @@ class Settings extends Component {
     };
   };
 
-  render() {
-    const {getFieldError, getFieldValue, setFieldsValue} = this.props.form;
-    const {settings} = this.props;
+  render = () => {
+    const { getFieldError, getFieldValue, setFieldsValue } = this.props.form;
+    const { settings } = this.props;
     let rules = {};
 
     if (this.state.modalVisible) {
@@ -341,7 +341,7 @@ class Settings extends Component {
     };
 
     const ScaleTypeSelect = (
-      <Select style={{width: 65}} size={this.props.size}>
+      <Select style={{ width: 65 }} size={this.props.size}>
         <Select.Option value={`true`}>auto</Select.Option>
         <Select.Option value={`false`}>fixed</Select.Option>
       </Select>
@@ -359,7 +359,7 @@ class Settings extends Component {
             {props.addonBefore}
             {wrappedField(props.name)(
               <InputNumber
-                style={{width: 100}}
+                style={{ width: 100 }}
                 disabled={props.disabled !== undefined ? props.disabled : false}
                 placeholder="Scale"
                 size={this.props.size}
@@ -374,12 +374,12 @@ class Settings extends Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 6},
+        xs: { span: 24 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 14},
+        xs: { span: 24 },
+        sm: { span: 14 },
       },
     };
 
@@ -393,7 +393,7 @@ class Settings extends Component {
         <Modal
           wrapClassName="main-page-settings"
           width={700}
-          title={(<span><Icon type="setting"/> Settings</span>)}
+          title={(<span><Icon type="setting" /> Settings</span>)}
           onCancel={this.handlerReset}
           onOk={this.handlerSave}
           visible={this.state.modalVisible}
@@ -402,14 +402,14 @@ class Settings extends Component {
             <Tabs tabPosition="left" defaultActiveKey="1">
               <Tabs.TabPane
                 key={tabsKey++}
-                tab={(<span><Icon type="layout"/>Application</span>)}
-                style={{height: this.state.modalHeight}}
+                tab={(<span><Icon type="layout" />Application</span>)}
+                style={{ height: this.state.modalHeight }}
               >
                 {!localStorage[app.LS_KEY_APP_SETTINGS] &&
-                <Alert message="This is global settings" type="warning" showIcon/>}
+                <Alert message="This is global settings" type="warning" showIcon />}
                 <Form.Item {...formItemLayout} label="Theme">
                   {wrappedField('appTheme')(
-                    <Select size={this.props.size} style={{width: 150}}>
+                    <Select size={this.props.size} style={{ width: 150 }}>
                       {app.THEMES.map((item, i) => {
                         return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
                       })}
@@ -418,7 +418,7 @@ class Settings extends Component {
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Language">
                   {wrappedField('appLanguage')(
-                    <Select size={this.props.size} style={{width: 150}} disabled>
+                    <Select size={this.props.size} style={{ width: 150 }} disabled>
                       {app.LANGUAGES.map((item, i) => {
                         return <Select.Option value={item.code} key={i}>{item.name}</Select.Option>;
                       })}
@@ -427,7 +427,7 @@ class Settings extends Component {
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Anti-aliasing">
                   {wrappedField('appAntiAliasing')(
-                    <Switch size={this.props.size}/>
+                    <Switch size={this.props.size} />
                   )}
                 </Form.Item>
                 <fieldset>
@@ -450,7 +450,7 @@ class Settings extends Component {
                   <div>
                     <Form.Item {...formItemLayout} label="World scale">
                       {wrappedField('appMapScale')(
-                        <Select size={this.props.size} style={{width: 150}}>
+                        <Select size={this.props.size} style={{ width: 150 }}>
                           {app.MAP_WORLD_SCALE.map((item, i) => {
                             return <Select.Option value={item} key={i}>{item}</Select.Option>;
                           })}
@@ -459,7 +459,7 @@ class Settings extends Component {
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Default projection">
                       {wrappedField('appMapProjectionType')(
-                        <Select size={this.props.size} style={{width: 150}}>
+                        <Select size={this.props.size} style={{ width: 150 }}>
                           {app.MAP_PROJECTION.map((item, i) => {
                             return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
                           })}
@@ -468,27 +468,27 @@ class Settings extends Component {
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Show countries">
                       {wrappedField('appMapCountries')(
-                        <Switch size={this.props.size}/>
+                        <Switch size={this.props.size} />
                       )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Water color">
                       <Col span={6}>
                         {wrappedField('appMapColor.water')(
-                          <Input placeholder="Color" size={this.props.size}/>
+                          <Input placeholder="Color" size={this.props.size} />
                         )}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Land color">
                       <Col span={6}>
                         {wrappedField('appMapColor.land')(
-                          <Input placeholder="Color" size={this.props.size}/>
+                          <Input placeholder="Color" size={this.props.size} />
                         )}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Borders color">
                       <Col span={6}>
                         {wrappedField('appMapColor.border')(
-                          <Input placeholder="Color" size={this.props.size}/>
+                          <Input placeholder="Color" size={this.props.size} />
                         )}
                       </Col>
                     </Form.Item>
@@ -497,8 +497,8 @@ class Settings extends Component {
               </Tabs.TabPane>
               <Tabs.TabPane
                 key={tabsKey++}
-                tab={(<span><Icon type="clock-circle"/>Time</span>)}
-                style={{height: this.state.modalHeight}}
+                tab={(<span><Icon type="clock-circle" />Time</span>)}
+                style={{ height: this.state.modalHeight }}
               >
                 <Form.Item {...formItemLayout} label="Time">
                   {wrappedField('projectTimePeriod')(
@@ -515,39 +515,39 @@ class Settings extends Component {
                     />
                   )}
                 </Form.Item>
-                <br/>
+                <br />
               </Tabs.TabPane>
               <Tabs.TabPane
                 key={tabsKey++}
-                tab={(<span><Icon type="global"/>Map</span>)}
-                style={{height: this.state.modalHeight}}
+                tab={(<span><Icon type="global" />Map</span>)}
+                style={{ height: this.state.modalHeight }}
               >
                 <fieldset>
-                  <legend>ΔH {wrappedField('projectMapLayerH.enabled')(<Switch size={this.props.size}/>)}</legend>
+                  <legend>ΔH {wrappedField('projectMapLayerH.enabled')(<Switch size={this.props.size} />)}</legend>
                   <div className={getFieldValue('projectMapLayerH.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
                       label: "Scale",
                       name: "projectMapLayerH.scale",
                       disabled: getFieldValue('projectMapLayerH.scaleAuto') === 'true',
                       addonAfter: "nT",
-                      addonBefore: wrappedField('projectMapLayerH.scaleAuto')({...ScaleTypeSelect})
+                      addonBefore: wrappedField('projectMapLayerH.scaleAuto')({ ...ScaleTypeSelect })
                     })}
                     <Form.Item {...formItemLayout} label="Color">
                       <Col span={6}>
-                        <Input placeholder="Color" size={this.props.size}/>
+                        <Input placeholder="Color" size={this.props.size} />
                       </Col>
                     </Form.Item>
                   </div>
                 </fieldset>
                 <fieldset>
-                  <legend>ΔZ {wrappedField('projectMapLayerZ.enabled')(<Switch size={this.props.size}/>)}</legend>
+                  <legend>ΔZ {wrappedField('projectMapLayerZ.enabled')(<Switch size={this.props.size} />)}</legend>
                   <div className={getFieldValue('projectMapLayerZ.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
                       label: "Scale",
                       name: "projectMapLayerZ.scale",
                       disabled: getFieldValue('projectMapLayerZ.scaleAuto') === 'true',
                       addonAfter: "nT",
-                      addonBefore: wrappedField('projectMapLayerZ.scaleAuto')({...ScaleTypeSelect})
+                      addonBefore: wrappedField('projectMapLayerZ.scaleAuto')({ ...ScaleTypeSelect })
                     })}
                     <Form.Item {...formItemLayout} label="View">
                       {wrappedField('projectMapLayerZ.view')(
@@ -576,8 +576,8 @@ class Settings extends Component {
                     <Form.Item {...formItemLayout} label="Color">
                       <Col span={12}>
                         <Input.Group size={this.props.size} compact>
-                          <Input placeholder="Color" style={{width: '50%'}} size={this.props.size}/>
-                          <Input placeholder="Color" style={{width: '50%'}} size={this.props.size}/>
+                          <Input placeholder="Color" style={{ width: '50%' }} size={this.props.size} />
+                          <Input placeholder="Color" style={{ width: '50%' }} size={this.props.size} />
                         </Input.Group>
                       </Col>
                     </Form.Item>
@@ -586,45 +586,45 @@ class Settings extends Component {
               </Tabs.TabPane>
               <Tabs.TabPane
                 key={tabsKey++}
-                tab={<span><Icon type="line-chart"/>Charts</span>}
-                style={{height: this.state.modalHeight}}
+                tab={<span><Icon type="line-chart" />Charts</span>}
+                style={{ height: this.state.modalHeight }}
               >
                 {wrappedField('projectAvgComponentLines')(
                   <SettingsAvgChartLines
                     onCellChange={(field, index, value) => {
                       let items = getFieldValue('projectAvgComponentLines');
                       items[index][field] = value;
-                      setFieldsValue({'projectAvgComponentLines': items});
+                      setFieldsValue({ 'projectAvgComponentLines': items });
                     }}
                     onLineAdd={() => {
                       let items = getFieldValue('projectAvgComponentLines');
-                      items.push({comp: null, hemisphere: null, style: null, enabled: true});
-                      setFieldsValue({'projectAvgComponentLines': items});
+                      items.push({ comp: null, hemisphere: null, style: null, enabled: true });
+                      setFieldsValue({ 'projectAvgComponentLines': items });
                     }}
                     onLineRemove={(index) => {
                       let items = getFieldValue('projectAvgComponentLines');
                       items.splice(index, 1);
-                      setFieldsValue({'projectAvgComponentLines': items});
+                      setFieldsValue({ 'projectAvgComponentLines': items });
                     }}
                   />
                 )}
-                <br/>
+                <br />
                 {wrappedField('projectAvgLatitudeRanges')(
                   <SettingsAvgChartLatitudes
                     onCellChange={(field, index, value) => {
                       let items = getFieldValue('projectAvgLatitudeRanges');
                       items[index][field] = value;
-                      setFieldsValue({'projectAvgLatitudeRanges': items});
+                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
                     }}
                     onLineAdd={() => {
                       let items = getFieldValue('projectAvgLatitudeRanges');
                       items.push([null, null]);
-                      setFieldsValue({'projectAvgLatitudeRanges': items});
+                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
                     }}
                     onLineRemove={(index) => {
                       let items = getFieldValue('projectAvgLatitudeRanges');
                       items.splice(index, 1);
-                      setFieldsValue({'projectAvgLatitudeRanges': items});
+                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
                     }}
                   />
                 )}
@@ -634,7 +634,7 @@ class Settings extends Component {
         </Modal>
       </Input.Group>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {

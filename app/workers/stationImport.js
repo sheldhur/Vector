@@ -16,7 +16,7 @@ export default function (dbSession, data) {
 
   db = dbSession;
 
-  const {filePaths, fileType} = data;
+  const { filePaths, fileType } = data;
   const time = {
     period: {
       start: moment(data.main.settings.projectTimePeriod[0]),
@@ -30,23 +30,23 @@ export default function (dbSession, data) {
       const filePath = filePaths[fileKey];
 
       try {
-        process.send({event: 'setCurrentFile', data: filePath});
+        process.send({ event: 'setCurrentFile', data: filePath });
         const readResult = await readFile(filePaths[fileKey], fileType);
         const stationsData = Array.isArray(readResult) ? readResult : [readResult];
 
         for (const stationKey in stationsData) {
           const stationData = stationsData[stationKey];
-          process.send({stationData});
+          process.send({ stationData });
 
           const data = await saveStation(stationData, fileType);
-          process.send({event: 'addStation', data: data.station});
+          process.send({ event: 'addStation', data: data.station });
 
           const values = await prepareImportData(data, time, 4);
           await saveStationValues(values, filePaths, stationsData, fileKey);
         }
       } catch (e) {
         console.error(e);
-        process.send({event: 'setImportLog', data: {filePath: filePath, error: errorToObject(e)}})
+        process.send({ event: 'setImportLog', data: { filePath: filePath, error: errorToObject(e) } })
       }
     }
   })();
@@ -82,7 +82,7 @@ async function saveStation(data, fileType) {
   };
 
   const station = await db.Station.findOrCreate({
-    where: {name: props.name, source: props.source},
+    where: { name: props.name, source: props.source },
     defaults: props
   });
 
@@ -95,7 +95,7 @@ async function saveStation(data, fileType) {
 }
 
 function saveStationValues(data, files, stations, fileCurrent) {
-  let {station, format, rows} = data;
+  let { station, format, rows } = data;
 
   return new Promise((resolve, reject) => {
     let lastProgress = {
@@ -120,7 +120,7 @@ function saveStationValues(data, files, stations, fileCurrent) {
           let saveTime = new Date().valueOf();
           if (progress.current > lastProgress.current) {
             lastProgress = progress;
-            process.send({event: 'setProgress', data: progress});
+            process.send({ event: 'setProgress', data: progress });
           }
 
           if (error) {

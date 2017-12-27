@@ -1,7 +1,7 @@
 // @flow
-import React, {Component} from 'react';
-import {Icon, Popconfirm, Popover, Button} from 'antd';
-import {SketchPicker} from 'react-color';
+import React, { Component } from 'react';
+import { Icon, Popconfirm, Popover, Button } from 'antd';
+import { SketchPicker } from 'react-color';
 
 
 class ColorCell extends Component {
@@ -13,18 +13,18 @@ class ColorCell extends Component {
     error: false
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps = (nextProps) => {
     if (this.state.value !== nextProps.value) {
-      this.setState({value: nextProps.value});
+      this.setState({ value: nextProps.value });
     }
-  }
+  };
 
   handleConfirm = () => {
     this.setState({
       value: this.props.value,
       error: false
     });
-  }
+  };
 
   handleChange = () => {
     if (this.props.onChange) {
@@ -55,11 +55,11 @@ class ColorCell extends Component {
   };
 
   handleColorChange = (color) => {
-    this.setState({value: color.hex});
+    this.setState({ value: color.hex });
   };
 
   handleColorPickerShow = () => {
-    this.setState({colorPickerVisible: true});
+    this.setState({ colorPickerVisible: true });
   };
 
   handleColorPickerCancel = () => {
@@ -69,8 +69,8 @@ class ColorCell extends Component {
     });
   };
 
-  render() {
-    const {value, colorPickerVisible, isSaved, error} = this.state;
+  render = () => {
+    const { value, colorPickerVisible, isSaved, error } = this.state;
     const message = !!error ? <div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
@@ -78,8 +78,8 @@ class ColorCell extends Component {
 
     const colorPicker = (
       <div>
-        <SketchPicker disableAlpha={true} color={value || '#FFFFFF'} onChangeComplete={this.handleColorChange}/>
-        <div style={{textAlign: 'center'}}>
+        <SketchPicker disableAlpha={true} color={value || '#FFFFFF'} onChangeComplete={this.handleColorChange} />
+        <div style={{ textAlign: 'center' }}>
           <Button size="small" type="primary" onClick={this.handleChange}>OK</Button>{" "}
           <Button size="small" onClick={this.handleColorPickerCancel}>Cancel</Button>
         </div>
@@ -103,18 +103,18 @@ class ColorCell extends Component {
             placement="right"
           >
             <div className="color-cell-wrapper" onClick={!isSaved ? this.handleColorPickerShow : null}>
-              <div style={{backgroundColor: value && value !== '' ? value : 'transparent'}}></div>
+              <div style={{ backgroundColor: value && value !== '' ? value : 'transparent' }}></div>
               {isSaved ?
-                <Icon type="loading" className="color-cell-icon"/>
+                <Icon type="loading" className="color-cell-icon" />
                 :
-                <Icon type="edit" className="color-cell-icon"/>
+                <Icon type="edit" className="color-cell-icon" />
               }
             </div>
           </Popover>
         </Popconfirm>
       </div>
     );
-  }
+  };
 }
 
 export default ColorCell;

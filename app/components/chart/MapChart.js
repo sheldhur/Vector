@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import MapCylindrical from './mapChart/MapCylindrical';
 import MapAzimuthal from './mapChart/MapAzimuthal';
@@ -40,7 +40,7 @@ class MapChart extends Component {
   };
 
   getSize = () => {
-    const {height, width} = this.state.wrapperSize;
+    const { height, width } = this.state.wrapperSize;
 
     let size = {
       width: undefined,
@@ -61,7 +61,7 @@ class MapChart extends Component {
 
   render = () => {
     const size = this.getSize();
-    const {data, showCountries, projectionType, world} = this.props;
+    const { data, showCountries, projectionType, world } = this.props;
 
     if (size.width !== undefined) {
       if (projectionType === 'stereographic') {

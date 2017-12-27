@@ -1,18 +1,17 @@
-import {push} from 'react-router-redux';
-// import {HashRouter} from 'react-router-re';
-import {remote} from 'electron';
+import { remote } from 'electron';
 import * as fs from 'fs';
-import errorToObject from '../lib/errorToObject';
-import dbConnect from '../database/dbConnect';
+import { push } from 'react-router-redux';
 import {
   DEFAULT_SETTINGS,
-  LS_KEY_APP_SETTINGS,
-  LS_KEY_LAST_DB,
-  FILE_EXT_DB,
   FILE_EXT_ALL,
-  FORMAT_DATE_SQL
+  FILE_EXT_DB,
+  FORMAT_DATE_SQL,
+  LS_KEY_APP_SETTINGS,
+  LS_KEY_LAST_DB
 } from '../constants/app';
 import * as types from '../constants/main';
+import dbConnect from '../database/dbConnect';
+import errorToObject from '../lib/errorToObject';
 
 const {dialog} = remote;
 const currentWindow = remote.getCurrentWindow();

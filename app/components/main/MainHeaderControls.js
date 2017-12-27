@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Tooltip, Button, Input, Tag, Icon} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Tooltip, Button, Input, Tag, Icon } from 'antd';
 import * as uiActions from '../../actions/ui';
 
 class MainHeaderControls extends Component {
@@ -12,13 +12,13 @@ class MainHeaderControls extends Component {
 
   isHotKeyActive = true;
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps = (nextProps) => {
     if (this.state.interval) {
       this.handlerPlay();
     }
-  }
+  };
 
-  componentWillMount() {
+  componentWillMount = () => {
     window.addEventListener('keydown', this.handlerHotKey);
 
     setTimeout(() => {
@@ -28,9 +28,9 @@ class MainHeaderControls extends Component {
         mainPage.addEventListener('mouseleave', this.handlerMouseLeave);
       }
     }, 10);
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('keydown', this.handlerHotKey);
 
     let mainPage = document.querySelector('#root .main-page');
@@ -38,7 +38,7 @@ class MainHeaderControls extends Component {
     mainPage.removeEventListener('mouseleave', this.handlerMouseLeave);
 
     clearInterval(this.state.interval);
-  }
+  };
 
   handlerMouseOver = (e) => {
     this.isHotKeyActive = true;
@@ -87,7 +87,7 @@ class MainHeaderControls extends Component {
     e.preventDefault();
     if (this.state.interval) {
       clearInterval(this.state.interval);
-      this.setState({interval: null});
+      this.setState({ interval: null });
     } else {
       this.setState({
         interval: setInterval(() => {
@@ -97,17 +97,17 @@ class MainHeaderControls extends Component {
     }
   };
 
-  render() {
+  render = () => {
     let buttons = [
       {
         icon: 'backward',
-        hotkey: ['Ctrl', <Icon type="arrow-left"/>],
+        hotkey: ['Ctrl', <Icon type="arrow-left" />],
         step: -this.props.shiftStep,
         handler: this.handlerTimeShift
       },
       {
         icon: 'step-backward',
-        hotkey: [<Icon type="arrow-left"/>],
+        hotkey: [<Icon type="arrow-left" />],
         step: -1,
         handler: this.handlerTimeShift
       },
@@ -119,13 +119,13 @@ class MainHeaderControls extends Component {
       },
       {
         icon: 'step-forward',
-        hotkey: [<Icon type="arrow-right"/>],
+        hotkey: [<Icon type="arrow-right" />],
         step: 1,
         handler: this.handlerTimeShift
       },
       {
         icon: 'forward',
-        hotkey: ['Ctrl', <Icon type="arrow-right"/>],
+        hotkey: ['Ctrl', <Icon type="arrow-right" />],
         step: this.props.shiftStep,
         handler: this.handlerTimeShift
       },
@@ -159,7 +159,7 @@ class MainHeaderControls extends Component {
     return (
       <Input.Group size={this.props.size} compact>{buttons}</Input.Group>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {

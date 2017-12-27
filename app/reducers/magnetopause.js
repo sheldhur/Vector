@@ -8,9 +8,9 @@ const initialState = {
 export default function magnetopause(state = initialState, action) {
   switch (action.type) {
     case types.MAGNETOPAUSE_DATA:
-      return {...state, data: action.payload};
+      return { ...state, data: action.payload };
     case types.MAGNETOPAUSE_CHART:
-      return {...state, chart: action.payload};
+      return { ...state, chart: action.payload };
     default:
       return state;
   }

@@ -28,7 +28,7 @@ process.on('message', async (data) => {
       workers[data.worker](db, data)
     } catch (e) {
       console.error(e);
-      process.send({event: 'setError', data: errorToObject(e)});
+      process.send({ event: 'setError', data: errorToObject(e) });
     }
   }
 });

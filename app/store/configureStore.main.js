@@ -1,6 +1,6 @@
-import {ipcMain} from 'electron';
-import {electronEnhancer} from 'redux-electron-store';
-import {createStore, applyMiddleware, compose} from 'redux';
+import { ipcMain } from 'electron';
+import { electronEnhancer } from 'redux-electron-store';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 

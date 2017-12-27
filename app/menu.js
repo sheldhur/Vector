@@ -1,5 +1,5 @@
 // @flow
-import {app, Menu, shell, BrowserWindow} from 'electron';
+import { app, Menu, shell, BrowserWindow } from 'electron';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -30,7 +30,7 @@ export default class MenuBuilder {
   setupDevelopmentEnvironment() {
     this.mainWindow.openDevTools();
     this.mainWindow.webContents.on('context-menu', (e, props) => {
-      const {x, y} = props;
+      const { x, y } = props;
 
       Menu
         .buildFromTemplate([{
@@ -47,14 +47,14 @@ export default class MenuBuilder {
     const subMenuAbout = {
       label: 'Electron',
       submenu: [
-        {label: 'About ElectronReact', selector: 'orderFrontStandardAboutPanel:'},
-        {type: 'separator'},
-        {label: 'Services', submenu: []},
-        {type: 'separator'},
-        {label: 'Hide ElectronReact', accelerator: 'Command+H', selector: 'hide:'},
-        {label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:'},
-        {label: 'Show All', selector: 'unhideAllApplications:'},
-        {type: 'separator'},
+        { label: 'About ElectronReact', selector: 'orderFrontStandardAboutPanel:' },
+        { type: 'separator' },
+        { label: 'Services', submenu: [] },
+        { type: 'separator' },
+        { label: 'Hide ElectronReact', accelerator: 'Command+H', selector: 'hide:' },
+        { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
+        { label: 'Show All', selector: 'unhideAllApplications:' },
+        { type: 'separator' },
         {
           label: 'Quit', accelerator: 'Command+Q', click: () => {
           app.quit();
@@ -65,13 +65,13 @@ export default class MenuBuilder {
     const subMenuEdit = {
       label: 'Edit',
       submenu: [
-        {label: 'Undo', accelerator: 'Command+Z', selector: 'undo:'},
-        {label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:'},
-        {type: 'separator'},
-        {label: 'Cut', accelerator: 'Command+X', selector: 'cut:'},
-        {label: 'Copy', accelerator: 'Command+C', selector: 'copy:'},
-        {label: 'Paste', accelerator: 'Command+V', selector: 'paste:'},
-        {label: 'Select All', accelerator: 'Command+A', selector: 'selectAll:'}
+        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
+        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
+        { label: 'Select All', accelerator: 'Command+A', selector: 'selectAll:' }
       ]
     };
     const subMenuViewDev = {
@@ -107,10 +107,10 @@ export default class MenuBuilder {
     const subMenuWindow = {
       label: 'Window',
       submenu: [
-        {label: 'Minimize', accelerator: 'Command+M', selector: 'performMiniaturize:'},
-        {label: 'Close', accelerator: 'Command+W', selector: 'performClose:'},
-        {type: 'separator'},
-        {label: 'Bring All to Front', selector: 'arrangeInFront:'}
+        { label: 'Minimize', accelerator: 'Command+M', selector: 'performMiniaturize:' },
+        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        { type: 'separator' },
+        { label: 'Bring All to Front', selector: 'arrangeInFront:' }
       ]
     };
     const subMenuHelp = {
@@ -161,14 +161,14 @@ export default class MenuBuilder {
             label: '&Open',
             accelerator: 'Ctrl+O',
             click: () => {
-              this.mainWindow.webContents.send('dispatchFromMain', {action: 'openDataBase'});
+              this.mainWindow.webContents.send('dispatchFromMain', { action: 'openDataBase' });
             }
           },
           {
             label: '&New',
             accelerator: 'Ctrl+N',
             click: () => {
-              this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
+              this.mainWindow.webContents.send('dispatchFromMain', { push: '/home' });
             }
           },
           {
@@ -176,7 +176,7 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+Shift+O',
             visible: process.env.NODE_ENV === 'development',
             click: () => {
-              this.mainWindow.webContents.send('dispatchFromMain', {action: 'getLastDataBase'});
+              this.mainWindow.webContents.send('dispatchFromMain', { action: 'getLastDataBase' });
             }
           },
           {
@@ -184,10 +184,10 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+Shift+R',
             visible: process.env.NODE_ENV === 'development',
             click: () => {
-              this.mainWindow.webContents.send('dispatchFromMain', {action: 'getData'});
+              this.mainWindow.webContents.send('dispatchFromMain', { action: 'getData' });
             }
           },
-          {type: 'separator'},
+          { type: 'separator' },
           {
             label: '&Close',
             accelerator: 'Ctrl+W',
@@ -230,31 +230,31 @@ export default class MenuBuilder {
               {
                 label: 'Home',
                 click: () => {
-                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/home'});
+                  this.mainWindow.webContents.send('dispatchFromMain', { push: '/home' });
                 }
               },
               {
                 label: 'Main',
                 click: () => {
-                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/main'});
+                  this.mainWindow.webContents.send('dispatchFromMain', { push: '/main' });
                 }
               },
               {
                 label: 'DataSet',
                 click: () => {
-                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/dataSet'});
+                  this.mainWindow.webContents.send('dispatchFromMain', { push: '/dataSet' });
                 }
               },
               {
                 label: 'Station list',
                 click: () => {
-                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/station'});
+                  this.mainWindow.webContents.send('dispatchFromMain', { push: '/station' });
                 }
               },
               {
                 label: 'Magnetopause',
                 click: () => {
-                  this.mainWindow.webContents.send('dispatchFromMain', {push: '/magnetopause'});
+                  this.mainWindow.webContents.send('dispatchFromMain', { push: '/magnetopause' });
                 }
               },
             ]

@@ -1,20 +1,20 @@
 // @flow
-import {remote} from 'electron';
-import React, {Component} from 'react';
+import { remote } from 'electron';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import moment from 'moment';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
-const {Menu} = remote;
+const { Menu } = remote;
 
 
 class DataSetValuesGrid extends Component {
@@ -45,7 +45,7 @@ class DataSetValuesGrid extends Component {
   };
 
   handlerResize = () => {
-    const {pageSize, availableHeight} = this.calcPageSize();
+    const { pageSize, availableHeight } = this.calcPageSize();
     this.setState({
       availableHeight,
       pageSize,
@@ -57,7 +57,7 @@ class DataSetValuesGrid extends Component {
   };
 
   setPagination = (props) => {
-    const {availableHeight, pageSize} = this.calcPageSize();
+    const { availableHeight, pageSize } = this.calcPageSize();
     const pageCurrent = this.calcPageCurrent(props, pageSize);
     this.setState({
       availableHeight,
@@ -67,7 +67,7 @@ class DataSetValuesGrid extends Component {
   };
 
   calcPageCurrent = (props, pageSize) => {
-    const {dataSetValues, dataSetId, currentTime} = props;
+    const { dataSetValues, dataSetId, currentTime } = props;
     const data = dataSetValues[dataSetId] || [];
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
 
@@ -94,15 +94,15 @@ class DataSetValuesGrid extends Component {
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
 
-    return {availableHeight, pageSize};
+    return { availableHeight, pageSize };
   };
 
   handlerPageChange = (pageCurrent) => {
-    this.setState({pageCurrent});
+    this.setState({ pageCurrent });
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
-    this.props.dataSetActions.updateDataSetValue(id, {[field]: value}, afterAction);
+    this.props.dataSetActions.updateDataSetValue(id, { [field]: value }, afterAction);
   };
 
   handlerRowOnContextMenu = (record, index, e) => {
@@ -112,7 +112,7 @@ class DataSetValuesGrid extends Component {
       return Menu.buildFromTemplate([{
         label: 'Delete value',
         icon: resourcePath('./assets/icons/table-delete-row.png'),
-        click: () => this.props.dataSetActions.deleteDataSetValue({id: record.id})
+        click: () => this.props.dataSetActions.deleteDataSetValue({ id: record.id })
       }]).popup(remote.getCurrentWindow());
     }
   };
@@ -133,7 +133,7 @@ class DataSetValuesGrid extends Component {
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
         (value, afterAction) => this.handlerCellChange('value', record.id, value, afterAction)
-      }/>),
+      } />),
       width: 175
     }, {
       title: '',
@@ -147,7 +147,7 @@ class DataSetValuesGrid extends Component {
     }];
 
 
-    const {dataSetValues, dataSetId, isLoading, currentTime} = this.props;
+    const { dataSetValues, dataSetId, isLoading, currentTime } = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
     const data = dataSetValues[dataSetId] || [];
 
@@ -159,7 +159,7 @@ class DataSetValuesGrid extends Component {
     };
 
     return (
-      <div style={{height: this.state.availableHeight}}>
+      <div style={{ height: this.state.availableHeight }}>
         <Grid
           rowClassName={(record) => {
             return record.time === currentTimeStr ? 'select-row' : ''

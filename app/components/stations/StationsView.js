@@ -1,14 +1,13 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Row} from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Row } from 'antd';
 import StationsActions from './StationsActions';
 import StationsGrid from './StationsGrid';
 
 
 class Stations extends Component {
-  render() {
+  render = () => {
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
         <Row>
@@ -19,7 +18,7 @@ class Stations extends Component {
         </Row>
       </div>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {

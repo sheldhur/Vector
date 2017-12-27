@@ -1,9 +1,9 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { ProgressAlert, NoDataAlert } from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
 import * as mainActions from '../../actions/main';
@@ -74,8 +74,8 @@ class StationValuesChart extends Component {
     return data;
   };
 
-  render() {
-    const {isLoading, isError, data, progress} = this.props;
+  render = () => {
+    const { isLoading, isError, data, progress } = this.props;
 
     let container = null;
 
@@ -91,23 +91,23 @@ class StationValuesChart extends Component {
     if (!container) {
       let chartLines = this.prepareValuesForChart(data);
       container = (
-        <div style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
+        <div style={{ width: this.props.width, height: this.props.height }} onContextMenu={this.handlerContextMenu}>
           <LineChart
             width={this.props.width}
             height={this.props.height}
             data={chartLines}
             tooltipDelay={100}
             antiAliasing={this.props.antiAliasing}
-            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu}/>}
+            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu} />}
           >
-            <TitleCurrentTime/>
+            <TitleCurrentTime />
           </LineChart>
         </div>
       );
     }
 
     return container;
-  }
+  };
 }
 
 StationValuesChart.propTypes = {

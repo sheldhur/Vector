@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {Checkbox, Icon, Popconfirm} from 'antd';
+import React, { Component } from 'react';
+import { Checkbox, Icon, Popconfirm } from 'antd';
 
 
 class CheckboxCell extends Component {
@@ -10,20 +10,12 @@ class CheckboxCell extends Component {
     isSaved: false,
     error: false
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.value !== nextProps.value) {
-      this.setState({value: nextProps.value});
-    }
-  }
-
   handleConfirm = () => {
     this.setState({
       value: this.props.value,
       error: false
     });
   }
-
   handleChange = (e) => {
     const value = e.target.checked;
     if (this.props.onChange) {
@@ -34,10 +26,9 @@ class CheckboxCell extends Component {
         this.props.onChange(this.state.value, this.afterAction)
       });
     } else {
-      this.setState({value});
+      this.setState({ value });
     }
   };
-
   afterAction = (value) => {
     if (value.error !== undefined) {
       this.setState({
@@ -51,8 +42,14 @@ class CheckboxCell extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.value !== nextProps.value) {
+      this.setState({ value: nextProps.value });
+    }
+  }
+
   render() {
-    const {value, isSaved, error} = this.state;
+    const { value, isSaved, error } = this.state;
     const message = !!error ? <div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
@@ -61,7 +58,7 @@ class CheckboxCell extends Component {
     return (
       <div className={"checkbox-cell " + (error ? 'error' : '')}>
         {isSaved ?
-          <Icon type="loading"/>
+          <Icon type="loading" />
           :
           <Popconfirm
             title={message}
@@ -70,7 +67,7 @@ class CheckboxCell extends Component {
             overlayClassName="grid-cell-popconfirm"
             onConfirm={this.handleConfirm}
           >
-            <Checkbox ref={(el) => this.input = el} checked={value} onChange={this.handleChange}/>
+            <Checkbox ref={(el) => this.input = el} checked={value} onChange={this.handleChange} />
           </Popconfirm>
         }
       </div>

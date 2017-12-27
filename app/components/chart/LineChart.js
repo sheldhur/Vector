@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {sprintf} from 'sprintf-js';
+import { sprintf } from 'sprintf-js';
 import * as d3 from 'd3';
 import Chart from './lineChart/Chart';
 import Line from './lineChart/Line';
@@ -10,7 +10,7 @@ import Axis from './lineChart/Axis';
 import Grid from './lineChart/Grid';
 import Tooltip from './lineChart/Tooltip';
 import TimeCursor from './lineChart/TimeCursor';
-import {mathSum} from '../../utils/helper';
+import { mathSum } from '../../utils/helper';
 
 
 //TODO: переделать всё.
@@ -50,19 +50,6 @@ class LineChart extends Component {
   //   // this.handleResize();
   //   //this.setState({axisSize: this.calculateAxisSize()});
   // }
-
-  componentWillReceiveProps(nextProps) {
-    this.handleResize();
-  }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (JSON.stringify(nextState.axisSize) === JSON.stringify(this.state.axisSize)) {
-  //   return false;
-  //   }
-  //
-  //   return true;
-  // }
-
   handleResize = (e) => {
     let svgWrapper = ReactDOM.findDOMNode(this.refs.svgWrapper);
     let title = ReactDOM.findDOMNode(this.refs.title);
@@ -78,6 +65,13 @@ class LineChart extends Component {
     }
   };
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (JSON.stringify(nextState.axisSize) === JSON.stringify(this.state.axisSize)) {
+  //   return false;
+  //   }
+  //
+  //   return true;
+  // }
   getAxisSize = () => {
     let size = {
       x: {
@@ -106,7 +100,6 @@ class LineChart extends Component {
 
     return size;
   };
-
   calculateAxisMargin = (axisSize) => {
     let margin = {
       left: 0,
@@ -123,7 +116,6 @@ class LineChart extends Component {
 
     return margin;
   };
-
   calculateSize = (wrapperSize, margin, axisMargin) => {
     let containerSize = {
       width: (this.props.width === '100%') ? wrapperSize.width || 100 : this.props.width,
@@ -136,7 +128,6 @@ class LineChart extends Component {
       container: containerSize
     }
   };
-
   prepareData = (data, isGroupX = false, isGroupY = true) => {
     let extent = {
       x: [],
@@ -205,13 +196,11 @@ class LineChart extends Component {
       });
     }
 
-    return {data, extent, pointsCount};
+    return { data, extent, pointsCount };
   };
-
   getScaleType = (value) => {
     return Object.prototype.toString.call(value) === '[object Date]' ? d3.scaleTime() : d3.scaleLinear();
   };
-
   getScale = (extent, size) => {
     // + (item.y / 100 * 10)
     return {
@@ -228,7 +217,6 @@ class LineChart extends Component {
       })
     }
   };
-
   getCurve = (value) => {
     let type = Array.isArray(value) ? value : [value];
 
@@ -249,7 +237,6 @@ class LineChart extends Component {
 
     return d3.curveCatmullRom.alpha(0.5);
   };
-
   multiFormatDate = (date) => {
     let formatMillisecond = d3.timeFormat(":%S.%L"),
       formatSecond = d3.timeFormat(":%S"),
@@ -268,11 +255,9 @@ class LineChart extends Component {
               : d3.timeYear(date) < date ? formatMonth
                 : formatYear)(date);
   };
-
   multiFormatFloat = (float) => {
     return sprintf('%.5g', float);
   };
-
   multiFormat = (value) => {
     if (Object.prototype.toString.call(value) === '[object Date]') {
       return this.multiFormatDate(value);
@@ -280,12 +265,11 @@ class LineChart extends Component {
 
     return this.multiFormatFloat(value);
   };
-
   render = () => {
-    const {data, extent, pointsCount} = this.prepareData(this.props.data);
+    const { data, extent, pointsCount } = this.prepareData(this.props.data);
 
     if (pointsCount) {
-      const {axisSize, wrapperSize} = this.state;
+      const { axisSize, wrapperSize } = this.state;
 
       const margin = {
         left: 5,
@@ -359,7 +343,7 @@ class LineChart extends Component {
           >
             <defs>
               <clipPath id={`${this.uid}-lines`}>
-                <rect width={size.width} height={size.height}/>
+                <rect width={size.width} height={size.height} />
               </clipPath>
             </defs>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
@@ -369,12 +353,12 @@ class LineChart extends Component {
                         scale={scale.y[scale.y.length - 1]}
                         ticks={ticks.y}
                         tickSize={-size.width}
-                        translate={`translate(0, 0)`}/>
+                        translate={`translate(0, 0)`} />
                   <Grid orient="bottom"
                         scale={scale.x}
                         ticks={ticks.x}
                         tickSize={-size.height}
-                        translate={`translate(0, ${size.height})`}/>
+                        translate={`translate(0, ${size.height})`} />
                 </g>
                 <g className="lines" transform={`translate(${axisMargin.left}, 0)`}
                    clipPath={`url(#${this.uid}-lines)`}>
@@ -401,7 +385,7 @@ class LineChart extends Component {
                                                           scale={scale}
                                                           transform={`translate(${axisMargin.left}, 0)`}
                                                           time={new Date(1999, 6 - 1, 28, 5, 37, 0, 0)}
-                                                          groupName={this.props.groupName}/>}
+                                                          groupName={this.props.groupName} />}
                 {this.props.showTooltip && <Tooltip width={size.width}
                                                     height={size.height}
                                                     delay={this.props.tooltipDelay}
@@ -409,7 +393,7 @@ class LineChart extends Component {
                                                     transform={`translate(${axisMargin.left}, 0)`}
                                                     scale={scale}
                                                     data={data}
-                                                    groupName={this.props.groupName}/>}
+                                                    groupName={this.props.groupName} />}
               </g>
               }
             </g>
@@ -424,6 +408,10 @@ class LineChart extends Component {
       );
     }
   };
+
+  componentWillReceiveProps(nextProps) {
+    this.handleResize();
+  }
 }
 
 LineChart.propTypes = {

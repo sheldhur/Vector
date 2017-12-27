@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Progress} from 'antd';
+import { Icon, Progress } from 'antd';
 
 const BlinkedDots = (props) => {
   return (
@@ -14,7 +14,7 @@ const ChartAlert = (props) => {
   return (
     <div className={`centered-box ${props.className || ''}`} onContextMenu={props.onContextMenu}>
       <div>
-        <h1><Icon type={props.icon}/></h1>
+        <h1><Icon type={props.icon} /></h1>
         <h3>{props.text}</h3>
         <p>{props.description}</p>
       </div>
@@ -41,7 +41,7 @@ const ErrorAlert = (props) => {
 const LoadingAlert = (props) => {
   return (<ChartAlert
     icon="loading"
-    text={<BlinkedDots text="Loading"/>}
+    text={<BlinkedDots text="Loading" />}
     {...props}
   />)
 };
@@ -58,7 +58,7 @@ const ProgressAlert = (props) => {
           strokeWidth={7}
           status={status}
         />
-        <h3>{props.error ? props.error.name : <BlinkedDots text={props.text || "Loading"}/>}</h3>
+        <h3>{props.error ? props.error.name : <BlinkedDots text={props.text || "Loading"} />}</h3>
         <p>{props.error ? props.error.message : props.description}</p>
       </div>
     </div>

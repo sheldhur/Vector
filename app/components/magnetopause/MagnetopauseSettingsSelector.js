@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {Select} from 'antd';
+import React, { Component } from 'react';
+import { Select } from 'antd';
 
 class MagnetopauseSettingsSelector extends Component {
 
@@ -8,8 +8,8 @@ class MagnetopauseSettingsSelector extends Component {
     this.props.onChange([...this.props.value, parseInt(optionValue)]);
   };
 
-  render() {
-    const {value, dataSets} = this.props;
+  render = () => {
+    const { value, dataSets } = this.props;
 
     return (
       <Select
@@ -26,7 +26,7 @@ class MagnetopauseSettingsSelector extends Component {
         })}
       </Select>
     );
-  }
+  };
 }
 
 export default MagnetopauseSettingsSelector;

@@ -45,13 +45,13 @@ export const WORKER_PATH = `./worker.${IS_PROD ? 'prod' : 'dev'}.js`;
 
 export const THEMES = ['Night', 'Light'];
 export const LANGUAGES = [
-  {code: 'en-US', name: 'English'},
-  {code: 'ru-RU', name: 'Русский'},
+  { code: 'en-US', name: 'English' },
+  { code: 'ru-RU', name: 'Русский' },
 ];
 export const MAP_WORLD_SCALE = ['1:50', '1:110'];
 export const MAP_PROJECTION = ['Equirectangular', 'Stereographic'];
 
-export const CSV_DELIIMITER = [',',';'];
+export const CSV_DELIIMITER = [',', ';'];
 
 export const DEFAULT_SETTINGS = {
   appTheme: 'night',
@@ -70,7 +70,7 @@ export const DEFAULT_SETTINGS = {
     border: '#766951',
   },
   appCsvDelimiter: ';',
-  projectTimeAvg: {by: 'minutes', value: 1},
+  projectTimeAvg: { by: 'minutes', value: 1 },
   projectTimePeriod: [null, null],
   projectTimeSelected: [null, null],
   projectMapLayerH: {
@@ -90,9 +90,9 @@ export const DEFAULT_SETTINGS = {
     }
   },
   projectAvgComponentLines: [
-    {comp: 'dH', hemisphere: 'global', style: null, enabled: true},
-    {comp: 'dH', hemisphere: 'east', style: null, enabled: true},
-    {comp: 'dH', hemisphere: 'west', style: null, enabled: true},
+    { comp: 'dH', hemisphere: 'global', style: null, enabled: true },
+    { comp: 'dH', hemisphere: 'east', style: null, enabled: true },
+    { comp: 'dH', hemisphere: 'west', style: null, enabled: true },
   ],
   projectAvgLatitudeRanges: [
     [90, -90],

@@ -1,15 +1,13 @@
 // @flow
-import {remote, desktopCapturer, ipcRenderer} from 'electron';
-import {message} from 'antd';
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Button, Input, Modal, Icon} from 'antd';
+import { remote } from 'electron';
+import { message, Button, Input, Modal, Icon } from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import domToImage from 'dom-to-image';
 import * as fs from 'fs';
 
-const {dialog, BrowserWindow} = remote;
+const { dialog, BrowserWindow } = remote;
 const currentWindow = remote.getCurrentWindow();
 
 
@@ -23,7 +21,7 @@ class MainHeaderCapture extends Component {
       properties: ['openFile', 'createDirectory'],
       buttonLabel: 'Save image',
       filters: [
-        {name: 'PNG', extensions: ['png']},
+        { name: 'PNG', extensions: ['png'] },
       ],
     }, (filePath) => {
       if (filePath && filePath.length) {

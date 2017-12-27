@@ -1,9 +1,9 @@
 // @flow
-import {remote} from 'electron';
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert} from 'antd';
+import { remote } from 'electron';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert } from 'antd';
 import moment from 'moment';
 import * as mainActions from '../actions/main';
 import * as app from '../constants/app';
@@ -13,10 +13,6 @@ import * as app from '../constants/app';
 
 class Home extends Component {
   avgByList = app.IMPORT_AVG;
-  avgData = app.IMPORT_AVG_DATA.map((item, i) => {
-    return {label: item, value: i};
-  });
-
   state = {
     avg: {
       by: this.avgByList[1],
@@ -27,7 +23,9 @@ class Home extends Component {
       end: undefined,
     }
   };
-
+  avgData = app.IMPORT_AVG_DATA.map((item, i) => {
+    return { label: item, value: i };
+  });
   handlerDaterangeOk = (value) => {
     this.setState({
       period: {
@@ -44,7 +42,7 @@ class Home extends Component {
   };
 
   handlerAvgValueChange = (value) => {
-    let {avg} = this.state;
+    let { avg } = this.state;
     avg.value = parseInt(value);
     this.setState({
       avg: avg
@@ -76,7 +74,7 @@ class Home extends Component {
   };
 
   render = () => {
-    const {avg, period} = this.state;
+    const { avg, period } = this.state;
 
     const isDateRange = period.start && period.end;
 
@@ -100,10 +98,10 @@ class Home extends Component {
                   onClick={(e) => this.handlerDialog(e, false)}
                 >Open database</Button>
               </Row>
-              <hr/>
+              <hr />
               <Row>
                 <Input.Group compact>
-                  <Input style={{width: '100px'}} value="Time period" disabled className="ant-input-group-addon"/>
+                  <Input style={{ width: '100px' }} value="Time period" disabled className="ant-input-group-addon" />
                   <DatePicker.RangePicker
                     showTime={{
                       hideDisabledOptions: true,
@@ -119,8 +117,8 @@ class Home extends Component {
               </Row>
               <Row>
                 <Input.Group compact>
-                  <Input style={{width: '100px'}} value="Averaged data" disabled className="ant-input-group-addon"/>
-                  <InputNumber min={1} defaultValue={avg.value} onChange={this.handlerAvgValueChange}/>
+                  <Input style={{ width: '100px' }} value="Averaged data" disabled className="ant-input-group-addon" />
+                  <InputNumber min={1} defaultValue={avg.value} onChange={this.handlerAvgValueChange} />
                   <Select defaultValue={avg.by} onChange={this.handlerAvgBySelect}>
                     {this.avgByList.map((item, i) => {
                       return <Select.Option key={i} value={i.toString()}>{item}</Select.Option>;
@@ -128,8 +126,8 @@ class Home extends Component {
                   </Select>
                 </Input.Group>
               </Row>
-              <Row style={{display: 'none'}}>
-                <Radio.Group options={this.avgData} defaultValue={0}/>
+              <Row style={{ display: 'none' }}>
+                <Radio.Group options={this.avgData} defaultValue={0} />
               </Row>
               <Row>
                 <Button

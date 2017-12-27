@@ -1,15 +1,15 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {remote} from 'electron';
-import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
-import {ImportProgress} from '../widgets/ImportProgress';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { remote } from 'electron';
+import { Menu, Dropdown, Button, Icon, Modal } from 'antd';
+import { ImportProgress } from '../widgets/ImportProgress';
 import * as dataSetActions from '../../actions/dataSet';
 import * as uiActions from '../../actions/ui';
 import * as app from '../../constants/app';
 
-const {dialog, BrowserWindow} = remote;
+const { dialog, BrowserWindow } = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 const currentWindow = remote.getCurrentWindow();
 
@@ -106,7 +106,7 @@ class DataSetsActions extends Component {
   };
 
   render() {
-    const {progress, showModal, currentFile, log} = this.props;
+    const { progress, showModal, currentFile, log } = this.props;
 
     this.setSystemProgressBar(progress.total);
 
@@ -119,12 +119,13 @@ class DataSetsActions extends Component {
     );
 
     const titleImport = (
-      <span><Icon type="file-add"/> Import data</span>
+      <span><Icon type="file-add" /> Import data</span>
     );
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Delete data for selected</Menu.Item>
+        <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Delete data for
+          selected</Menu.Item>
         <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
         <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
@@ -139,7 +140,7 @@ class DataSetsActions extends Component {
           <Button>{titleImport} <Icon type="down" /></Button>
         </Dropdown>{" "}
         <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
-          <Button>Actions <Icon type="down"/></Button>
+          <Button>Actions <Icon type="down" /></Button>
         </Dropdown>
         <Modal
           title={titleImport}

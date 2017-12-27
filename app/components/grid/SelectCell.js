@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {Select, Icon, Popconfirm} from 'antd';
+import React, { Component } from 'react';
+import { Select, Icon, Popconfirm } from 'antd';
 import HighlightValue from './HighlightValue';
 
 
@@ -12,8 +12,8 @@ class SelectCell extends Component {
     error: false
   };
 
-  componentWillReceiveProps(nextProps) {
-    const {value} = this.state;
+  componentWillReceiveProps = (nextProps) => {
+    const { value } = this.state;
     const isUpdate = nextProps.value && nextProps.value.hasOwnProperty('search') ?
       (value.text !== nextProps.value || value.search !== nextProps.search) :
       (value !== nextProps.value);
@@ -23,7 +23,7 @@ class SelectCell extends Component {
         value: nextProps.value
       });
     }
-  }
+  };
 
   handleConfirm = () => {
     this.setState({
@@ -41,7 +41,7 @@ class SelectCell extends Component {
         this.props.onChange(this.state.value, this.afterAction)
       });
     } else {
-      this.setState({value});
+      this.setState({ value });
     }
   };
 
@@ -62,8 +62,8 @@ class SelectCell extends Component {
     }
   };
 
-  render() {
-    const {value, isSaved, error} = this.state;
+  render = () => {
+    const { value, isSaved, error } = this.state;
     const message = !!error ? <div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
@@ -93,13 +93,13 @@ class SelectCell extends Component {
             onChange={this.handleChange}
             size="small"
             dropdownMatchSelectWidth={false}
-            style={{width: '100%'}}
+            style={{ width: '100%' }}
           >
             {this.props.options.map((item, i) => {
               let key = item.value || i;
               return (
                 <Select.Option key={key} value={key}>
-                  <HighlightValue value={item.text || item} search={search}/>
+                  <HighlightValue value={item.text || item} search={search} />
                 </Select.Option>
               );
             })}
@@ -107,7 +107,7 @@ class SelectCell extends Component {
         </Popconfirm>
       </div>
     );
-  }
+  };
 }
 
 export default SelectCell;

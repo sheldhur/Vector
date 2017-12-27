@@ -14,7 +14,7 @@ export default function (dbSession, data) {
 
   db = dbSession;
 
-  const {filePaths, fileType} = data;
+  const { filePaths, fileType } = data;
   const time = {
     period: {
       start: moment(data.main.settings.projectTimePeriod[0]),
@@ -28,14 +28,14 @@ export default function (dbSession, data) {
       const filePath = filePaths[fileKey];
 
       try {
-        process.send({event: 'setCurrentFile', data: filePath});
+        process.send({ event: 'setCurrentFile', data: filePath });
         const readResult = await readFile(filePaths[fileKey], fileType);
         const data = await prepareImportData(readResult, time);
         const dataSets = await saveDataSets(data);
         await saveDataSetValues(dataSets, filePaths, fileKey)
       } catch (e) {
         console.error(e);
-        process.send({event: 'setImportLog', data: {filePath: filePath, error: errorToObject(e)}})
+        process.send({ event: 'setImportLog', data: { filePath: filePath, error: errorToObject(e) } })
       }
     }
   })();
@@ -59,7 +59,7 @@ function saveDataSets(data) {
     Promise.map(data.columns, (item, i) => {
       if (i > 0 && item.name !== '') {
         return db.DataSet.findOrCreate({
-          where: {name: item.name},
+          where: { name: item.name },
           defaults: {
             name: item.name,
             si: item.si || item.name,
@@ -78,7 +78,7 @@ function saveDataSets(data) {
           console.log('saveDataSet: ' + errorToObject(e));
         });
       }
-    }, {concurrency: 1}).then(() => {
+    }, { concurrency: 1 }).then(() => {
       resolve(results);
     }, (error) => {
       reject(error);
@@ -102,7 +102,7 @@ function saveDataSetValues(rows, files, fileCurrent) {
           let progress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
           if (progress.current > lastProgress.current) {
             lastProgress = progress;
-            process.send({event: 'setProgress', data: progress});
+            process.send({ event: 'setProgress', data: progress });
           }
 
           if (error) {

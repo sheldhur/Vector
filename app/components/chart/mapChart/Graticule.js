@@ -1,19 +1,19 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 
 class Graticule extends Component {
   render() {
-    const {path, graticule, shapeRendering, outline} = this.props;
+    const { path, graticule, shapeRendering, outline } = this.props;
 
     return (
       <g>
         <g className="map-graticule" shapeRendering={shapeRendering}>
           {graticule.lines().map((item, i) => {
-            return <path key={`graticule-${i}`} d={path(item)}/>;
+            return <path key={`graticule-${i}`} d={path(item)} />;
           })}
         </g>
-        <path className="map-outline" d={path(outline)}/>
+        <path className="map-outline" d={path(outline)} />
       </g>
     );
   }

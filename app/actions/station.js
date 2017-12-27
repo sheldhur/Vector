@@ -1,9 +1,9 @@
-import {hashHistory} from 'react-router';
-import childProcess from '../lib/childProcess';
-import {db} from '../database/dbConnect';
-import resourcePath from '../lib/resourcePath';
-import {WORKER_PATH, IS_PROD} from '../constants/app';
+import { push } from 'react-router-redux';
+import { IS_PROD, WORKER_PATH } from '../constants/app';
 import * as types from '../constants/station';
+import { db } from '../database/dbConnect';
+import childProcess from '../lib/childProcess';
+import resourcePath from '../lib/resourcePath';
 
 let worker;
 
@@ -91,7 +91,7 @@ export function resetStation() {
 }
 
 export function getData(dispatch, getState, action, args) {
-  const {main} = getState();
+  const { main } = getState();
 
   if (!worker) {
     worker = childProcess({
@@ -141,7 +141,7 @@ export function getData(dispatch, getState, action, args) {
     });
   }
 
-  worker.send({worker: 'station', action, main, args}, () => {
+  worker.send({ worker: 'station', action, main, args }, () => {
     // console.time('stationWorker');
   });
 }
@@ -155,8 +155,8 @@ export function getLatitudeAvgValues() {
 
 export function getStationsValue() {
   return (dispatch, getState) => {
-    const {chartCurrentTime} = getState().ui;
-    return getData(dispatch, getState, 'getStationsValue', {currentTime: chartCurrentTime});
+    const { chartCurrentTime } = getState().ui;
+    return getData(dispatch, getState, 'getStationsValue', { currentTime: chartCurrentTime });
   }
 }
 
@@ -171,13 +171,13 @@ export function getStationViewValues(args) {
 export function updateStation(id, fields, callback) {
   return async (dispatch) => {
     try {
-      const result = await db.Station.update(fields, {where: {id}});
-      const station = await db.Station.find({where: {id}});
-      dispatch(_updateStation(id, station.get({plain: true})));
+      const result = await db.Station.update(fields, { where: { id } });
+      const station = await db.Station.find({ where: { id } });
+      dispatch(_updateStation(id, station.get({ plain: true })));
 
-      if (callback) callback({result});
+      if (callback) callback({ result });
     } catch (error) {
-      if (callback) callback({error});
+      if (callback) callback({ error });
       throw error;
     }
   };
@@ -185,11 +185,11 @@ export function updateStation(id, fields, callback) {
 
 function _updateStation(id, fields) {
   return (dispatch, getState) => {
-    let {stations, extremes} = getState().station;
+    let { stations, extremes } = getState().station;
     let data = {
       stations: {
         ...stations,
-        [id]: {...stations[id], ...fields}
+        [id]: { ...stations[id], ...fields }
       },
       extremes
     };
@@ -200,13 +200,13 @@ function _updateStation(id, fields) {
 export function updateStationValue(id, fields, callback) {
   return async (dispatch) => {
     try {
-      const result = await db.StationValue.update(fields, {where: {id}});
-      const stationValue = await db.StationValue.find({where: {id}});
-      dispatch(_updateStationValue(id, stationValue.get({plain: true})));
+      const result = await db.StationValue.update(fields, { where: { id } });
+      const stationValue = await db.StationValue.find({ where: { id } });
+      dispatch(_updateStationValue(id, stationValue.get({ plain: true })));
 
-      if (callback) callback({result});
+      if (callback) callback({ result });
     } catch (error) {
-      if (callback) callback({error});
+      if (callback) callback({ error });
       throw error;
     }
   };
@@ -217,7 +217,7 @@ function _updateStationValue(id, fields) {
     let stationValues = getState().station.stationView.values;
     stationValues = [...stationValues].map((value) => {
       if (value.id === id) {
-        return {...value, ...fields}
+        return { ...value, ...fields }
       }
       return value;
     });
@@ -234,14 +234,14 @@ export function deleteStation(fields) {
     if (fields.hasOwnProperty('id') && Object.keys(fields).length === 1) {
       stationIds = Array.isArray(fields.id) ? fields.id : [fields.id];
     } else {
-      const stations = await db.Station.findAll({attributes: ['id'], where: fields});
+      const stations = await db.Station.findAll({ attributes: ['id'], where: fields });
       stationIds = stations.map((station) => station.id);
     }
 
     openStationPage();
     await Promise.all([
-      db.StationValue.destroy({where: {stationId: stationIds}}),
-      db.Station.destroy({where: {id: stationIds}})
+      db.StationValue.destroy({ where: { stationId: stationIds } }),
+      db.Station.destroy({ where: { id: stationIds } })
     ]);
 
     dispatch(_deleteStation(stationIds));
@@ -251,10 +251,10 @@ export function deleteStation(fields) {
 
 function _deleteStation(stationIds) {
   return (dispatch, getState) => {
-    const {stations, extremes} = getState().station;
+    const { stations, extremes } = getState().station;
     const data = {
-      stations: {...stations},
-      extremes: {...extremes},
+      stations: { ...stations },
+      extremes: { ...extremes },
     };
 
     stationIds.forEach((stationId) => {
@@ -273,10 +273,10 @@ export function deleteStationValue(fields) {
 
     let stationValueIds;
     if (!fields.id && !fields.stationId) {
-      const stationValues = await db.StationValue.findAll({attributes: ['id'], where: fields});
+      const stationValues = await db.StationValue.findAll({ attributes: ['id'], where: fields });
       stationValueIds = stationValues.map((stationValue) => stationValue.id);
     }
-    await db.StationValue.destroy({where: fields});
+    await db.StationValue.destroy({ where: fields });
 
     if (fields.id) {
       dispatch(_deleteStationValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
@@ -292,7 +292,7 @@ export function deleteStationValue(fields) {
 
 function _deleteStationValue(stationValueIds) {
   return (dispatch, getState) => {
-    const {values} = getState().station.stationView;
+    const { values } = getState().station.stationView;
     const newValues = values.filter(stationValue => stationValueIds.indexOf(stationValue.id) === -1);
 
     dispatch(setStationViewValues(newValues));
@@ -301,7 +301,7 @@ function _deleteStationValue(stationValueIds) {
 
 export function deleteSelectedStations() {
   return (dispatch, getState) => {
-    const {gridSelectedRows} = getState().ui;
+    const { gridSelectedRows } = getState().ui;
 
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteStation({
@@ -313,7 +313,7 @@ export function deleteSelectedStations() {
 
 export function deleteSelectedStationsValues(field) {
   return (dispatch, getState) => {
-    const {gridSelectedRows} = getState().ui;
+    const { gridSelectedRows } = getState().ui;
 
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteStationValue({
@@ -328,8 +328,8 @@ export function clearStations() {
     dispatch(setLoading(true));
 
     await Promise.all([
-      db.Station.destroy({where: {}}),
-      db.StationValue.destroy({where: {}}),
+      db.Station.destroy({ where: {} }),
+      db.StationValue.destroy({ where: {} }),
       db.sequelize.query('DELETE FROM sqlite_sequence WHERE name IN (:name)', {
         replacements: {
           name: [db.Station.getTableName(), db.StationValue.getTableName()]

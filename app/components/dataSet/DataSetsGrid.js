@@ -1,19 +1,19 @@
 // @flow
-import {remote} from 'electron';
-import React, {Component} from 'react';
+import { remote } from 'electron';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {Modal, Icon} from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Modal, Icon } from 'antd';
 import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
 import * as uiActions from '../../actions/ui';
 import * as dataSetActions from '../../actions/dataSet';
 import * as app from '../../constants/app';
 
-const {Menu} = remote;
+const { Menu } = remote;
 
 
 class DataSetsGrid extends Component {
@@ -38,7 +38,7 @@ class DataSetsGrid extends Component {
   };
 
   handlerResize = () => {
-    const {pageSize, availableHeight} = this.calcPageSize();
+    const { pageSize, availableHeight } = this.calcPageSize();
     this.setState({
       availableHeight,
       pageSize,
@@ -50,7 +50,7 @@ class DataSetsGrid extends Component {
   };
 
   setPagination = (props) => {
-    const {availableHeight, pageSize} = this.calcPageSize();
+    const { availableHeight, pageSize } = this.calcPageSize();
     const pageCurrent = this.calcPageCurrent(props, pageSize);
     this.setState({
       availableHeight,
@@ -60,7 +60,7 @@ class DataSetsGrid extends Component {
   };
 
   calcPageCurrent = (props, pageSize) => {
-    const {dataSets, lastOpenItem} = props;
+    const { dataSets, lastOpenItem } = props;
     if (lastOpenItem) {
       const data = dataSets ? Object.values(dataSets) : [];
 
@@ -90,15 +90,15 @@ class DataSetsGrid extends Component {
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
 
-    return {availableHeight, pageSize};
+    return { availableHeight, pageSize };
   };
 
   handlerPageChange = (page) => {
-    this.setState({pageCurrent: page});
+    this.setState({ pageCurrent: page });
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
-    this.props.dataSetActions.updateDataSet(id, {[field]: value}, afterAction);
+    this.props.dataSetActions.updateDataSet(id, { [field]: value }, afterAction);
   };
 
   handlerRowOnContextMenu = (record, index, e) => {
@@ -117,7 +117,7 @@ class DataSetsGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.dataSetActions.deleteDataSet({id: record.id})
+                this.props.dataSetActions.deleteDataSet({ id: record.id })
               },
             });
           }
@@ -132,7 +132,7 @@ class DataSetsGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.dataSetActions.deleteDataSetValue({stationId: record.id})
+                this.props.dataSetActions.deleteDataSetValue({ stationId: record.id })
               },
             });
           }
@@ -154,7 +154,7 @@ class DataSetsGrid extends Component {
         title: '',
         dataIndex: 'chart',
         width: 30,
-        render: (text, record, index) => (<Link to={`/dataset/${record.id}`}><Icon type="line-chart"/></Link>)
+        render: (text, record, index) => (<Link to={`/dataset/${record.id}`}><Icon type="line-chart" /></Link>)
       }, {
         title: 'Name',
         dataIndex: 'name',
@@ -162,7 +162,7 @@ class DataSetsGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('name', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'SI',
         dataIndex: 'si',
@@ -171,7 +171,7 @@ class DataSetsGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('si', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'Bad value',
         dataIndex: 'badValue',
@@ -180,14 +180,14 @@ class DataSetsGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('badValue', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'Style',
         dataIndex: 'style',
         width: 75,
         render: (text, record, index) => (<Grid.LineStyleCell value={record.style} onChange={
           (value, afterAction) => this.handlerCellChange('style', record.id, value, afterAction)
-        }/>)
+        } />)
       },
       // {
       //   title: 'Axis Y',
@@ -207,19 +207,19 @@ class DataSetsGrid extends Component {
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('axisGroup', record.id, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: '',
         dataIndex: 'status',
         width: 30,
         render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
           (value, afterAction) => this.handlerCellChange('status', record.id, value, afterAction)
-        }/>)
+        } />)
       }
     ];
 
 
-    const {dataSets, isLoading} = this.props.data;
+    const { dataSets, isLoading } = this.props.data;
     const data = dataSets ? Object.values(dataSets).filter((dataSet) => dataSet !== undefined) : [];
 
     const rowSelection = {
@@ -231,7 +231,7 @@ class DataSetsGrid extends Component {
 
     return (
       <div className="dataset-grid"
-           style={{height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1)}}>
+           style={{ height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1) }}>
         <Grid
           rowClassName={(record) => {
             return record.id === this.props.lastOpenItem ? 'select-row' : ''

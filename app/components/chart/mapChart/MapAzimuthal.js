@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import * as d3 from 'd3';
 import Chart from './Chart';
 import World from './World';
@@ -34,8 +34,8 @@ class MapAzimuthal extends Component {
   };
 
   render = () => {
-    const {width, height, data, graticuleStep, clipAngle, rotate} = this.props;
-    const {isRenderMap, axisMargin} = this.state;
+    const { width, height, data, graticuleStep, clipAngle, rotate } = this.props;
+    const { isRenderMap, axisMargin } = this.state;
 
     const margin = {
       left: 13,
@@ -54,7 +54,7 @@ class MapAzimuthal extends Component {
 
     const path = d3.geoPath().projection(projection);
     const graticule = d3.geoGraticule().step(graticuleStep);
-    const outline = {type: 'Sphere'};
+    const outline = { type: 'Sphere' };
 
     const range = d3.range(0, 360, graticuleStep[0]).reverse();
     let ticks = [];
@@ -81,10 +81,10 @@ class MapAzimuthal extends Component {
       >
         <defs>
           <filter id={`#${this.uid}-blur`}>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0" />
           </filter>
           <clipPath id={`${this.uid}-vector`}>
-            <path d={path(outline)}/>
+            <path d={path(outline)} />
           </clipPath>
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
@@ -92,7 +92,7 @@ class MapAzimuthal extends Component {
             <World
               path={path}
               ocean={outline}
-              size={{width, height}}
+              size={{ width, height }}
               {...this.props.world}
             />
             <Graticule
@@ -101,7 +101,7 @@ class MapAzimuthal extends Component {
               outline={outline}
               shapeRendering="auto"
             />
-            <GeomagEquator path={path}/>
+            <GeomagEquator path={path} />
             <SolarTerminator
               path={path}
               projection={projection}

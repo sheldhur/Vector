@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 
 //TODO: зависит от даты, прикрутить модели IGRF и WWM https://upload.wikimedia.org/wikipedia/commons/d/de/World_Magnetic_Inclination_2015.pdf
@@ -16,7 +16,8 @@ class GeomagEquator extends Component {
     };
 
     return (
-      <path d={this.props.path(line)} stroke="black" strokeWidth={1} strokeDasharray={'4,2'} strokeOpacity={0.8} fill="none" />
+      <path d={this.props.path(line)} stroke="black" strokeWidth={1} strokeDasharray={'4,2'} strokeOpacity={0.8}
+            fill="none" />
     );
   }
 }

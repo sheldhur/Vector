@@ -1,15 +1,15 @@
-import {remote} from 'electron';
-import {message} from 'antd';
+import { remote } from 'electron';
+import { message } from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
 
-const {dialog} = remote;
+const { dialog } = remote;
 const currentWindow = remote.getCurrentWindow();
 
 
 export default function (props) {
-  const {Menu} = remote;
+  const { Menu } = remote;
   const menu = Menu.buildFromTemplate([
     {
       label: 'Export',
@@ -21,7 +21,7 @@ export default function (props) {
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save CSV',
           filters: [
-            {name: 'CSV', extensions: ['csv']},
+            { name: 'CSV', extensions: ['csv'] },
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
@@ -60,7 +60,7 @@ export default function (props) {
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save image',
           filters: [
-            {name: 'PNG', extensions: ['png']},
+            { name: 'PNG', extensions: ['png'] },
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
@@ -80,7 +80,7 @@ export default function (props) {
           }
         });
       }
-    }, {type: 'separator'}, {
+    }, { type: 'separator' }, {
       label: 'Update chart',
       icon: resourcePath('./assets/icons/arrow-circle-double.png'),
       click: () => {

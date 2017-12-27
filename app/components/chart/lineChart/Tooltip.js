@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {sprintf} from 'sprintf-js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { sprintf } from 'sprintf-js';
 import * as d3 from 'd3';
-import {mathAvg} from "../../../utils/helper";
+import { mathAvg } from "../../../utils/helper";
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
 import * as uiActions from '../../../actions/ui';
@@ -100,7 +100,7 @@ class Tooltip extends Component {
 
     let tooltipPointList = [];
     let tooltipTextList = [];
-    let tooltipTextPosition = {x: [], y: []};
+    let tooltipTextPosition = { x: [], y: [] };
     points.forEach((item, i) => {
       if (item.y !== null) {
         tooltipPointList.push(<TooltipPoint
@@ -109,7 +109,7 @@ class Tooltip extends Component {
           position={{
             x: this.props.scale.x(item.x),
             y: this.props.scale.y[item.linesGroup](item.y)
-          }}/>);
+          }} />);
 
         if (this.props.group) {
           tooltipTextList.push(<tspan key={'tooltipText-' + i} fill={item.stroke} dy="1em"
@@ -147,7 +147,7 @@ class Tooltip extends Component {
                 y1="0"
                 y2={this.props.height}
                 transform={`translate(${this.props.scale.x(points[0].x)}, 0)`}
-                shapeRendering="optimizeSpeed"/>
+                shapeRendering="optimizeSpeed" />
           {tooltipPointList.length && tooltipPointList}
           {tooltipPointList.length && tooltipTextList}
         </g>}
@@ -155,7 +155,7 @@ class Tooltip extends Component {
               height={this.props.height}
               fill="none"
               ref="rect"
-              pointerEvents="all"/>
+              pointerEvents="all" />
       </g>
     );
   };

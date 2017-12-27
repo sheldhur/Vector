@@ -8,9 +8,9 @@
 }
 
 .dataset-values-view .dataset-actions > div:first-child {
-   text-align: left;
-   padding: 0 10px;
- }
+  text-align: left;
+  padding: 0 10px;
+}
 
 .dataset-values-view .dataset-actions .ant-btn {
   line-height: normal;

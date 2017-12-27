@@ -18,15 +18,15 @@ const initialState = {
 export default function chart(state = initialState, action) {
   switch (action.type) {
     case types.CHART_CURRENT_TIME:
-      return {...state, chartCurrentTime: action.payload};
+      return { ...state, chartCurrentTime: action.payload };
     case types.CHART_TOOLTIP_TIME:
-      return {...state, chartTooltipTime: action.payload};
+      return { ...state, chartTooltipTime: action.payload };
     case types.MAP_TOOLTIP_STATION:
-      return {...state, mapTooltipStation: action.payload};
+      return { ...state, mapTooltipStation: action.payload };
     case types.GRID_SELECTED_ROWS:
-      return {...state, gridSelectedRows: action.payload || []};
+      return { ...state, gridSelectedRows: action.payload || [] };
     case types.GRID_LAST_OPEN_ITEM:
-      return {...state, gridLastOpenItem: action.payload};
+      return { ...state, gridLastOpenItem: action.payload };
     case types.IMPORT_SHOW_MODAL:
       if (!action.payload) {
         return {
@@ -40,13 +40,13 @@ export default function chart(state = initialState, action) {
           importLog: []
         }
       }
-      return {...state, importShowModal: action.payload};
+      return { ...state, importShowModal: action.payload };
     case types.IMPORT_CURRENT_FILE:
-      return {...state, importCurrentFile: action.payload};
+      return { ...state, importCurrentFile: action.payload };
     case types.IMPORT_PROGRESS:
-      return {...state, importProgress: action.payload || {...initialState.progressBar}};
+      return { ...state, importProgress: action.payload || { ...initialState.progressBar } };
     case types.IMPORT_LOG:
-      return {...state, importLog: action.payload ? [...state.importLog, action.payload] : []};
+      return { ...state, importLog: action.payload ? [...state.importLog, action.payload] : [] };
     default:
       return state;
   }

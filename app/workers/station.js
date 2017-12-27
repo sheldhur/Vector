@@ -1,10 +1,10 @@
 import Promise from 'bluebird';
 import moment from 'moment';
-import {STATION_DISABLED, STATION_ENABLED} from '../constants/app'
+import { STATION_DISABLED } from '../constants/app'
 import * as stationsCalc from '../utils/stationsCalc';
 import errorToObject from '../lib/errorToObject';
 import calcProgress from '../lib/calcProgress';
-import {mathAvg, numberIsBetween} from '../utils/helper';
+import { mathAvg, numberIsBetween } from '../utils/helper';
 
 let db;
 
@@ -20,10 +20,10 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
   let stageLength = 0;
   const stages = stageName ? {
     // getStations: {stage: stageLength++, message: "Loading stations list"},
-    getStationValues: {stage: stageLength++, message: "Loading stations values"},
-    getLatitudeAvgValues: {stage: stageLength++, message: "Calculating average values"},
+    getStationValues: { stage: stageLength++, message: "Loading stations values" },
+    getLatitudeAvgValues: { stage: stageLength++, message: "Calculating average values" },
   } : {
-    null: {stage: stageLength++, message: "Loading", event: 'setStationViewProgress'},
+    null: { stage: stageLength++, message: "Loading", event: 'setStationViewProgress' },
   };
 
   let lastSendTime = null;
@@ -36,7 +36,7 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
 
     const sendTime = new Date().valueOf();
     if (!lastSendTime || sendTime - lastSendTime > throttleMs) {
-      process.send({event: stages[stageName].event || 'setProgress', data: progress});
+      process.send({ event: stages[stageName].event || 'setProgress', data: progress });
       lastSendTime = sendTime;
     }
   }
@@ -65,7 +65,7 @@ export default function (dbSession, data) {
 function actionStationViewValues(data) {
   return new Promise((resolve, reject) => {
     console.time('actionStationViewValues');
-    const {settings} = data.main;
+    const { settings } = data.main;
     const sqlite = db.sequelize.connectionManager.connections.default;
 
     if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
@@ -95,7 +95,7 @@ function actionStationViewValues(data) {
       ORDER BY time
     `;
 
-    process.send({consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ')});
+    process.send({ consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ') });
     sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
@@ -115,7 +115,7 @@ function actionStationViewValues(data) {
 
       sendProgress(time.valueOf() - timeStart);
     }, () => {
-      process.send({event: 'setStationViewValues', data: values});
+      process.send({ event: 'setStationViewValues', data: values });
 
       resolve({
         values,
@@ -134,15 +134,15 @@ async function actionStationsValue(data) {
       },
       raw: true
     });
-    process.send({event: 'setStationsValue', data: stationsValue});
+    process.send({ event: 'setStationsValue', data: stationsValue });
   } catch (error) {
-    process.send({event: 'setStationsValueError', data: errorToObject(error)});
+    process.send({ event: 'setStationsValueError', data: errorToObject(error) });
     console.error(error);
   }
 }
 
 async function actionLatitudeAvgValues(data) {
-  const {settings} = data.main;
+  const { settings } = data.main;
 
   if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
     throw new Error("Can't get time period");
@@ -170,15 +170,15 @@ async function actionLatitudeAvgValues(data) {
     const stationValues = await getStationValues(stations, timePeriod);
     const result = getLatitudeAvgValues(stationValues, avgChart, timeSelected);
 
-    process.send({event: 'setLatitudeAvgValues', data: result});
+    process.send({ event: 'setLatitudeAvgValues', data: result });
   } catch (error) {
-    process.send({event: 'setError', data: errorToObject(error)});
+    process.send({ event: 'setError', data: errorToObject(error) });
     console.error(error);
   }
 }
 
 function getStations() {
-  return db.Station.findAll({raw: true})
+  return db.Station.findAll({ raw: true })
     .then((stations) => {
       // const sendProgress = getProgress('getStations', stations.length);
 
@@ -195,7 +195,7 @@ function getStations() {
         // sendProgress(i);
       });
 
-      return {list, disabled};
+      return { list, disabled };
     });
 }
 
@@ -227,7 +227,7 @@ function getStationValues(stations, timePeriod) {
     const sendProgress = getProgress('getStationValues', timePeriod.end.valueOf() - timePeriod.start.valueOf());
     const timeStart = timePeriod.start.valueOf();
 
-    process.send({consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ')});
+    process.send({ consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ') });
     sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
@@ -250,8 +250,8 @@ function getStationValues(stations, timePeriod) {
 
         if (extremes[row.stationId] === undefined) {
           extremes[row.stationId] = {
-            start: {...components},
-            end: {...components}
+            start: { ...components },
+            end: { ...components }
           }
         }
         extremes[row.stationId] = getExtremes(extremes[row.stationId], ['compX', 'compY'], row);
@@ -280,7 +280,7 @@ function getStationValues(stations, timePeriod) {
 function getLatitudeAvgValues(data, avgChart, timeSelected) {
   console.time('getLatitudeAvgValues');
   const sendProgress = getProgress('getLatitudeAvgValues', data.values.length);
-  const {latitudeRanges, lines} = avgChart;
+  const { latitudeRanges, lines } = avgChart;
   let latitudeAvgValues = {};
   let maximum = {
     dH: null,
@@ -381,7 +381,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
 
   console.timeEnd('getLatitudeAvgValues');
 
-  return {latitudeAvgValues, maximum};
+  return { latitudeAvgValues, maximum };
 }
 
 function getExtremes(extremes, compKeys, row) {

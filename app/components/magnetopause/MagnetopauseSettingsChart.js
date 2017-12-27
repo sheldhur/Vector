@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Modal, Icon, Button, Input, Form} from "antd";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Modal, Icon, Button, Input, Form } from "antd";
 import * as mainActions from "./../../actions/main";
 import * as magnetopauseActions from "./../../actions/magnetopause";
 import MagnetopauseSettingsDataSets from "./MagnetopauseSettingsDataSets";
@@ -21,11 +21,11 @@ class MagnetopauseSettingsChart extends Component {
   // };
 
   handlerModalOpen = () => {
-    this.setState({modalVisible: true});
+    this.setState({ modalVisible: true });
   };
 
   handlerModalClose = (callback) => {
-    this.setState({modalVisible: false}, callback);
+    this.setState({ modalVisible: false }, callback);
   };
 
   handlerReset = (e) => {
@@ -38,7 +38,7 @@ class MagnetopauseSettingsChart extends Component {
     e.preventDefault();
     let values = this.props.form.getFieldsValue();
 
-    this.props.mainActions.saveSettings({projectMagnetopauseDataSets: values.magnetopauseDataSets}).then(() => {
+    this.props.mainActions.saveSettings({ projectMagnetopauseDataSets: values.magnetopauseDataSets }).then(() => {
       this.handlerModalClose(() => {
         this.props.magnetopauseActions.calculateMagnetopause();
       });
@@ -46,8 +46,8 @@ class MagnetopauseSettingsChart extends Component {
   };
 
   getValidationRules = () => {
-    const {magnetopauseDataSets} = this.props;
-    const {setFieldsValue} = this.props.form;
+    const { magnetopauseDataSets } = this.props;
+    const { setFieldsValue } = this.props.form;
 
     return {
       'magnetopauseDataSets': {
@@ -60,8 +60,8 @@ class MagnetopauseSettingsChart extends Component {
   };
 
   render = () => {
-    const {getFieldError, getFieldValue, setFieldsValue} = this.props.form;
-    const {dataSets} = this.props;
+    const { getFieldError, getFieldValue, setFieldsValue } = this.props.form;
+    const { dataSets } = this.props;
     let rules = {};
 
     if (this.state.modalVisible) {
@@ -74,12 +74,12 @@ class MagnetopauseSettingsChart extends Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 8},
+        xs: { span: 24 },
+        sm: { span: 8 },
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 14},
+        xs: { span: 24 },
+        sm: { span: 14 },
       },
     };
 
@@ -89,28 +89,28 @@ class MagnetopauseSettingsChart extends Component {
         <Modal
           wrapClassName="main-page-settings magnetopause-view-settings"
           width={460}
-          title={(<span><Icon type="setting"/> Additional datasets</span>)}
+          title={(<span><Icon type="setting" /> Additional datasets</span>)}
           onCancel={this.handlerReset}
           onOk={this.handlerSave}
           visible={this.state.modalVisible}
         >
           <Form>
-              <Form.Item {...formItemLayout} label="Add dataset">
-                {wrappedField('magnetopauseDataSets')(
-                  <MagnetopauseSettingsSelector
-                    size={this.props.size}
-                    dataSets={dataSets}
-                  />
-                )}
-              </Form.Item>
-              {wrappedField('magnetopauseDataSets')(<MagnetopauseSettingsDataSets
-                dataSets={dataSets}
-                onLineRemove={(index) => {
-                  let items = getFieldValue('magnetopauseDataSets');
-                  items.splice(index, 1);
-                  setFieldsValue({'magnetopauseDataSets': items});
-                }}
-              />)}
+            <Form.Item {...formItemLayout} label="Add dataset">
+              {wrappedField('magnetopauseDataSets')(
+                <MagnetopauseSettingsSelector
+                  size={this.props.size}
+                  dataSets={dataSets}
+                />
+              )}
+            </Form.Item>
+            {wrappedField('magnetopauseDataSets')(<MagnetopauseSettingsDataSets
+              dataSets={dataSets}
+              onLineRemove={(index) => {
+                let items = getFieldValue('magnetopauseDataSets');
+                items.splice(index, 1);
+                setFieldsValue({ 'magnetopauseDataSets': items });
+              }}
+            />)}
           </Form>
         </Modal>
       </Input.Group>

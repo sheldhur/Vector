@@ -1,7 +1,7 @@
 // @flow
-import React, {Component} from 'react';
-import {Icon, Popconfirm, Popover, Button, Form, Input} from 'antd';
-import {SketchPicker} from 'react-color';
+import React, { Component } from 'react';
+import { Icon, Popconfirm, Popover, Button, Form, Input } from 'antd';
+import { SketchPicker } from 'react-color';
 
 
 class LineStyleCell extends Component {
@@ -17,7 +17,7 @@ class LineStyleCell extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     if (JSON.stringify(this.state.value) !== JSON.stringify(nextProps.value)) {
-      this.setState({value: nextProps.value});
+      this.setState({ value: nextProps.value });
     }
   };
 
@@ -100,7 +100,7 @@ class LineStyleCell extends Component {
   };
 
   handleColorPickerShow = () => {
-    this.setState({colorPickerVisible: true});
+    this.setState({ colorPickerVisible: true });
   };
 
   handleCancel = () => {
@@ -111,7 +111,7 @@ class LineStyleCell extends Component {
   };
 
   render = () => {
-    const {value, colorPickerVisible, isSaved, error} = this.state;
+    const { value, colorPickerVisible, isSaved, error } = this.state;
     const message = !!error ? <div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
@@ -127,8 +127,8 @@ class LineStyleCell extends Component {
 
     const size = 'small';
     const formItemLayout = {
-      labelCol: {span: 6},
-      wrapperCol: {span: 18},
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     };
 
     const colorPicker = (
@@ -138,7 +138,7 @@ class LineStyleCell extends Component {
       >
         <div className="line-style-control">
           <div className="left">
-            <SketchPicker disableAlpha={true} color={style.stroke} onChangeComplete={this.handleColorChange}/>
+            <SketchPicker disableAlpha={true} color={style.stroke} onChangeComplete={this.handleColorChange} />
           </div>
           <div className="right">
             <Form layout="horizontal">
@@ -215,9 +215,9 @@ class LineStyleCell extends Component {
                 </svg>
               </div>
               {isSaved ?
-                <Icon type="loading" className="line-style-cell-icon"/>
+                <Icon type="loading" className="line-style-cell-icon" />
                 :
-                <Icon type="line-chart" className="line-style-cell-icon"/>
+                <Icon type="line-chart" className="line-style-cell-icon" />
               }
             </div>
           </Popover>

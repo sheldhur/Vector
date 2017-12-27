@@ -1,10 +1,10 @@
 // @flow
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
-import {NoDataAlert} from '../widgets/ChartAlert';
+import { NoDataAlert } from '../widgets/ChartAlert';
 import MagnetopauseChartMenu from './MagnetopauseChartMenu';
 import * as prepareData from '../../utils/prepareData';
 
@@ -15,7 +15,7 @@ class MagnetopauseChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      const {chart} = this.props;
+      const { chart } = this.props;
       MagnetopauseChartMenu({
         data: chart,
         dataNotEmpty: chart != null && chart.length > 0
@@ -23,7 +23,7 @@ class MagnetopauseChart extends Component {
     }
   };
 
-  render() {
+  render = () => {
     const dataSets = {};
     const dataSetValues = {};
 
@@ -39,7 +39,7 @@ class MagnetopauseChart extends Component {
       axisGroup: 0,
       name: "Magnetopause",
       si: "Re",
-      style: {stroke: '#ff7f0e'},
+      style: { stroke: '#ff7f0e' },
       axisY: -1,
       badValue: null,
       status: 1
@@ -50,7 +50,7 @@ class MagnetopauseChart extends Component {
     return (
       <div
         id="magnetopauseChart"
-        style={{width: this.props.width, height: this.props.height}}
+        style={{ width: this.props.width, height: this.props.height }}
         onContextMenu={this.handlerContextMenu}
       >
         <LineChart
@@ -59,13 +59,13 @@ class MagnetopauseChart extends Component {
           data={chartLines}
           tooltipDelay={100}
           antiAliasing={this.props.antiAliasing}
-          emptyMessage={<NoDataAlert/>}
+          emptyMessage={<NoDataAlert />}
         >
-          <TitleCurrentTime/>
+          <TitleCurrentTime />
         </LineChart>
       </div>
     );
-  }
+  };
 }
 
 MagnetopauseChart.propTypes = {

@@ -1,10 +1,10 @@
-import {ipcRenderer, remote} from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React from 'react';
-import {render} from 'react-dom';
-import {AppContainer} from 'react-hot-loader';
+import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
-import {configureStore, history} from './store/configureStore';
-import {LocaleProvider} from 'antd';
+import { configureStore, history } from './store/configureStore';
+import { LocaleProvider } from 'antd';
 import locale from 'antd/lib/locale-provider/ru_RU';
 import * as mainActions from './actions/main';
 import * as stationActions from './actions/station';
@@ -18,7 +18,7 @@ const store = configureStore();
 render(
   <LocaleProvider locale={locale}>
     <AppContainer>
-      <Root store={store} history={history}/>
+      <Root store={store} history={history} />
     </AppContainer>
   </LocaleProvider>,
   document.getElementById('root')
@@ -30,7 +30,7 @@ if (module.hot) {
     render(
       <LocaleProvider locale={locale}>
         <AppContainer>
-          <NextRoot store={store} history={history}/>
+          <NextRoot store={store} history={history} />
         </AppContainer>
       </LocaleProvider>,
       document.getElementById('root')

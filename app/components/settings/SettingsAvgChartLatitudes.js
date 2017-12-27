@@ -1,7 +1,7 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Button, Popconfirm, Icon} from 'antd';
+import { Button, Popconfirm, Icon } from 'antd';
 import Grid from '../grid/Grid';
 
 
@@ -21,20 +21,20 @@ class SettingsAvgChartLines extends Component {
     }
   };
 
-  render() {
+  render = () => {
     let columns = [
       {
         title: 'Start',
         dataIndex: '0',
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('0', index, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: 'End',
         dataIndex: '1',
         render: (text, record, index) => (<Grid.InputCell value={text} onChange={
           (value, afterAction) => this.handleCellChange('1', index, value, afterAction)
-        }/>)
+        } />)
       }, {
         title: '',
         dataIndex: 'delete',
@@ -45,22 +45,26 @@ class SettingsAvgChartLines extends Component {
               <Popconfirm
                 placement="left"
                 title="Are you sure delete this range?"
-                onConfirm={() => {this.handleLineAddRemove(index)}}
+                onConfirm={() => {
+                  this.handleLineAddRemove(index)
+                }}
                 okText="Delete"
                 cancelText="No"
               >
-                <a href="#"><Icon type="delete"/></a>
+                <a href="#"><Icon type="delete" /></a>
               </Popconfirm>
               :
-              <a href="#" onClick={() => {this.handleLineAddRemove(index)}}><Icon type="delete"/></a>
+              <a href="#" onClick={() => {
+                this.handleLineAddRemove(index)
+              }}><Icon type="delete" /></a>
           )
         }
       }
     ];
 
-    const {value} = this.props;
+    const { value } = this.props;
     const lines = value ? value.map((line, i) => {
-      return {0: line[0], 1: line[1], key: i}
+      return { 0: line[0], 1: line[1], key: i }
     }) : [];
     // const buttonAddDisable = !!lines.filter((line) => !line.comp || !line.hemisphere).length;
     const buttonAddDisable = false;
@@ -89,7 +93,7 @@ class SettingsAvgChartLines extends Component {
         bordered={true}
       />
     );
-  }
+  };
 }
 
 // export default DataSetGrid;

@@ -1,6 +1,6 @@
 // @flow
-import {combineReducers} from 'redux';
-import {routerReducer as router} from 'react-router-redux';
+import { combineReducers } from 'redux';
+import { routerReducer as router } from 'react-router-redux';
 import main from './main';
 import ui from './ui';
 import dataSet from './dataSet';

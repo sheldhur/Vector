@@ -1,5 +1,5 @@
-import MagnetopausePoint from '../lib/geopack/magnetopausePoint';
 import * as types from '../constants/magnetopause';
+import MagnetopausePoint from '../lib/geopack/magnetopausePoint';
 
 export function setChart(payload) {
   return {
@@ -31,7 +31,7 @@ function prepareDataSet(dataSets, dataSetValues, field) {
 export function calculateMagnetopause() {
   return (dispatch, getState) => {
     const field = getState().main.settings.projectMagnetopause;
-    const {dataSets, dataSetValues} = getState().dataSet;
+    const { dataSets, dataSetValues } = getState().dataSet;
 
     let chartPoints = null;
     let data = null;

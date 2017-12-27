@@ -51,7 +51,7 @@ let dbConnect = async (dbPath) => {
       logging: (log) => {
         if (!db.disableLogging) {
           if (process.send !== undefined) {
-            process.send({consoleLogSQL: log});
+            process.send({ consoleLogSQL: log });
           } else {
             consoleLogSQL(log);
           }

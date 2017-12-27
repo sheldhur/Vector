@@ -1,9 +1,9 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
-import {openWindowStation} from '../../map/VectorMapMenu'
+import { openWindowStation } from '../../map/VectorMapMenu'
 import * as uiActions from '../../../actions/ui';
 import * as stationsCalc from '../../../utils/stationsCalc';
 
@@ -26,11 +26,11 @@ class StationVector extends Component {
   };
 
   componentDidCatch = (error, info) => {
-    this.setState({hasError: true});
+    this.setState({ hasError: true });
   };
 
   prepareStationsData = () => {
-    const {projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum, mapLayerH, mapLayerZ, isShowNames} = this.props;
+    const { projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum, mapLayerH, mapLayerZ, isShowNames } = this.props;
 
     let data = [];
 
@@ -40,7 +40,7 @@ class StationVector extends Component {
           let station = stations[stationValue.stationId];
           if (station.status) {
             let delta = stationsCalc.delta(stationValue, extremes[stationValue.stationId]);
-            data.push({...station, delta});
+            data.push({ ...station, delta });
           }
         }
       });
@@ -151,12 +151,12 @@ class StationVector extends Component {
       });
     }
 
-    return {points, lines, circles, names};
+    return { points, lines, circles, names };
   };
 
   render = () => {
     if (!this.state.hasError) {
-      const {mapLayerZ} = this.props;
+      const { mapLayerZ } = this.props;
       const data = this.prepareStationsData();
       const color = {
         positive: hexToRgb(mapLayerZ.color.positive),
@@ -192,12 +192,12 @@ class StationVector extends Component {
         <g className="map-point" clipPath={this.props.clipPath} ref="points">
           <defs>
             <radialGradient id="circle-positive" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
-              <stop offset="0%" style={style.circle.positive.start}/>
-              <stop offset="100%" style={style.circle.positive.end}/>
+              <stop offset="0%" style={style.circle.positive.start} />
+              <stop offset="100%" style={style.circle.positive.end} />
             </radialGradient>
             <radialGradient id="circle-negative" cx="50%" cy="50%" r="25%" fx="50%" fy="50%">
-              <stop offset="0%" style={style.circle.negative.start}/>
-              <stop offset="100%" style={style.circle.negative.end}/>
+              <stop offset="0%" style={style.circle.negative.start} />
+              <stop offset="100%" style={style.circle.negative.end} />
             </radialGradient>
           </defs>
           <g>

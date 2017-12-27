@@ -1,15 +1,13 @@
 // @flow
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import * as d3 from 'd3';
-import {solarPoint} from '../../../lib/geopack';
+import { solarPoint } from '../../../lib/geopack';
 
 class SolarTerminator extends Component {
 
   render = () => {
-    const {projection, path, currentTime, pointRadius} = this.props;
+    const { projection, path, currentTime, pointRadius } = this.props;
 
     if (currentTime) {
       const utcTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
@@ -25,15 +23,15 @@ class SolarTerminator extends Component {
             transform={`translate(${coordinates[0] - pointRadius}, ${coordinates[1] - pointRadius})`}
           >
             <g shapeRendering="optimizeSpeed">
-              <line x1={0} y1={pointRadius} x2={pointRadius * 2} y2={pointRadius}/>
-              <line x1={pointRadius} y1={0} x2={pointRadius} y2={pointRadius * 2}/>
+              <line x1={0} y1={pointRadius} x2={pointRadius * 2} y2={pointRadius} />
+              <line x1={pointRadius} y1={0} x2={pointRadius} y2={pointRadius * 2} />
             </g>
             <g transform="rotate(45, 7.5, 7.5)">
-              <line x1={0} y1={pointRadius} x2={pointRadius * 2} y2={pointRadius}/>
-              <line x1={pointRadius} y1={0} x2={pointRadius} y2={pointRadius * 2}/>
+              <line x1={0} y1={pointRadius} x2={pointRadius * 2} y2={pointRadius} />
+              <line x1={pointRadius} y1={0} x2={pointRadius} y2={pointRadius * 2} />
             </g>
           </g>
-          <path d={path(circle.center([antipode.longitude, antipode.latitude]).radius(90)())}/>
+          <path d={path(circle.center([antipode.longitude, antipode.latitude]).radius(90)())} />
         </g>
       );
     }

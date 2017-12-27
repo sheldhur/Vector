@@ -1,15 +1,15 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {remote} from 'electron';
-import {Menu, Dropdown, Button, Icon, Modal} from 'antd';
-import {ImportProgress} from '../widgets/ImportProgress';
+import { Button, Dropdown, Icon, Menu, Modal } from 'antd';
+import { remote } from 'electron';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as stationActions from '../../actions/station';
 import * as uiActions from '../../actions/ui';
 import * as app from '../../constants/app';
+import { ImportProgress } from '../widgets/ImportProgress';
 
-const {dialog, BrowserWindow} = remote;
+const { dialog, BrowserWindow } = remote;
 const mainWindow = BrowserWindow.getAllWindows()[0];
 const currentWindow = remote.getCurrentWindow();
 
@@ -104,7 +104,7 @@ class StationsActions extends Component {
   };
 
   render() {
-    const {progress, showModal, currentFile, log} = this.props;
+    const { progress, showModal, currentFile, log } = this.props;
 
     this.setSystemProgressBar(progress.total);
 
@@ -117,12 +117,13 @@ class StationsActions extends Component {
     );
 
     const titleImport = (
-      <span><Icon type="file-add"/> Import data</span>
+      <span><Icon type="file-add" /> Import data</span>
     );
 
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
-        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for selected</Menu.Item>
+        <Menu.Item key={STATIONS_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Clear data for
+          selected</Menu.Item>
         <Menu.Item key={STATIONS_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
         <Menu.Item key={STATIONS_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
@@ -131,15 +132,15 @@ class StationsActions extends Component {
     return (
       <div className="station-import">
         <Button onClick={this.props.stationActions.getLatitudeAvgValues}>
-          <Icon type="reload"/> Update stations
+          <Icon type="reload" /> Update stations
         </Button>
         {" "}
         <Dropdown overlay={menuFileType} placement="bottomCenter" trigger={['click']}>
-          <Button>{titleImport} <Icon type="down"/></Button>
+          <Button>{titleImport} <Icon type="down" /></Button>
         </Dropdown>
         {" "}
         <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
-          <Button>Actions <Icon type="down"/></Button>
+          <Button>Actions <Icon type="down" /></Button>
         </Dropdown>
         <Modal
           wrapClassName="station-import"

@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {NoDataAlert} from '../widgets/ChartAlert';
+import { NoDataAlert } from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import MagnetopauseMapMenu from './MagnetopauseMapMenu';
-import {magnetopausePoint} from '../../lib/geopack';
-import {numberIsBetween} from '../../utils/helper';
+import { magnetopausePoint } from '../../lib/geopack';
+import { numberIsBetween } from '../../utils/helper';
 
 
 class MagnetopauseMapY extends Component {
@@ -69,7 +69,7 @@ class MagnetopauseMapY extends Component {
     let chartLines = [
       {
         si: 'Z (Re)',
-        extent: {x: [-30, 30], y: [-30, 30]},
+        extent: { x: [-30, 30], y: [-30, 30] },
         lines: lines
       },
     ];
@@ -78,7 +78,7 @@ class MagnetopauseMapY extends Component {
   };
 
   render = () => {
-    const {wind} = this.props;
+    const { wind } = this.props;
     const data = this.prepareData(wind);
 
     return (
@@ -88,12 +88,12 @@ class MagnetopauseMapY extends Component {
           height={this.props.height}
           data={data}
           tooltipDelay={100}
-          ticks={{x: 5, y: 5}}
+          ticks={{ x: 5, y: 5 }}
           showTooltip={false}
           showTimeCursor={false}
           labelY={'Y (Re)'}
           antiAliasing={this.props.antiAliasing}
-          emptyMessage={<NoDataAlert/>}
+          emptyMessage={<NoDataAlert />}
         />
       </div>
     );

@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Row} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Row } from 'antd';
 import DataSetValueActions from './DataSetValueActions';
 import DataSetValuesChart from './DataSetValuesChart';
 import DataSetValuesGrid from './DataSetValuesGrid';
@@ -33,11 +33,11 @@ class DataSetValuesView extends Component {
 
     return (
       <div className={`dataset-values-view theme-${this.props.theme}`}>
-        <Row style={{height:'150px'}}>
+        <Row style={{ height: '150px' }}>
           <DataSetValuesChart dataSetId={dataSetId} />
         </Row>
         <Row>
-          <DataSetValueActions dataSetId={dataSetId}/>
+          <DataSetValueActions dataSetId={dataSetId} />
         </Row>
         <Row>
           <DataSetValuesGrid dataSetId={dataSetId} />

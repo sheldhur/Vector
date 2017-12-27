@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
@@ -40,7 +40,7 @@ class Axis extends Component {
   }
 
   render() {
-    const {text, textStyle} = this.props;
+    const { text, textStyle } = this.props;
 
     let className = ['axis'];
     if (this.props.orient === 'bottom') {

@@ -1,9 +1,8 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Button, Popconfirm, Icon} from 'antd';
+import { Button, Popconfirm, Icon } from 'antd';
 import Grid from '../grid/Grid';
-import * as app from '../../constants/app';
 
 class MagnetopauseSettingsDataSets extends Component {
 
@@ -23,8 +22,8 @@ class MagnetopauseSettingsDataSets extends Component {
     }
   };
 
-  render() {
-    const {value, dataSets} = this.props;
+  render = () => {
+    const { value, dataSets } = this.props;
 
     const columns = [
       {
@@ -36,7 +35,9 @@ class MagnetopauseSettingsDataSets extends Component {
         key: 'id',
         width: 30,
         render: (text, record, index) => (
-          <a href="#" onClick={(e) => {this.handleLineAddRemove(e, index)}}><Icon type="delete"/></a>
+          <a href="#" onClick={(e) => {
+            this.handleLineAddRemove(e, index)
+          }}><Icon type="delete" /></a>
         )
       }
     ];
@@ -44,7 +45,7 @@ class MagnetopauseSettingsDataSets extends Component {
     const lines = dataSets ? dataSets
       .filter(line => (value.indexOf(line.id) !== -1))
       .map((line, i) => {
-        return {...line, key: i}
+        return { ...line, key: i }
       }) : [];
 
     return (
@@ -58,7 +59,7 @@ class MagnetopauseSettingsDataSets extends Component {
         showHeader={false}
       />
     );
-  }
+  };
 }
 
 MagnetopauseSettingsDataSets.propTypes = {

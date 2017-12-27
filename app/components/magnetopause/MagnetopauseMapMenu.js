@@ -1,15 +1,15 @@
-import {remote} from 'electron';
-import {message} from 'antd';
+import { remote } from 'electron';
+import { message } from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import * as fs from 'fs';
 
-const {dialog} = remote;
+const { dialog } = remote;
 const currentWindow = remote.getCurrentWindow();
 
 
 export default function (props) {
-  const {Menu} = remote;
+  const { Menu } = remote;
   const menu = Menu.buildFromTemplate([
     {
       label: 'Save to image',
@@ -21,7 +21,7 @@ export default function (props) {
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save image',
           filters: [
-            {name: 'PNG', extensions: ['png']},
+            { name: 'PNG', extensions: ['png'] },
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
@@ -50,7 +50,7 @@ export default function (props) {
           type: 'radio',
           checked: props.state.range === 40,
           click: () => {
-            props.setState({range: 40});
+            props.setState({ range: 40 });
           }
         },
         {
@@ -58,7 +58,7 @@ export default function (props) {
           type: 'radio',
           checked: props.state.range === 60,
           click: () => {
-            props.setState({range: 60});
+            props.setState({ range: 60 });
           }
         }
       ]

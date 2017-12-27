@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LineChart from '../chart/LineChart';
-import {NoDataAlert} from '../widgets/ChartAlert';
+import { NoDataAlert } from '../widgets/ChartAlert';
 import MagnetopauseMapMenu from './MagnetopauseMapMenu';
-import {magnetopausePoint} from '../../lib/geopack';
-import {numberIsBetween} from '../../utils/helper';
+import { magnetopausePoint } from '../../lib/geopack';
+import { numberIsBetween } from '../../utils/helper';
 
 
 class MagnetopauseMapX extends Component {
@@ -45,7 +45,7 @@ class MagnetopauseMapX extends Component {
           });
         } else {
           if (!breakPoint) {
-            points.push({x: null, y: null});
+            points.push({ x: null, y: null });
             breakPoint = true;
           }
         }
@@ -53,11 +53,11 @@ class MagnetopauseMapX extends Component {
     }
 
     if (points.length) {
-      const {range} = this.state;
+      const { range } = this.state;
       const chartLines = [
         {
           si: 'Z (Re)',
-          extent: {x: [-range + 20, 20], y: [-(range / 2), range / 2]},
+          extent: { x: [-range + 20, 20], y: [-(range / 2), range / 2] },
           lines: [{
             name: 'Magnetopause',
             si: 'Z (Re)',
@@ -74,7 +74,7 @@ class MagnetopauseMapX extends Component {
               stroke: 'silver',
               strokeWidth: 1,
             },
-            points: [{x: 0, y: 1}, {x: 1, y: 0}, {x: 0, y: -1}, {x: -1, y: 0}]
+            points: [{ x: 0, y: 1 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: -1, y: 0 }]
           }]
         },
       ];
@@ -86,7 +86,7 @@ class MagnetopauseMapX extends Component {
   };
 
   render = () => {
-    const {wind} = this.props;
+    const { wind } = this.props;
     const data = this.prepareData(wind);
 
     return (
@@ -96,12 +96,12 @@ class MagnetopauseMapX extends Component {
           height={this.props.height}
           data={data}
           tooltipDelay={100}
-          ticks={{x: 5, y: 5}}
+          ticks={{ x: 5, y: 5 }}
           showTooltip={false}
           showTimeCursor={false}
           labelY={'X (Re)'}
           antiAliasing={this.props.antiAliasing}
-          emptyMessage={<NoDataAlert/>}
+          emptyMessage={<NoDataAlert />}
         />
       </div>
     );

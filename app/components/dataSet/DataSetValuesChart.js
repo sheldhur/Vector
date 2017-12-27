@@ -1,9 +1,9 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {NoDataAlert, ProgressAlert} from '../widgets/ChartAlert';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { NoDataAlert, ProgressAlert } from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
 import * as mainActions from '../../actions/main';
@@ -55,7 +55,7 @@ class DataSetValuesChart extends Component {
   };
 
   render() {
-    const {dataSetId, isLoading, isError, progress, dataSets, dataSetValues} = this.props;
+    const { dataSetId, isLoading, isError, progress, dataSets, dataSetValues } = this.props;
     const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues, (dataSet) => dataSet.id == dataSetId);
 
     let container = null;
@@ -71,16 +71,16 @@ class DataSetValuesChart extends Component {
 
     if (!container) {
       container = (
-        <div style={{width: this.props.width, height: this.props.height}} onContextMenu={this.handlerContextMenu}>
+        <div style={{ width: this.props.width, height: this.props.height }} onContextMenu={this.handlerContextMenu}>
           <LineChart
             width={this.props.width}
             height={this.props.height}
             data={chartLines}
             tooltipDelay={100}
             antiAliasing={this.props.antiAliasing}
-            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu}/>}
+            emptyMessage={<NoDataAlert onContextMenu={this.handlerContextMenu} />}
           >
-            <TitleCurrentTime/>
+            <TitleCurrentTime />
           </LineChart>
         </div>
       );

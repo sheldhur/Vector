@@ -8,7 +8,7 @@ let db;
 function getProgress(stageName, rowsLength, throttleMs = 150) {
   let stageLength = 0;
   const stages = {
-    getDataSetValues: {stage: stageLength++, message: "Loading datasets values"},
+    getDataSetValues: { stage: stageLength++, message: "Loading datasets values" },
   };
 
   let lastSendTime = null;
@@ -21,7 +21,7 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
 
     const sendTime = new Date().valueOf();
     if (!lastSendTime || sendTime - lastSendTime > throttleMs) {
-      process.send({event: 'setProgress', data: progress});
+      process.send({ event: 'setProgress', data: progress });
       lastSendTime = sendTime;
     }
   }
@@ -34,7 +34,7 @@ export default function (dbSession, data) {
 
   db = dbSession;
 
-  const {projectTimeSelected} = data.main.settings;
+  const { projectTimeSelected } = data.main.settings;
   if (!projectTimeSelected[0] || !projectTimeSelected[1]) {
     throw new Error("Can't get time period");
   }
@@ -43,9 +43,9 @@ export default function (dbSession, data) {
     try {
       const dataSets = await getDataSets();
       const result = await getDataSetValues(dataSets, projectTimeSelected);
-      process.send({event: 'setData', data: result});
+      process.send({ event: 'setData', data: result });
     } catch (error) {
-      process.send({event: 'setError', data: errorToObject(error)});
+      process.send({ event: 'setError', data: errorToObject(error) });
       console.error(error);
     }
   })();
@@ -70,7 +70,7 @@ async function getDataSetValues(dataSets, time) {
   };
 
   await Promise.map(dataSets, async (dataSet) => {
-    result.dataSets[dataSet.id] = {...dataSet, style: JSON.parse(dataSet.style)};
+    result.dataSets[dataSet.id] = { ...dataSet, style: JSON.parse(dataSet.style) };
     result.dataSetValues[dataSet.id] = await db.DataSetValue.findAll({
       where: {
         dataSetId: dataSet.id,

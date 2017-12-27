@@ -1,11 +1,11 @@
 // @flow
-import {remote} from 'electron';
-import React, {Component} from 'react';
+import { remote } from 'electron';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Icon, Popconfirm} from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Icon, Popconfirm } from 'antd';
 import moment from 'moment';
 import resourcePath from '../../lib/resourcePath';
 import Grid from '../grid/Grid';
@@ -13,7 +13,7 @@ import * as uiActions from '../../actions/ui';
 import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
-const {Menu} = remote;
+const { Menu } = remote;
 
 
 class StationGrid extends Component {
@@ -41,13 +41,13 @@ class StationGrid extends Component {
           this.setPagination(nextProps);
         }, 300);
       } else {
-        this.setState({pageCurrent: this.calcPageCurrent(nextProps, this.state.pageSize)});
+        this.setState({ pageCurrent: this.calcPageCurrent(nextProps, this.state.pageSize) });
       }
     }
   };
 
   handlerResize = () => {
-    const {pageSize, availableHeight} = this.calcPageSize();
+    const { pageSize, availableHeight } = this.calcPageSize();
     this.setState({
       availableHeight,
       pageSize,
@@ -55,7 +55,7 @@ class StationGrid extends Component {
   };
 
   setPagination = (props) => {
-    const {availableHeight, pageSize} = this.calcPageSize();
+    const { availableHeight, pageSize } = this.calcPageSize();
     const pageCurrent = this.calcPageCurrent(props, pageSize);
     this.setState({
       availableHeight,
@@ -65,7 +65,7 @@ class StationGrid extends Component {
   };
 
   calcPageCurrent = (props, pageSize) => {
-    const {values, currentTime} = props;
+    const { values, currentTime } = props;
     const data = values ? Object.values(values) : [];
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
 
@@ -92,18 +92,18 @@ class StationGrid extends Component {
 
     const pageSize = Math.floor((availableHeight - theadHeight - (paginationHeight + 16 * 2)) / rowHeight);
 
-    return {availableHeight, pageSize};
+    return { availableHeight, pageSize };
   };
 
   handlerPageChange = (page) => {
-    this.setState({pageCurrent: page});
+    this.setState({ pageCurrent: page });
   };
 
   handlerCellChange = (field, id, value, afterAction) => {
     if (['compX', 'compY', 'compZ'].indexOf(field) !== -1 && value.trim() === '') {
       value = null;
     }
-    this.props.stationActions.updateStationValue(id, {[field]: value}, afterAction);
+    this.props.stationActions.updateStationValue(id, { [field]: value }, afterAction);
   };
 
   handlerRowOnContextMenu = (record, index, e) => {
@@ -122,7 +122,7 @@ class StationGrid extends Component {
         }, {
           label: 'Delete values',
           icon: resourcePath('./assets/icons/table-delete-row.png'),
-          click: () => this.props.stationActions.deleteStationValue({id: record.id})
+          click: () => this.props.stationActions.deleteStationValue({ id: record.id })
         }
       ]).popup(remote.getCurrentWindow());
     }
@@ -145,7 +145,7 @@ class StationGrid extends Component {
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
         (value, afterAction) => this.handlerCellChange('compX', record.id, value, afterAction)
-      }/>),
+      } />),
       width: compWidth
     }, {
       title: 'Y',
@@ -154,7 +154,7 @@ class StationGrid extends Component {
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
         (value, afterAction) => this.handlerCellChange('compY', record.id, value, afterAction)
-      }/>),
+      } />),
       width: compWidth
     }, {
       title: 'Z',
@@ -163,7 +163,7 @@ class StationGrid extends Component {
       hasSorter: true,
       render: (text, record, index) => (<Grid.InputCell value={text} onChange={
         (value, afterAction) => this.handlerCellChange('compZ', record.id, value, afterAction)
-      }/>),
+      } />),
       width: compWidth
     }, {
       title: '',
@@ -176,7 +176,7 @@ class StationGrid extends Component {
       width: 80
     }];
 
-    const {values, isLoading, currentTime} = this.props;
+    const { values, isLoading, currentTime } = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
     const data = values ? Object.values(values) : [];
 
@@ -188,7 +188,7 @@ class StationGrid extends Component {
     };
 
     return (
-      <div style={{height: this.state.availableHeight}}>
+      <div style={{ height: this.state.availableHeight }}>
         <Grid
           rowClassName={(record) => {
             return record.time === currentTimeStr ? 'select-row' : ''
@@ -213,7 +213,7 @@ class StationGrid extends Component {
         />
       </div>
     );
-  }
+  };
 }
 
 StationGrid.propTypes = {

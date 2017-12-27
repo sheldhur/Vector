@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {Table, Input, Button, Icon} from 'antd';
+import React, { Component } from 'react';
+import { Table, Input, Button, Icon } from 'antd';
 
 import InputCell from './InputCell';
 import CheckboxCell from './CheckboxCell';
@@ -48,7 +48,7 @@ class Grid extends Component {
         }
       }
     }
-    return {...item, ...props};
+    return { ...item, ...props };
   };
 
   // onChange = (pagination, filters, sorter) => {
@@ -105,7 +105,7 @@ class Grid extends Component {
     }
 
     const filterDropdownVisible = input.name;
-    const {filterValue} = this.state;
+    const { filterValue } = this.state;
     if (filterDropdownVisible) {
       filterValue[filterDropdownVisible] = input.value;
       this.setState({
@@ -115,7 +115,7 @@ class Grid extends Component {
   };
 
   prepareColumns = (columns) => {
-    const {filterValue, filterDropdownVisible} = this.state;
+    const { filterValue, filterDropdownVisible } = this.state;
     return columns.map((item, i) => {
       const propsSorter = item.hasSorter ? {
         sorter: (a, b) => this.columnSorter(item.dataIndex, a, b),
@@ -131,23 +131,23 @@ class Grid extends Component {
             />
             <Button.Group>
               <Button type="primary" onClick={e => this.handlerFilter(e, this.props.data)}>
-                <Icon type="search"/>
+                <Icon type="search" />
               </Button>
               <Button onClick={e => this.handlerFilter(e, this.props.data, true)}>
-                <Icon type="delete"/>
+                <Icon type="delete" />
               </Button>
             </Button.Group>
           </div>
         ),
         filterIcon: <Icon
           type="filter"
-          style={{color: filterValue[item.dataIndex] !== undefined && filterValue[item.dataIndex] !== '' ? '#108ee9' : '#aaa'}}
+          style={{ color: filterValue[item.dataIndex] !== undefined && filterValue[item.dataIndex] !== '' ? '#108ee9' : '#aaa' }}
         />,
         filterDropdownVisible: filterDropdownVisible === item.dataIndex,
-        onFilterDropdownVisibleChange: visible => this.setState({filterDropdownVisible: visible ? item.dataIndex : false}, () => this.searchInput.focus())
+        onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible ? item.dataIndex : false }, () => this.searchInput.focus())
       } : {};
 
-      return {...item, ...propsSorter, ...propsFilter};
+      return { ...item, ...propsSorter, ...propsFilter };
     });
   };
 

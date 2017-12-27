@@ -1,7 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class TimeCursor extends Component {
 
@@ -12,7 +11,7 @@ class TimeCursor extends Component {
   // };
 
   render = () => {
-    const {currentTime} = this.props;
+    const { currentTime } = this.props;
     const position = this.props.scale.x(currentTime);
 
     if (position > 0) {
@@ -23,7 +22,7 @@ class TimeCursor extends Component {
                 y1="0"
                 y2={this.props.height}
                 transform={`translate(${this.props.scale.x(currentTime)}, 0)`}
-                shapeRendering="optimizeSpeed"/>
+                shapeRendering="optimizeSpeed" />
         </g>
       );
     }

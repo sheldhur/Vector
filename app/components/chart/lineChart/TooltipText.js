@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 
@@ -32,9 +32,10 @@ class TooltipText extends Component {
   }
 
   render() {
-    return <g className={`tooltip-text ${this.props.className}`} transform={`translate(${this.props.position.x}, ${this.props.position.y})`}>
+    return <g className={`tooltip-text ${this.props.className}`}
+              transform={`translate(${this.props.position.x}, ${this.props.position.y})`}>
       <g ref="textWrapper" transform="translate(7, 0)">
-        <rect ref="rect"/>
+        <rect ref="rect" />
         <text ref="text" fill={this.props.stroke} dy="1em" x="2.5">{this.props.children}</text>
       </g>
     </g>

@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Modal, Icon, Button, Input, Select, Form} from "antd";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Modal, Icon, Button, Input, Select, Form } from "antd";
 import * as mainActions from "./../../actions/main";
 import * as magnetopauseActions from "./../../actions/magnetopause";
 
@@ -19,11 +19,11 @@ class MagnetopauseSettings extends Component {
   // };
 
   handlerModalOpen = () => {
-    this.setState({modalVisible: true});
+    this.setState({ modalVisible: true });
   };
 
   handlerModalClose = (callback) => {
-    this.setState({modalVisible: false}, callback);
+    this.setState({ modalVisible: false }, callback);
   };
 
   handlerReset = (e) => {
@@ -40,7 +40,7 @@ class MagnetopauseSettings extends Component {
       values[field] = values[field] ? parseInt(values[field]) : null;
     }
 
-    this.props.mainActions.saveSettings({projectMagnetopause: values}).then(() => {
+    this.props.mainActions.saveSettings({ projectMagnetopause: values }).then(() => {
       this.handlerModalClose(() => {
         this.props.magnetopauseActions.calculateMagnetopause();
       });
@@ -48,8 +48,8 @@ class MagnetopauseSettings extends Component {
   };
 
   getValidationRules = () => {
-    const {magnetopause} = this.props;
-    const {setFieldsValue} = this.props.form;
+    const { magnetopause } = this.props;
+    const { setFieldsValue } = this.props.form;
 
     return {
       'b': {
@@ -86,8 +86,8 @@ class MagnetopauseSettings extends Component {
   };
 
   render = () => {
-    const {getFieldError, getFieldValue, setFieldsValue} = this.props.form;
-    const {settings, dataSets} = this.props;
+    const { getFieldError, getFieldValue, setFieldsValue } = this.props.form;
+    const { settings, dataSets } = this.props;
     let rules = {};
 
     if (this.state.modalVisible) {
@@ -100,12 +100,12 @@ class MagnetopauseSettings extends Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 8},
+        xs: { span: 24 },
+        sm: { span: 8 },
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 14},
+        xs: { span: 24 },
+        sm: { span: 14 },
       },
     };
 
@@ -133,15 +133,15 @@ class MagnetopauseSettings extends Component {
         <Modal
           wrapClassName="main-page-settings magnetopause-view-settings"
           width={460}
-          title={(<span><Icon type="setting"/> Magnetopause settings</span>)}
+          title={(<span><Icon type="setting" /> Magnetopause settings</span>)}
           onCancel={this.handlerReset}
           onOk={this.handlerSave}
           visible={this.state.modalVisible}
         >
           <Form>
-            {DataSetSelector({name: "b", label: "B (nT), GSM"})}
-            {DataSetSelector({name: "bz", label: (<span>B<sub>z</sub> (nT), GSM</span>)})}
-            {DataSetSelector({name: "pressureSolar", label: "Solar pressure (nPa)"})}
+            {DataSetSelector({ name: "b", label: "B (nT), GSM" })}
+            {DataSetSelector({ name: "bz", label: (<span>B<sub>z</sub> (nT), GSM</span>) })}
+            {DataSetSelector({ name: "pressureSolar", label: "Solar pressure (nPa)" })}
           </Form>
         </Modal>
       </Input.Group>

@@ -1,14 +1,13 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import MagnetopauseHeader from './MagnetopauseHeader';
 import MagnetopauseDashboard from './MagnetopauseDashboard';
-import {LoadingAlert, ErrorAlert} from '../widgets/ChartAlert';
+import { LoadingAlert, ErrorAlert } from '../widgets/ChartAlert';
 
 
 class MagnetopauseView extends Component {
-  render() {
+  render = () => {
     if (this.props.isError) {
       return (<ErrorAlert
         className={`theme-${this.props.theme}`}
@@ -18,7 +17,7 @@ class MagnetopauseView extends Component {
     }
 
     if (this.props.isLoading) {
-      return (<LoadingAlert className={`theme-${this.props.theme}`}/>);
+      return (<LoadingAlert className={`theme-${this.props.theme}`} />);
     }
 
     return (
@@ -26,13 +25,13 @@ class MagnetopauseView extends Component {
         <tbody>
         <tr>
           <td className="header">
-            <MagnetopauseHeader/>
+            <MagnetopauseHeader />
           </td>
         </tr>
         <tr>
-          <td className="content" style={{position: 'relative'}}>
+          <td className="content" style={{ position: 'relative' }}>
             <div className="box" id="mainView">
-              <MagnetopauseDashboard/>
+              <MagnetopauseDashboard />
             </div>
           </td>
         </tr>

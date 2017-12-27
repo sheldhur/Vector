@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import Chart from './Chart';
@@ -85,8 +85,8 @@ class MapCylindrical extends Component {
   };
 
   render = () => {
-    const {width, height, data, graticuleStep} = this.props;
-    const {isRenderMap, axisMargin} = this.state;
+    const { width, height, data, graticuleStep } = this.props;
+    const { isRenderMap, axisMargin } = this.state;
 
     const margin = {
       left: 0,
@@ -124,10 +124,10 @@ class MapCylindrical extends Component {
       >
         <defs>
           <filter id={`${this.uid}-blur`}>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0" />
           </filter>
           <clipPath id={`${this.uid}-vector`}>
-            <rect width={size.width} height={size.height}/>
+            <rect width={size.width} height={size.height} />
           </clipPath>
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
@@ -135,7 +135,7 @@ class MapCylindrical extends Component {
             <World
               path={path}
               ocean={outline}
-              size={{width, height}}
+              size={{ width, height }}
               {...this.props.world}
             />
             <Graticule
@@ -143,7 +143,7 @@ class MapCylindrical extends Component {
               graticule={graticule}
               outline={outline}
             />
-            <GeomagEquator path={path}/>
+            <GeomagEquator path={path} />
             <SolarTerminator
               path={path}
               projection={projection}

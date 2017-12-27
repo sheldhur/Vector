@@ -1,7 +1,7 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import MapChart from '../chart/MapChart';
 import VectorMapMenu from './VectorMapMenu';
 import * as stationActions from '../../actions/station';
@@ -15,7 +15,7 @@ class VectorMapChart extends Component {
       e.preventDefault();
 
       let mapLayer = {};
-      let props = {...mapLayer, ...this.state};
+      let props = { ...mapLayer, ...this.state };
 
       VectorMapMenu({
         state: props,
@@ -27,7 +27,7 @@ class VectorMapChart extends Component {
   };
 
   render = () => {
-    let {antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor} = this.props;
+    let { antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor } = this.props;
     let props = {
       antiAliasing,
       world: {
@@ -40,7 +40,7 @@ class VectorMapChart extends Component {
     };
 
     return (
-      <div style={{height: "100%", padding: '5px'}} onContextMenu={this.handlerContextMenu} id="mapChart">
+      <div style={{ height: "100%", padding: '5px' }} onContextMenu={this.handlerContextMenu} id="mapChart">
         <MapChart
           width={'100%'}
           height={'100%'}

@@ -1,12 +1,12 @@
-import {remote} from 'electron';
-import {message} from 'antd';
+import { remote } from 'electron';
+import { message } from 'antd';
 import domToImage from 'dom-to-image';
 import resourcePath from '../../lib/resourcePath';
 import windowManager from '../../lib/windowManager';
-import {WINDOW_DATASET, WINDOW_MAGNETOPAUSE} from '../../constants/app';
+import { WINDOW_DATASET, WINDOW_MAGNETOPAUSE } from '../../constants/app';
 import * as fs from 'fs';
 
-const {dialog, Menu} = remote;
+const { dialog, Menu } = remote;
 const currentWindow = remote.getCurrentWindow();
 
 function openWindowDataSet(id) {
@@ -83,7 +83,7 @@ export default function (props) {
           properties: ['openFile', 'createDirectory'],
           buttonLabel: 'Save image',
           filters: [
-            {name: 'PNG', extensions: ['png']},
+            { name: 'PNG', extensions: ['png'] },
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {

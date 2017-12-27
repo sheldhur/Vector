@@ -1,5 +1,4 @@
 /* eslint global-require: 1, flowtype-errors/show-errors: 0 */
-
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -10,8 +9,8 @@
  *
  * @flow
  */
-import {app, BrowserWindow, ipcMain} from 'electron';
-import {autoUpdater} from "electron-updater";
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { autoUpdater } from "electron-updater";
 import log from 'electron-log';
 import configureStore from './store/configureStore';
 import MenuBuilder from './menu';
@@ -59,7 +58,7 @@ autoUpdater.logger.transports.file.level = process.env.NODE_ENV === 'development
 autoUpdater.on('download-progress', (progressObj) => {
   log.info('Downloaded ' + Math.round(progressObj.percent) + '% (' + progressObj.transferred + "/" + progressObj.total + ')');
 });
-autoUpdater.on('update-downloaded', (update) => mainWindow.send('dispatchFromMain', {update}));
+autoUpdater.on('update-downloaded', (update) => mainWindow.send('dispatchFromMain', { update }));
 ipcMain.on('installUpdate', () => {
   if (process.env.NODE_ENV === 'development') {
     console.log('autoUpdater.quitAndInstall()');

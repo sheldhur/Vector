@@ -36,16 +36,16 @@ export default function main(state = initialState, action) {
         maximum: action.maximum,
         isError: false,
         isLoading: false,
-        progress: {...initialState.progress}
+        progress: { ...initialState.progress }
       };
     case types.STATIONS:
-      return {...state, stations: action.stations, extremes: action.extremes};
+      return { ...state, stations: action.stations, extremes: action.extremes };
     case types.LOADING:
-      return {...state, isLoading: action.payload, isError: false, progress: {...initialState.progress}};
+      return { ...state, isLoading: action.payload, isError: false, progress: { ...initialState.progress } };
     case types.PROGRESS:
-      return {...state, progress: action.payload};
+      return { ...state, progress: action.payload };
     case types.STATIONS_VALUE:
-      return {...state, stationsValue: action.payload};
+      return { ...state, stationsValue: action.payload };
     case types.STATION_VIEW_VALUES:
       return {
         ...state,
@@ -54,11 +54,14 @@ export default function main(state = initialState, action) {
           values: action.payload,
           isError: false,
           isLoading: false,
-          progress: {...initialState.stationView.progress}
+          progress: { ...initialState.stationView.progress }
         }
       };
     case types.STATION_VIEW_ERROR:
-      return {...state, stationView: {...state.stationView, values: null, isError: action.payload, isLoading: false}};
+      return {
+        ...state,
+        stationView: { ...state.stationView, values: null, isError: action.payload, isLoading: false }
+      };
     case types.STATION_VIEW_LOADING:
       return {
         ...state,
@@ -66,11 +69,11 @@ export default function main(state = initialState, action) {
           ...state.stationView,
           isLoading: action.payload,
           isError: false,
-          progress: {...initialState.progress}
+          progress: { ...initialState.progress }
         }
       };
     case types.STATION_VIEW_PROGRESS:
-      return {...state, stationView: {...state.stationView, progress: action.payload}};
+      return { ...state, stationView: { ...state.stationView, progress: action.payload } };
     case types.RESET: {
       return {
         ...state,
@@ -78,7 +81,7 @@ export default function main(state = initialState, action) {
         extremes: null,
         stationsValue: null,
         latitudeAvgValues: null,
-        maximum: {...initialState.maximum},
+        maximum: { ...initialState.maximum },
         isError: false,
         isLoading: false
       }
@@ -90,7 +93,7 @@ export default function main(state = initialState, action) {
         extremes: null,
         stationsValue: null,
         latitudeAvgValues: null,
-        maximum: {...initialState.maximum},
+        maximum: { ...initialState.maximum },
         isError: action.payload,
         isLoading: false
       };

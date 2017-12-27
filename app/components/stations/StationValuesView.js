@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Row} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Row } from 'antd';
 import StationValueActions from './StationValueActions';
 import StationValuesChart from './StationValuesChart';
 import StationValuesGrid from './StationValuesGrid';
@@ -26,7 +26,7 @@ class StationValuesView extends Component {
     const stationId = parseInt(props.match.params.id);
 
     this.props.uiActions.setGridLastOpenItem(stationId);
-    this.props.stationActions.getStationViewValues({stationId});
+    this.props.stationActions.getStationViewValues({ stationId });
   };
 
   render = () => {
@@ -34,14 +34,14 @@ class StationValuesView extends Component {
 
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
-        <Row style={{height: '175px'}}>
-          <StationValuesChart/>
+        <Row style={{ height: '175px' }}>
+          <StationValuesChart />
         </Row>
         <Row>
-          <StationValueActions stationId={stationId}/>
+          <StationValueActions stationId={stationId} />
         </Row>
         <Row>
-          <StationValuesGrid stationId={stationId}/>
+          <StationValuesGrid stationId={stationId} />
         </Row>
       </div>
     );

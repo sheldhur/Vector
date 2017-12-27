@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react';
-import {Input, Icon, Popconfirm} from 'antd';
+import React, { Component } from 'react';
+import { Input, Icon, Popconfirm } from 'antd';
 import HighlightValue from './HighlightValue';
 
 
@@ -14,8 +14,8 @@ class InputCell extends Component {
     error: false
   };
 
-  componentWillReceiveProps(nextProps) {
-    const {value, editable} = this.state;
+  componentWillReceiveProps = (nextProps) => {
+    const { value, editable } = this.state;
     const isUpdate = nextProps.value && nextProps.value.hasOwnProperty('search') ?
       (value.text !== nextProps.value || value.search !== nextProps.search) :
       (value !== nextProps.value);
@@ -25,21 +25,21 @@ class InputCell extends Component {
         value: nextProps.value
       });
     }
-  }
+  };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate = (prevProps, prevState) => {
     if (this.state.editable) {
       this.input.focus();
     }
-  }
+  };
 
   handleEdit = () => {
-    this.setState({editable: true});
+    this.setState({ editable: true });
   };
 
   handleChange = (e) => {
-    const {value} = e.target;
-    this.setState({value: value});
+    const { value } = e.target;
+    this.setState({ value: value });
   };
 
   handleKeyDown = (e) => {
@@ -66,12 +66,12 @@ class InputCell extends Component {
   handleCheck = () => {
     if (this.props.onChange && this.props.value !== this.state.value) {
       if (!this.state.error) {
-        this.setState({isSaved: true}, () => {
+        this.setState({ isSaved: true }, () => {
           this.props.onChange(this.state.value, (value) => this.afterAction(value));
         });
       }
     } else {
-      this.setState({editable: false});
+      this.setState({ editable: false });
     }
   };
 
@@ -94,8 +94,8 @@ class InputCell extends Component {
     }
   };
 
-  render() {
-    const {value, editable, isSaved, error} = this.state;
+  render = () => {
+    const { value, editable, isSaved, error } = this.state;
     const message = !!error ? <div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
@@ -131,16 +131,16 @@ class InputCell extends Component {
                 onBlur={!isSaved ? this.handleCheck : null}
                 onKeyDown={!isSaved ? this.handleKeyDown : null}
               />
-              <Icon type={isSaved ? "loading" : "edit"} className="input-cell-icon"/>
+              <Icon type={isSaved ? "loading" : "edit"} className="input-cell-icon" />
               <div className="input-cell-underline">
-                <hr/>
+                <hr />
               </div>
             </Popconfirm>
           </div>
           :
           <div className="input-cell-text-wrapper" onDoubleClick={this.handleEdit}>
-            <HighlightValue value={plainValue} search={search}/>&nbsp;
-            <Icon type="edit" className="input-cell-icon" onClick={this.handleEdit}/>
+            <HighlightValue value={plainValue} search={search} />&nbsp;
+            <Icon type="edit" className="input-cell-icon" onClick={this.handleEdit} />
           </div>
         }
       </div>

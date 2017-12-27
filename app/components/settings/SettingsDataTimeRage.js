@@ -1,10 +1,10 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {DatePicker} from 'antd';
+import { DatePicker } from 'antd';
 import moment from "moment";
 import * as app from '../../constants/app';
-import {numberIsBetween} from "../../utils/helper";
+import { numberIsBetween } from "../../utils/helper";
 
 
 //TODO: ресет значений, если отмена
@@ -77,7 +77,7 @@ class SettingsDataTimeRage extends Component {
       <DatePicker.RangePicker
         disabledDate={(item) => this.disabledRangeDate(item, this.props.valueLimit)}
         disabledTime={(date, type) => this.disabledRangeTime(date, type, this.props.valueLimit)}
-        showTime={{hideDisabledOptions: true}}
+        showTime={{ hideDisabledOptions: true }}
         format={app.FORMAT_DATE_INPUT}
         placeholder={['Start time', 'End time']}
         {...this.props}

@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import MagnetopauseMapX from './MagnetopauseMapX';
 
 
@@ -40,7 +40,7 @@ class MagnetopauseMap extends Component {
   };
 
   getSize = () => {
-    const {height, width} = this.state.wrapperSize;
+    const { height, width } = this.state.wrapperSize;
 
     let size = {
       width: undefined,
@@ -61,23 +61,23 @@ class MagnetopauseMap extends Component {
 
   render = () => {
     const size = this.getSize();
-    const {data, currentTime} = this.props;
+    const { data, currentTime } = this.props;
 
     if (data && size.width !== undefined) {
       const currentTimeData = data.hasOwnProperty(currentTime) || currentTime === null ? data[currentTime] : null;
 
-      return <div className="svg-wrapper centered-box" ref="svgWrapper" style={{padding: 5}}>
+      return <div className="svg-wrapper centered-box" ref="svgWrapper" style={{ padding: 5 }}>
         <MagnetopauseMapX
           width={size.width / 2}
-          height={size.height- 10}
+          height={size.height - 10}
           wind={currentTimeData}
           antiAliasing={this.props.antiAliasing}
         />
         {/*<MagnetopauseMapY*/}
-          {/*width={size.width / 2}*/}
-          {/*height={size.height}*/}
-          {/*wind={currentData}*/}
-          {/*antiAliasing={this.props.antiAliasing}*/}
+        {/*width={size.width / 2}*/}
+        {/*height={size.height}*/}
+        {/*wind={currentData}*/}
+        {/*antiAliasing={this.props.antiAliasing}*/}
         {/*/>*/}
       </div>;
     }

@@ -1,10 +1,10 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {withRouter} from 'react-router';
-import {Col, Button, Select, Menu, Dropdown, Icon, Modal} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Col, Button, Select, Menu, Dropdown, Icon, Modal } from 'antd';
 import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
@@ -22,14 +22,14 @@ class StationValueActions extends Component {
   };
 
   handlerActionSelect = (e) => {
-    const {stationId} = this.props;
+    const { stationId } = this.props;
 
     switch (e.key) {
       case STATION_DISABLE:
-        this.props.stationActions.updateStation(stationId, {status: app.STATION_DISABLED});
+        this.props.stationActions.updateStation(stationId, { status: app.STATION_DISABLED });
         break;
       case STATION_ENABLE:
-        this.props.stationActions.updateStation(stationId, {status: app.STATION_ENABLED});
+        this.props.stationActions.updateStation(stationId, { status: app.STATION_ENABLED });
         break;
       case STATION_DELETE_VALUES:
         Modal.confirm({
@@ -51,7 +51,7 @@ class StationValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.stationActions.deleteStationValue({stationId})
+            this.props.stationActions.deleteStationValue({ stationId })
           },
         });
         break;
@@ -63,7 +63,7 @@ class StationValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.stationActions.deleteStation({id: stationId})
+            this.props.stationActions.deleteStation({ id: stationId })
           },
         });
         break;
@@ -72,8 +72,8 @@ class StationValueActions extends Component {
     }
   };
 
-  render() {
-    const {stations, stationId} = this.props;
+  render = () => {
+    const { stations, stationId } = this.props;
     const station = stations[stationId];
 
     const stationsSorted = stations ? Object.values(stations).filter((station) => station !== undefined).sort(function (a, b) {
@@ -100,10 +100,10 @@ class StationValueActions extends Component {
         <Col span={8}>
           <Link to="/station"><Button icon="arrow-left">Stations</Button></Link>
         </Col>
-        <Col span={8} style={{textAlign: 'center'}}>
+        <Col span={8} style={{ textAlign: 'center' }}>
           <Select
             value={stationId}
-            style={{width: 150}}
+            style={{ width: 150 }}
             placeholder="Select station"
             optionFilterProp="children"
             showSearch
@@ -116,13 +116,13 @@ class StationValueActions extends Component {
           </Select>
           {" "}
           <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
-            <Button>Actions <Icon type="down"/></Button>
+            <Button>Actions <Icon type="down" /></Button>
           </Dropdown>
         </Col>
         <Col span={8}></Col>
       </div>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {

@@ -1,8 +1,8 @@
 // @flow
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Button, Input} from 'antd';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Button, Input } from 'antd';
 import moment from 'moment';
 import MainHeaderControls from './MainHeaderControls';
 import MainHeaderCapture from './MainHeaderCapture';
@@ -13,23 +13,23 @@ import * as mainActions from '../../actions/main';
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
 import * as uiActions from '../../actions/ui';
-import {IS_PROD} from "../../constants/app";
+import { IS_PROD } from "../../constants/app";
 
 
 class MainHeader extends Component {
   size = 'small';
 
-  componentWillMount() {
+  componentWillMount = () => {
     setTimeout(this.handlerReload, 100);
 
     this.props.uiActions.setChartCurrentTime(null);
-  }
+  };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps = (nextProps) => {
     if (nextProps.dbPath !== this.props.dbPath) {
       this.handlerReload();
     }
-  }
+  };
 
   handlerReload = (e) => {
     if (!this.props.isLoading) {
@@ -57,8 +57,8 @@ class MainHeader extends Component {
     // });
   };
 
-  render() {
-    const {timeSelected, timePeriod, timeAvg, isLoading} = this.props;
+  render = () => {
+    const { timeSelected, timePeriod, timeAvg, isLoading } = this.props;
 
     return (
       <div className="main-page-header">
@@ -85,14 +85,14 @@ class MainHeader extends Component {
             onClick={(e) => this.handlerClose(e)}
           />}
         </Input.Group>
-        <Settings size={this.size}/>
-        <MainHeaderControls size={this.size} onTick={this.props.stationActions.getStationsValue}/>
-        <MainHeaderCapture size={this.size}/>
-        <MainUpdateApp/>
+        <Settings size={this.size} />
+        <MainHeaderControls size={this.size} onTick={this.props.stationActions.getStationsValue} />
+        <MainHeaderCapture size={this.size} />
+        <MainUpdateApp />
       </div>
     );
 
-  }
+  };
 }
 
 function mapStateToProps(state) {

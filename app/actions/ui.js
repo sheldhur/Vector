@@ -1,9 +1,8 @@
+import { IS_PROD, WORKER_PATH } from '../constants/app';
+import * as stationTypes from '../constants/station';
+import * as types from '../constants/ui';
 import childProcess from '../lib/childProcess';
 import resourcePath from '../lib/resourcePath';
-import {WORKER_PATH, IS_PROD} from '../constants/app';
-import * as types from '../constants/ui';
-import * as stationTypes from '../constants/station';
-import * as dataSetTypes from '../constants/dataSet';
 
 let worker;
 
@@ -34,8 +33,8 @@ export function setMapTooltipStation(payload) {
 
 export function shiftChartCurrentTime(value) {
   return (dispatch, getState) => {
-    const {projectTimeSelected, projectTimeAvg} = getState().main.settings;
-    const {chartCurrentTime} = getState().ui;
+    const { projectTimeSelected, projectTimeAvg } = getState().main.settings;
+    const { chartCurrentTime } = getState().ui;
 
     const timeStart = new Date(projectTimeSelected[0]);
     const timeEnd = new Date(projectTimeSelected[1]);
@@ -110,10 +109,10 @@ export function importCloseModal() {
 
 export function addStation(station) {
   return (dispatch, getState) => {
-    let {stations, extremes} = getState().station;
+    let { stations, extremes } = getState().station;
 
     if (stations[station.id] === undefined) {
-      let stationsNew = {...stations, [station.id]: station};
+      let stationsNew = { ...stations, [station.id]: station };
 
       dispatch({
         type: stationTypes.STATIONS,
@@ -126,7 +125,7 @@ export function addStation(station) {
 
 export function importFiles(workerName, filePaths, fileType) {
   return (dispatch, getState) => {
-    const {main} = getState();
+    const { main } = getState();
 
     worker = childProcess({
       script: resourcePath(WORKER_PATH),
@@ -160,7 +159,7 @@ export function importFiles(workerName, filePaths, fileType) {
       }
     });
 
-    worker.send({worker: workerName, main, filePaths, fileType}, () => {
+    worker.send({ worker: workerName, main, filePaths, fileType }, () => {
       dispatch(setImportShowModal(true));
     });
   }

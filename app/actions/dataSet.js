@@ -1,9 +1,9 @@
-import {hashHistory} from 'react-router';
+import { push } from 'react-router-redux';
+import { IS_PROD, WORKER_PATH } from '../constants/app';
+import * as types from '../constants/dataSet';
+import { db } from '../database/dbConnect';
 import childProcess from '../lib/childProcess';
 import resourcePath from '../lib/resourcePath';
-import {db} from '../database/dbConnect';
-import {WORKER_PATH, IS_PROD} from '../constants/app';
-import * as types from '../constants/dataSet';
 
 let worker;
 
@@ -48,7 +48,7 @@ export function resetDataSet() {
 
 export function getData() {
   return (dispatch, getState) => {
-    const {main} = getState();
+    const { main } = getState();
 
     if (!worker) {
       worker = childProcess({
@@ -83,7 +83,7 @@ export function getData() {
       });
     }
 
-    worker.send({worker: 'dataSet', main}, () => {
+    worker.send({ worker: 'dataSet', main }, () => {
       dispatch(setLoading());
       // console.time('dataSetWorker');
     });
@@ -93,13 +93,13 @@ export function getData() {
 export function updateDataSet(id, fields, callback) {
   return async (dispatch) => {
     try {
-      const result = await db.DataSet.update(fields, {where: {id}});
-      const dataSet = await db.DataSet.find({where: {id}});
-      dispatch(_updateDataSet(id, dataSet.get({plain: true})));
+      const result = await db.DataSet.update(fields, { where: { id } });
+      const dataSet = await db.DataSet.find({ where: { id } });
+      dispatch(_updateDataSet(id, dataSet.get({ plain: true })));
 
-      if (callback) callback({result});
+      if (callback) callback({ result });
     } catch (error) {
-      if (callback) callback({error});
+      if (callback) callback({ error });
       throw error;
     }
   }
@@ -107,12 +107,12 @@ export function updateDataSet(id, fields, callback) {
 
 function _updateDataSet(id, fields) {
   return (dispatch, getState) => {
-    const {dataSets, dataSetValues} = getState().dataSet;
+    const { dataSets, dataSetValues } = getState().dataSet;
 
     let data = {
       dataSets: {
         ...dataSets,
-        [id]: {...dataSets[id], ...fields}
+        [id]: { ...dataSets[id], ...fields }
       },
       dataSetValues
     };
@@ -125,13 +125,13 @@ export function deleteDataSet(fields) {
   return async (dispatch) => {
     dispatch(setLoading());
 
-    const dataSets = await db.DataSet.findAll({attributes: ['id'], where: fields});
+    const dataSets = await db.DataSet.findAll({ attributes: ['id'], where: fields });
     const dataSetIds = dataSets.map((dataSet) => dataSet.id);
 
     openDataSetPage();
     await Promise.all([
-      db.DataSetValue.destroy({where: {dataSetId: dataSetIds}}),
-      db.DataSet.destroy({where: {id: dataSetIds}})
+      db.DataSetValue.destroy({ where: { dataSetId: dataSetIds } }),
+      db.DataSet.destroy({ where: { id: dataSetIds } })
     ]);
 
     dispatch(_deleteDataSet(dataSetIds));
@@ -141,11 +141,11 @@ export function deleteDataSet(fields) {
 
 function _deleteDataSet(dataSetIds, dataKeys) {
   return (dispatch, getState) => {
-    const {dataSets, dataSetValues} = getState().dataSet;
+    const { dataSets, dataSetValues } = getState().dataSet;
 
     const data = {
-      dataSets: {...dataSets},
-      dataSetValues: {...dataSetValues}
+      dataSets: { ...dataSets },
+      dataSetValues: { ...dataSetValues }
     };
 
     if (!dataKeys) {
@@ -167,13 +167,13 @@ function _deleteDataSet(dataSetIds, dataKeys) {
 export function updateDataSetValue(id, fields, callback) {
   return async (dispatch) => {
     try {
-      const result = await db.DataSetValue.update(fields, {where: {id}});
-      const dataSetValue = await db.DataSetValue.find({where: {id}});
-      dispatch(_updateDataSetValue(id, dataSetValue.get({plain: true})));
+      const result = await db.DataSetValue.update(fields, { where: { id } });
+      const dataSetValue = await db.DataSetValue.find({ where: { id } });
+      dispatch(_updateDataSetValue(id, dataSetValue.get({ plain: true })));
 
-      if (callback) callback({result});
+      if (callback) callback({ result });
     } catch (error) {
-      if (callback) callback({error});
+      if (callback) callback({ error });
       throw error;
     }
   }
@@ -181,16 +181,16 @@ export function updateDataSetValue(id, fields, callback) {
 
 function _updateDataSetValue(id, fields) {
   return (dispatch, getState) => {
-    const {dataSets, dataSetValues} = getState().dataSet;
+    const { dataSets, dataSetValues } = getState().dataSet;
 
     const data = {
       dataSets,
-      dataSetValues: {...dataSetValues}
+      dataSetValues: { ...dataSetValues }
     };
 
     data.dataSetValues[fields.dataSetId] = data.dataSetValues[fields.dataSetId].map((dataSetValue) => {
       if (dataSetValue.id === id) {
-        return {...dataSetValue, ...fields};
+        return { ...dataSetValue, ...fields };
       }
 
       return dataSetValue;
@@ -206,10 +206,10 @@ export function deleteDataSetValue(fields) {
 
     let dataSetValuesIds;
     if (!fields.id && !fields.dataSetId) {
-      const dataSetValues = await db.DataSetValue.findAll({attributes: ['id'], where: fields});
+      const dataSetValues = await db.DataSetValue.findAll({ attributes: ['id'], where: fields });
       dataSetValuesIds = dataSetValues.map((dataSetValue) => dataSetValue.id);
     }
-    await db.DataSetValue.destroy({where: fields});
+    await db.DataSetValue.destroy({ where: fields });
 
     if (fields.id) {
       dispatch(_deleteDataSetValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
@@ -225,7 +225,7 @@ export function deleteDataSetValue(fields) {
 
 function _deleteDataSetValue(dataSetValueIds) {
   return (dispatch, getState) => {
-    const {dataSets, dataSetValues} = getState().dataSet;
+    const { dataSets, dataSetValues } = getState().dataSet;
 
     const newDataSetValues = {};
     for (const dataSetId in dataSetValues) {
@@ -241,7 +241,7 @@ function _deleteDataSetValue(dataSetValueIds) {
 
 export function deleteSelectedDataSets() {
   return (dispatch, getState) => {
-    const {gridSelectedRows} = getState().ui;
+    const { gridSelectedRows } = getState().ui;
 
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteDataSet({
@@ -253,7 +253,7 @@ export function deleteSelectedDataSets() {
 
 export function deleteSelectedDataSetValues(field) {
   return (dispatch, getState) => {
-    const {gridSelectedRows} = getState().ui;
+    const { gridSelectedRows } = getState().ui;
 
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteDataSetValue({
@@ -268,8 +268,8 @@ export function clearDataSets() {
     dispatch(setLoading(true));
 
     await Promise.all([
-      db.DataSet.destroy({where: {}}),
-      db.DataSetValue.destroy({where: {}}),
+      db.DataSet.destroy({ where: {} }),
+      db.DataSetValue.destroy({ where: {} }),
       db.sequelize.query('DELETE FROM sqlite_sequence WHERE name IN (:name)', {
         replacements: {
           name: [db.DataSet.getTableName(), db.DataSetValue.getTableName()]

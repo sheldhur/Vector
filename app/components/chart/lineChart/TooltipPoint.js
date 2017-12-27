@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 
 class TooltipPoint extends Component {
   render() {
     return <g className="tooltip-point" transform={`translate(${this.props.position.x}, ${this.props.position.y})`}>
-      <circle fill={this.props.stroke} stroke={this.props.stroke}/>
+      <circle fill={this.props.stroke} stroke={this.props.stroke} />
     </g>
   }
 }

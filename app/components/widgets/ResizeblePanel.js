@@ -1,30 +1,20 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {numberIsBetween} from '../../utils/helper';
+import { numberIsBetween } from '../../utils/helper';
 
 
 export class ResizeblePanel extends Component {
+  state = {
+    size: this.props.defaultSize
+  };
 
-  constructor(props) {
-    super(props);
-
-    this.handleResize = this.handleResize.bind(this);
-    this.handleResizeStart = this.handleResizeStart.bind(this);
-    this.handleResizeEnd = this.handleResizeEnd.bind(this);
-    this.sendResizeEvent = this.sendResizeEvent.bind(this);
-
-    this.state = {
-      size: this.props.defaultSize
-    }
-  }
-
-  sendResizeEvent() {
+  sendResizeEvent = () => {
     window.dispatchEvent(new CustomEvent('resize'));
     console.info('EVENT RESIZE');
-  }
+  };
 
-  handleResize(event) {
+  handleResize = (event) => {
     event.preventDefault();
 
     // if (this.props.eventWhen === 'mousemove') {
@@ -39,24 +29,24 @@ export class ResizeblePanel extends Component {
     }
 
     if (size !== this.state.size) {
-      this.setState({size: size});
+      this.setState({ size: size });
     }
 
     if (this.props.eventWhen === 'mousemove') {
       this.sendResizeEvent();
     }
-  }
+  };
 
-  handleResizeStart(event) {
+  handleResizeStart = (event) => {
     if (event.button === 0) {
       event.preventDefault();
 
       document.addEventListener('mousemove', this.handleResize);
       document.addEventListener('mouseup', this.handleResizeEnd);
     }
-  }
+  };
 
-  handleResizeEnd(event) {
+  handleResizeEnd = (event) => {
     if (event.button === 0) {
       event.preventDefault();
 
@@ -67,31 +57,31 @@ export class ResizeblePanel extends Component {
       document.removeEventListener('mousemove', this.handleResize);
       document.removeEventListener('mouseup', this.handleResizeEnd);
     }
-  }
+  };
 
-  render() {
+  render = () => {
     let delimiterPos;
     let sizeFirst;
     let sizeSecond;
 
     if (this.props.type === 'horizontal') {
-      delimiterPos = {left: this.state.size + '%'};
-      sizeFirst = {width: this.state.size + '%'};
-      sizeSecond = {width: (100 - this.state.size) + '%'};
+      delimiterPos = { left: this.state.size + '%' };
+      sizeFirst = { width: this.state.size + '%' };
+      sizeSecond = { width: (100 - this.state.size) + '%' };
     } else if (this.props.type === 'vertical') {
-      delimiterPos = {top: this.state.size + '%'};
-      sizeFirst = {height: this.state.size + '%'};
-      sizeSecond = {height: (100 - this.state.size) + '%'};
+      delimiterPos = { top: this.state.size + '%' };
+      sizeFirst = { height: this.state.size + '%' };
+      sizeSecond = { height: (100 - this.state.size) + '%' };
     }
 
     return (
       <div className={"resizeble-panel " + this.props.type}>
-        {React.cloneElement(this.props.children[0], {size: sizeFirst})}
-        {React.cloneElement(this.props.children[1], {size: sizeSecond})}
+        {React.cloneElement(this.props.children[0], { size: sizeFirst })}
+        {React.cloneElement(this.props.children[1], { size: sizeSecond })}
         <div onMouseDown={this.handleResizeStart} style={delimiterPos}></div>
       </div>
     );
-  }
+  };
 }
 
 ResizeblePanel.propTypes = {

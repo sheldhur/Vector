@@ -1,6 +1,6 @@
 import React from 'react';
-import {shell} from 'electron';
-import {Icon, Progress, Tooltip, Row, List} from 'antd';
+import { shell } from 'electron';
+import { Icon, Progress, Tooltip, Row, List } from 'antd';
 
 const getFileName = (path) => {
   return path.replace(/^.*[\\\/]/, '');
@@ -12,7 +12,7 @@ const WbrString = (props) => {
       __html: props.children.replace(/\\/g, (str) => {
         return str + '<wbr />';
       })
-    }}/>
+    }} />
   );
 };
 
@@ -33,11 +33,11 @@ const FilePathTooltip = (props) => {
 const ImportProgressBar = (props) => {
   return (
     <Row className={'import-progress-bar' + (props.className ? ` ${props.className}` : '')}>
-      <Progress percent={Math.ceil(props.progressBar.total)} className="animation-off"/>
+      <Progress percent={Math.ceil(props.progressBar.total)} className="animation-off" />
       <small>
         File: <FilePathTooltip>{props.currentFile}</FilePathTooltip>
       </small>
-      <Progress percent={Math.ceil(props.progressBar.current)} className="animation-off"/>
+      <Progress percent={Math.ceil(props.progressBar.current)} className="animation-off" />
     </Row>
   );
 };
@@ -55,7 +55,7 @@ const ImportLogList = (props) => {
         <List.Item className="error">
           <List.Item.Meta
             title={<div>
-              <Icon type="cross-circle"/> {FileLink} processing error
+              <Icon type="cross-circle" /> {FileLink} processing error
             </div>}
             description={<div>
               <strong>{props.error.name}: </strong>
@@ -69,7 +69,7 @@ const ImportLogList = (props) => {
         <List.Item className="info">
           <List.Item.Meta
             title={<div>
-              <Icon type="exclamation-circle"/> {FileLink} no data for import
+              <Icon type="exclamation-circle" /> {FileLink} no data for import
             </div>}
           />
         </List.Item>
@@ -90,8 +90,8 @@ const ImportLogList = (props) => {
 const ImportProgress = (props) => {
   return (
     <div className={'import-progress' + (props.className ? ` ${props.className}` : '')}>
-      <ImportProgressBar currentFile={props.currentFile} progressBar={props.progress}/>
-      {props.log && props.log.length > 0 && <ImportLogList data={props.log}/>}
+      <ImportProgressBar currentFile={props.currentFile} progressBar={props.progress} />
+      {props.log && props.log.length > 0 && <ImportLogList data={props.log} />}
     </div>
   )
 };

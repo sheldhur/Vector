@@ -1,8 +1,8 @@
-import {ipcRenderer} from 'electron';
-import React, {Component} from 'react';
-import {bindActionCreators} from "redux";
-import {connect} from 'react-redux';
-import {Modal, Icon, Row, Col} from "antd";
+import { ipcRenderer } from 'electron';
+import React, { Component } from 'react';
+import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { Modal, Icon, Row, Col } from "antd";
 import * as mainActions from "./../../actions/main";
 
 
@@ -16,8 +16,8 @@ class MainUpdateApp extends Component {
     this.props.mainActions.setUpdate(null);
   };
 
-  render() {
-    const {update} = this.props;
+  render = () => {
+    const { update } = this.props;
 
     if (update) {
       return (
@@ -26,14 +26,14 @@ class MainUpdateApp extends Component {
           visible={true}
           onOk={() => this.handlerOk()}
           onCancel={() => this.handlerCancel()}
-          okText={<span><Icon type="download"/> Install update</span>}
+          okText={<span><Icon type="download" /> Install update</span>}
           wrapClassName="main-update-app"
           zIndex={999}
           width={600}
         >
           <Row gutter={50}>
             <Col span={2}>
-              <Icon type="info-circle" style={{fontSize: '300%', color: '#108ee9', padding: '12px 0'}}/>
+              <Icon type="info-circle" style={{ fontSize: '300%', color: '#108ee9', padding: '12px 0' }} />
             </Col>
             <Col span={10}>
               <h1>{update.releaseName}</h1>
@@ -41,14 +41,14 @@ class MainUpdateApp extends Component {
             </Col>
           </Row>
           <Row>
-            <div dangerouslySetInnerHTML={{__html: update.releaseNotes}}/>
+            <div dangerouslySetInnerHTML={{ __html: update.releaseNotes }} />
           </Row>
         </Modal>
       );
     }
 
     return null;
-  }
+  };
 }
 
 MainUpdateApp.propTypes = {};

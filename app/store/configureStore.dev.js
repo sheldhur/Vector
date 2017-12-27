@@ -1,10 +1,10 @@
-import {ipcRenderer} from "electron";
-import {electronEnhancer} from "redux-electron-store";
-import {createStore, applyMiddleware, compose} from 'redux';
+import { ipcRenderer } from "electron";
+import { electronEnhancer } from "redux-electron-store";
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import {createHashHistory} from 'history';
-import {routerMiddleware, routerActions} from 'react-router-redux';
-import {createLogger} from 'redux-logger';
+import { createHashHistory } from 'history';
+import { routerMiddleware, routerActions } from 'react-router-redux';
+import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 
 const history = createHashHistory();
@@ -68,4 +68,4 @@ const configureStore = (initialState) => {
   return store;
 };
 
-export default {configureStore, history};
+export default { configureStore, history };
