@@ -14,7 +14,7 @@ class CheckboxCell extends Component {
       value: this.props.value,
       error: false
     });
-  }
+  };
   handleChange = (e) => {
     const value = e.target.checked;
     if (this.props.onChange) {
