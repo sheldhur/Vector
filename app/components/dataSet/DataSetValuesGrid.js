@@ -26,7 +26,6 @@ class DataSetValuesGrid extends Component {
   };
 
   componentDidMount = () => {
-    this.props.uiActions.setGridLastOpenItem(parseInt(this.props.dataSetId));
     this.setPagination(this.props);
     window.addEventListener('resize', this.handlerResize);
     window.addEventListener('load', this.fixPageSize);

@@ -17,18 +17,6 @@ const STATION_DELETE_ALL_VALUES = 'STATION_DELETE_ALL_VALUES';
 
 class StationValueActions extends Component {
 
-  componentWillMount = () => {
-    const {stationId} = this.props;
-    this.props.stationActions.getStationViewValues({stationId});
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    const {stationId} = nextProps;
-    if (stationId !== this.props.stationId) {
-      this.props.stationActions.getStationViewValues({stationId});
-    }
-  };
-
   handlerStationChange = (stationId) => {
     this.props.history.push(`/station/${stationId}`);
   };

@@ -77,7 +77,7 @@ hr {
 
 @import "./components/grid/Grid.css";
 
-@import "./components/dataSet/DataSetView.css";
+@import "components/dataSet/DataSetsView.css";
 
 @import "./components/stations/StationsView.css";
 

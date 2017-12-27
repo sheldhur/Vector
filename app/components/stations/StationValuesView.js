@@ -6,17 +6,27 @@ import {Row} from 'antd';
 import StationValueActions from './StationValueActions';
 import StationValuesChart from './StationValuesChart';
 import StationValuesGrid from './StationValuesGrid';
+import * as stationActions from '../../actions/station';
 import * as uiActions from '../../actions/ui';
 
 
 class StationValuesView extends Component {
 
-  shouldComponentUpdate = (nextProps) => {
-    if (nextProps.location.action === 'POP') {
-      // return false;
-    }
+  componentWillMount = () => {
+    this.getStationViewValues(this.props);
+  };
 
-    return true;
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      this.getStationViewValues(nextProps);
+    }
+  };
+
+  getStationViewValues = (props) => {
+    const stationId = parseInt(props.match.params.id);
+
+    this.props.uiActions.setGridLastOpenItem(stationId);
+    this.props.stationActions.getStationViewValues({stationId});
   };
 
   render = () => {
@@ -24,18 +34,18 @@ class StationValuesView extends Component {
 
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
-        <Row style={{height:'175px'}}>
-          <StationValuesChart />
+        <Row style={{height: '175px'}}>
+          <StationValuesChart/>
         </Row>
         <Row>
           <StationValueActions stationId={stationId}/>
         </Row>
         <Row>
-          <StationValuesGrid stationId={stationId} />
+          <StationValuesGrid stationId={stationId}/>
         </Row>
       </div>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {
@@ -47,6 +57,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     uiActions: bindActionCreators(uiActions, dispatch),
+    stationActions: bindActionCreators(stationActions, dispatch),
   };
 }
 

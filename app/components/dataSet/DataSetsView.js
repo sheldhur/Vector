@@ -3,23 +3,23 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Row} from 'antd';
-import DataSetImport from './DataSetActions';
-import DataSetChart from './DataSetChart';
-import DataSetGrid from './DataSetGrid';
+import DataSetsActions from './DataSetsActions';
+import DataSetsChart from './DataSetsChart';
+import DataSetsGrid from './DataSetsGrid';
 
 
-class DataSetView extends Component {
+class DataSetsView extends Component {
   render() {
     return (
       <div className={`dataset-view theme-${this.props.theme}`}>
         <Row style={{height:'150px'}}>
-          <DataSetChart/>
+          <DataSetsChart/>
         </Row>
         <Row>
-          <DataSetImport/>
+          <DataSetsActions/>
         </Row>
         <Row>
-          <DataSetGrid />
+          <DataSetsGrid />
         </Row>
       </div>
     );
@@ -33,4 +33,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(DataSetView);
+export default connect(mapStateToProps, null)(DataSetsView);

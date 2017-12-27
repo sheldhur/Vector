@@ -4,7 +4,7 @@ import {Switch, Route} from 'react-router';
 import App from './containers/App';
 import Home from './components/Home';
 import Main from './components/main/Main';
-import DataSetView from './components/dataSet/DataSetView';
+import DataSetsView from './components/dataSet/DataSetsView';
 import DataSetValuesView from './components/dataSet/DataSetValuesView';
 import StationsView from './components/stations/StationsView';
 import StationValuesView from './components/stations/StationValuesView';
@@ -18,7 +18,7 @@ export default () => (
       <Route path="/home" component={Home}/>
       <Route path="/main" component={Main}/>
       <Route path="/dataSet/:id" component={DataSetValuesView}/>
-      <Route path="/dataSet" component={DataSetView}/>
+      <Route path="/dataSet" component={DataSetsView}/>
       <Route path="/station/:id" component={StationValuesView}/>
       <Route path="/station" component={StationsView}/>
       <Route path="/capture" component={Capture}/>

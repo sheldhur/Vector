@@ -41,7 +41,7 @@ export function shiftChartCurrentTime(value) {
     const timeEnd = new Date(projectTimeSelected[1]);
     const timeAvg = (projectTimeAvg.by.startsWith('min') ? projectTimeAvg.value * 60 : projectTimeAvg.value) * 1000;
 
-    let timeCurrent = chartCurrentTime ? new Date(chartCurrentTime) : timeStart;
+    const timeCurrent = chartCurrentTime ? new Date(chartCurrentTime) : timeStart;
 
     let timeNew = timeStart;
     if (timeCurrent) {

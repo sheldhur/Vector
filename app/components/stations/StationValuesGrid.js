@@ -25,7 +25,6 @@ class StationGrid extends Component {
   };
 
   componentDidMount = () => {
-    this.props.uiActions.setGridLastOpenItem(parseInt(this.props.stationId));
     window.addEventListener('resize', this.handlerResize);
   };
 

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Row} from 'antd';
-import StationsImport from './StationsActions';
+import StationsActions from './StationsActions';
 import StationsGrid from './StationsGrid';
 
 
@@ -12,7 +12,7 @@ class Stations extends Component {
     return (
       <div className={`stations-view theme-${this.props.theme}`}>
         <Row>
-          <StationsImport />
+          <StationsActions />
         </Row>
         <Row>
           <StationsGrid />

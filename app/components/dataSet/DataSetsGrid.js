@@ -16,7 +16,7 @@ import * as app from '../../constants/app';
 const {Menu} = remote;
 
 
-class DataSetGrid extends Component {
+class DataSetsGrid extends Component {
 
   state = {
     availableHeight: 'auto',
@@ -262,12 +262,12 @@ class DataSetGrid extends Component {
 // export default DataSetGrid;
 
 
-DataSetGrid.propTypes = {
+DataSetsGrid.propTypes = {
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-DataSetGrid.defaultProps = {
+DataSetsGrid.defaultProps = {
   width: '100%',
   height: '100%',
 };
@@ -287,4 +287,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetGrid);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSetsGrid);

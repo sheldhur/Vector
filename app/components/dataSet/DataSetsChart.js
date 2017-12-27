@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {ProgressAlert, NoDataAlert} from '../widgets/ChartAlert';
 import LineChart from '../chart/LineChart';
 import TitleCurrentTime from '../main/TitleCurrentTime';
-import DataSetChartMenu from './DataSetChartMenu';
+import DataSetChartMenu from './DataSetsChartMenu';
 import * as mainActions from '../../actions/main';
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
@@ -14,7 +14,7 @@ import * as prepareData from '../../utils/prepareData';
 import * as app from '../../constants/app';
 
 
-class DataSetChart extends Component {
+class DataSetsChart extends Component {
 
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
@@ -72,13 +72,13 @@ class DataSetChart extends Component {
   }
 }
 
-DataSetChart.propTypes = {
+DataSetsChart.propTypes = {
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   getStations: PropTypes.bool,
 };
 
-DataSetChart.defaultProps = {
+DataSetsChart.defaultProps = {
   width: '100%',
   height: '100%',
   getStations: false,
@@ -103,4 +103,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetChart);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSetsChart);

@@ -23,12 +23,6 @@ class StationValuesChart extends Component {
     view: VIEW_RAW,
   };
 
-  componentWillMount() {
-    // if (!this.props.data.isLoading) {
-    //   this.props.dataSetActions.getData();
-    // }
-  }
-
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
       e.preventDefault();

@@ -17,7 +17,7 @@ const DATASET_DELETE_ALL = 'DATASET_DELETE_ALL';
 const DATASET_DELETE_SELECTED = 'DATASET_DELETE_SELECTED';
 const DATASET_VALUES_DELETE_SELECTED = 'DATASET_VALUES_DELETE_SELECTED';
 
-class DataSetActions extends Component {
+class DataSetsActions extends Component {
   fileTypes = app.IMPORT_TYPE_DATA_SET;
 
   handlerDropdownSelect = (e) => {
@@ -176,4 +176,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataSetActions);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSetsActions);
