@@ -22,7 +22,7 @@ class MapCylindrical extends Component {
       bottom: 0
     }
   };
-  uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
+  uid = `${this.constructor.name}-${Math.random().toString(35).substr(2, 7)}`;
 
   componentDidMount = () => {
     this.setState({
@@ -31,9 +31,7 @@ class MapCylindrical extends Component {
     });
   };
 
-  formatAngle = (d) => {
-    return d + '°';
-  };
+  formatAngle = (d) => `${d}°`;
 
   calculateAxisMargin = () => {
     const chart = ReactDOM.findDOMNode(this.refs.chart);
@@ -44,7 +42,7 @@ class MapCylindrical extends Component {
       right: axis.width - this.props.width + axis.x,
       top: -axis.y,
       bottom: axis.height - this.props.height + axis.y
-    }
+    };
   };
 
   calculateSize = (margin, axisMargin) => {
@@ -53,17 +51,17 @@ class MapCylindrical extends Component {
       height: this.props.height,
     };
 
-    let marginSumm = {
+    const marginSumm = {
       width: margin.left + margin.right + axisMargin.left + axisMargin.right,
       height: margin.top + margin.bottom + axisMargin.top + axisMargin.bottom
     };
 
-    let width = containerSize.width - marginSumm.width;
-    let height = containerSize.height - marginSumm.height;
+    const width = containerSize.width - marginSumm.width;
+    const height = containerSize.height - marginSumm.height;
 
-    let size = {
-      width: width,
-      height: height,
+    const size = {
+      width,
+      height,
       container: containerSize
     };
 
@@ -85,7 +83,9 @@ class MapCylindrical extends Component {
   };
 
   render = () => {
-    const { width, height, data, graticuleStep } = this.props;
+    const {
+      width, height, data, graticuleStep
+    } = this.props;
     const { isRenderMap, axisMargin } = this.state;
 
     const margin = {
@@ -131,7 +131,7 @@ class MapCylindrical extends Component {
           </clipPath>
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
-          {isRenderMap && <g transform={`translate(1,0)`}>
+          {isRenderMap && <g transform="translate(1,0)">
             <World
               path={path}
               ocean={outline}
@@ -158,7 +158,9 @@ class MapCylindrical extends Component {
               projection={projection}
               clipPath={`url(#${this.uid}-vector)`}
             />
-            <Tooltip data={data} projection={projection}
+            <Tooltip
+              data={data}
+              projection={projection}
             />
           </g>}
           <g className="map-axis">
@@ -167,7 +169,7 @@ class MapCylindrical extends Component {
               scale={scale.y}
               tickValues={ticks.y}
               format={this.formatAngle}
-              translate={`translate(0,0)`}
+              translate="translate(0,0)"
             >
               <text
                 x={0}

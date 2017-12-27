@@ -5,7 +5,6 @@ import HighlightValue from './HighlightValue';
 
 
 class SelectCell extends Component {
-
   state = {
     value: this.props.value,
     isSaved: false,
@@ -38,7 +37,7 @@ class SelectCell extends Component {
         value,
         isSaved: true
       }, () => {
-        this.props.onChange(this.state.value, this.afterAction)
+        this.props.onChange(this.state.value, this.afterAction);
       });
     } else {
       this.setState({ value });
@@ -64,10 +63,10 @@ class SelectCell extends Component {
 
   render = () => {
     const { value, isSaved, error } = this.state;
-    const message = !!error ? <div>
+    const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-    </div> : null;
+                             </div>) : null;
 
     let plainValue = null;
     let search = null;
@@ -75,11 +74,11 @@ class SelectCell extends Component {
       plainValue = value.text;
       search = value.search;
     } else {
-      plainValue = value
+      plainValue = value;
     }
 
     return (
-      <div className={"select-cell" + (error ? ' error' : '') + (isSaved ? ' saved' : '')}>
+      <div className={`select-cell${error ? ' error' : ''}${isSaved ? ' saved' : ''}`}>
         <Popconfirm
           title={message}
           visible={!!error}
@@ -96,7 +95,7 @@ class SelectCell extends Component {
             style={{ width: '100%' }}
           >
             {this.props.options.map((item, i) => {
-              let key = item.value || i;
+              const key = item.value || i;
               return (
                 <Select.Option key={key} value={key}>
                   <HighlightValue value={item.text || item} search={search} />

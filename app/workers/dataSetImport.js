@@ -32,10 +32,10 @@ export default function (dbSession, data) {
         const readResult = await readFile(filePaths[fileKey], fileType);
         const data = await prepareImportData(readResult, time);
         const dataSets = await saveDataSets(data);
-        await saveDataSetValues(dataSets, filePaths, fileKey)
+        await saveDataSetValues(dataSets, filePaths, fileKey);
       } catch (e) {
         console.error(e);
-        process.send({ event: 'setImportLog', data: { filePath: filePath, error: errorToObject(e) } })
+        process.send({ event: 'setImportLog', data: { filePath, error: errorToObject(e) } });
       }
     }
   })();
@@ -55,7 +55,7 @@ function readFile(filePath, fileType) {
 
 function saveDataSets(data) {
   return new Promise((resolve, reject) => {
-    let results = [];
+    const results = [];
     Promise.map(data.columns, (item, i) => {
       if (i > 0 && item.name !== '') {
         return db.DataSet.findOrCreate({
@@ -65,7 +65,7 @@ function saveDataSets(data) {
             si: item.si || item.name,
           }
         }).then((dataSet) => {
-          let id = dataSet[0].id;
+          const id = dataSet[0].id;
           data.rows.forEach((row, j) => {
             results.push({
               dataSetId: id,
@@ -75,7 +75,7 @@ function saveDataSets(data) {
             });
           });
         }).catch(e => {
-          console.log('saveDataSet: ' + errorToObject(e));
+          console.log(`saveDataSet: ${errorToObject(e)}`);
         });
       }
     }, { concurrency: 1 }).then(() => {
@@ -93,31 +93,31 @@ function saveDataSetValues(rows, files, fileCurrent) {
       total: 0,
     };
 
-    let sqlite = db.sequelize.connectionManager.connections.default;
-    sqlite.serialize(function () {
-      let query = "INSERT INTO DataSetValues (id, dataSetId, time, value, format) VALUES(NULL, ?, ?, ?, ?);";
-      let stmt = sqlite.prepare(query);
+    const sqlite = db.sequelize.connectionManager.connections.default;
+    sqlite.serialize(() => {
+      const query = 'INSERT INTO DataSetValues (id, dataSetId, time, value, format) VALUES(NULL, ?, ?, ?, ?);';
+      const stmt = sqlite.prepare(query);
       rows.forEach((row, rowCurrent) => {
         stmt.run(row.dataSetId, row.time, row.value, row.format, (error) => {
-          let progress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
+          const progress = calcProgress(files.length, fileCurrent, rows.length, rowCurrent);
           if (progress.current > lastProgress.current) {
             lastProgress = progress;
             process.send({ event: 'setProgress', data: progress });
           }
 
           if (error) {
-            //process.send({event: 'progress', error: {name: error.name, message: error.message}, value});
+            // process.send({event: 'progress', error: {name: error.name, message: error.message}, value});
           }
         });
       });
       stmt.finalize((error) => {
-        //process.send({event: 'result', error});
+        // process.send({event: 'result', error});
         if (error) {
           reject(error);
         } else {
           resolve();
         }
-      })
+      });
     });
   });
 }

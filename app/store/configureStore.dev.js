@@ -1,5 +1,5 @@
-import { ipcRenderer } from "electron";
-import { electronEnhancer } from "redux-electron-store";
+import { ipcRenderer } from 'electron';
+import { electronEnhancer } from 'redux-electron-store';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
@@ -59,10 +59,9 @@ const configureStore = (initialState) => {
 
   if (module.hot) {
     module.hot.accept('../reducers', () => {
-        ipcRenderer.sendSync('renderer-reload');
-        store.replaceReducer(require('../reducers')) // eslint-disable-line global-require
-      }
-    );
+      ipcRenderer.sendSync('renderer-reload');
+      store.replaceReducer(require('../reducers')); // eslint-disable-line global-require
+    });
   }
 
   return store;

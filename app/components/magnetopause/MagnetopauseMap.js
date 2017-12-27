@@ -29,7 +29,7 @@ class MagnetopauseMap extends Component {
   };
 
   handleResize = (e) => {
-    let svgWrapper = ReactDOM.findDOMNode(this.refs.svgWrapper);
+    const svgWrapper = ReactDOM.findDOMNode(this.refs.svgWrapper);
 
     this.setState({
       wrapperSize: {
@@ -42,7 +42,7 @@ class MagnetopauseMap extends Component {
   getSize = () => {
     const { height, width } = this.state.wrapperSize;
 
-    let size = {
+    const size = {
       width: undefined,
       height: undefined
     };
@@ -66,23 +66,23 @@ class MagnetopauseMap extends Component {
     if (data && size.width !== undefined) {
       const currentTimeData = data.hasOwnProperty(currentTime) || currentTime === null ? data[currentTime] : null;
 
-      return <div className="svg-wrapper centered-box" ref="svgWrapper" style={{ padding: 5 }}>
+      return (<div className="svg-wrapper centered-box" ref="svgWrapper" style={{ padding: 5 }}>
         <MagnetopauseMapX
           width={size.width / 2}
           height={size.height - 10}
           wind={currentTimeData}
           antiAliasing={this.props.antiAliasing}
         />
-        {/*<MagnetopauseMapY*/}
-        {/*width={size.width / 2}*/}
-        {/*height={size.height}*/}
-        {/*wind={currentData}*/}
-        {/*antiAliasing={this.props.antiAliasing}*/}
-        {/*/>*/}
-      </div>;
+        {/* <MagnetopauseMapY */}
+        {/* width={size.width / 2} */}
+        {/* height={size.height} */}
+        {/* wind={currentData} */}
+        {/* antiAliasing={this.props.antiAliasing} */}
+        {/* /> */}
+              </div>);
     }
 
-    return <div className="svg-wrapper center" ref="svgWrapper"></div>
+    return <div className="svg-wrapper center" ref="svgWrapper" />;
   };
 }
 

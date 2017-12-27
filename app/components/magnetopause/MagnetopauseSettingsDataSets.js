@@ -5,7 +5,6 @@ import { Button, Popconfirm, Icon } from 'antd';
 import Grid from '../grid/Grid';
 
 class MagnetopauseSettingsDataSets extends Component {
-
   handleCellChange = (field, index, value, afterAction) => {
     this.props.onCellChange(field, index, value);
     afterAction(true);
@@ -35,18 +34,20 @@ class MagnetopauseSettingsDataSets extends Component {
         key: 'id',
         width: 30,
         render: (text, record, index) => (
-          <a href="#" onClick={(e) => {
-            this.handleLineAddRemove(e, index)
-          }}><Icon type="delete" /></a>
+          <a
+            href="#"
+            onClick={(e) => {
+            this.handleLineAddRemove(e, index);
+          }}
+          ><Icon type="delete" />
+          </a>
         )
       }
     ];
 
     const lines = dataSets ? dataSets
       .filter(line => (value.indexOf(line.id) !== -1))
-      .map((line, i) => {
-        return { ...line, key: i }
-      }) : [];
+      .map((line, i) => ({ ...line, key: i })) : [];
 
     return (
       <Grid

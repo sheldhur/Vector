@@ -2,15 +2,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DatePicker } from 'antd';
-import moment from "moment";
+import moment from 'moment';
 import * as app from '../../constants/app';
-import { numberIsBetween } from "../../utils/helper";
+import { numberIsBetween } from '../../utils/helper';
 
 
-//TODO: ресет значений, если отмена
-//TODO: время для сегодняшнего дня
+// TODO: ресет значений, если отмена
+// TODO: время для сегодняшнего дня
 class SettingsDataTimeRage extends Component {
-
   createRange = (start, end) => {
     const result = [];
     for (let i = start; i < end; i++) {
@@ -20,18 +19,14 @@ class SettingsDataTimeRage extends Component {
   };
 
   disabledRangeTime = (current, type, range) => {
-    let disabled = {
-      disabledSeconds: () => {
-        return this.createRange(1, 60);
-      }
+    const disabled = {
+      disabledSeconds: () => this.createRange(1, 60)
     };
 
     if (range && Array.isArray(current) && current[type === 'start' ? 0 : 1].format('YYYY-MM-DD') === range[type].format('YYYY-MM-DD')) {
-      let rangeHour = range[type].hour();
-      let rangeMinute = range[type].minute();
-      disabled.disabledHours = () => {
-        return type === 'start' ? this.createRange(0, rangeHour) : this.createRange(rangeHour + 1, 24);
-      };
+      const rangeHour = range[type].hour();
+      const rangeMinute = range[type].minute();
+      disabled.disabledHours = () => (type === 'start' ? this.createRange(0, rangeHour) : this.createRange(rangeHour + 1, 24));
       disabled.disabledMinutes = (selectedHour) => {
         if (selectedHour === rangeHour) {
           return type === 'start' ? this.createRange(0, rangeMinute) : this.createRange(rangeMinute + 1, 60);
@@ -43,12 +38,12 @@ class SettingsDataTimeRage extends Component {
   };
 
   disabledRangeDate = (current, range) => {
-    let currentDate = current.clone().startOf('date');
-    let rangeDate = range ? {
+    const currentDate = current.clone().startOf('date');
+    const rangeDate = range ? {
       start: range[0].clone().startOf('date'),
       end: range[1].clone().startOf('date'),
     } : null;
-    let nowDate = moment().startOf('date');
+    const nowDate = moment().startOf('date');
 
     return this.filterRangeDataTime(currentDate, rangeDate, nowDate);
   };
@@ -56,15 +51,15 @@ class SettingsDataTimeRage extends Component {
   filterRangeDataTime = (current, range, now) => {
     let result = true;
     if (current) {
-      let currentMs = current.valueOf();
+      const currentMs = current.valueOf();
       if (range) {
-        let rangeMs = [
+        const rangeMs = [
           range.start.valueOf(),
           range.end.valueOf()
         ];
         result = !numberIsBetween(currentMs, rangeMs);
       } else {
-        let nowMs = now.valueOf();
+        const nowMs = now.valueOf();
         result = current > nowMs;
       }
     }
@@ -72,18 +67,16 @@ class SettingsDataTimeRage extends Component {
     return result;
   };
 
-  render = () => {
-    return (
-      <DatePicker.RangePicker
-        disabledDate={(item) => this.disabledRangeDate(item, this.props.valueLimit)}
-        disabledTime={(date, type) => this.disabledRangeTime(date, type, this.props.valueLimit)}
-        showTime={{ hideDisabledOptions: true }}
-        format={app.FORMAT_DATE_INPUT}
-        placeholder={['Start time', 'End time']}
-        {...this.props}
-      />
-    );
-  }
+  render = () => (
+    <DatePicker.RangePicker
+      disabledDate={(item) => this.disabledRangeDate(item, this.props.valueLimit)}
+      disabledTime={(date, type) => this.disabledRangeTime(date, type, this.props.valueLimit)}
+      showTime={{ hideDisabledOptions: true }}
+      format={app.FORMAT_DATE_INPUT}
+      placeholder={['Start time', 'End time']}
+      {...this.props}
+    />
+  )
 }
 
 SettingsDataTimeRage.propTypes = {

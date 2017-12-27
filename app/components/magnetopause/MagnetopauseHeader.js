@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MainHeaderControls from '../main/MainHeaderControls';
 import MainHeaderCapture from '../main/MainHeaderCapture';

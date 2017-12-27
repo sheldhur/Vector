@@ -16,7 +16,6 @@ const { Menu } = remote;
 
 
 class StationGrid extends Component {
-
   state = {
     availableHeight: 'auto',
     pageSize: 5,
@@ -55,7 +54,7 @@ class StationGrid extends Component {
       availableHeight,
       pageSize,
       pageCurrent,
-    })
+    });
   };
 
   calcPageCurrent = (props, pageSize) => {
@@ -116,7 +115,7 @@ class StationGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.stationActions.deleteStation({ id: record.id })
+                this.props.stationActions.deleteStation({ id: record.id });
               },
             });
           }
@@ -131,7 +130,7 @@ class StationGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.stationActions.deleteStationValue({ stationId: record.id })
+                this.props.stationActions.deleteStationValue({ stationId: record.id });
               },
             });
           }
@@ -154,44 +153,59 @@ class StationGrid extends Component {
         dataIndex: 'name',
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('name', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Source',
         dataIndex: 'source',
         width: 150,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('source', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Lat',
         dataIndex: 'latitude',
         width: 150,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('latitude', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Long',
         dataIndex: 'longitude',
         width: 150,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('longitude', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: '',
         dataIndex: 'status',
         width: 30,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
+        render: (text, record, index) => (<Grid.CheckboxCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('status', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }
     ];
 
@@ -208,9 +222,7 @@ class StationGrid extends Component {
     return (
       <div style={{ height: this.state.availableHeight }}>
         <Grid
-          rowClassName={(record) => {
-            return record.id === this.props.lastOpenItem ? 'select-row' : ''
-          }}
+          rowClassName={(record) => (record.id === this.props.lastOpenItem ? 'select-row' : '')}
           ref="grid"
           rowKey="id"
           columns={columns}
@@ -224,7 +236,7 @@ class StationGrid extends Component {
             onChange: this.handlerPageChange
           }}
           size="x-small"
-          bordered={true}
+          bordered
           onRow={(record, index) => ({
             onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
           })}

@@ -38,7 +38,7 @@ export default function chart(state = initialState, action) {
             current: 0,
           },
           importLog: []
-        }
+        };
       }
       return { ...state, importShowModal: action.payload };
     case types.IMPORT_CURRENT_FILE:

@@ -22,7 +22,7 @@ class MainHeaderControls extends Component {
     window.addEventListener('keydown', this.handlerHotKey);
 
     setTimeout(() => {
-      let mainPage = document.querySelector('#root .main-page');
+      const mainPage = document.querySelector('#root .main-page');
       if (mainPage) {
         mainPage.addEventListener('mouseover', this.handlerMouseOver);
         mainPage.addEventListener('mouseleave', this.handlerMouseLeave);
@@ -33,7 +33,7 @@ class MainHeaderControls extends Component {
   componentWillUnmount = () => {
     window.removeEventListener('keydown', this.handlerHotKey);
 
-    let mainPage = document.querySelector('#root .main-page');
+    const mainPage = document.querySelector('#root .main-page');
     mainPage.removeEventListener('mouseover', this.handlerMouseOver);
     mainPage.removeEventListener('mouseleave', this.handlerMouseLeave);
 
@@ -78,7 +78,7 @@ class MainHeaderControls extends Component {
 
     this.props.uiActions.shiftChartCurrentTime(value);
 
-    if (this.props.onTick && typeof this.props.onTick === "function") {
+    if (this.props.onTick && typeof this.props.onTick === 'function') {
       this.props.onTick();
     }
   };
@@ -112,7 +112,7 @@ class MainHeaderControls extends Component {
         handler: this.handlerTimeShift
       },
       {
-        icon: this.state.interval ? "pause" : "caret-right",
+        icon: this.state.interval ? 'pause' : 'caret-right',
         hotkey: ['Space'],
         step: 1,
         handler: this.handlerPlay
@@ -132,8 +132,8 @@ class MainHeaderControls extends Component {
     ];
 
     buttons = buttons.map((btn, i) => {
-      //ref={(el) => button[buttonName] = el}
-      let hotKey = (
+      // ref={(el) => button[buttonName] = el}
+      const hotKey = (
         <span key={i} className="hotkey">
           {btn.hotkey.map((item, i) => [i !== 0 && ' + ', <Tag>{item}</Tag>])}
         </span>
@@ -150,8 +150,7 @@ class MainHeaderControls extends Component {
             icon={btn.icon}
             size={this.props.size}
             onClick={(e) => btn.handler(e, btn.step)}
-          >
-          </Button>
+          />
         </Tooltip>
       );
     });

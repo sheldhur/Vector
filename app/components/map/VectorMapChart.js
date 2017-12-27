@@ -14,8 +14,8 @@ class VectorMapChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let mapLayer = {};
-      let props = { ...mapLayer, ...this.state };
+      const mapLayer = {};
+      const props = { ...mapLayer, ...this.state };
 
       VectorMapMenu({
         state: props,
@@ -27,8 +27,10 @@ class VectorMapChart extends Component {
   };
 
   render = () => {
-    let { antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor } = this.props;
-    let props = {
+    const {
+      antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor
+    } = this.props;
+    const props = {
       antiAliasing,
       world: {
         scale: mapScale,
@@ -40,10 +42,10 @@ class VectorMapChart extends Component {
     };
 
     return (
-      <div style={{ height: "100%", padding: '5px' }} onContextMenu={this.handlerContextMenu} id="mapChart">
+      <div style={{ height: '100%', padding: '5px' }} onContextMenu={this.handlerContextMenu} id="mapChart">
         <MapChart
-          width={'100%'}
-          height={'100%'}
+          width="100%"
+          height="100%"
           {...props}
         />
       </div>

@@ -2,19 +2,14 @@ import React from 'react';
 import { shell } from 'electron';
 import { Icon, Progress, Tooltip, Row, List } from 'antd';
 
-const getFileName = (path) => {
-  return path.replace(/^.*[\\\/]/, '');
-};
+const getFileName = (path) => path.replace(/^.*[\\\/]/, '');
 
-const WbrString = (props) => {
-  return (
-    <span dangerouslySetInnerHTML={{
-      __html: props.children.replace(/\\/g, (str) => {
-        return str + '<wbr />';
-      })
-    }} />
-  );
-};
+const WbrString = (props) => (
+  <span dangerouslySetInnerHTML={{
+      __html: props.children.replace(/\\/g, (str) => `${str}<wbr />`)
+    }}
+  />
+);
 
 const FilePathTooltip = (props) => {
   if (props.children) {
@@ -23,24 +18,23 @@ const FilePathTooltip = (props) => {
         title={<WbrString>{props.children}</WbrString>}
         placement="right"
         overlayClassName="import-progress file-path"
-      >{getFileName(props.children)}</Tooltip>
+      >{getFileName(props.children)}
+      </Tooltip>
     );
   }
 
   return null;
 };
 
-const ImportProgressBar = (props) => {
-  return (
-    <Row className={'import-progress-bar' + (props.className ? ` ${props.className}` : '')}>
-      <Progress percent={Math.ceil(props.progressBar.total)} className="animation-off" />
-      <small>
+const ImportProgressBar = (props) => (
+  <Row className={`import-progress-bar${props.className ? ` ${props.className}` : ''}`}>
+    <Progress percent={Math.ceil(props.progressBar.total)} className="animation-off" />
+    <small>
         File: <FilePathTooltip>{props.currentFile}</FilePathTooltip>
-      </small>
-      <Progress percent={Math.ceil(props.progressBar.current)} className="animation-off" />
-    </Row>
-  );
-};
+    </small>
+    <Progress percent={Math.ceil(props.progressBar.current)} className="animation-off" />
+  </Row>
+);
 
 const ImportLogList = (props) => {
   const ListItem = (props) => {
@@ -56,30 +50,29 @@ const ImportLogList = (props) => {
           <List.Item.Meta
             title={<div>
               <Icon type="cross-circle" /> {FileLink} processing error
-            </div>}
+                   </div>}
             description={<div>
               <strong>{props.error.name}: </strong>
               {props.error.message}
-            </div>}
+                         </div>}
           />
         </List.Item>
-      )
-    } else {
-      return (
-        <List.Item className="info">
-          <List.Item.Meta
-            title={<div>
-              <Icon type="exclamation-circle" /> {FileLink} no data for import
-            </div>}
-          />
-        </List.Item>
-      )
+      );
     }
+    return (
+      <List.Item className="info">
+        <List.Item.Meta
+          title={<div>
+            <Icon type="exclamation-circle" /> {FileLink} no data for import
+                 </div>}
+        />
+      </List.Item>
+    );
   };
 
   return (
     <List
-      className={'import-log-list' + (props.className ? ` ${props.className}` : '')}
+      className={`import-log-list${props.className ? ` ${props.className}` : ''}`}
       size="small"
       dataSource={props.data}
       renderItem={item => ListItem(item)}
@@ -87,14 +80,12 @@ const ImportLogList = (props) => {
   );
 };
 
-const ImportProgress = (props) => {
-  return (
-    <div className={'import-progress' + (props.className ? ` ${props.className}` : '')}>
-      <ImportProgressBar currentFile={props.currentFile} progressBar={props.progress} />
-      {props.log && props.log.length > 0 && <ImportLogList data={props.log} />}
-    </div>
-  )
-};
+const ImportProgress = (props) => (
+  <div className={`import-progress${props.className ? ` ${props.className}` : ''}`}>
+    <ImportProgressBar currentFile={props.currentFile} progressBar={props.progress} />
+    {props.log && props.log.length > 0 && <ImportLogList data={props.log} />}
+  </div>
+);
 
 export default {
   WbrString,
@@ -102,4 +93,4 @@ export default {
   ImportProgressBar,
   ImportLogList,
   ImportProgress
-}
+};

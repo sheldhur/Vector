@@ -11,7 +11,6 @@ import * as uiActions from '../../actions/ui';
 
 
 class StationValuesView extends Component {
-
   componentWillMount = () => {
     this.getStationViewValues(this.props);
   };

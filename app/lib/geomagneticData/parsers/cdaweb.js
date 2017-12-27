@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as fs from 'fs';
-import {stringCamelCase} from '../../../utils/helper';
+import { stringCamelCase } from '../../../utils/helper';
 
 export default function (filePath) {
   return new Promise((resolve) => {
@@ -9,14 +9,14 @@ export default function (filePath) {
         throw error;
       }
 
-      let data = {
+      const data = {
         properties: {},
         variables: {},
         columns: [],
         rows: []
       };
 
-      let regexp = {
+      const regexp = {
         properties: /#\s{5}([A-Z0-9_-]+)\s+(.+)/,
         variables: /#\s+(\d+)\.\s+(.+)/,
         n: /#\s+(.+)/
@@ -25,7 +25,7 @@ export default function (filePath) {
       let resultLastPropName;
       let lastVarName;
 
-      let lineList = rawData.toString().split(/\n+/);
+      const lineList = rawData.toString().split(/\n+/);
       lineList.forEach((line, i) => {
         if (line !== '') {
           if (line.startsWith('#')) {
@@ -34,23 +34,23 @@ export default function (filePath) {
               lastVarName = undefined;
             }
 
-            for (let key in regexp) {
-              let matches = line.match(regexp[key]);
+            for (const key in regexp) {
+              const matches = line.match(regexp[key]);
               if (matches !== null) {
                 if (data[key] !== undefined) {
                   resultLastPropName = key;
                   lastVarName = stringCamelCase(matches[1]);
                   data[resultLastPropName][lastVarName] = matches[2].trim();
                 } else if (resultLastPropName !== undefined) {
-                  data[resultLastPropName][lastVarName] += "\r\n" + matches[1].trim();
+                  data[resultLastPropName][lastVarName] += `\r\n${matches[1].trim()}`;
                 }
 
                 break;
               }
             }
           } else {
-            let lineSplit = line.split(/\s+/);
-            if (['UT','EPOCH_TIME','EPOCH','TIME','DATE'].indexOf(lineSplit[0]) !== -1) {
+            const lineSplit = line.split(/\s+/);
+            if (['UT', 'EPOCH_TIME', 'EPOCH', 'TIME', 'DATE'].indexOf(lineSplit[0]) !== -1) {
               lineSplit.forEach((item, i) => {
                 data.columns.push({
                   name: item,
@@ -59,16 +59,16 @@ export default function (filePath) {
                 });
               });
             } else {
-              lineSplit[0] = lineSplit[0] + ' ' + lineSplit[1];
+              lineSplit[0] = `${lineSplit[0]} ${lineSplit[1]}`;
               lineSplit.splice(1, 1);
               if (lineSplit[0].search(/^\d/) === -1) {
                 lineSplit.forEach((item, i) => {
-                  data.columns[i]['si'] = item;
+                  data.columns[i].si = item;
                 });
               } else {
                 data.rows.push(lineSplit.map((item, i) => {
                   if (i === 0) {
-                    item = moment(item, "DD-MM-YYYY HH:mm:ss.SSS").toDate();
+                    item = moment(item, 'DD-MM-YYYY HH:mm:ss.SSS').toDate();
                   } else {
                     item = parseFloat(item);
                   }

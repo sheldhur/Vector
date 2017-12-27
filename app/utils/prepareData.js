@@ -1,4 +1,4 @@
-import {DATA_SET_COLOR} from '../constants/app';
+import { DATA_SET_COLOR } from '../constants/app';
 
 
 export const dataSetsForChart = (dataSets, dataSetValues, filter) => {
@@ -8,11 +8,11 @@ export const dataSetsForChart = (dataSets, dataSetValues, filter) => {
     filter = () => true;
   }
 
-  let chartGroups = {};
-  for (let dataSetId in dataSets) {
+  const chartGroups = {};
+  for (const dataSetId in dataSets) {
     const dataSet = dataSets[dataSetId];
     if (dataSet && filter(dataSet)) {
-      let dataSetLine = {
+      const dataSetLine = {
         name: dataSet.name,
         si: dataSet.si,
         format: '%(name)s: %(y).5g %(si)s',
@@ -21,12 +21,10 @@ export const dataSetsForChart = (dataSets, dataSetValues, filter) => {
           strokeWidth: 1,
           ...dataSet.style
         },
-        points: dataSetValues[dataSet.id] ? dataSetValues[dataSet.id].map((dataSetValue) => {
-          return {
-            x: dataSetValue.time,
-            y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
-          };
-        }) : null
+        points: dataSetValues[dataSet.id] ? dataSetValues[dataSet.id].map((dataSetValue) => ({
+          x: dataSetValue.time,
+          y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
+        })) : null
       };
 
       if (chartGroups[dataSet.axisGroup] === undefined) {

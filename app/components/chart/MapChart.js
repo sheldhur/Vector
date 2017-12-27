@@ -5,7 +5,7 @@ import MapCylindrical from './mapChart/MapCylindrical';
 import MapAzimuthal from './mapChart/MapAzimuthal';
 
 
-//TODO: переделать
+// TODO: переделать
 class MapChart extends Component {
   state = {
     wrapperSize: {
@@ -29,7 +29,7 @@ class MapChart extends Component {
   };
 
   handleResize = (e) => {
-    let svgWrapper = ReactDOM.findDOMNode(this.refs.svgMapWrapper);
+    const svgWrapper = ReactDOM.findDOMNode(this.refs.svgMapWrapper);
 
     this.setState({
       wrapperSize: {
@@ -42,7 +42,7 @@ class MapChart extends Component {
   getSize = () => {
     const { height, width } = this.state.wrapperSize;
 
-    let size = {
+    const size = {
       width: undefined,
       height: undefined
     };
@@ -61,11 +61,13 @@ class MapChart extends Component {
 
   render = () => {
     const size = this.getSize();
-    const { data, showCountries, projectionType, world } = this.props;
+    const {
+      data, showCountries, projectionType, world
+    } = this.props;
 
     if (size.width !== undefined) {
       if (projectionType === 'stereographic') {
-        return <div className="svg-wrapper centered-box" ref="svgMapWrapper">
+        return (<div className="svg-wrapper centered-box" ref="svgMapWrapper">
           <MapAzimuthal
             width={size.width / 2}
             height={size.height}
@@ -86,9 +88,9 @@ class MapChart extends Component {
             world={world}
             antiAliasing={this.props.antiAliasing}
           />
-        </div>;
+                </div>);
       } else if (projectionType === 'equirectangular') {
-        return <div className="svg-wrapper centered-box" ref="svgMapWrapper">
+        return (<div className="svg-wrapper centered-box" ref="svgMapWrapper">
           <MapCylindrical
             width={size.width}
             height={size.height}
@@ -97,18 +99,18 @@ class MapChart extends Component {
             world={world}
             antiAliasing={this.props.antiAliasing}
           />
-        </div>;
+                </div>);
       }
     }
 
-    return <div className="svg-wrapper center" ref="svgMapWrapper"></div>
+    return <div className="svg-wrapper center" ref="svgMapWrapper" />;
   };
 }
 
 MapChart.defaultProps = {
   width: '100%',
   height: '100%',
-  projectionType: 'stereographic', //equirectangular stereographic
+  projectionType: 'stereographic', // equirectangular stereographic
   world: {},
   terminator: null,
   antiAliasing: true,

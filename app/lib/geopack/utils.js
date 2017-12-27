@@ -3,7 +3,7 @@ export const D2R = 1 / R2D;
 export const RE = 6371.2;
 
 export const cartesianToSperical = (values, convert = D2R) => {
-  const {x, y, z} = values;
+  const { x, y, z } = values;
 
   const altitude = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
   const latitude = ((Math.atan2(y, x) * 180 / Math.PI) % 360) / 180 * Math.PI * convert;
@@ -13,7 +13,7 @@ export const cartesianToSperical = (values, convert = D2R) => {
     altitude,
     latitude,
     longitude,
-  }
+  };
 };
 
 export const sphericalToCartesian = (values, convert = D2R) => {
@@ -35,7 +35,7 @@ export const sphericalToCartesian = (values, convert = D2R) => {
     x: altitude * Math.cos(latitude * convert) * Math.cos(longitude * convert),
     y: altitude * Math.cos(latitude * convert) * Math.sin(longitude * convert),
     z: altitude * Math.sin(latitude * convert),
-  }
+  };
 };
 
 export class CoordinatesPoint {

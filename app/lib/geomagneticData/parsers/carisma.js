@@ -8,7 +8,7 @@ export default function (filePath) {
         throw error;
       }
 
-      let data = {
+      const data = {
         properties: {
           reported: 'XYZ',
           badValue: 99999
@@ -17,37 +17,35 @@ export default function (filePath) {
         rows: [],
       };
 
-      let regexp = {
+      const regexp = {
         properties: /\s+/i,
         components: /-?\d+\.\d{3}/ig
       };
 
       let isProperty = true;
 
-      let lineList = rawData.toString().split(/\n+/);
+      const lineList = rawData.toString().split(/\n+/);
       lineList.forEach((line, i) => {
         line = line.trim();
         if (line !== '') {
           if (!line.startsWith('#')) {
             if (isProperty) {
-              let lineSplit = line.split(regexp.properties);
+              const lineSplit = line.split(regexp.properties);
               data.properties.code = lineSplit[0];
               data.properties.geodeticLatitude = parseFloat(lineSplit[1]);
               data.properties.geodeticLongitude = parseFloat(lineSplit[2]);
-              data.columns = ['DATETIME', 'X', 'Y', 'Z'].map((item) => {
-                return {
-                  name: item,
-                  description: null,
-                  si: null,
-                }
-              });
+              data.columns = ['DATETIME', 'X', 'Y', 'Z'].map((item) => ({
+                name: item,
+                description: null,
+                si: null,
+              }));
               isProperty = false;
             } else {
-              let lineSplitDate = line.substring(0, 14);
-              let lineSplitComp = line.substring(15, line.length).match(regexp.components);
+              const lineSplitDate = line.substring(0, 14);
+              const lineSplitComp = line.substring(15, line.length).match(regexp.components);
 
-              let row = [];
-              row.push(moment(lineSplitDate, "YYYYMMDDHHmmss").toDate());
+              const row = [];
+              row.push(moment(lineSplitDate, 'YYYYMMDDHHmmss').toDate());
               lineSplitComp.forEach((item, i) => {
                 row.push(parseFloat(item));
               });

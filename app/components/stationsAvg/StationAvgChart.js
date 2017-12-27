@@ -10,7 +10,6 @@ import * as stationActions from '../../actions/station';
 import * as app from '../../constants/app';
 
 class StationAvgChart extends Component {
-
   componentWillMount = () => {
     // if (!this.props.isLoading) {
     //   this.props.stationActions.getData('getAvgValues');
@@ -21,7 +20,7 @@ class StationAvgChart extends Component {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let { data } = this.props;
+      const { data } = this.props;
 
       StationAvgMenu({
         dataNotEmpty: !!data,
@@ -38,22 +37,22 @@ class StationAvgChart extends Component {
   prepareDataForCsv = () => {
     const { data, latitudeRanges, componentLines } = this.props;
 
-    let csvData = {
+    const csvData = {
       0: {
         0: 'DateTime'
       }
     };
 
-    let linesEnabled = componentLines.filter((line) => line.enabled);
+    const linesEnabled = componentLines.filter((line) => line.enabled);
 
     latitudeRanges.forEach((range, rangeKey) => {
       linesEnabled.forEach((line, lineKey) => {
-        let colKey = rangeKey + '-' + lineKey;
+        const colKey = `${rangeKey}-${lineKey}`;
 
-        csvData[0][colKey] = line.comp.replace(/^d/, 'Δ') + ' ' + line.hemisphere + ' ' + range.toString();
+        csvData[0][colKey] = `${line.comp.replace(/^d/, 'Δ')} ${line.hemisphere} ${range.toString()}`;
 
-        let pointsValue = data[line.comp][rangeKey][line.hemisphere];
-        for (let time in pointsValue) {
+        const pointsValue = data[line.comp][rangeKey][line.hemisphere];
+        for (const time in pointsValue) {
           if (!csvData.hasOwnProperty(time)) {
             csvData[time] = {
               0: moment(parseInt(time)).format(app.FORMAT_DATE_SQL)
@@ -71,18 +70,18 @@ class StationAvgChart extends Component {
     const { data, latitudeRanges, componentLines } = this.props;
     const colorGroup = app.DATA_SET_COLOR;
 
-    let chartData = [];
+    const chartData = [];
 
     if (data) {
       latitudeRanges.forEach((range, rangeKey) => {
-        let lineHasValues = {};
-        let latitudeGroup = {
+        const lineHasValues = {};
+        const latitudeGroup = {
           si: null,
           lines: []
         };
         componentLines.forEach((line, lineKey) => {
-          let lineData = {
-            name: line.comp.replace(/^d/, 'Δ') + ' ' + line.hemisphere,
+          const lineData = {
+            name: `${line.comp.replace(/^d/, 'Δ')} ${line.hemisphere}`,
             format: '%(name)s: %(y).2f nT',
             style: {
               stroke: colorGroup[lineKey % colorGroup.length],
@@ -97,8 +96,8 @@ class StationAvgChart extends Component {
           }
 
           if (lineHasValues[lineKey]) {
-            let pointsValue = data[line.comp][rangeKey][line.hemisphere];
-            for (let time in pointsValue) {
+            const pointsValue = data[line.comp][rangeKey][line.hemisphere];
+            for (const time in pointsValue) {
               lineData.points.push({
                 x: new Date(parseInt(time)),
                 y: pointsValue[time],
@@ -119,14 +118,12 @@ class StationAvgChart extends Component {
   };
 
   render = () => {
-    const { isLoading, isError, progress, latitudeRanges } = this.props;
+    const {
+      isLoading, isError, progress, latitudeRanges
+    } = this.props;
 
     const preparedData = this.prepareDataForChart();
-    let isEmpty = !preparedData.some((latitudeRange) => {
-      return latitudeRange.some((group) => {
-        return group.lines.length > 0;
-      })
-    });
+    const isEmpty = !preparedData.some((latitudeRange) => latitudeRange.some((group) => group.lines.length > 0));
 
     const AvgDataChart = (props) => {
       const condition = props.itemKey !== latitudeRanges.length - 1 ? '≥ gLat >' : '≥ gLat ≥';
@@ -135,8 +132,8 @@ class StationAvgChart extends Component {
       return (
         <div key={props.itemKey} style={props.style} onContextMenu={this.handlerContextMenu}>
           <LineChart
-            width={'100%'}
-            height={'100%'}
+            width="100%"
+            height="100%"
             data={props.data}
             tooltipDelay={100}
             tooltipOnClick={this.handlerMouseClick}
@@ -165,15 +162,13 @@ class StationAvgChart extends Component {
     }
 
     if (!container) {
-      let chartStyle = {
-        height: (100 / latitudeRanges.length) + '%'
+      const chartStyle = {
+        height: `${100 / latitudeRanges.length}%`
       };
 
       container = (
-        <div style={{ height: "100%", width: '100%' }} id="stationAvgChar">
-          {latitudeRanges.map((item, i) => {
-            return <AvgDataChart key={i} itemKey={i} style={chartStyle} data={preparedData[i] || []} />;
-          })}
+        <div style={{ height: '100%', width: '100%' }} id="stationAvgChar">
+          {latitudeRanges.map((item, i) => <AvgDataChart key={i} itemKey={i} style={chartStyle} data={preparedData[i] || []} />)}
         </div>
       );
     }

@@ -5,7 +5,6 @@ import { SketchPicker } from 'react-color';
 
 
 class LineStyleCell extends Component {
-
   state = {
     value: this.props.value,
     colorPickerVisible: false,
@@ -48,12 +47,12 @@ class LineStyleCell extends Component {
         colorPickerVisible: false,
         isSaved: true
       }, () => {
-        this.props.onChange(this.state.value, this.afterAction)
+        this.props.onChange(this.state.value, this.afterAction);
       });
     } else {
       this.setState({
         colorPickerVisible: false,
-      })
+      });
     }
   };
 
@@ -111,13 +110,15 @@ class LineStyleCell extends Component {
   };
 
   render = () => {
-    const { value, colorPickerVisible, isSaved, error } = this.state;
-    const message = !!error ? <div>
+    const {
+      value, colorPickerVisible, isSaved, error
+    } = this.state;
+    const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-    </div> : null;
+                             </div>) : null;
 
-    let style = {
+    const style = {
       stroke: '#000000',
       strokeWidth: 1,
       strokeDasharray: 'none',
@@ -138,7 +139,7 @@ class LineStyleCell extends Component {
       >
         <div className="line-style-control">
           <div className="left">
-            <SketchPicker disableAlpha={true} color={style.stroke} onChangeComplete={this.handleColorChange} />
+            <SketchPicker disableAlpha color={style.stroke} onChangeComplete={this.handleColorChange} />
           </div>
           <div className="right">
             <Form layout="horizontal">
@@ -170,7 +171,7 @@ class LineStyleCell extends Component {
               <path d="M10 80  C 40 10, 65 10, 95 80 S 150 150, 180 80" {...style} />
             </svg>
             <div>
-              <Button size="small" type="primary" onClick={this.handleChange}>OK</Button>{" "}
+              <Button size="small" type="primary" onClick={this.handleChange}>OK</Button>{' '}
               <Button size="small" onClick={this.handleCancel}>Cancel</Button>
             </div>
           </div>
@@ -208,8 +209,10 @@ class LineStyleCell extends Component {
                   shapeRendering="optimizeSpeed"
                 >
                   <line
-                    x1="0%" y1="50%"
-                    x2="100%" y2="50%"
+                    x1="0%"
+                    y1="50%"
+                    x2="100%"
+                    y2="50%"
                     {...style}
                   />
                 </svg>

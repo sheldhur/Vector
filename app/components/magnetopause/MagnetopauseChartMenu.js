@@ -27,18 +27,18 @@ export default function (props) {
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
-            let fileContent = props.data.map((item) => {
+            const fileContent = props.data.map((item) => {
               const time = moment(item.time).format(FORMAT_DATE_SQL);
               const value = item.value ? item.value.toFixed(5).replace('.', ',') : '';
               return `${time};${value}`;
-            }).join("\r\n");
+            }).join('\r\n');
 
             fs.writeFile(filePath, fileContent, (error) => {
               if (error) {
                 message.error(error.message, 6);
                 throw error;
               } else {
-                message.success(filePath + ' was saved', 3);
+                message.success(`${filePath} was saved`, 3);
               }
             });
           }
@@ -63,12 +63,12 @@ export default function (props) {
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
-              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
+              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ''), 'base64', (error) => {
                 if (error) {
                   message.error(error.message, 6);
                   throw error;
                 } else {
-                  message.success(filePath + ' was saved', 3);
+                  message.success(`${filePath} was saved`, 3);
                 }
               });
             });

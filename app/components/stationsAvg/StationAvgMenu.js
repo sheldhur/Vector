@@ -25,17 +25,17 @@ export default function (props) {
           ],
         }, (filePath) => {
           if (filePath && filePath.length) {
-            let data = props.prepareDataForCsv();
+            const data = props.prepareDataForCsv();
 
             let fileContent = '';
-            let columns = data[0];
-            for (let time in data) {
-              let string = [];
-              for (let colName in columns) {
+            const columns = data[0];
+            for (const time in data) {
+              const string = [];
+              for (const colName in columns) {
                 string.push(data[time][colName] || null);
               }
 
-              fileContent += string.join(';') + '\r\n';
+              fileContent += `${string.join(';')}\r\n`;
             }
 
             fs.writeFile(filePath, fileContent, (error) => {
@@ -43,7 +43,7 @@ export default function (props) {
                 message.error(error.message, 6);
                 throw error;
               } else {
-                message.success(filePath + ' was saved', 3);
+                message.success(`${filePath} was saved`, 3);
               }
             });
           }
@@ -68,12 +68,12 @@ export default function (props) {
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
-              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
+              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ''), 'base64', (error) => {
                 if (error) {
                   message.error(error.message, 6);
                   throw error;
                 } else {
-                  message.success(filePath + ' was saved', 3);
+                  message.success(`${filePath} was saved`, 3);
                 }
               });
             });

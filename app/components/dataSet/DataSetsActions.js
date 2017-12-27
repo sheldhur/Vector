@@ -24,10 +24,10 @@ class DataSetsActions extends Component {
     const fileType = this.fileTypes[e.key];
 
     dialog.showOpenDialog(currentWindow, {
-      title: 'Select ' + fileType + ' format data file',
+      title: `Select ${fileType} format data file`,
       defaultPath: 'project.db3',
       properties: ['openFile', 'multiSelections'],
-      buttonLabel: 'Import ' + fileType + ' data',
+      buttonLabel: `Import ${fileType} data`,
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
         this.props.uiActions.importDataSets(filePaths, fileType);
@@ -106,15 +106,15 @@ class DataSetsActions extends Component {
   };
 
   render() {
-    const { progress, showModal, currentFile, log } = this.props;
+    const {
+      progress, showModal, currentFile, log
+    } = this.props;
 
     this.setSystemProgressBar(progress.total);
 
     const menuFileType = (
       <Menu onClick={this.handlerDropdownSelect} selectable={false}>
-        {this.fileTypes.map((item, i) => {
-          return <Menu.Item key={i}>{item}</Menu.Item>;
-        })}
+        {this.fileTypes.map((item, i) => <Menu.Item key={i}>{item}</Menu.Item>)}
       </Menu>
     );
 
@@ -125,7 +125,8 @@ class DataSetsActions extends Component {
     const menuActions = (
       <Menu onClick={this.handlerActionSelect} selectable={false}>
         <Menu.Item key={DATASET_VALUES_DELETE_SELECTED} disable><Icon type="table" /> Delete data for
-          selected</Menu.Item>
+          selected
+        </Menu.Item>
         <Menu.Item key={DATASET_DELETE_SELECTED}><Icon type="bars" /> Delete selected</Menu.Item>
         <Menu.Item key={DATASET_DELETE_ALL}><Icon type="delete" /> Delete all</Menu.Item>
       </Menu>
@@ -135,10 +136,10 @@ class DataSetsActions extends Component {
       <div className="dataset-import">
         <Button onClick={this.props.dataSetActions.getData}>
           <Icon type="reload" /> Update chart
-        </Button>{" "}
+        </Button>{' '}
         <Dropdown overlay={menuFileType} placement="bottomCenter" trigger={['click']}>
           <Button>{titleImport} <Icon type="down" /></Button>
-        </Dropdown>{" "}
+        </Dropdown>{' '}
         <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
           <Button>Actions <Icon type="down" /></Button>
         </Dropdown>

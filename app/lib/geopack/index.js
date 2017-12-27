@@ -6,4 +6,4 @@ export {
   igrf,
   magnetopausePoint,
   solarPoint
-}
+};

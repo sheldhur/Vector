@@ -8,7 +8,7 @@ export default function (filePath) {
         throw error;
       }
 
-      let data = {
+      const data = {
         properties: {
           badValue: 99999
         },
@@ -29,7 +29,7 @@ export default function (filePath) {
        |..E=Z(Z-component)..HR=0..|.. ..|..E=Z(Z)..HR=23..|  (400+1)x24=9624character
 
        */
-      let structure = {
+      const structure = {
         npd: [1, 6],
         longitude: [7, 12],
         year: [13, 14],
@@ -44,34 +44,34 @@ export default function (filePath) {
         mean: [395, 400]
       };
 
-      let tmp = {};
+      const tmp = {};
       let dataYearBase = parseInt(new Date().getFullYear().toString().match(/.{2}/g)[0]) * 100;
       let dataReported;
 
-      let lineList = rawData.toString().split(/\n+/);
+      const lineList = rawData.toString().split(/\n+/);
       lineList.forEach((line, i) => {
         line = line.trim();
         if (line !== '') {
           if (line.startsWith('#')) {
-            let lineSplit = line.match(/^#\s+(.+)\s+(.+)/);
+            const lineSplit = line.match(/^#\s+(.+)\s+(.+)/);
             if (lineSplit[1] === 'YEAR_BASE') {
               dataYearBase = parseInt(lineSplit[2]);
             } else if (lineSplit[1] === 'REPORTED') {
               dataReported = lineSplit[2];
             }
           } else {
-            let lineSplit = {};
-            for (let block in structure) {
+            const lineSplit = {};
+            for (const block in structure) {
               lineSplit[block] = line.substring(structure[block][0] - 1, structure[block][1]);
               if (['code', 'comp', 'org', 'blanks', 'data'].indexOf(block) === -1) {
                 lineSplit[block] = parseFloat(lineSplit[block]);
               }
             }
 
-            lineSplit.year = lineSplit.year + dataYearBase;
-            lineSplit.npd = lineSplit.npd / 1000;
+            lineSplit.year += dataYearBase;
+            lineSplit.npd /= 1000;
             lineSplit.latitude = 90 - lineSplit.npd;
-            lineSplit.longitude = lineSplit.longitude / 1000;
+            lineSplit.longitude /= 1000;
             lineSplit.data = lineSplit.data.match(/.{6}/g).map((item) => parseFloat(item));
 
             if (isProperty) {
@@ -83,7 +83,7 @@ export default function (filePath) {
             }
 
             lineSplit.data.forEach((item, minute) => {
-              let time = moment({
+              const time = moment({
                 year: lineSplit.year,
                 month: lineSplit.month - 1,
                 date: lineSplit.day,
@@ -94,13 +94,13 @@ export default function (filePath) {
               });
 
               if (tmp[time.valueOf()] === undefined) {
-                tmp[time.valueOf()] = [time.toDate(), null, null, null]
+                tmp[time.valueOf()] = [time.toDate(), null, null, null];
               }
 
               let compCol = data.properties.reported.indexOf(lineSplit.comp);
               if (compCol === -1) {
                 data.properties.reported.push(lineSplit.comp);
-                compCol = data.properties.reported.indexOf(lineSplit.comp)
+                compCol = data.properties.reported.indexOf(lineSplit.comp);
               }
 
               tmp[time.valueOf()][compCol + 1] = item * 0.1;
@@ -114,16 +114,14 @@ export default function (filePath) {
       if (dataReported) {
         data.properties.reported = dataReported.split('');
       } else if (data.rows[0][0] < new Date(2010, 7 - 1, 5, 0, 0, 0, 0)) {
-        data.properties.reported = ['X','Y','Z'];
+        data.properties.reported = ['X', 'Y', 'Z'];
       }
 
-      data.columns = ['DATETIME', ...data.properties.reported].map((item) => {
-        return {
-          name: item,
-          description: null,
-          si: null,
-        }
-      });
+      data.columns = ['DATETIME', ...data.properties.reported].map((item) => ({
+        name: item,
+        description: null,
+        si: null,
+      }));
       data.properties.reported = data.properties.reported.join('');
 
       resolve(data);

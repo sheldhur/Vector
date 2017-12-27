@@ -6,7 +6,6 @@ import Grid from '../grid/Grid';
 import * as app from '../../constants/app';
 
 class SettingsAvgChartLines extends Component {
-
   handleCellChange = (field, index, value, afterAction) => {
     this.props.onCellChange(field, index, value);
     afterAction(true);
@@ -22,77 +21,87 @@ class SettingsAvgChartLines extends Component {
   };
 
   render = () => {
-    const optionsComp = app.AVG_CHART_COMP.map((item) => {
-      return {
-        value: item,
-        text: item.replace(/^d/, 'Δ')
-      }
-    });
-    const optionsHemisphere = app.AVG_CHART_HEMISPHERE.map((item) => {
-      return {
-        value: item,
-        text: item
-      }
-    });
+    const optionsComp = app.AVG_CHART_COMP.map((item) => ({
+      value: item,
+      text: item.replace(/^d/, 'Δ')
+    }));
+    const optionsHemisphere = app.AVG_CHART_HEMISPHERE.map((item) => ({
+      value: item,
+      text: item
+    }));
 
-    let columns = [
+    const columns = [
       {
         title: 'Comp',
         dataIndex: 'comp',
-        render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsComp} onChange={
+        render: (text, record, index) => (<Grid.SelectCell
+          value={text}
+          options={optionsComp}
+          onChange={
           (value, afterAction) => this.handleCellChange('comp', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Hemisphere',
         dataIndex: 'hemisphere',
-        render: (text, record, index) => (<Grid.SelectCell value={text} options={optionsHemisphere} onChange={
+        render: (text, record, index) => (<Grid.SelectCell
+          value={text}
+          options={optionsHemisphere}
+          onChange={
           (value, afterAction) => this.handleCellChange('hemisphere', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Style',
         dataIndex: 'style',
         width: 75,
-        render: (text, record, index) => (<Grid.LineStyleCell value={record.style} onChange={
+        render: (text, record, index) => (<Grid.LineStyleCell
+          value={record.style}
+          onChange={
           (value, afterAction) => this.handleCellChange('style', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: '',
         dataIndex: 'enabled',
         width: 30,
-        render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
+        render: (text, record, index) => (<Grid.CheckboxCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handleCellChange('enabled', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: '',
         dataIndex: 'delete',
         width: 30,
-        render: (text, record, index) => {
-          return (
-            (record.comp && record.hemisphere) ?
-              <Popconfirm
-                placement="left"
-                title="Are you sure delete this line?"
-                onConfirm={() => {
-                  this.handleLineAddRemove(index)
+        render: (text, record, index) => (
+          (record.comp && record.hemisphere) ?
+            <Popconfirm
+              placement="left"
+              title="Are you sure delete this line?"
+              onConfirm={() => {
+                  this.handleLineAddRemove(index);
                 }}
-                okText="Delete"
-                cancelText="No"
-              >
-                <a href="#"><Icon type="delete" /></a>
-              </Popconfirm>
-              :
-              <a href="#" onClick={() => {
-                this.handleLineAddRemove(index)
-              }}><Icon type="delete" /></a>
-          )
-        }
+              okText="Delete"
+              cancelText="No"
+            >
+              <a href="#"><Icon type="delete" /></a>
+            </Popconfirm>
+            :
+            <a
+              href="#"
+              onClick={() => {
+                this.handleLineAddRemove(index);
+              }}
+            ><Icon type="delete" />
+            </a>
+        )
       }
     ];
 
     const { value } = this.props;
-    const lines = value ? value.map((line, i) => {
-      return { ...line, key: i }
-    }) : [];
+    const lines = value ? value.map((line, i) => ({ ...line, key: i })) : [];
     const buttonAddDisable = !!lines.filter((line) => !line.comp || !line.hemisphere).length;
 
     const footer = (
@@ -116,7 +125,7 @@ class SettingsAvgChartLines extends Component {
         data={lines}
         pagination={false}
         size="x-small"
-        bordered={true}
+        bordered
       />
     );
   };

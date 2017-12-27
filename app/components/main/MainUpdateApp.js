@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron';
 import React, { Component } from 'react';
-import { bindActionCreators } from "redux";
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Icon, Row, Col } from "antd";
-import * as mainActions from "./../../actions/main";
+import { Modal, Icon, Row, Col } from 'antd';
+import * as mainActions from './../../actions/main';
 
 
 class MainUpdateApp extends Component {
@@ -23,7 +23,7 @@ class MainUpdateApp extends Component {
       return (
         <Modal
           title={<span>Update ready for install</span>}
-          visible={true}
+          visible
           onOk={() => this.handlerOk()}
           onCancel={() => this.handlerCancel()}
           okText={<span><Icon type="download" /> Install update</span>}

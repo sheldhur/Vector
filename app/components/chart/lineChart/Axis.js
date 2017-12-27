@@ -4,7 +4,6 @@ import * as d3 from 'd3';
 
 
 class Axis extends Component {
-
   constructor(props) {
     super(props);
   }
@@ -42,7 +41,7 @@ class Axis extends Component {
   render() {
     const { text, textStyle } = this.props;
 
-    let className = ['axis'];
+    const className = ['axis'];
     if (this.props.orient === 'bottom') {
       className.push('axis--x');
     } else if (this.props.orient === 'left') {
@@ -50,10 +49,12 @@ class Axis extends Component {
     }
 
     return (
-      <g className={className.join(' ')}
-         ref="axis"
-         transform={this.props.translate}
-         shapeRendering="optimizeSpeed">
+      <g
+        className={className.join(' ')}
+        ref="axis"
+        transform={this.props.translate}
+        shapeRendering="optimizeSpeed"
+      >
         {this.props.children !== undefined && this.props.children}
       </g>
     );

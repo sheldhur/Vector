@@ -9,7 +9,6 @@ import { numberIsBetween } from '../../utils/helper';
 
 
 class MagnetopauseMapY extends Component {
-
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
       e.preventDefault();
@@ -29,13 +28,13 @@ class MagnetopauseMapY extends Component {
       return null;
     }
 
-    let magnetopause = new magnetopausePoint(values);
+    const magnetopause = new magnetopausePoint(values);
 
-    let tmp = [];
+    const tmp = [];
 
-    let lines = [];
-    for (let j = 0; j < 180; j = j + 5) {
-      let line = {
+    const lines = [];
+    for (let j = 0; j < 180; j += 5) {
+      const line = {
         name: 'Magnetopause',
         si: 'Z (Re)',
         curve: 'BasisOpen',
@@ -46,8 +45,8 @@ class MagnetopauseMapY extends Component {
         points: []
       };
       for (let i = 0; i < 360; i++) {
-        let coordinates = this.getDotPosition(i, j);
-        let point = magnetopause.calculate(coordinates[0], coordinates[1]).toCartesian();
+        const coordinates = this.getDotPosition(i, j);
+        const point = magnetopause.calculate(coordinates[0], coordinates[1]).toCartesian();
         if (numberIsBetween(point.x, [-10, 10])) {
           line.points.push({
             x: point.y,
@@ -66,11 +65,11 @@ class MagnetopauseMapY extends Component {
       lines.push(line);
     }
 
-    let chartLines = [
+    const chartLines = [
       {
         si: 'Z (Re)',
         extent: { x: [-30, 30], y: [-30, 30] },
-        lines: lines
+        lines
       },
     ];
 
@@ -91,7 +90,7 @@ class MagnetopauseMapY extends Component {
           ticks={{ x: 5, y: 5 }}
           showTooltip={false}
           showTimeCursor={false}
-          labelY={'Y (Re)'}
+          labelY="Y (Re)"
           antiAliasing={this.props.antiAliasing}
           emptyMessage={<NoDataAlert />}
         />

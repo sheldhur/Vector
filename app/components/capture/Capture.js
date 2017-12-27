@@ -1,9 +1,9 @@
 // @flow
-import {remote, ipcRenderer} from 'electron';
-import React, {Component} from 'react';
+import { remote, ipcRenderer } from 'electron';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import * as fs from 'fs';
 import MainDashboard from '../main/MainDashboard';
@@ -14,17 +14,15 @@ import * as stationActions from '../../actions/station';
 const captureWin = remote.getCurrentWindow();
 const mainWin = captureWin.parent;
 
-//https://www.youtube.com/watch?v=_z-s_P6bDh4
+// https://www.youtube.com/watch?v=_z-s_P6bDh4
 class Capture extends Component {
   savePath = '';
 
-  getChildContext = () => {
-    return {
-      test: 'test getChildContext',
-      onCompomentWillMount: this.childCompomentWillMount,
-      onComponentDidUpdate: this.childComponentDidUpdate
-    }
-  };
+  getChildContext = () => ({
+    test: 'test getChildContext',
+    onCompomentWillMount: this.childCompomentWillMount,
+    onComponentDidUpdate: this.childComponentDidUpdate
+  });
 
   childCompomentWillMount = () => {
 
@@ -34,9 +32,7 @@ class Capture extends Component {
     console.log(component, 'componentDidUpdate');
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return false;
-  };
+  shouldComponentUpdate = (nextProps, nextState) => false;
 
   componentWillMount = () => {
     ipcRenderer.on('init', (event, data) => {
@@ -48,9 +44,9 @@ class Capture extends Component {
   componentWillReceiveProps = (nextProps) => {
     console.log(this.props.currentTime, nextProps.currentTime);
     if (this.props.currentTime !== null && nextProps.currentTime !== this.props.currentTime) {
-      const saveName = moment(this.props.currentTime).format('YYYY-MM-DD HH-mm-ss') + '.png';
+      const saveName = `${moment(this.props.currentTime).format('YYYY-MM-DD HH-mm-ss')}.png`;
       captureWin.capturePage((img) => {
-        remote.require('fs').writeFile(this.savePath + '\\' + saveName, img.toPng(), (error) => {
+        remote.require('fs').writeFile(`${this.savePath}\\${saveName}`, img.toPng(), (error) => {
           if (error) {
             console.log(error);
           }
@@ -73,16 +69,14 @@ class Capture extends Component {
     return this.props.stationActions.getStationsValue();
   };
 
-  render = () => {
-    return (
-      <div className={`main-page theme-light screencapture`}>
-        <MainDashboard/>
-      </div>
-    );
-  }
+  render = () => (
+    <div className="main-page theme-light screencapture">
+      <MainDashboard />
+    </div>
+  )
 }
 
-Capture.childContextTypes  = {
+Capture.childContextTypes = {
   test: PropTypes.string,
   onCompomentWillMount: PropTypes.any,
   onComponentDidUpdate: PropTypes.any

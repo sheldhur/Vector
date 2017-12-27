@@ -9,7 +9,6 @@ import { numberIsBetween } from '../../utils/helper';
 
 
 class MagnetopauseMapX extends Component {
-
   state = {
     range: 40
   };
@@ -30,10 +29,10 @@ class MagnetopauseMapX extends Component {
       return null;
     }
 
-    let magnetopause = new magnetopausePoint(values);
+    const magnetopause = new magnetopausePoint(values);
 
     let breakPoint = false;
-    let points = [];
+    const points = [];
     for (let i = 0; i <= 360; i++) {
       let point = magnetopause.calculate(i, 0);
       if (point) {
@@ -43,11 +42,9 @@ class MagnetopauseMapX extends Component {
             x: point.x,
             y: point.z
           });
-        } else {
-          if (!breakPoint) {
-            points.push({ x: null, y: null });
-            breakPoint = true;
-          }
+        } else if (!breakPoint) {
+          points.push({ x: null, y: null });
+          breakPoint = true;
         }
       }
     }
@@ -65,7 +62,7 @@ class MagnetopauseMapX extends Component {
               stroke: '#ff7f0e',
               strokeWidth: 1,
             },
-            points: points
+            points
           }, {
             name: 'Earth',
             si: 'Z (Re)',
@@ -99,7 +96,7 @@ class MagnetopauseMapX extends Component {
           ticks={{ x: 5, y: 5 }}
           showTooltip={false}
           showTimeCursor={false}
-          labelY={'X (Re)'}
+          labelY="X (Re)"
           antiAliasing={this.props.antiAliasing}
           emptyMessage={<NoDataAlert />}
         />

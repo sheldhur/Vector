@@ -13,7 +13,6 @@ import * as prepareData from '../../utils/prepareData';
 
 
 class DataSetValuesChart extends Component {
-
   prepareDataForChart = (dataSet, dataSetValue) => {
     const colorGroup = app.DATA_SET_COLOR;
 
@@ -21,9 +20,9 @@ class DataSetValuesChart extends Component {
       return [];
     }
 
-    let chartGroups = {};
+    const chartGroups = {};
     if (dataSet && dataSet.status === app.DATASET_ENABLED) {
-      let dataSetLine = {
+      const dataSetLine = {
         name: dataSet.name,
         si: dataSet.si,
         format: '%(name)s: %(y).5g %(si)s',
@@ -32,12 +31,10 @@ class DataSetValuesChart extends Component {
           strokeWidth: 1,
           ...dataSet.style
         },
-        points: dataSetValue ? dataSetValue.map((dataSetValue) => {
-          return {
-            x: dataSetValue.time,
-            y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
-          };
-        }) : []
+        points: dataSetValue ? dataSetValue.map((dataSetValue) => ({
+          x: dataSetValue.time,
+          y: !dataSet.badValue || Math.abs(dataSetValue.value) < dataSet.badValue ? dataSetValue.value : null
+        })) : []
       };
 
       if (chartGroups[dataSet.axisGroup] === undefined) {
@@ -55,7 +52,9 @@ class DataSetValuesChart extends Component {
   };
 
   render() {
-    const { dataSetId, isLoading, isError, progress, dataSets, dataSetValues } = this.props;
+    const {
+      dataSetId, isLoading, isError, progress, dataSets, dataSetValues
+    } = this.props;
     const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues, (dataSet) => dataSet.id == dataSetId);
 
     let container = null;

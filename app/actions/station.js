@@ -13,7 +13,7 @@ export function setError(payload) {
     type: types.ERROR,
     payload,
     syncState: true
-  }
+  };
 }
 
 export function setLoading(payload) {
@@ -37,14 +37,14 @@ export function setLatitudeAvgValues(payload) {
     type: types.LATITUDE_AVG_VALUES,
     ...payload,
     syncState: true
-  }
+  };
 }
 
 export function setStationsValue(payload) {
   return {
     type: types.STATIONS_VALUE,
     payload,
-  }
+  };
 }
 
 export function setStations(payload) {
@@ -52,21 +52,21 @@ export function setStations(payload) {
     type: types.STATIONS,
     ...payload,
     syncState: true
-  }
+  };
 }
 
 export function setStationViewValues(payload) {
   return {
     type: types.STATION_VIEW_VALUES,
     payload,
-  }
+  };
 }
 
 export function setStationViewError(payload) {
   return {
     type: types.STATION_VIEW_ERROR,
     payload,
-  }
+  };
 }
 
 export function setStationViewLoading(payload) {
@@ -87,7 +87,7 @@ export function resetStation() {
   return {
     type: types.RESET,
     syncState: true
-  }
+  };
 }
 
 export function getData(dispatch, getState, action, args) {
@@ -141,7 +141,9 @@ export function getData(dispatch, getState, action, args) {
     });
   }
 
-  worker.send({ worker: 'station', action, main, args }, () => {
+  worker.send({
+    worker: 'station', action, main, args
+  }, () => {
     // console.time('stationWorker');
   });
 }
@@ -157,7 +159,7 @@ export function getStationsValue() {
   return (dispatch, getState) => {
     const { chartCurrentTime } = getState().ui;
     return getData(dispatch, getState, 'getStationsValue', { currentTime: chartCurrentTime });
-  }
+  };
 }
 
 export function getStationViewValues(args) {
@@ -165,7 +167,7 @@ export function getStationViewValues(args) {
     dispatch(setStationViewValues(null));
     dispatch(setStationViewLoading(true));
     return getData(dispatch, getState, 'getStationViewValues', args);
-  }
+  };
 }
 
 export function updateStation(id, fields, callback) {
@@ -185,8 +187,8 @@ export function updateStation(id, fields, callback) {
 
 function _updateStation(id, fields) {
   return (dispatch, getState) => {
-    let { stations, extremes } = getState().station;
-    let data = {
+    const { stations, extremes } = getState().station;
+    const data = {
       stations: {
         ...stations,
         [id]: { ...stations[id], ...fields }
@@ -217,13 +219,13 @@ function _updateStationValue(id, fields) {
     let stationValues = getState().station.stationView.values;
     stationValues = [...stationValues].map((value) => {
       if (value.id === id) {
-        return { ...value, ...fields }
+        return { ...value, ...fields };
       }
       return value;
     });
 
     dispatch(setStationViewValues(stationValues));
-  }
+  };
 }
 
 export function deleteStation(fields) {
@@ -246,7 +248,7 @@ export function deleteStation(fields) {
 
     dispatch(_deleteStation(stationIds));
     dispatch(setLoading(false));
-  }
+  };
 }
 
 function _deleteStation(stationIds) {
@@ -258,13 +260,13 @@ function _deleteStation(stationIds) {
     };
 
     stationIds.forEach((stationId) => {
-      for (let dataKey in data) {
+      for (const dataKey in data) {
         data[dataKey][stationId] = undefined;
       }
     });
 
     dispatch(setStations(data));
-  }
+  };
 }
 
 export function deleteStationValue(fields) {
@@ -287,7 +289,7 @@ export function deleteStationValue(fields) {
     }
 
     dispatch(setStationViewLoading(false));
-  }
+  };
 }
 
 function _deleteStationValue(stationValueIds) {
@@ -296,7 +298,7 @@ function _deleteStationValue(stationValueIds) {
     const newValues = values.filter(stationValue => stationValueIds.indexOf(stationValue.id) === -1);
 
     dispatch(setStationViewValues(newValues));
-  }
+  };
 }
 
 export function deleteSelectedStations() {
@@ -306,9 +308,9 @@ export function deleteSelectedStations() {
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteStation({
         id: gridSelectedRows.map(item => item.id)
-      }))
+      }));
     }
-  }
+  };
 }
 
 export function deleteSelectedStationsValues(field) {
@@ -318,9 +320,9 @@ export function deleteSelectedStationsValues(field) {
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteStationValue({
         [field]: gridSelectedRows.map(item => item.id)
-      }))
+      }));
     }
-  }
+  };
 }
 
 export function clearStations() {
@@ -340,7 +342,7 @@ export function clearStations() {
 
     dispatch(resetStation());
     dispatch(setLoading(false));
-  }
+  };
 }
 
 function openStationPage() {
@@ -348,5 +350,5 @@ function openStationPage() {
     if (getState().router.location.pathname !== '/station') {
       return dispatch(push('/station'));
     }
-  }
+  };
 }

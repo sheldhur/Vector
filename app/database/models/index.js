@@ -10,4 +10,4 @@ export default {
   Project,
   Station,
   StationValue
-}
+};

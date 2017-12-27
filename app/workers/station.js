@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import moment from 'moment';
-import { STATION_DISABLED } from '../constants/app'
+import { STATION_DISABLED } from '../constants/app';
 import * as stationsCalc from '../utils/stationsCalc';
 import errorToObject from '../lib/errorToObject';
 import calcProgress from '../lib/calcProgress';
@@ -8,9 +8,9 @@ import { mathAvg, numberIsBetween } from '../utils/helper';
 
 let db;
 
-//TODO: прелоад данных
-//TODO: сделать выборку по частям
-//TODO: ipc send bigData, JSON length error
+// TODO: прелоад данных
+// TODO: сделать выборку по частям
+// TODO: ipc send bigData, JSON length error
 // http://stackoverflow.com/questions/27321392/is-it-expensive-efficient-to-send-data-between-processes-in-node
 // http://stackoverflow.com/questions/33842489/node-js-sending-a-big-object-to-child-process-is-slow
 // https://github.com/nodejs/node/issues/3145
@@ -20,10 +20,10 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
   let stageLength = 0;
   const stages = stageName ? {
     // getStations: {stage: stageLength++, message: "Loading stations list"},
-    getStationValues: { stage: stageLength++, message: "Loading stations values" },
-    getLatitudeAvgValues: { stage: stageLength++, message: "Calculating average values" },
+    getStationValues: { stage: stageLength++, message: 'Loading stations values' },
+    getLatitudeAvgValues: { stage: stageLength++, message: 'Calculating average values' },
   } : {
-    null: { stage: stageLength++, message: "Loading", event: 'setStationViewProgress' },
+    null: { stage: stageLength++, message: 'Loading', event: 'setStationViewProgress' },
   };
 
   let lastSendTime = null;
@@ -39,7 +39,7 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
       process.send({ event: stages[stageName].event || 'setProgress', data: progress });
       lastSendTime = sendTime;
     }
-  }
+  };
 }
 
 export default function (dbSession, data) {
@@ -95,7 +95,7 @@ function actionStationViewValues(data) {
       ORDER BY time
     `;
 
-    process.send({ consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ') });
+    process.send({ consoleLogSQL: `Executing (sqlite): ${query.replace(/\r?\n/g, ' ')}` });
     sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
@@ -182,8 +182,8 @@ function getStations() {
     .then((stations) => {
       // const sendProgress = getProgress('getStations', stations.length);
 
-      let list = {};
-      let disabled = [];
+      const list = {};
+      const disabled = [];
 
       // sendProgress(0);
       stations.forEach((item, i) => {
@@ -203,14 +203,14 @@ function getStationValues(stations, timePeriod) {
   return new Promise((resolve, reject) => {
     console.time('getStationValues');
     const sqlite = db.sequelize.connectionManager.connections.default;
-    let components = {
+    const components = {
       compX: null,
       compY: null,
       compZ: null,
     };
 
-    let values = [];
-    let extremes = {};
+    const values = [];
+    const extremes = {};
 
     const query = `
       SELECT 
@@ -227,7 +227,7 @@ function getStationValues(stations, timePeriod) {
     const sendProgress = getProgress('getStationValues', timePeriod.end.valueOf() - timePeriod.start.valueOf());
     const timeStart = timePeriod.start.valueOf();
 
-    process.send({ consoleLogSQL: 'Executing (sqlite): ' + query.replace(/\r?\n/g, ' ') });
+    process.send({ consoleLogSQL: `Executing (sqlite): ${query.replace(/\r?\n/g, ' ')}` });
     sqlite.each(query, (err, row) => {
       if (err) {
         reject(err);
@@ -235,7 +235,7 @@ function getStationValues(stations, timePeriod) {
 
       row.time = new Date(row.time);
 
-      let station = stations.list[row.stationId];
+      const station = stations.list[row.stationId];
 
       if (station !== undefined) {
         values.push({
@@ -252,7 +252,7 @@ function getStationValues(stations, timePeriod) {
           extremes[row.stationId] = {
             start: { ...components },
             end: { ...components }
-          }
+          };
         }
         extremes[row.stationId] = getExtremes(extremes[row.stationId], ['compX', 'compY'], row);
         extremes[row.stationId] = getExtremes(extremes[row.stationId], ['compZ'], row);
@@ -261,7 +261,8 @@ function getStationValues(stations, timePeriod) {
       sendProgress(row.time.valueOf() - timeStart);
     }, () => {
       process.send({
-        event: 'setStations', data: {
+        event: 'setStations',
+        data: {
           stations: stations.list,
           extremes
         }
@@ -281,8 +282,8 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
   console.time('getLatitudeAvgValues');
   const sendProgress = getProgress('getLatitudeAvgValues', data.values.length);
   const { latitudeRanges, lines } = avgChart;
-  let latitudeAvgValues = {};
-  let maximum = {
+  const latitudeAvgValues = {};
+  const maximum = {
     dH: null,
     dD: null,
     dZ: null,
@@ -290,9 +291,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
 
   lines.filter((line) => line.enabled).forEach((line) => {
     if (latitudeAvgValues[line.comp] === undefined) {
-      latitudeAvgValues[line.comp] = new Array(latitudeRanges.length).fill(null).map(() => {
-        return {}
-      });
+      latitudeAvgValues[line.comp] = new Array(latitudeRanges.length).fill(null).map(() => ({}));
     }
 
     latitudeRanges.forEach((range, rangeKey) => {
@@ -300,7 +299,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
     });
   });
 
-  let components = Object.keys(latitudeAvgValues);
+  const components = Object.keys(latitudeAvgValues);
 
   function latitudeValuesAdd(compKey, latitudeRange, hemisphere, time, value) {
     if (latitudeAvgValues[compKey][latitudeRange][hemisphere] !== undefined) {
@@ -317,7 +316,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
   function latitudeValuesAvg(compKey, latitudeRange, hemisphere, time) {
     if (latitudeAvgValues[compKey][latitudeRange][hemisphere] !== undefined) {
       if (latitudeAvgValues[compKey][latitudeRange][hemisphere][time] !== undefined) {
-        let values = latitudeAvgValues[compKey][latitudeRange][hemisphere][time];
+        const values = latitudeAvgValues[compKey][latitudeRange][hemisphere][time];
         latitudeAvgValues[compKey][latitudeRange][hemisphere][time] = values.length > 0 ? mathAvg(values) : null;
       }
       // if (latitudeAvgValues[compKey][latitudeRange][hemisphere][time] === undefined) {
@@ -331,18 +330,18 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
 
   let lastTime = null;
   for (let i = 0; i < data.values.length; i++) {
-    let stationValue = data.values[i];
-    let stationExtremum = data.extremes[stationValue.stationId];
-    let stationValueTime = stationValue.time.getTime();
+    const stationValue = data.values[i];
+    const stationExtremum = data.extremes[stationValue.stationId];
+    const stationValueTime = stationValue.time.getTime();
     if (i === 0) {
       lastTime = stationValueTime;
     }
 
-    let delta = stationsCalc.delta(stationValue, stationExtremum);
-    let hemisphere = stationValue.longitude <= 180 && stationValue.longitude >= 0 ? 'east' : 'west';
+    const delta = stationsCalc.delta(stationValue, stationExtremum);
+    const hemisphere = stationValue.longitude <= 180 && stationValue.longitude >= 0 ? 'east' : 'west';
 
-    for (let compKey in maximum) {
-      let absValue = Math.abs(delta[compKey]);
+    for (const compKey in maximum) {
+      const absValue = Math.abs(delta[compKey]);
       if (maximum[compKey] < absValue) {
         maximum[compKey] = absValue;
       }
@@ -350,8 +349,8 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
 
     components.forEach((compKey) => {
       latitudeAvgValues[compKey].forEach((item, latitudeRange) => {
-        let range = latitudeRanges[latitudeRange];
-        let isInRange = stationValue.latitude <= range[0] && stationValue.latitude > range[1];
+        const range = latitudeRanges[latitudeRange];
+        const isInRange = stationValue.latitude <= range[0] && stationValue.latitude > range[1];
 
         if (isInRange) {
           if (numberIsBetween(lastTime, [timeSelected.start.valueOf(), timeSelected.end.valueOf()])) {
@@ -375,7 +374,7 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
     sendProgress(i);
   }
 
-  for (let compKey in maximum) {
+  for (const compKey in maximum) {
     maximum[compKey] = maximum[compKey] <= 10 ? Math.ceil(maximum[compKey]) : Math.ceil(maximum[compKey] / 10) * 10;
   }
 
@@ -385,15 +384,15 @@ function getLatitudeAvgValues(data, avgChart, timeSelected) {
 }
 
 function getExtremes(extremes, compKeys, row) {
-  let tmp = extremes;
+  const tmp = extremes;
 
   for (let i = 0; i < compKeys.length; i++) {
-    let compKey = compKeys[i];
+    const compKey = compKeys[i];
     if (row[compKey] === null || row[compKey] >= stationsCalc.BAD_VALUE) {
       return tmp;
     }
 
-    let extreme = {
+    const extreme = {
       time: row.time,
       value: row[compKey]
     };

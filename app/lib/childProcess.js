@@ -3,7 +3,7 @@ import consoleLogSQL from './consoleLogSQL';
 export default (params, onMessageCallback) => {
   const STD_OUT = 'stdout';
   const STD_ERR = 'stderr';
-  const {spawn} = require('child_process');
+  const { spawn } = require('child_process');
 
   const electronVersion = process.versions.electron;
 
@@ -28,18 +28,18 @@ export default (params, onMessageCallback) => {
     params.options.env.ELECTRON_VERSION = electronVersion;
   }
 
-  let child = spawn(params.exec, params.args, params.options);
+  const child = spawn(params.exec, params.args, params.options);
 
-  let lastMessageTime = (new Date).getTime();
-  let timer = setInterval(() => {
-    if (params.timeout && params.timeout > 0 && lastMessageTime + params.timeout < (new Date).getTime()) {
+  let lastMessageTime = (new Date()).getTime();
+  const timer = setInterval(() => {
+    if (params.timeout && params.timeout > 0 && lastMessageTime + params.timeout < (new Date()).getTime()) {
       child.kill(params.killSignal);
       clearInterval(timer);
       console.log('Kill child process by timeout %s sec.', params.timeout / 1000);
     }
   }, 100);
 
-  let prepareStd = (message, type) => {
+  const prepareStd = (message, type) => {
     message = message.toString();
     try {
       message = JSON.parse(message);
@@ -47,7 +47,7 @@ export default (params, onMessageCallback) => {
 
     }
 
-    let messageType = `${type} (${child.pid}):`;
+    const messageType = `${type} (${child.pid}):`;
 
     if (type === STD_ERR) {
       console.error(messageType, message);
@@ -56,12 +56,12 @@ export default (params, onMessageCallback) => {
     }
   };
 
-  let killChild = (kill) => {
+  const killChild = (kill) => {
     if (kill) {
       child.kill(params.killSignal);
       clearInterval(timer);
     } else {
-      lastMessageTime = (new Date).getTime();
+      lastMessageTime = (new Date()).getTime();
     }
   };
 
@@ -69,11 +69,11 @@ export default (params, onMessageCallback) => {
   child.stderr.on('data', (data) => prepareStd(data, STD_ERR));
 
   child.on('disconnect', () => {
-    killChild(params.killOnDisconnect)
+    killChild(params.killOnDisconnect);
     console.log('Kill child process. Disconnect.');
   });
   child.on('error', () => {
-    killChild(params.killOnDisconnect)
+    killChild(params.killOnDisconnect);
     console.log('Kill child process. Error.');
   });
 
@@ -83,7 +83,7 @@ export default (params, onMessageCallback) => {
 
 
   child.on('message', (data, sendHandle) => {
-    lastMessageTime = (new Date).getTime();
+    lastMessageTime = (new Date()).getTime();
     if (data.consoleLogSQL !== undefined) {
       consoleLogSQL(`stdout (${child.pid}) ${data.consoleLogSQL}`);
     } else if (onMessageCallback) {
@@ -92,4 +92,4 @@ export default (params, onMessageCallback) => {
   });
 
   return child;
-}
+};

@@ -1,8 +1,8 @@
 import moment from 'moment';
-import {dateToMinutes} from './helper';
+import { dateToMinutes } from './helper';
 
 function delta(stationValue, stationExtremum) {
-  let result = {};
+  const result = {};
 
   result.dX = componentDelta('compX', stationValue, stationExtremum);
   result.dY = componentDelta('compY', stationValue, stationExtremum);
@@ -12,7 +12,7 @@ function delta(stationValue, stationExtremum) {
 
     result.dD = Math.acos(result.dY / result.dH);
     if (result.dX < 0) {
-      result.dD = result.dD * -1;
+      result.dD *= -1;
     }
 
     result.vector = {
@@ -25,16 +25,16 @@ function delta(stationValue, stationExtremum) {
     result.vector = {
       X: null,
       Y: null,
-    }
+    };
   }
 
   return result;
 }
 
-//return DataCurrent[Component] - DataStart[Component] - (DataCurrent.Time.ToMinute() - DataStart.Time.ToMinute()) * (DataEnd[Component] - DataStart[Component]) / (DataEnd.Time.ToMinute() - DataStart.Time.ToMinute());
+// return DataCurrent[Component] - DataStart[Component] - (DataCurrent.Time.ToMinute() - DataStart.Time.ToMinute()) * (DataEnd[Component] - DataStart[Component]) / (DataEnd.Time.ToMinute() - DataStart.Time.ToMinute());
 function componentDelta(compKey, stationValue, stationExtremum) {
-  let dataStart = stationExtremum.start[compKey];
-  let dataEnd = stationExtremum.end[compKey];
+  const dataStart = stationExtremum.start[compKey];
+  const dataEnd = stationExtremum.end[compKey];
 
   if (dataStart !== null && dataEnd !== null && stationValue[compKey] !== null) {
     if (typeof stationValue.time === 'string') {
@@ -63,4 +63,4 @@ export default {
   delta,
   componentDelta,
   longitude
-}
+};

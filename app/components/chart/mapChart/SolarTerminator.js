@@ -5,9 +5,10 @@ import * as d3 from 'd3';
 import { solarPoint } from '../../../lib/geopack';
 
 class SolarTerminator extends Component {
-
   render = () => {
-    const { projection, path, currentTime, pointRadius } = this.props;
+    const {
+      projection, path, currentTime, pointRadius
+    } = this.props;
 
     if (currentTime) {
       const utcTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);

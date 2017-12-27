@@ -4,7 +4,6 @@ import { Checkbox, Icon, Popconfirm } from 'antd';
 
 
 class CheckboxCell extends Component {
-
   state = {
     value: !!this.props.value,
     isSaved: false,
@@ -23,7 +22,7 @@ class CheckboxCell extends Component {
         value,
         isSaved: true
       }, () => {
-        this.props.onChange(this.state.value, this.afterAction)
+        this.props.onChange(this.state.value, this.afterAction);
       });
     } else {
       this.setState({ value });
@@ -50,13 +49,13 @@ class CheckboxCell extends Component {
 
   render() {
     const { value, isSaved, error } = this.state;
-    const message = !!error ? <div>
+    const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-    </div> : null;
+                             </div>) : null;
 
     return (
-      <div className={"checkbox-cell " + (error ? 'error' : '')}>
+      <div className={`checkbox-cell ${error ? 'error' : ''}`}>
         {isSaved ?
           <Icon type="loading" />
           :

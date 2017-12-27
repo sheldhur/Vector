@@ -43,22 +43,20 @@ export function calculateMagnetopause() {
         pressureSolar: prepareDataSet(dataSets, dataSetValues, field.pressureSolar),
       };
 
-      console.log(fieldData, field);
-
       if (fieldData.b && fieldData.bz && fieldData.pressureSolar) {
-        for (let timeStr in fieldData.b) {
+        for (const timeStr in fieldData.b) {
           const time = new Date(timeStr);
-          let values = {
+          const values = {
             b: fieldData.b[timeStr],
             bz: fieldData.bz[timeStr],
             pressureSolar: fieldData.pressureSolar[timeStr],
-            time: new Date(time - time.getTimezoneOffset() * 60000)
+            time: new Date(time - (time.getTimezoneOffset() * 60000))
           };
-          let point = new MagnetopausePoint(values).calculate(0, 0);
+          const point = new MagnetopausePoint(values).calculate(0, 0);
 
           if (!chartPoints) {
             chartPoints = [];
-            data = {}
+            data = {};
           }
 
           chartPoints.push({
@@ -73,5 +71,5 @@ export function calculateMagnetopause() {
 
     dispatch(setChart(chartPoints));
     dispatch(setData(data));
-  }
+  };
 }

@@ -10,7 +10,6 @@ import * as uiActions from '../../actions/ui';
 
 
 class DataSetValuesView extends Component {
-
   componentWillMount = () => {
     console.log(this.props);
     this.getDataSetValues(this.props);

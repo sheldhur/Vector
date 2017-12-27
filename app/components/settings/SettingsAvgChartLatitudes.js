@@ -6,7 +6,6 @@ import Grid from '../grid/Grid';
 
 
 class SettingsAvgChartLines extends Component {
-
   handleCellChange = (field, index, value, afterAction) => {
     this.props.onCellChange(field, index, value);
     afterAction(true);
@@ -22,50 +21,56 @@ class SettingsAvgChartLines extends Component {
   };
 
   render = () => {
-    let columns = [
+    const columns = [
       {
         title: 'Start',
         dataIndex: '0',
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handleCellChange('0', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'End',
         dataIndex: '1',
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handleCellChange('1', index, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: '',
         dataIndex: 'delete',
         width: 30,
-        render: (text, record, index) => {
-          return (
-            (record[0] && record[1]) ?
-              <Popconfirm
-                placement="left"
-                title="Are you sure delete this range?"
-                onConfirm={() => {
-                  this.handleLineAddRemove(index)
+        render: (text, record, index) => (
+          (record[0] && record[1]) ?
+            <Popconfirm
+              placement="left"
+              title="Are you sure delete this range?"
+              onConfirm={() => {
+                  this.handleLineAddRemove(index);
                 }}
-                okText="Delete"
-                cancelText="No"
-              >
-                <a href="#"><Icon type="delete" /></a>
-              </Popconfirm>
-              :
-              <a href="#" onClick={() => {
-                this.handleLineAddRemove(index)
-              }}><Icon type="delete" /></a>
-          )
-        }
+              okText="Delete"
+              cancelText="No"
+            >
+              <a href="#"><Icon type="delete" /></a>
+            </Popconfirm>
+            :
+            <a
+              href="#"
+              onClick={() => {
+                this.handleLineAddRemove(index);
+              }}
+            ><Icon type="delete" />
+            </a>
+        )
       }
     ];
 
     const { value } = this.props;
-    const lines = value ? value.map((line, i) => {
-      return { 0: line[0], 1: line[1], key: i }
-    }) : [];
+    const lines = value ? value.map((line, i) => ({ 0: line[0], 1: line[1], key: i })) : [];
     // const buttonAddDisable = !!lines.filter((line) => !line.comp || !line.hemisphere).length;
     const buttonAddDisable = false;
 
@@ -90,7 +95,7 @@ class SettingsAvgChartLines extends Component {
         data={lines}
         pagination={false}
         size="x-small"
-        bordered={true}
+        bordered
       />
     );
   };

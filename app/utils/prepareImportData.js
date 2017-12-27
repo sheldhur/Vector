@@ -6,7 +6,7 @@ import {
   VALUES_MIN,
   VALUES_RAW,
 } from '../constants/app';
-import {mathAvg, numberIsBetween} from './helper';
+import { mathAvg, numberIsBetween } from './helper';
 
 function calcTimeExtreme(period, data, avg, startOrEnd) {
   const timePeriod = period.valueOf();
@@ -22,12 +22,12 @@ function calcTimeExtreme(period, data, avg, startOrEnd) {
   }
 
   return time;
-};
+}
 
 function prepareValues(data, time, rowLength) {
-  let {rows} = data;
-  let {avg} = time;
-  avg.time = (avg.by.startsWith('min') ? avg.value * 60 : avg.value) * 1000; //ms
+  let { rows } = data;
+  const { avg } = time;
+  avg.time = (avg.by.startsWith('min') ? avg.value * 60 : avg.value) * 1000; // ms
 
   time.extreme = {
     frequency: rows[1][0].valueOf() - rows[0][0].valueOf(),
@@ -49,18 +49,18 @@ function prepareValues(data, time, rowLength) {
     ...data,
     format,
     rows,
-  }
+  };
 }
 
 function prepareRawValues(rows, time, rowLength, badValue) {
-  const {period} = time;
+  const { period } = time;
 
   if (!rowLength) {
     rowLength = rows[0].length;
   }
 
-  let addon = Array.from({length: rowLength - rows.length}, () => null);
-  let result = [];
+  const addon = Array.from({ length: rowLength - rows.length }, () => null);
+  const result = [];
   for (let i = 0; i < rows.length; i++) {
     let row = rows[i];
 
@@ -81,7 +81,7 @@ function prepareRawValues(rows, time, rowLength, badValue) {
 
       result.push(row);
     } else if (row[0].valueOf() > period.end.valueOf()) {
-      break
+      break;
     }
   }
 
@@ -89,7 +89,7 @@ function prepareRawValues(rows, time, rowLength, badValue) {
 }
 
 function prepareFormatedValues(rows, time, method = VALUES_RAW) {
-  const {avg, extreme} = time;
+  const { avg, extreme } = time;
 
   if (rows.length === 0) {
     return [];
@@ -97,7 +97,7 @@ function prepareFormatedValues(rows, time, method = VALUES_RAW) {
 
   let timeStart = extreme.start;
 
-  let result = {};
+  const result = {};
   rows.forEach((row, i) => {
     if (result[timeStart] === undefined) {
       result[timeStart] = [];
@@ -116,21 +116,20 @@ function prepareFormatedValues(rows, time, method = VALUES_RAW) {
       result[timeStart] = result[timeStart].map((comp, i) => {
         if (i === 0) {
           return timeStart;
-        } else {
-          if (comp.length) {
-            switch (method) {
-              case VALUES_MAX:
-                return Math.max(...comp);
-              case VALUES_MIN:
-                return Math.min(...comp);
-              case VALUES_AVG:
-                return mathAvg(comp);
-              default:
-                return mathAvg(comp);
-            }
-          } else {
-            return null;
+        }
+        if (comp.length) {
+          switch (method) {
+            case VALUES_MAX:
+              return Math.max(...comp);
+            case VALUES_MIN:
+              return Math.min(...comp);
+            case VALUES_AVG:
+              return mathAvg(comp);
+            default:
+              return mathAvg(comp);
           }
+        } else {
+          return null;
         }
       });
       timeStart += avg.time;
@@ -141,7 +140,7 @@ function prepareFormatedValues(rows, time, method = VALUES_RAW) {
 }
 
 function prepareInterpolatedValues(rows, time, method = VALUES_INTERPOLATED) {
-  const {avg, extreme} = time;
+  const { avg, extreme } = time;
 
   let timeValues = [];
   rows.forEach((row, i) => {
@@ -156,9 +155,9 @@ function prepareInterpolatedValues(rows, time, method = VALUES_INTERPOLATED) {
 
   timeValues = timeValues.map((item) => naturalSplineInterpolator(item));
 
-  let result = [];
-  for (let i = extreme.start; i <= extreme.end; i = i + avg.time) {
-    let tmp = [new Date(i)];
+  const result = [];
+  for (let i = extreme.start; i <= extreme.end; i += avg.time) {
+    const tmp = [new Date(i)];
     for (let j = 0; j < timeValues.length; j++) {
       tmp.push(timeValues[j](i));
     }

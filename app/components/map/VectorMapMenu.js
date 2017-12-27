@@ -25,7 +25,7 @@ export function openWindowStation(id) {
     icon: resourcePath('./assets/icons/radar.png'),
   };
 
-  let win = windowManager.get(WINDOW_STATIONS);
+  const win = windowManager.get(WINDOW_STATIONS);
   if (!win) {
     windowManager.open(WINDOW_STATIONS, url, windowOptions);
   } else {
@@ -61,12 +61,12 @@ export default function (props) {
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
-              fs.writeFile(filename, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
+              fs.writeFile(filename, dataUrl.replace(/^data:image\/png;base64,/, ''), 'base64', (error) => {
                 if (error) {
                   message.error(error.message, 6);
                   throw error;
                 } else {
-                  message.success(filePath + ' was saved', 3);
+                  message.success(`${filePath} was saved`, 3);
                 }
               });
             });

@@ -1,9 +1,8 @@
-// @flow
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import hexToRgb from 'hex-to-rgb';
-import { openWindowStation } from '../../map/VectorMapMenu'
+import { openWindowStation } from '../../map/VectorMapMenu';
 import * as uiActions from '../../../actions/ui';
 import * as stationsCalc from '../../../utils/stationsCalc';
 
@@ -30,16 +29,18 @@ class StationVector extends Component {
   };
 
   prepareStationsData = () => {
-    const { projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum, mapLayerH, mapLayerZ, isShowNames } = this.props;
+    const {
+      projection, pointSize, dataFilter, stations, stationsValue, extremes, maximum, mapLayerH, mapLayerZ, isShowNames
+    } = this.props;
 
     let data = [];
 
     if (stations && stationsValue) {
       stationsValue.forEach((stationValue) => {
         if (stations[stationValue.stationId] !== undefined && extremes[stationValue.stationId] !== undefined) {
-          let station = stations[stationValue.stationId];
+          const station = stations[stationValue.stationId];
           if (station.status) {
-            let delta = stationsCalc.delta(stationValue, extremes[stationValue.stationId]);
+            const delta = stationsCalc.delta(stationValue, extremes[stationValue.stationId]);
             data.push({ ...station, delta });
           }
         }
@@ -50,39 +51,37 @@ class StationVector extends Component {
       data = data.filter(dataFilter);
     }
 
-    let points = [];
+    const points = [];
 
-    let lines = [];
-    let vectorLength = 50;
-    let vectorStrength = mapLayerH.scaleAuto ? maximum.dH : mapLayerH.scale; //660
-    let vectorNormal = vectorLength / vectorStrength;
+    const lines = [];
+    const vectorLength = 50;
+    const vectorStrength = mapLayerH.scaleAuto ? maximum.dH : mapLayerH.scale; // 660
+    const vectorNormal = vectorLength / vectorStrength;
 
-    let circles = {
+    const circles = {
       positive: [],
       negative: [],
     };
-    let circleRadius = 50 * (mapLayerZ.view === 'circle' ? 1 : 2);
-    let circleStrength = mapLayerZ.scaleAuto ? maximum.dZ : mapLayerZ.scale; //486 * 2;
-    let circleNormal = circleRadius / circleStrength;
+    const circleRadius = 50 * (mapLayerZ.view === 'circle' ? 1 : 2);
+    const circleStrength = mapLayerZ.scaleAuto ? maximum.dZ : mapLayerZ.scale; // 486 * 2;
+    const circleNormal = circleRadius / circleStrength;
 
 
-    let names = [];
+    const names = [];
     if (isShowNames) {
-      for (let stationId in stations) {
+      for (const stationId in stations) {
         const item = stations[stationId];
         const coordinates = projection([item.longitude, item.latitude]);
-        names.push(
-          <text
-            key={'name-' + stationId}
-            x={coordinates[0]}
-            y={coordinates[1]}
-            onClick={(e) => this.handlerMouseClick(item)}
-            onMouseEnter={(e) => this.handlerMouseEnter(item)}
-            onMouseOut={(e) => this.handlerMouseOut()}
-          >
-            {item.name}
-          </text>
-        );
+        names.push(<text
+          key={`name-${stationId}`}
+          x={coordinates[0]}
+          y={coordinates[1]}
+          onClick={() => this.handlerMouseClick(item)}
+          onMouseEnter={() => this.handlerMouseEnter(item)}
+          onMouseOut={() => this.handlerMouseOut()}
+        >
+          {item.name}
+        </text>);
       }
     } else {
       data.forEach((item, i) => {
@@ -108,21 +107,20 @@ class StationVector extends Component {
               coordinates2 = projection(coordinates2);
 
               lines.push(<line
-                  key={'line-' + i}
-                  x1={coordinates[0]}
-                  y1={coordinates[1]}
-                  x2={coordinates2[0]}
-                  y2={coordinates2[1]}
-                />
-              );
+                key={`line-${i}`}
+                x1={coordinates[0]}
+                y1={coordinates[1]}
+                x2={coordinates2[0]}
+                y2={coordinates2[1]}
+              />);
             }
           }
 
           if (mapLayerZ.enabled) {
             if (item.delta.dZ) {
-              let circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
+              const circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
               circles[circleClass].push(<circle
-                key={'circle-' + i}
+                key={`circle-${i}`}
                 cx={coordinates[0]}
                 cy={coordinates[1]}
                 r={Math.abs(item.delta.dZ * circleNormal)}
@@ -137,21 +135,23 @@ class StationVector extends Component {
         /* should be so transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
            but in the electron 1.6.12+ have bug. */
         points.push(<rect
-          key={'point-' + i}
+          key={`point-${i}`}
           width={pointSize}
           height={pointSize}
-          x={coordinates[0] - pointSize / 2}
-          y={coordinates[1] - pointSize / 2}
-          onClick={(e) => this.handlerMouseClick(item)}
-          onMouseEnter={(e) => this.handlerMouseEnter(item)}
-          onMouseOut={(e) => this.handlerMouseOut()}
+          x={(coordinates[0] - pointSize) / 2}
+          y={(coordinates[1] - pointSize) / 2}
+          onClick={() => this.handlerMouseClick(item)}
+          onMouseEnter={() => this.handlerMouseEnter(item)}
+          onMouseOut={() => this.handlerMouseOut()}
           transform={`rotate(45, ${coordinates[0] / 10000000}, ${coordinates[1] / 10000000})`}
           className={pointClass}
         />);
       });
     }
 
-    return { points, lines, circles, names };
+    return {
+      points, lines, circles, names
+    };
   };
 
   render = () => {
@@ -163,7 +163,7 @@ class StationVector extends Component {
         negative: hexToRgb(mapLayerZ.color.negative),
       };
 
-      let style = {
+      const style = {
         circle: {
           positive: {
             start: {

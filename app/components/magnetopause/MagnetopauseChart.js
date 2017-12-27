@@ -10,7 +10,6 @@ import * as prepareData from '../../utils/prepareData';
 
 
 class MagnetopauseChart extends Component {
-
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
       e.preventDefault();
@@ -34,17 +33,17 @@ class MagnetopauseChart extends Component {
       }
     });
 
-    dataSets["magnetopause"] = {
-      id: "magnetopause",
+    dataSets.magnetopause = {
+      id: 'magnetopause',
       axisGroup: 0,
-      name: "Magnetopause",
-      si: "Re",
+      name: 'Magnetopause',
+      si: 'Re',
       style: { stroke: '#ff7f0e' },
       axisY: -1,
       badValue: null,
       status: 1
     };
-    dataSetValues["magnetopause"] = this.props.chart;
+    dataSetValues.magnetopause = this.props.chart;
 
     const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues);
     return (

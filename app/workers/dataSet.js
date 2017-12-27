@@ -8,7 +8,7 @@ let db;
 function getProgress(stageName, rowsLength, throttleMs = 150) {
   let stageLength = 0;
   const stages = {
-    getDataSetValues: { stage: stageLength++, message: "Loading datasets values" },
+    getDataSetValues: { stage: stageLength++, message: 'Loading datasets values' },
   };
 
   let lastSendTime = null;
@@ -24,7 +24,7 @@ function getProgress(stageName, rowsLength, throttleMs = 150) {
       process.send({ event: 'setProgress', data: progress });
       lastSendTime = sendTime;
     }
-  }
+  };
 }
 
 export default function (dbSession, data) {

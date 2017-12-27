@@ -5,10 +5,9 @@ export default function HighlightValue(props) {
   if (props.search) {
     return (
       <span dangerouslySetInnerHTML={{
-        __html: props.value.replace(props.search, (str) => {
-          return '<span class="highlight">' + str + '</span>';
-        })
-      }} />
+        __html: props.value.replace(props.search, (str) => `<span class="highlight">${str}</span>`)
+      }}
+      />
     );
   }
 

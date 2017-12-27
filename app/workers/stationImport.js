@@ -46,7 +46,7 @@ export default function (dbSession, data) {
         }
       } catch (e) {
         console.error(e);
-        process.send({ event: 'setImportLog', data: { filePath: filePath, error: errorToObject(e) } })
+        process.send({ event: 'setImportLog', data: { filePath, error: errorToObject(e) } });
       }
     }
   })();
@@ -67,13 +67,12 @@ function readFile(filePath, fileType) {
     return geomag.samnet(filePath);
   } else if (fileType === 'IMAGE') {
     return geomag.imageColumnOld(filePath);
-  } else {
-    return Promise.reject(new Error(`File type ${fileType} is not supported`));
   }
+  return Promise.reject(new Error(`File type ${fileType} is not supported`));
 }
 
 async function saveStation(data, fileType) {
-  let props = {
+  const props = {
     name: data.properties.code.toUpperCase(),
     source: fileType,
     reported: data.properties.reported.toUpperCase(),
@@ -95,7 +94,7 @@ async function saveStation(data, fileType) {
 }
 
 function saveStationValues(data, files, stations, fileCurrent) {
-  let { station, format, rows } = data;
+  const { station, format, rows } = data;
 
   return new Promise((resolve, reject) => {
     let lastProgress = {
@@ -103,10 +102,10 @@ function saveStationValues(data, files, stations, fileCurrent) {
       total: 0,
     };
 
-    let sqlite = db.sequelize.connectionManager.connections.default;
-    sqlite.serialize(function () {
-      let query = "INSERT INTO StationValues (id, time, compX, compY, compZ, stationId, format) VALUES(NULL, ?, ?, ?, ?, ?, ?);";
-      let stmt = sqlite.prepare(query);
+    const sqlite = db.sequelize.connectionManager.connections.default;
+    sqlite.serialize(() => {
+      const query = 'INSERT INTO StationValues (id, time, compX, compY, compZ, stationId, format) VALUES(NULL, ?, ?, ?, ?, ?, ?);';
+      const stmt = sqlite.prepare(query);
       rows.forEach((row, rowCurrent) => {
         row = convertToXY(row, station.reported).map((item, i) => {
           if (i === 0) {
@@ -116,8 +115,8 @@ function saveStationValues(data, files, stations, fileCurrent) {
           }
         });
         stmt.run(...row, station.id, format, (error) => {
-          let progress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
-          let saveTime = new Date().valueOf();
+          const progress = calcProgress(files.length * stations.length, fileCurrent, rows.length, rowCurrent);
+          const saveTime = new Date().valueOf();
           if (progress.current > lastProgress.current) {
             lastProgress = progress;
             process.send({ event: 'setProgress', data: progress });
@@ -125,7 +124,7 @@ function saveStationValues(data, files, stations, fileCurrent) {
 
           if (error) {
             // console.error(error);
-            //process.send({event: 'progress', error: {name: error.name, message: error.message}, value});
+            // process.send({event: 'progress', error: {name: error.name, message: error.message}, value});
           }
         });
       });
@@ -135,17 +134,18 @@ function saveStationValues(data, files, stations, fileCurrent) {
         } else {
           resolve();
         }
-      })
+      });
     });
   });
 }
 
 function convertToXY(values, reported = 'XYZF') {
   if (!reported.startsWith('XY')) {
-    let X, Y;
+    let X,
+      Y;
     if (reported.startsWith('HD')) {
-      let H = values[1];
-      let D = values[2];
+      const H = values[1];
+      const D = values[2];
       if (H === null || D === null) {
         X = null;
         Y = null;
@@ -154,8 +154,8 @@ function convertToXY(values, reported = 'XYZF') {
         Y = H * Math.sin(D * M2R);
       }
     } else if (reported.startsWith('HY')) {
-      let H = values[1];
-      let Y = values[2];
+      const H = values[1];
+      const Y = values[2];
       if (H === null || Y === null) {
         X = null;
       } else {

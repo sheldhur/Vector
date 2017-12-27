@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import models from './models';
 import consoleLogSQL from '../lib/consoleLogSQL';
 
-const Op = Sequelize.Op;
+const { Op } = Sequelize;
 const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
@@ -42,10 +42,10 @@ const operatorsAliases = {
 
 export let db;
 
-let dbConnect = async (dbPath) => {
+const dbConnect = async (dbPath) => {
   if (dbPath !== undefined && (db === undefined || db.sequelize === undefined)) {
-    let sequelize = new Sequelize('database', null, null, {
-      dialect: "sqlite",
+    const sequelize = new Sequelize('database', null, null, {
+      dialect: 'sqlite',
       dialectModulePath: 'sqlite3-offline',
       storage: dbPath,
       logging: (log) => {
@@ -65,12 +65,12 @@ let dbConnect = async (dbPath) => {
 
     db = {};
 
-    for (let modelName in models) {
-      let model = models[modelName](sequelize, Sequelize.DataTypes);
+    for (const modelName in models) {
+      const model = models[modelName](sequelize, Sequelize.DataTypes);
       db[model.name] = model;
 
-      Object.keys(db).forEach(function (modelName) {
-        if ("associate" in db[modelName]) {
+      Object.keys(db).forEach((modelName) => {
+        if ('associate' in db[modelName]) {
           db[modelName].associate(db);
         }
       });
@@ -82,7 +82,7 @@ let dbConnect = async (dbPath) => {
     db.Sequelize = Sequelize;
     db.close = () => {
       db.sequelize.close();
-      console.log(db.path + ' connection closed');
+      console.log(`${db.path} connection closed`);
       db = {};
     };
     db.setPragma = async (values) => {
@@ -95,8 +95,9 @@ let dbConnect = async (dbPath) => {
       }
 
       const result = [];
+
       for (const key in values) {
-        result[key] = await db.sequelize.query("PRAGMA " + values[key][0] + " = " + values[key][1]);
+        result[key] = await db.sequelize.query(`PRAGMA ${values[key][0]} = ${values[key][1]}`);
       }
 
       return result;

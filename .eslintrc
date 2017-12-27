@@ -30,7 +30,12 @@
     }],
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": "off",
+    "max-len": "off",
+    "no-prototype-builtins": "off",
+    "guard-for-in": "off",
+    "no-restricted-syntax": ["off", "ForInStatement"],
+    "react/prop-types": ["off"]
   },
   "plugins": [
     "flowtype",

@@ -23,4 +23,4 @@ export default {
   goes,
   imageColumnOld,
   toIaga2002,
-}
+};

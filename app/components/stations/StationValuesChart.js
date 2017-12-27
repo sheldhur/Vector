@@ -17,7 +17,6 @@ const VIEW_DELTA_SIMPLE = 'VIEW_DELTA_SIMPLE';
 
 
 class StationValuesChart extends Component {
-
   state = {
     comp: COMP_XYZ,
     view: VIEW_RAW,
@@ -37,7 +36,7 @@ class StationValuesChart extends Component {
     }
 
     let data = {};
-    let compNames = this.state.comp.split('');
+    const compNames = this.state.comp.split('');
 
     compNames.forEach((compName) => {
       data[compName] = [];
@@ -45,7 +44,7 @@ class StationValuesChart extends Component {
 
     values.forEach((value) => {
       compNames.forEach((compName) => {
-        let field = 'comp' + compName;
+        const field = `comp${compName}`;
         data[compName].push({
           x: value.time,
           y: Math.abs(value[field]) < 99999 ? value[field] : null
@@ -53,29 +52,29 @@ class StationValuesChart extends Component {
       });
     });
 
-    data = compNames.map((compName, compKey) => {
-      return {
-        si: 'nT',
-        lines: [
-          {
-            name: compName,
-            si: 'nT',
-            format: '%(name)s: %(y).2f %(si)s',
-            style: {
-              stroke: colorGroup[compKey % colorGroup.length],
-              strokeWidth: 1
-            },
-            points: data[compName]
-          }
-        ],
-      }
-    });
+    data = compNames.map((compName, compKey) => ({
+      si: 'nT',
+      lines: [
+        {
+          name: compName,
+          si: 'nT',
+          format: '%(name)s: %(y).2f %(si)s',
+          style: {
+            stroke: colorGroup[compKey % colorGroup.length],
+            strokeWidth: 1
+          },
+          points: data[compName]
+        }
+      ],
+    }));
 
     return data;
   };
 
   render = () => {
-    const { isLoading, isError, data, progress } = this.props;
+    const {
+      isLoading, isError, data, progress
+    } = this.props;
 
     let container = null;
 
@@ -89,7 +88,7 @@ class StationValuesChart extends Component {
     }
 
     if (!container) {
-      let chartLines = this.prepareValuesForChart(data);
+      const chartLines = this.prepareValuesForChart(data);
       container = (
         <div style={{ width: this.props.width, height: this.props.height }} onContextMenu={this.handlerContextMenu}>
           <LineChart

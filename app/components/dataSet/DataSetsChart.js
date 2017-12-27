@@ -15,12 +15,11 @@ import * as app from '../../constants/app';
 
 
 class DataSetsChart extends Component {
-
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
       e.preventDefault();
 
-      let { dataSets } = this.props;
+      const { dataSets } = this.props;
 
       DataSetChartMenu({
         dataNotEmpty: !!dataSets,
@@ -36,7 +35,9 @@ class DataSetsChart extends Component {
   };
 
   render() {
-    const { isLoading, isError, progress, dataSets, dataSetValues } = this.props;
+    const {
+      isLoading, isError, progress, dataSets, dataSetValues
+    } = this.props;
     const chartLines = prepareData.dataSetsForChart(dataSets, dataSetValues, (dataSet) => dataSet.status === app.DATASET_ENABLED);
 
     let container = null;
@@ -52,8 +53,11 @@ class DataSetsChart extends Component {
 
     if (!container) {
       container = (
-        <div id="dataSetChart" style={{ width: this.props.width, height: this.props.height }}
-             onContextMenu={this.handlerContextMenu}>
+        <div
+          id="dataSetChart"
+          style={{ width: this.props.width, height: this.props.height }}
+          onContextMenu={this.handlerContextMenu}
+        >
           <LineChart
             width={this.props.width}
             height={this.props.height}

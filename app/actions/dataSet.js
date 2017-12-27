@@ -12,7 +12,7 @@ export function setError(payload) {
     type: types.ERROR,
     payload,
     syncState: true
-  }
+  };
 }
 
 export function setLoading(payload = true) {
@@ -87,7 +87,7 @@ export function getData() {
       dispatch(setLoading());
       // console.time('dataSetWorker');
     });
-  }
+  };
 }
 
 export function updateDataSet(id, fields, callback) {
@@ -95,21 +95,21 @@ export function updateDataSet(id, fields, callback) {
     try {
       const result = await db.DataSet.update(fields, { where: { id } });
       const dataSet = await db.DataSet.find({ where: { id } });
-      dispatch(_updateDataSet(id, dataSet.get({ plain: true })));
+      dispatch(storeUpdateDataSet(id, dataSet.get({ plain: true })));
 
       if (callback) callback({ result });
     } catch (error) {
       if (callback) callback({ error });
       throw error;
     }
-  }
+  };
 }
 
-function _updateDataSet(id, fields) {
+function storeUpdateDataSet(id, fields) {
   return (dispatch, getState) => {
     const { dataSets, dataSetValues } = getState().dataSet;
 
-    let data = {
+    const data = {
       dataSets: {
         ...dataSets,
         [id]: { ...dataSets[id], ...fields }
@@ -118,7 +118,7 @@ function _updateDataSet(id, fields) {
     };
 
     dispatch(setData(data));
-  }
+  };
 }
 
 export function deleteDataSet(fields) {
@@ -134,12 +134,12 @@ export function deleteDataSet(fields) {
       db.DataSet.destroy({ where: { id: dataSetIds } })
     ]);
 
-    dispatch(_deleteDataSet(dataSetIds));
+    dispatch(storeDeleteDataSet(dataSetIds));
     dispatch(setLoading(false));
-  }
+  };
 }
 
-function _deleteDataSet(dataSetIds, dataKeys) {
+function storeDeleteDataSet(dataSetIds, dataKeys) {
   return (dispatch, getState) => {
     const { dataSets, dataSetValues } = getState().dataSet;
 
@@ -161,7 +161,7 @@ function _deleteDataSet(dataSetIds, dataKeys) {
     });
 
     dispatch(setData(data));
-  }
+  };
 }
 
 export function updateDataSetValue(id, fields, callback) {
@@ -169,17 +169,17 @@ export function updateDataSetValue(id, fields, callback) {
     try {
       const result = await db.DataSetValue.update(fields, { where: { id } });
       const dataSetValue = await db.DataSetValue.find({ where: { id } });
-      dispatch(_updateDataSetValue(id, dataSetValue.get({ plain: true })));
+      dispatch(storeUpdateDataSetValue(id, dataSetValue.get({ plain: true })));
 
       if (callback) callback({ result });
     } catch (error) {
       if (callback) callback({ error });
       throw error;
     }
-  }
+  };
 }
 
-function _updateDataSetValue(id, fields) {
+function storeUpdateDataSetValue(id, fields) {
   return (dispatch, getState) => {
     const { dataSets, dataSetValues } = getState().dataSet;
 
@@ -197,7 +197,7 @@ function _updateDataSetValue(id, fields) {
     });
 
     dispatch(setData(data));
-  }
+  };
 }
 
 export function deleteDataSetValue(fields) {
@@ -212,18 +212,18 @@ export function deleteDataSetValue(fields) {
     await db.DataSetValue.destroy({ where: fields });
 
     if (fields.id) {
-      dispatch(_deleteDataSetValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
+      dispatch(storeDeleteDataSetValue(Array.isArray(fields.id) ? fields.id : [fields.id]));
     } else if (fields.dataSetId) {
-      dispatch(_deleteDataSet(Array.isArray(fields.dataSetId) ? fields.dataSetId : [fields.dataSetId], 'dataSetValues'));
+      dispatch(storeDeleteDataSet(Array.isArray(fields.dataSetId) ? fields.dataSetId : [fields.dataSetId], 'dataSetValues'));
     } else {
-      dispatch(_deleteDataSetValue(dataSetValuesIds));
+      dispatch(storeDeleteDataSetValue(dataSetValuesIds));
     }
 
     dispatch(setLoading(false));
-  }
+  };
 }
 
-function _deleteDataSetValue(dataSetValueIds) {
+function storeDeleteDataSetValue(dataSetValueIds) {
   return (dispatch, getState) => {
     const { dataSets, dataSetValues } = getState().dataSet;
 
@@ -236,7 +236,7 @@ function _deleteDataSetValue(dataSetValueIds) {
       dataSets,
       dataSetValues: newDataSetValues
     }));
-  }
+  };
 }
 
 export function deleteSelectedDataSets() {
@@ -246,9 +246,9 @@ export function deleteSelectedDataSets() {
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteDataSet({
         id: gridSelectedRows.map(item => item.id)
-      }))
+      }));
     }
-  }
+  };
 }
 
 export function deleteSelectedDataSetValues(field) {
@@ -258,9 +258,9 @@ export function deleteSelectedDataSetValues(field) {
     if (gridSelectedRows && gridSelectedRows.length) {
       dispatch(deleteDataSetValue({
         [field]: gridSelectedRows.map(item => item.id)
-      }))
+      }));
     }
-  }
+  };
 }
 
 export function clearDataSets() {
@@ -280,7 +280,7 @@ export function clearDataSets() {
 
     dispatch(resetDataSet());
     dispatch(setLoading(false));
-  }
+  };
 }
 
 function openDataSetPage() {
@@ -288,5 +288,5 @@ function openDataSetPage() {
     if (getState().router.location.pathname !== '/dataSet') {
       return dispatch(push('/dataSet'));
     }
-  }
+  };
 }

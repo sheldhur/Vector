@@ -16,7 +16,6 @@ const STATION_DELETE_VALUES = 'STATION_DELETE_VALUES';
 const STATION_DELETE_ALL_VALUES = 'STATION_DELETE_ALL_VALUES';
 
 class StationValueActions extends Component {
-
   handlerStationChange = (stationId) => {
     this.props.history.push(`/station/${stationId}`);
   };
@@ -39,7 +38,7 @@ class StationValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.stationActions.deleteSelectedStationsValues('id')
+            this.props.stationActions.deleteSelectedStationsValues('id');
           },
         });
         break;
@@ -51,7 +50,7 @@ class StationValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.stationActions.deleteStationValue({ stationId })
+            this.props.stationActions.deleteStationValue({ stationId });
           },
         });
         break;
@@ -63,7 +62,7 @@ class StationValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.stationActions.deleteStation({ id: stationId })
+            this.props.stationActions.deleteStation({ id: stationId });
           },
         });
         break;
@@ -76,7 +75,7 @@ class StationValueActions extends Component {
     const { stations, stationId } = this.props;
     const station = stations[stationId];
 
-    const stationsSorted = stations ? Object.values(stations).filter((station) => station !== undefined).sort(function (a, b) {
+    const stationsSorted = stations ? Object.values(stations).filter((station) => station !== undefined).sort((a, b) => {
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
@@ -110,16 +109,14 @@ class StationValueActions extends Component {
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={this.handlerStationChange}
           >
-            {stationsSorted.map((station, i) => {
-              return <Select.Option key={station.id.toString()}>{station.name}</Select.Option>;
-            })}
+            {stationsSorted.map((station, i) => <Select.Option key={station.id.toString()}>{station.name}</Select.Option>)}
           </Select>
-          {" "}
+          {' '}
           <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
             <Button>Actions <Icon type="down" /></Button>
           </Dropdown>
         </Col>
-        <Col span={8}></Col>
+        <Col span={8} />
       </div>
     );
   };

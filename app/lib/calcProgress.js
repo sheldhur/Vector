@@ -8,7 +8,7 @@ export default (filesLength, fileCurrent, rowsLength, rowCurrent) => {
 
   const percentFile = 100 / filesLength;
   const percentFiles = percentFile * fileCurrent;
-  const percentCurrent = 100 / rowsLength * (rowCurrent); //+1
+  const percentCurrent = 100 / rowsLength * (rowCurrent); // +1
   const percentFileRows = percentFile / 100 * percentCurrent;
   const percentTotal = percentFiles + percentFileRows;
 
@@ -16,4 +16,4 @@ export default (filesLength, fileCurrent, rowsLength, rowCurrent) => {
     current: Math.ceil(percentCurrent),
     total: Math.ceil(percentTotal),
   };
-}
+};

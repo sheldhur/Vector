@@ -29,7 +29,7 @@ export class ResizeblePanel extends Component {
     }
 
     if (size !== this.state.size) {
-      this.setState({ size: size });
+      this.setState({ size });
     }
 
     if (this.props.eventWhen === 'mousemove') {
@@ -65,20 +65,20 @@ export class ResizeblePanel extends Component {
     let sizeSecond;
 
     if (this.props.type === 'horizontal') {
-      delimiterPos = { left: this.state.size + '%' };
-      sizeFirst = { width: this.state.size + '%' };
-      sizeSecond = { width: (100 - this.state.size) + '%' };
+      delimiterPos = { left: `${this.state.size}%` };
+      sizeFirst = { width: `${this.state.size}%` };
+      sizeSecond = { width: `${100 - this.state.size}%` };
     } else if (this.props.type === 'vertical') {
-      delimiterPos = { top: this.state.size + '%' };
-      sizeFirst = { height: this.state.size + '%' };
-      sizeSecond = { height: (100 - this.state.size) + '%' };
+      delimiterPos = { top: `${this.state.size}%` };
+      sizeFirst = { height: `${this.state.size}%` };
+      sizeSecond = { height: `${100 - this.state.size}%` };
     }
 
     return (
-      <div className={"resizeble-panel " + this.props.type}>
+      <div className={`resizeble-panel ${this.props.type}`}>
         {React.cloneElement(this.props.children[0], { size: sizeFirst })}
         {React.cloneElement(this.props.children[1], { size: sizeSecond })}
-        <div onMouseDown={this.handleResizeStart} style={delimiterPos}></div>
+        <div onMouseDown={this.handleResizeStart} style={delimiterPos} />
       </div>
     );
   };
@@ -95,7 +95,7 @@ ResizeblePanel.defaultProps = {
   type: 'horizontal',
   resizeRange: [20, 80],
   eventWhen: 'mousemove'
-}
+};
 
 export class Panel extends Component {
   constructor(props) {
@@ -106,5 +106,5 @@ export class Panel extends Component {
     return (
       <div style={this.props.size} className={this.props.className}>{this.props.children}</div>
     );
-  };
+  }
 }

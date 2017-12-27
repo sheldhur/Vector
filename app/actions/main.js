@@ -13,7 +13,7 @@ import * as types from '../constants/main';
 import dbConnect from '../database/dbConnect';
 import errorToObject from '../lib/errorToObject';
 
-const {dialog} = remote;
+const { dialog } = remote;
 const currentWindow = remote.getCurrentWindow();
 let db;
 
@@ -52,14 +52,14 @@ export function setDataBasePath(payload) {
     type: types.DB_PATH,
     payload,
     syncState: true
-  }
+  };
 }
 
 export function saveLastDataBase(path) {
   return (dispatch) => {
     localStorage[LS_KEY_LAST_DB] = path;
     dispatch(setDataBasePath(path));
-  }
+  };
 }
 
 export function getLastDataBase(openMain = true) {
@@ -82,9 +82,9 @@ export function getLastDataBase(openMain = true) {
 export function saveSettings(values, useDefault = false) {
   return async (dispatch, getState) => {
     const defaultSettings = useDefault ? DEFAULT_SETTINGS : getState().main.settings;
-    const settings = {...defaultSettings, ...values};
+    const settings = { ...defaultSettings, ...values };
 
-    const tmp = {app: {}, project: {}};
+    const tmp = { app: {}, project: {} };
     Object.keys(DEFAULT_SETTINGS).forEach((key) => {
       let type = key.startsWith('project') ? 'project' : 'app';
       let value = settings[key];
@@ -99,7 +99,7 @@ export function saveSettings(values, useDefault = false) {
     const settingsProject = JSON.stringify(tmp.project, null, 2);
     const settingsApp = JSON.stringify(tmp.app, null, 2);
 
-    await db.Project.update({settings: settingsProject}, {where: {id: 1}});
+    await db.Project.update({ settings: settingsProject }, { where: { id: 1 } });
     localStorage[LS_KEY_APP_SETTINGS] = settingsApp;
 
     return dispatch(setSettings(settings));
@@ -112,11 +112,11 @@ export function loadSettings(id = 1) {
 
     try {
       const project = await db.Project.findById(id);
-      const settingsProject = {...project.settings};
+      const settingsProject = { ...project.settings };
       const settingsAppString = localStorage[LS_KEY_APP_SETTINGS];
       const settingsApp = (settingsAppString && settingsAppString !== '') ? JSON.parse(settingsAppString) : {};
 
-      return dispatch(setSettings({...settingsApp, ...settingsProject}));
+      return dispatch(setSettings({ ...settingsApp, ...settingsProject }));
     } catch (e) {
       console.error(e);
       dispatch(setError(errorToObject(e)));
@@ -153,8 +153,8 @@ export function createDataBase(path, settings) {
   return async (dispatch) => {
     try {
       await createConnect(path);
-      await db.sequelize.sync({force: true});
-      await db.Project.upsert({id: 1}, {where: {_id: 1}});
+      await db.sequelize.sync({ force: true });
+      await db.Project.upsert({ id: 1 }, { where: { _id: 1 } });
       await dispatch(saveSettings(settings, true));
       dispatch(saveLastDataBase(path));
       openMainPage();
@@ -170,7 +170,7 @@ export function closeDataBase() {
     if (db && db.sequelize !== undefined) {
       db.close();
       db = null;
-      hashHistory.push('/home');
+      dispatch(push('/home'));
     }
   }
 }
@@ -192,8 +192,8 @@ export function dialogOpenCreateDataBase(settings) {
       properties: !settings ? ['openFile'] : ['openFile', 'createDirectory', 'promptToCreate'],
       buttonLabel: !settings ? 'Open database' : 'Create database',
       filters: [
-        {name: 'Database', extensions: FILE_EXT_DB},
-        {name: 'All Files', extensions: FILE_EXT_ALL}
+        { name: 'Database', extensions: FILE_EXT_DB },
+        { name: 'All Files', extensions: FILE_EXT_ALL }
       ],
     }, (filePaths) => {
       if (filePaths && filePaths.length) {

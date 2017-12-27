@@ -53,3 +53,7 @@ main.js.map
 .idea
 npm-debug.log.*
 __snapshots__
+
+# tmp
+_*.js
+*_.js

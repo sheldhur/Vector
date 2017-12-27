@@ -5,7 +5,6 @@ import { SketchPicker } from 'react-color';
 
 
 class ColorCell extends Component {
-
   state = {
     value: this.props.value,
     colorPickerVisible: false,
@@ -32,12 +31,12 @@ class ColorCell extends Component {
         colorPickerVisible: false,
         isSaved: true
       }, () => {
-        this.props.onChange(this.state.value, this.afterAction)
+        this.props.onChange(this.state.value, this.afterAction);
       });
     } else {
       this.setState({
         colorPickerVisible: false,
-      })
+      });
     }
   };
 
@@ -70,24 +69,26 @@ class ColorCell extends Component {
   };
 
   render = () => {
-    const { value, colorPickerVisible, isSaved, error } = this.state;
-    const message = !!error ? <div>
+    const {
+      value, colorPickerVisible, isSaved, error
+    } = this.state;
+    const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-    </div> : null;
+                             </div>) : null;
 
     const colorPicker = (
       <div>
-        <SketchPicker disableAlpha={true} color={value || '#FFFFFF'} onChangeComplete={this.handleColorChange} />
+        <SketchPicker disableAlpha color={value || '#FFFFFF'} onChangeComplete={this.handleColorChange} />
         <div style={{ textAlign: 'center' }}>
-          <Button size="small" type="primary" onClick={this.handleChange}>OK</Button>{" "}
+          <Button size="small" type="primary" onClick={this.handleChange}>OK</Button>{' '}
           <Button size="small" onClick={this.handleColorPickerCancel}>Cancel</Button>
         </div>
       </div>
     );
 
     return (
-      <div className={"color-cell"}>
+      <div className="color-cell">
         <Popconfirm
           title={message}
           visible={!!error}
@@ -103,7 +104,7 @@ class ColorCell extends Component {
             placement="right"
           >
             <div className="color-cell-wrapper" onClick={!isSaved ? this.handleColorPickerShow : null}>
-              <div style={{ backgroundColor: value && value !== '' ? value : 'transparent' }}></div>
+              <div style={{ backgroundColor: value && value !== '' ? value : 'transparent' }} />
               {isSaved ?
                 <Icon type="loading" className="color-cell-icon" />
                 :

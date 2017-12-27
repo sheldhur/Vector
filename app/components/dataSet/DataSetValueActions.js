@@ -16,7 +16,6 @@ const DATASET_DELETE_SELECTED_VALUES = 'DATASET_DELETE_SELECTED_VALUES';
 const DATASET_DELETE_ALL_VALUES = 'DATASET_DELETE_ALL_VALUES';
 
 class DataSetValueActions extends Component {
-
   handlerStationChange = (dataSetId) => {
     this.props.history.push(`/dataSet/${dataSetId}`);
   };
@@ -38,7 +37,7 @@ class DataSetValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.dataSetActions.deleteSelectedDataSetValues('id')
+            this.props.dataSetActions.deleteSelectedDataSetValues('id');
           },
         });
         break;
@@ -50,7 +49,7 @@ class DataSetValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.dataSetActions.deleteDataSetValue({ dataSetId })
+            this.props.dataSetActions.deleteDataSetValue({ dataSetId });
           },
         });
         break;
@@ -62,7 +61,7 @@ class DataSetValueActions extends Component {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            this.props.dataSetActions.deleteDataSet({ id: dataSetId })
+            this.props.dataSetActions.deleteDataSet({ id: dataSetId });
           },
         });
         break;
@@ -75,7 +74,7 @@ class DataSetValueActions extends Component {
     const { dataSets, dataSetId } = this.props;
     const dataSet = dataSets[dataSetId];
 
-    const dataSetSorted = dataSets ? Object.values(dataSets).filter((dataSet) => dataSet !== undefined).sort(function (a, b) {
+    const dataSetSorted = dataSets ? Object.values(dataSets).filter((dataSet) => dataSet !== undefined).sort((a, b) => {
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
@@ -109,16 +108,14 @@ class DataSetValueActions extends Component {
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={this.handlerStationChange}
           >
-            {dataSetSorted.map((dataSet, i) => {
-              return <Select.Option key={dataSet.id.toString()}>{dataSet.name}</Select.Option>;
-            })}
+            {dataSetSorted.map((dataSet, i) => <Select.Option key={dataSet.id.toString()}>{dataSet.name}</Select.Option>)}
           </Select>
-          {" "}
+          {' '}
           <Dropdown overlay={menuActions} placement="bottomCenter" trigger={['click']}>
             <Button>Actions <Icon type="down" /></Button>
           </Dropdown>
         </Col>
-        <Col span={8}></Col>
+        <Col span={8} />
       </div>
     );
   }

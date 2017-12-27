@@ -23,18 +23,18 @@ class MagnetopauseView extends Component {
     return (
       <table className={`main-page theme-${this.props.theme}`}>
         <tbody>
-        <tr>
-          <td className="header">
-            <MagnetopauseHeader />
-          </td>
-        </tr>
-        <tr>
-          <td className="content" style={{ position: 'relative' }}>
-            <div className="box" id="mainView">
-              <MagnetopauseDashboard />
-            </div>
-          </td>
-        </tr>
+          <tr>
+            <td className="header">
+              <MagnetopauseHeader />
+            </td>
+          </tr>
+          <tr>
+            <td className="content" style={{ position: 'relative' }}>
+              <div className="box" id="mainView">
+                <MagnetopauseDashboard />
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     );

@@ -10,7 +10,7 @@
  * @flow
  */
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { autoUpdater } from "electron-updater";
+import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import configureStore from './store/configureStore';
 import MenuBuilder from './menu';
@@ -56,7 +56,7 @@ const installExtensions = async () => {
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true' ? 'debug' : 'info';
 autoUpdater.on('download-progress', (progressObj) => {
-  log.info('Downloaded ' + Math.round(progressObj.percent) + '% (' + progressObj.transferred + "/" + progressObj.total + ')');
+  log.info(`Downloaded ${Math.round(progressObj.percent)}% (${progressObj.transferred}/${progressObj.total})`);
 });
 autoUpdater.on('update-downloaded', (update) => mainWindow.send('dispatchFromMain', { update }));
 ipcMain.on('installUpdate', () => {

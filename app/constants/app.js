@@ -77,22 +77,28 @@ export const DEFAULT_SETTINGS = {
     enabled: true,
     scaleAuto: false,
     scale: 200,
-    color: "#000000"
+    color: '#000000'
   },
   projectMapLayerZ: {
     enabled: true,
     scaleAuto: false,
     scale: 200,
-    view: "circle",
+    view: 'circle',
     color: {
-      positive: "#d0021b",
-      negative: "#2a47e2"
+      positive: '#d0021b',
+      negative: '#2a47e2'
     }
   },
   projectAvgComponentLines: [
-    { comp: 'dH', hemisphere: 'global', style: null, enabled: true },
-    { comp: 'dH', hemisphere: 'east', style: null, enabled: true },
-    { comp: 'dH', hemisphere: 'west', style: null, enabled: true },
+    {
+      comp: 'dH', hemisphere: 'global', style: null, enabled: true
+    },
+    {
+      comp: 'dH', hemisphere: 'east', style: null, enabled: true
+    },
+    {
+      comp: 'dH', hemisphere: 'west', style: null, enabled: true
+    },
   ],
   projectAvgLatitudeRanges: [
     [90, -90],

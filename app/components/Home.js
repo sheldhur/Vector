@@ -23,9 +23,7 @@ class Home extends Component {
       end: undefined,
     }
   };
-  avgData = app.IMPORT_AVG_DATA.map((item, i) => {
-    return { label: item, value: i };
-  });
+  avgData = app.IMPORT_AVG_DATA.map((item, i) => ({ label: item, value: i }));
   handlerDaterangeOk = (value) => {
     this.setState({
       period: {
@@ -42,10 +40,10 @@ class Home extends Component {
   };
 
   handlerAvgValueChange = (value) => {
-    let { avg } = this.state;
+    const { avg } = this.state;
     avg.value = parseInt(value);
     this.setState({
-      avg: avg
+      avg
     });
   };
 
@@ -59,19 +57,17 @@ class Home extends Component {
       }
     } : undefined;
 
-    this.props.mainActions.dialogOpenCreateDataBase(settings)
+    this.props.mainActions.dialogOpenCreateDataBase(settings);
   };
 
-  disabledRangeTime = () => {
-    return {
-      disabledSeconds: () => {
-        let range = [...Array(60).keys()];
-        range.shift();
+  disabledRangeTime = () => ({
+    disabledSeconds: () => {
+      const range = [...Array(60).keys()];
+      range.shift();
 
-        return range;
-      },
-    };
-  };
+      return range;
+    },
+  });
 
   render = () => {
     const { avg, period } = this.state;
@@ -96,7 +92,8 @@ class Home extends Component {
                   icon="file"
                   type="primary"
                   onClick={(e) => this.handlerDialog(e, false)}
-                >Open database</Button>
+                >Open database
+                </Button>
               </Row>
               <hr />
               <Row>
@@ -120,9 +117,7 @@ class Home extends Component {
                   <Input style={{ width: '100px' }} value="Averaged data" disabled className="ant-input-group-addon" />
                   <InputNumber min={1} defaultValue={avg.value} onChange={this.handlerAvgValueChange} />
                   <Select defaultValue={avg.by} onChange={this.handlerAvgBySelect}>
-                    {this.avgByList.map((item, i) => {
-                      return <Select.Option key={i} value={i.toString()}>{item}</Select.Option>;
-                    })}
+                    {this.avgByList.map((item, i) => <Select.Option key={i} value={i.toString()}>{item}</Select.Option>)}
                   </Select>
                 </Input.Group>
               </Row>
@@ -135,7 +130,8 @@ class Home extends Component {
                   type="primary"
                   onClick={(e) => this.handlerDialog(e, true)}
                   disabled={!isDateRange}
-                >Create new database</Button>
+                >Create new database
+                </Button>
               </Row>
             </Card>
           </Col>

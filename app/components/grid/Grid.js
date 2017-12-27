@@ -11,7 +11,6 @@ import LineStyleCell from './LineStyleCell';
 const isProd = process.env.NODE_ENV === 'production';
 
 class Grid extends Component {
-
   state = {
     filterDropdownVisible: false,
     filterValue: {},
@@ -24,29 +23,28 @@ class Grid extends Component {
     }
   };
 
-  columnSorter = (dataIndex, a, b) => {
-    return -(a[dataIndex] < b[dataIndex]) || +(a[dataIndex] != b[dataIndex]);
+  columnSorter = (dataIndex, a, b) =>
+    -(a[dataIndex] < b[dataIndex]) || +(a[dataIndex] != b[dataIndex])
     // return true;
-  };
+  ;
 
   columnFilter = (item, reg) => {
     const props = {};
-    for (let dataIndex in reg) {
+    for (const dataIndex in reg) {
       const value = item[dataIndex].toString();
       const match = value.match(reg[dataIndex]);
       if (!match) {
         return null;
-      } else {
-        props[dataIndex] = {
-          text: value,
-          search: reg[dataIndex],
-          updateFilter: () => {
-            this.setState({
-              data: this.filterData(this.props.data, reg)
-            });
-          }
-        }
       }
+      props[dataIndex] = {
+        text: value,
+        search: reg[dataIndex],
+        updateFilter: () => {
+          this.setState({
+            data: this.filterData(this.props.data, reg)
+          });
+        }
+      };
     }
     return { ...item, ...props };
   };
@@ -73,9 +71,9 @@ class Grid extends Component {
     const filterValue = this.state.filterValue;
 
     const reg = {};
-    for (let dataIndex in filterValue) {
+    for (const dataIndex in filterValue) {
       if (filterValue[dataIndex] !== '') {
-        reg[dataIndex] = new RegExp('(' + filterValue[dataIndex] + ')+', 'gi');
+        reg[dataIndex] = new RegExp(`(${filterValue[dataIndex]})+`, 'gi');
       }
     }
 
@@ -90,9 +88,7 @@ class Grid extends Component {
 
   filterData = (data, reg) => {
     if (data) {
-      data = data.map((item, i) => {
-        return this.columnFilter(item, reg);
-      }).filter(item => !!item);
+      data = data.map((item, i) => this.columnFilter(item, reg)).filter(item => !!item);
     }
 
     return data;
@@ -152,8 +148,8 @@ class Grid extends Component {
   };
 
   filterProps = (props, removeProps) => {
-    let tableProps = {};
-    for (let name in props) {
+    const tableProps = {};
+    for (const name in props) {
       if (removeProps.indexOf(name)) {
         tableProps[name] = props[name];
       }
@@ -172,7 +168,7 @@ class Grid extends Component {
     }
 
     if (!isProd) {
-      console.info('GRID RERENDER ' + window.location.href);
+      console.info(`GRID RERENDER ${window.location.href}`);
     }
 
     return (

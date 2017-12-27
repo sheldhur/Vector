@@ -2,7 +2,7 @@
 import sqlformatter from 'sqlformatter';
 
 function highliteSQl(text, outputType = 'bash') {
-  var keyWords = [
+  let keyWords = [
       'PRAGMA', 'CREATE', 'EXISTS', 'INTEGER', 'PRIMARY', 'VARCHAR',
       'DATETIME', 'NULL', 'REFERENCES', 'AND', 'AS', 'ASC', 'INDEX_LIST',
       'BETWEEN', 'BY', 'CASE', 'CURRENT_DATE', 'CURRENT_TIME', 'DELETE',
@@ -17,57 +17,57 @@ function highliteSQl(text, outputType = 'bash') {
     len = keyWords.length,
     i;
 
-  //adding lowercase keyword support
+  // adding lowercase keyword support
   for (i = 0; i < len; i += 1) {
     keyWords.push(keyWords[i].toLowerCase());
   }
 
-  var regEx;
-  var color = {
+  let regEx;
+  const color = {
     none: '\x1b[0m',
     red: '\x1b[31m',
     green: '\x1b[32m',
     yellow: '\x1b[33m',
     magenta: '\x1b[35m',
-  }
+  };
   // just store original
   // to  compare for
-  var newText = text;
+  let newText = text;
 
   // regex time
   // looking fo defaults
   // newText = newText.replace(/Executing \(default\): /g, '');
 
-  //numbers - same color as strings
-  newText = newText.replace(/(\d+)/g, color.green + '$1' + color.none);
+  // numbers - same color as strings
+  newText = newText.replace(/(\d+)/g, `${color.green}$1${color.none}`);
 
   // special chars
-  newText = newText.replace(/(=|%|\/|\*|-|,|;|:|\+|<|>)/g, color.yellow + '$1' + color.none);
+  newText = newText.replace(/(=|%|\/|\*|-|,|;|:|\+|<|>)/g, `${color.yellow}$1${color.none}`);
 
-  //strings - text inside single quotes and backticks
-  newText = newText.replace(/(['`].*?['`])/g, color.green + '$1' + color.none);
+  // strings - text inside single quotes and backticks
+  newText = newText.replace(/(['`].*?['`])/g, `${color.green}$1${color.none}`);
 
-  //functions - any string followed by a '('
-  newText = newText.replace(/(\w*?)\(/g, color.red + '$1' + color.none + '(');
+  // functions - any string followed by a '('
+  newText = newText.replace(/(\w*?)\(/g, `${color.red}$1${color.none}(`);
 
-  //brackets - same as special chars
-  newText = newText.replace(/([\(\)])/g, color.yellow + '$1' + color.none);
+  // brackets - same as special chars
+  newText = newText.replace(/([\(\)])/g, `${color.yellow}$1${color.none}`);
 
-  //reserved mysql keywords
+  // reserved mysql keywords
   for (i = 0; i < keyWords.length; i += 1) {
-    //regex pattern will be formulated based on the array values surrounded by word boundaries. since the replace function does not accept a string as a regex pattern, we will use a regex object this time
-    regEx = new RegExp('\\b' + keyWords[i] + '\\b', 'g');
+    // regex pattern will be formulated based on the array values surrounded by word boundaries. since the replace function does not accept a string as a regex pattern, we will use a regex object this time
+    regEx = new RegExp(`\\b${keyWords[i]}\\b`, 'g');
     newText = newText.replace(regEx, color.magenta + keyWords[i] + color.none);
   }
 
   if (outputType === 'css') {
-    let colorCSS = {};
-    for (let name in color) {
+    const colorCSS = {};
+    for (const name in color) {
       colorCSS[color[name]] = name;
     }
 
-    let colorParams = newText.match(/\x1b\[[\d]{1,2}m/ig).map((item) => {
-      let color = colorCSS[item];
+    const colorParams = newText.match(/\x1b\[[\d]{1,2}m/ig).map((item) => {
+      const color = colorCSS[item];
       let style = '';
       switch (color) {
         case 'magenta':
@@ -77,7 +77,7 @@ function highliteSQl(text, outputType = 'bash') {
           style = 'color: black';
           break;
         default:
-          style = 'font-weight: bold; color:' + color;
+          style = `font-weight: bold; color:${color}`;
       }
 
       return style;
@@ -93,13 +93,13 @@ function highliteSQl(text, outputType = 'bash') {
 }
 
 export default function (string) {
-  let stringSplit = string.match(/(.*executing\s+\([^\s]+\):\s)(.+(\s+.+)*)/i);
+  const stringSplit = string.match(/(.*executing\s+\([^\s]+\):\s)(.+(\s+.+)*)/i);
 
   try {
-    console.groupCollapsed.apply(console, highliteSQl(stringSplit[1] + stringSplit[2].replace(/[\r\n\s]+/g, ' '), 'css'));
-    console.log.apply(console, highliteSQl(stringSplit[1] + sqlformatter.format(stringSplit[2]), 'css'));
+    console.groupCollapsed(...highliteSQl(stringSplit[1] + stringSplit[2].replace(/[\r\n\s]+/g, ' '), 'css'));
+    console.log(...highliteSQl(stringSplit[1] + sqlformatter.format(stringSplit[2]), 'css'));
     console.groupEnd();
   } catch (e) {
-    throw new Error("Can't parse query string: " + string);
+    throw new Error(`Can't parse query string: ${string}`);
   }
 }

@@ -39,7 +39,7 @@ class InputCell extends Component {
 
   handleChange = (e) => {
     const { value } = e.target;
-    this.setState({ value: value });
+    this.setState({ value });
   };
 
   handleKeyDown = (e) => {
@@ -95,11 +95,13 @@ class InputCell extends Component {
   };
 
   render = () => {
-    const { value, editable, isSaved, error } = this.state;
-    const message = !!error ? <div>
+    const {
+      value, editable, isSaved, error
+    } = this.state;
+    const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-    </div> : null;
+                             </div>) : null;
 
     let plainValue = null;
     let search = null;
@@ -107,13 +109,13 @@ class InputCell extends Component {
       plainValue = value.text;
       search = value.search;
     } else {
-      plainValue = value
+      plainValue = value;
     }
 
     return (
       <div className="input-cell">
         {editable ?
-          <div className={'input-cell-input-wrapper ' + (error ? 'error' : '')}>
+          <div className={`input-cell-input-wrapper ${error ? 'error' : ''}`}>
             <Popconfirm
               title={message}
               visible={!!error}
@@ -131,7 +133,7 @@ class InputCell extends Component {
                 onBlur={!isSaved ? this.handleCheck : null}
                 onKeyDown={!isSaved ? this.handleKeyDown : null}
               />
-              <Icon type={isSaved ? "loading" : "edit"} className="input-cell-icon" />
+              <Icon type={isSaved ? 'loading' : 'edit'} className="input-cell-icon" />
               <div className="input-cell-underline">
                 <hr />
               </div>

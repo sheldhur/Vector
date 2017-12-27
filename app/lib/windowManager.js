@@ -1,4 +1,4 @@
-import {remote, screen} from 'electron';
+import { remote, screen } from 'electron';
 
 
 class WindowManager {
@@ -27,12 +27,12 @@ class WindowManager {
       ...options
     };
 
-    const {width, height} = screen.getPrimaryDisplay().workAreaSize;
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     ['minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'width', 'height', 'x', 'y'].forEach((propName) => {
       if (windowOptions.hasOwnProperty(propName)) {
         let prop = windowOptions[propName];
         if (/^\d+(\.\d+)?%$/.test(prop)) {
-          let propPercentage = parseFloat(prop);
+          const propPercentage = parseFloat(prop);
           if (/^(.+)?width$/.test(propName) || propName === 'x') {
             prop = Math.floor((width / 100) * propPercentage);
           } else if (/^(.+)?height$/.test(propName) || propName === 'y') {
@@ -71,9 +71,9 @@ class WindowManager {
       win.once('ready-to-show', () => {
         win.show();
       });
-      win.loadURL(`${window.location.origin + window.location.pathname}#` + url);
+      win.loadURL(`${window.location.origin + window.location.pathname}#${url}`);
     } else {
-      win.webContents.send('windowManger', {push: url});
+      win.webContents.send('windowManger', { push: url });
     }
     win.show();
   };
@@ -83,7 +83,7 @@ class WindowManager {
   };
 
   closeAll = () => {
-    for (let name in this.window) {
+    for (const name in this.window) {
       this.close(name);
     }
   };

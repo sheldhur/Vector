@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import Chart from './Chart';
@@ -20,21 +19,21 @@ class MapAzimuthal extends Component {
       bottom: 0
     }
   };
-  uid = this.constructor.name + '-' + Math.random().toString(35).substr(2, 7);
+  uid = `${this.constructor.name}-${Math.random().toString(35).substr(2, 7)}`;
 
-  calculateSize = () => {
-    return {
-      width: this.props.width - 25,
-      height: this.props.height - 25,
-      container: {
-        width: this.props.width,
-        height: this.props.height,
-      }
+  calculateSize = () => ({
+    width: this.props.width - 25,
+    height: this.props.height - 25,
+    container: {
+      width: this.props.width,
+      height: this.props.height,
     }
-  };
+  });
 
   render = () => {
-    const { width, height, data, graticuleStep, clipAngle, rotate } = this.props;
+    const {
+      width, height, data, graticuleStep, clipAngle, rotate
+    } = this.props;
     const { isRenderMap, axisMargin } = this.state;
 
     const margin = {
@@ -46,8 +45,8 @@ class MapAzimuthal extends Component {
     const size = this.calculateSize(margin, axisMargin);
 
     const projection = d3.geoStereographic()
-      .clipAngle(clipAngle) //60
-      .scale(size.height / Math.PI * 1.5) //2.6
+      .clipAngle(clipAngle) // 60
+      .scale(size.height / Math.PI * 1.5) // 2.6
       .translate([size.width / 2, size.height / 2])
       .rotate(rotate)
       .precision(0.6);
@@ -57,20 +56,20 @@ class MapAzimuthal extends Component {
     const outline = { type: 'Sphere' };
 
     const range = d3.range(0, 360, graticuleStep[0]).reverse();
-    let ticks = [];
+    const ticks = [];
     range.forEach((item, i) => {
-      let transform = "rotate(" + (item - 90) + ")translate(" + Math.PI * (size.height / 6.55) + ")rotate(" + (item > 270 || item < 90 ? 90 : -90) + ")";
-      let dy = item > 270 || item < 90 ? "-0.65em" : "1.3em";
-      let y2 = item > 270 || item < 90 ? -5 : 5;
+      const transform = `rotate(${item - 90})translate(${Math.PI * (size.height / 6.55)})rotate(${item > 270 || item < 90 ? 90 : -90})`;
+      const dy = item > 270 || item < 90 ? '-0.65em' : '1.3em';
+      const y2 = item > 270 || item < 90 ? -5 : 5;
       ticks.push(<g key={`axis-tick-${i}`} className="tick" transform={transform}>
         <text textAnchor="middle" dy={dy}>{item}°</text>
-        <line y2={y2}></line>
+        <line y2={y2} />
       </g>);
     });
 
-    let coordinates = projection([0, 0]);
+    const coordinates = projection([0, 0]);
 
-    //2011, 7, 9, 7, 2
+    // 2011, 7, 9, 7, 2
     return (
       <Chart
         ready={isRenderMap}
@@ -88,7 +87,7 @@ class MapAzimuthal extends Component {
           </clipPath>
         </defs>
         <g transform={`translate(${axisMargin.left + margin.left},${axisMargin.top + margin.top})`}>
-          {isRenderMap && <g transform={`translate(0,0)`}>
+          {isRenderMap && <g transform="translate(0,0)">
             <World
               path={path}
               ocean={outline}
@@ -122,7 +121,7 @@ class MapAzimuthal extends Component {
               width={size.container.width}
               height={size.container.height}
             />
-            {/*<circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/>*/}
+            {/* <circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/> */}
           </g>}
           <g className="map-axis azimuthal" transform={`translate(${size.width / 2},${size.height / 2})`}>
             {ticks}
@@ -145,4 +144,4 @@ MapAzimuthal.defaultProps = {
   antiAliasing: true,
 };
 
-export default MapAzimuthal
+export default MapAzimuthal;

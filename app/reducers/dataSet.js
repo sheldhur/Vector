@@ -23,9 +23,13 @@ export default function main(state = initialState, action) {
         progress: { ...initialState.progress }
       };
     case types.ERROR:
-      return { ...state, dataSets: null, dataSetValues: null, isError: action.payload, isLoading: false };
+      return {
+        ...state, dataSets: null, dataSetValues: null, isError: action.payload, isLoading: false
+      };
     case types.LOADING:
-      return { ...state, isLoading: action.payload, isError: false, progress: { ...initialState.progress } };
+      return {
+        ...state, isLoading: action.payload, isError: false, progress: { ...initialState.progress }
+      };
     case types.PROGRESS:
       return { ...state, progress: action.payload };
     case types.RESET:

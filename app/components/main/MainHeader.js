@@ -13,7 +13,7 @@ import * as mainActions from '../../actions/main';
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
 import * as uiActions from '../../actions/ui';
-import { IS_PROD } from "../../constants/app";
+import { IS_PROD } from '../../constants/app';
 
 
 class MainHeader extends Component {
@@ -58,7 +58,9 @@ class MainHeader extends Component {
   };
 
   render = () => {
-    const { timeSelected, timePeriod, timeAvg, isLoading } = this.props;
+    const {
+      timeSelected, timePeriod, timeAvg, isLoading
+    } = this.props;
 
     return (
       <div className="main-page-header">
@@ -91,7 +93,6 @@ class MainHeader extends Component {
         <MainUpdateApp />
       </div>
     );
-
   };
 }
 

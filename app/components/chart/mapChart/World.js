@@ -6,14 +6,13 @@ import resourcePath from '../../../lib/resourcePath';
 
 
 class World extends Component {
-
   loadWorldData = (scale) => {
     const files = {
       '1:50': 'world-50m.v1.json',
       '1:110': 'world-110m.v1.json',
     };
 
-    fs.readFile(resourcePath('./assets/json/' + files[scale]), 'utf-8', (error, data) => {
+    fs.readFile(resourcePath(`./assets/json/${files[scale]}`), 'utf-8', (error, data) => {
       if (error) {
         throw error;
       }
@@ -32,9 +31,7 @@ class World extends Component {
         world: {
           ocean: path(ocean),
           land: path(topojson.feature(worldData, worldData.objects.land)),
-          country: path(topojson.mesh(worldData, worldData.objects.countries, (a, b) => {
-            return a !== b;
-          })),
+          country: path(topojson.mesh(worldData, worldData.objects.countries, (a, b) => a !== b)),
         }
       });
     }
@@ -46,7 +43,7 @@ class World extends Component {
     this.state = {
       worldData: undefined,
       world: undefined
-    }
+    };
   }
 
   componentDidMount() {

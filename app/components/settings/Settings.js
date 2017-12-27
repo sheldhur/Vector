@@ -1,17 +1,16 @@
-// @flow
-import React, { Component } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert } from "antd";
-import moment from "moment";
-import SettingsAvgChartLines from "./SettingsAvgChartLines";
-import SettingsAvgChartLatitudes from "./SettingsAvgChartLatitudes";
-import SettingsDataTimeRage from "./SettingsDataTimeRage";
-import * as mainActions from "./../../actions/main";
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Modal, Icon, Button, Input, InputNumber, Select, Radio, Form, Switch, Tabs, Col, Alert } from 'antd';
+import moment from 'moment';
+import SettingsAvgChartLines from './SettingsAvgChartLines';
+import SettingsAvgChartLatitudes from './SettingsAvgChartLatitudes';
+import SettingsDataTimeRage from './SettingsDataTimeRage';
+import * as mainActions from './../../actions/main';
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
-import * as app from "./../../constants/app"
-import { stringCamelCase, numberIsBetween } from "../../utils/helper";
+import * as app from './../../constants/app';
+import { stringCamelCase, numberIsBetween } from '../../utils/helper';
 
 
 class Settings extends Component {
@@ -20,22 +19,22 @@ class Settings extends Component {
     modalHeight: 250,
   };
 
-  calcModalHeight = () => {
-    let modalHeight = (window.innerHeight / 100 * 50) - 50;
-    if (modalHeight < 250) {
-      modalHeight = 250;
-    }
-
-    this.setState({ modalHeight });
-  };
-
   componentWillMount = () => {
-    this.calcModalHeight()
+    this.calcModalHeight();
     window.addEventListener('resize', this.calcModalHeight);
   };
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.calcModalHeight);
+  };
+
+  calcModalHeight = () => {
+    let modalHeight = ((window.innerHeight / 100) * 50) - 50;
+    if (modalHeight < 250) {
+      modalHeight = 250;
+    }
+
+    this.setState({ modalHeight });
   };
 
   createRange = (start, end) => {
@@ -46,11 +45,11 @@ class Settings extends Component {
     return result;
   };
 
-  //TODO: время для сегодняшнего дня
+  // TODO: время для сегодняшнего дня
   disabledRangeTime = (current, type, range) => {
-    let disabled = {
+    const disabled = {
       disabledSeconds: () => {
-        let seconds = [...Array(60).keys()];
+        const seconds = [...Array(60).keys()];
         seconds.shift();
 
         return seconds;
@@ -58,14 +57,12 @@ class Settings extends Component {
     };
 
     if (range && Array.isArray(current) && current[type === 'start' ? 0 : 1].format('YYYY-MM-DD') === range[type].format('YYYY-MM-DD')) {
-      let rangeHour = range[type].hour();
-      let rangeMinute = range[type].minute();
-      disabled.disabledHours = () => {
-        return type === 'start' ? this.createRange(0, rangeHour) : this.createRange(rangeHour + 1, 24);
-      };
+      const rangeHour = range[type].hour();
+      const rangeMinute = range[type].minute();
+      disabled.disabledHours = () => (type === 'start' ? this.createRange(0, rangeHour) : this.createRange(rangeHour + 1, 24));
       disabled.disabledMinutes = (selectedHour) => {
         if (selectedHour === rangeHour) {
-          return type === 'start' ? this.createRange(0, rangeMinute) : this.createRange(rangeMinute + 1, 60)
+          return type === 'start' ? this.createRange(0, rangeMinute) : this.createRange(rangeMinute + 1, 60);
         }
       };
     }
@@ -74,12 +71,12 @@ class Settings extends Component {
   };
 
   disabledRangeDate = (current, range) => {
-    let currentDate = current.clone().startOf('date');
-    let rangeDate = range ? {
+    const currentDate = current.clone().startOf('date');
+    const rangeDate = range ? {
       start: range.start.clone().startOf('date'),
       end: range.end.clone().startOf('date'),
     } : null;
-    let nowDate = moment().startOf('date');
+    const nowDate = moment().startOf('date');
 
     return this.filterRangeDataTime(currentDate, rangeDate, nowDate);
   };
@@ -87,15 +84,15 @@ class Settings extends Component {
   filterRangeDataTime = (current, range, now) => {
     let result = true;
     if (current) {
-      let currentMs = current.valueOf();
+      const currentMs = current.valueOf();
       if (range) {
-        let rangeMs = [
+        const rangeMs = [
           range.start.valueOf(),
           range.end.valueOf()
         ];
         result = !numberIsBetween(currentMs, rangeMs);
       } else {
-        let nowMs = now.valueOf();
+        const nowMs = now.valueOf();
         result = current > nowMs;
       }
     }
@@ -160,35 +157,35 @@ class Settings extends Component {
     const { setFieldsValue } = this.props.form;
 
     return {
-      'appTheme': {
+      appTheme: {
         initialValue: settings.appTheme,
         rules: [{
           type: 'string'
         }],
       },
-      'appLanguage': {
+      appLanguage: {
         initialValue: settings.appLanguage,
         rules: [{
           type: 'string'
         }],
       },
-      'appAntiAliasing': {
+      appAntiAliasing: {
         initialValue: settings.appAntiAliasing,
         valuePropName: 'checked'
       },
-      'appMapScale': {
+      appMapScale: {
         initialValue: settings.appMapScale,
         rules: [{
           type: 'string'
         }],
       },
-      'appMapProjectionType': {
+      appMapProjectionType: {
         initialValue: settings.appMapProjectionType,
         rules: [{
           type: 'string'
         }],
       },
-      'appMapCountries': {
+      appMapCountries: {
         initialValue: settings.appMapCountries,
         valuePropName: 'checked'
       },
@@ -210,47 +207,47 @@ class Settings extends Component {
           type: 'float', message: 'Is not a integer!'
         }],
       },
-      'appTimeShiftStep': {
+      appTimeShiftStep: {
         initialValue: settings.appTimeShiftStep,
         rules: [{
           type: 'integer', message: 'Is not a integer!',
         }]
       },
-      'appPlayDelay': {
+      appPlayDelay: {
         initialValue: settings.appPlayDelay,
         rules: [{
           type: 'integer', message: 'Is not a integer!',
         }]
       },
-      'projectTimePeriod': {
+      projectTimePeriod: {
         initialValue: [...settings.projectTimePeriod].map(item => moment(item)),
         rules: [{
           type: 'array',
           fields: {
-            0: { type: "object", required: true },
-            1: { type: "object", required: true },
+            0: { type: 'object', required: true },
+            1: { type: 'object', required: true },
           },
           message: 'Please select time!',
           transform: (value) => {
             setFieldsValue({
-              'projectTimePeriod': value.map(item => item.seconds(0).millisecond(0))
-            })
+              projectTimePeriod: value.map(item => item.seconds(0).millisecond(0))
+            });
           }
         }]
       },
-      'projectTimeSelected': {
+      projectTimeSelected: {
         initialValue: [...settings.projectTimeSelected].map(item => moment(item)),
         rules: [{
           type: 'array',
           fields: {
-            0: { type: "object", required: true },
-            1: { type: "object", required: true },
+            0: { type: 'object', required: true },
+            1: { type: 'object', required: true },
           },
           message: 'Please select time!',
           transform: (value) => {
             setFieldsValue({
-              'projectTimeSelected': value.map(item => item.seconds(0).millisecond(0))
-            })
+              projectTimeSelected: value.map(item => item.seconds(0).millisecond(0))
+            });
           }
         }],
       },
@@ -269,7 +266,7 @@ class Settings extends Component {
           transform: (value) => {
             setFieldsValue({
               'projectMapLayerH.scale': value !== 'true' ? settings.projectMapLayerH.scale : (maximum ? maximum.dH : NaN)
-            })
+            });
           }
         }]
       },
@@ -279,7 +276,7 @@ class Settings extends Component {
           transform: (value) => {
             setFieldsValue({
               'projectMapLayerZ.scale': value !== 'true' ? settings.projectMapLayerZ.scale : (maximum ? maximum.dZ : NaN)
-            })
+            });
           }
         }]
       },
@@ -298,10 +295,8 @@ class Settings extends Component {
       'projectMapLayerZ.view': {
         initialValue: settings.projectMapLayerZ.view,
       },
-      'projectAvgComponentLines': {
-        initialValue: settings.projectAvgComponentLines.map(item => {
-          return { ...item };
-        }),
+      projectAvgComponentLines: {
+        initialValue: settings.projectAvgComponentLines.map(item => ({ ...item })),
         rules: [{
           type: 'array',
           // fields: {
@@ -311,10 +306,8 @@ class Settings extends Component {
           message: 'Please add lines!'
         }]
       },
-      'projectAvgLatitudeRanges': {
-        initialValue: settings.projectAvgLatitudeRanges.map(item => {
-          return [...item];
-        }),
+      projectAvgLatitudeRanges: {
+        initialValue: settings.projectAvgLatitudeRanges.map(item => [...item]),
         rules: [{
           type: 'array',
           // fields: {
@@ -336,41 +329,35 @@ class Settings extends Component {
       rules = this.getValidationRules();
     }
 
-    let wrappedField = (name) => {
-      return this.props.form.getFieldDecorator(name, rules[name]);
-    };
+    const wrappedField = (name) => this.props.form.getFieldDecorator(name, rules[name]);
 
     const ScaleTypeSelect = (
       <Select style={{ width: 65 }} size={this.props.size}>
-        <Select.Option value={`true`}>auto</Select.Option>
-        <Select.Option value={`false`}>fixed</Select.Option>
+        <Select.Option value="true">auto</Select.Option>
+        <Select.Option value="false">fixed</Select.Option>
       </Select>
     );
 
-    const InputGroup = (props) => {
-      return (
-        <Form.Item
-          {...formItemLayout}
-          label={props.label}
-          validateStatus={getFieldError(props.name) ? 'error' : 'success'}
-          help={getFieldError(props.name)}
-        >
-          <Input.Group size={this.props.size} className="custom-group" compact>
-            {props.addonBefore}
-            {wrappedField(props.name)(
-              <InputNumber
-                style={{ width: 100 }}
-                disabled={props.disabled !== undefined ? props.disabled : false}
-                placeholder="Scale"
-                size={this.props.size}
-                onKeyDown={this.handlerInputNumberFix}
-              />
-            )}
-            <span className="ant-input-group-addon">{props.addonAfter}</span>
-          </Input.Group>
-        </Form.Item>
-      );
-    };
+    const InputGroup = (props) => (
+      <Form.Item
+        {...formItemLayout}
+        label={props.label}
+        validateStatus={getFieldError(props.name) ? 'error' : 'success'}
+        help={getFieldError(props.name)}
+      >
+        <Input.Group size={this.props.size} className="custom-group" compact>
+          {props.addonBefore}
+          {wrappedField(props.name)(<InputNumber
+            style={{ width: 100 }}
+            disabled={props.disabled !== undefined ? props.disabled : false}
+            placeholder="Scale"
+            size={this.props.size}
+            onKeyDown={this.handlerInputNumberFix}
+          />)}
+          <span className="ant-input-group-addon">{props.addonAfter}</span>
+        </Input.Group>
+      </Form.Item>
+    );
 
     const formItemLayout = {
       labelCol: {
@@ -389,7 +376,7 @@ class Settings extends Component {
 
     return (
       <Input.Group size={this.props.size} compact>
-        <Button icon="setting" size={this.props.size} onClick={this.handlerModalOpen}></Button>
+        <Button icon="setting" size={this.props.size} onClick={this.handlerModalOpen} />
         <Modal
           wrapClassName="main-page-settings"
           width={700}
@@ -408,40 +395,30 @@ class Settings extends Component {
                 {!localStorage[app.LS_KEY_APP_SETTINGS] &&
                 <Alert message="This is global settings" type="warning" showIcon />}
                 <Form.Item {...formItemLayout} label="Theme">
-                  {wrappedField('appTheme')(
-                    <Select size={this.props.size} style={{ width: 150 }}>
-                      {app.THEMES.map((item, i) => {
-                        return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
-                      })}
-                    </Select>
-                  )}
+                  {wrappedField('appTheme')(<Select size={this.props.size} style={{ width: 150 }}>
+                    {app.THEMES.map((item, i) => <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>)}
+                  </Select>)}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Language">
-                  {wrappedField('appLanguage')(
-                    <Select size={this.props.size} style={{ width: 150 }} disabled>
-                      {app.LANGUAGES.map((item, i) => {
-                        return <Select.Option value={item.code} key={i}>{item.name}</Select.Option>;
-                      })}
-                    </Select>
-                  )}
+                  {wrappedField('appLanguage')(<Select size={this.props.size} style={{ width: 150 }} disabled>
+                    {app.LANGUAGES.map((item, i) => <Select.Option value={item.code} key={i}>{item.name}</Select.Option>)}
+                  </Select>)}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Anti-aliasing">
-                  {wrappedField('appAntiAliasing')(
-                    <Switch size={this.props.size} />
-                  )}
+                  {wrappedField('appAntiAliasing')(<Switch size={this.props.size} />)}
                 </Form.Item>
                 <fieldset>
                   <legend>Time</legend>
                   <div>
                     {InputGroup({
-                      label: "Shift step",
-                      name: "appTimeShiftStep",
+                      label: 'Shift step',
+                      name: 'appTimeShiftStep',
                       addonAfter: `× ${settings.projectTimeAvg.value} ${settings.projectTimeAvg.by}`
                     })}
                     {InputGroup({
-                      label: "Play delay",
-                      name: "appPlayDelay",
-                      addonAfter: "seconds"
+                      label: 'Play delay',
+                      name: 'appPlayDelay',
+                      addonAfter: 'seconds'
                     })}
                   </div>
                 </fieldset>
@@ -449,47 +426,31 @@ class Settings extends Component {
                   <legend>Map</legend>
                   <div>
                     <Form.Item {...formItemLayout} label="World scale">
-                      {wrappedField('appMapScale')(
-                        <Select size={this.props.size} style={{ width: 150 }}>
-                          {app.MAP_WORLD_SCALE.map((item, i) => {
-                            return <Select.Option value={item} key={i}>{item}</Select.Option>;
-                          })}
-                        </Select>
-                      )}
+                      {wrappedField('appMapScale')(<Select size={this.props.size} style={{ width: 150 }}>
+                        {app.MAP_WORLD_SCALE.map((item, i) => <Select.Option value={item} key={i}>{item}</Select.Option>)}
+                      </Select>)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Default projection">
-                      {wrappedField('appMapProjectionType')(
-                        <Select size={this.props.size} style={{ width: 150 }}>
-                          {app.MAP_PROJECTION.map((item, i) => {
-                            return <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>;
-                          })}
-                        </Select>
-                      )}
+                      {wrappedField('appMapProjectionType')(<Select size={this.props.size} style={{ width: 150 }}>
+                        {app.MAP_PROJECTION.map((item, i) => <Select.Option value={stringCamelCase(item)} key={i}>{item}</Select.Option>)}
+                      </Select>)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Show countries">
-                      {wrappedField('appMapCountries')(
-                        <Switch size={this.props.size} />
-                      )}
+                      {wrappedField('appMapCountries')(<Switch size={this.props.size} />)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Water color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.water')(
-                          <Input placeholder="Color" size={this.props.size} />
-                        )}
+                        {wrappedField('appMapColor.water')(<Input placeholder="Color" size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Land color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.land')(
-                          <Input placeholder="Color" size={this.props.size} />
-                        )}
+                        {wrappedField('appMapColor.land')(<Input placeholder="Color" size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Borders color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.border')(
-                          <Input placeholder="Color" size={this.props.size} />
-                        )}
+                        {wrappedField('appMapColor.border')(<Input placeholder="Color" size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                   </div>
@@ -501,19 +462,15 @@ class Settings extends Component {
                 style={{ height: this.state.modalHeight }}
               >
                 <Form.Item {...formItemLayout} label="Time">
-                  {wrappedField('projectTimePeriod')(
-                    <SettingsDataTimeRage
-                      size={this.props.size}
-                    />
-                  )}
+                  {wrappedField('projectTimePeriod')(<SettingsDataTimeRage
+                    size={this.props.size}
+                  />)}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Selected time">
-                  {wrappedField('projectTimeSelected')(
-                    <SettingsDataTimeRage
-                      size={this.props.size}
-                      valueLimit={getFieldValue('time.period')}
-                    />
-                  )}
+                  {wrappedField('projectTimeSelected')(<SettingsDataTimeRage
+                    size={this.props.size}
+                    valueLimit={getFieldValue('time.period')}
+                  />)}
                 </Form.Item>
                 <br />
               </Tabs.TabPane>
@@ -526,10 +483,10 @@ class Settings extends Component {
                   <legend>ΔH {wrappedField('projectMapLayerH.enabled')(<Switch size={this.props.size} />)}</legend>
                   <div className={getFieldValue('projectMapLayerH.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
-                      label: "Scale",
-                      name: "projectMapLayerH.scale",
+                      label: 'Scale',
+                      name: 'projectMapLayerH.scale',
                       disabled: getFieldValue('projectMapLayerH.scaleAuto') === 'true',
-                      addonAfter: "nT",
+                      addonAfter: 'nT',
                       addonBefore: wrappedField('projectMapLayerH.scaleAuto')({ ...ScaleTypeSelect })
                     })}
                     <Form.Item {...formItemLayout} label="Color">
@@ -543,35 +500,33 @@ class Settings extends Component {
                   <legend>ΔZ {wrappedField('projectMapLayerZ.enabled')(<Switch size={this.props.size} />)}</legend>
                   <div className={getFieldValue('projectMapLayerZ.enabled') ? 'show' : 'hide'}>
                     {InputGroup({
-                      label: "Scale",
-                      name: "projectMapLayerZ.scale",
+                      label: 'Scale',
+                      name: 'projectMapLayerZ.scale',
                       disabled: getFieldValue('projectMapLayerZ.scaleAuto') === 'true',
-                      addonAfter: "nT",
+                      addonAfter: 'nT',
                       addonBefore: wrappedField('projectMapLayerZ.scaleAuto')({ ...ScaleTypeSelect })
                     })}
                     <Form.Item {...formItemLayout} label="View">
-                      {wrappedField('projectMapLayerZ.view')(
-                        <Radio.Group>
-                          <Radio.Button value="circle">
-                            <div className="dz-view-select circle">
-                              <div className="positive"></div>
-                              <div className="negative"></div>
-                            </div>
-                          </Radio.Button>
-                          <Radio.Button value="circleGradient">
-                            <div className="dz-view-select circle-gradient">
-                              <div className="positive"></div>
-                              <div className="negative"></div>
-                            </div>
-                          </Radio.Button>
-                          <Radio.Button value="square">
-                            <div className="dz-view-select square">
-                              <div className="positive"></div>
-                              <div className="negative"></div>
-                            </div>
-                          </Radio.Button>
-                        </Radio.Group>
-                      )}
+                      {wrappedField('projectMapLayerZ.view')(<Radio.Group>
+                        <Radio.Button value="circle">
+                          <div className="dz-view-select circle">
+                            <div className="positive" />
+                            <div className="negative" />
+                          </div>
+                        </Radio.Button>
+                        <Radio.Button value="circleGradient">
+                          <div className="dz-view-select circle-gradient">
+                            <div className="positive" />
+                            <div className="negative" />
+                          </div>
+                        </Radio.Button>
+                        <Radio.Button value="square">
+                          <div className="dz-view-select square">
+                            <div className="positive" />
+                            <div className="negative" />
+                          </div>
+                        </Radio.Button>
+                       </Radio.Group>)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Color">
                       <Col span={12}>
@@ -589,45 +544,43 @@ class Settings extends Component {
                 tab={<span><Icon type="line-chart" />Charts</span>}
                 style={{ height: this.state.modalHeight }}
               >
-                {wrappedField('projectAvgComponentLines')(
-                  <SettingsAvgChartLines
-                    onCellChange={(field, index, value) => {
-                      let items = getFieldValue('projectAvgComponentLines');
-                      items[index][field] = value;
-                      setFieldsValue({ 'projectAvgComponentLines': items });
-                    }}
-                    onLineAdd={() => {
-                      let items = getFieldValue('projectAvgComponentLines');
-                      items.push({ comp: null, hemisphere: null, style: null, enabled: true });
-                      setFieldsValue({ 'projectAvgComponentLines': items });
-                    }}
-                    onLineRemove={(index) => {
-                      let items = getFieldValue('projectAvgComponentLines');
-                      items.splice(index, 1);
-                      setFieldsValue({ 'projectAvgComponentLines': items });
-                    }}
-                  />
-                )}
+                {wrappedField('projectAvgComponentLines')(<SettingsAvgChartLines
+                  onCellChange={(field, index, value) => {
+                    const items = getFieldValue('projectAvgComponentLines');
+                    items[index][field] = value;
+                    setFieldsValue({ projectAvgComponentLines: items });
+                  }}
+                  onLineAdd={() => {
+                    const items = getFieldValue('projectAvgComponentLines');
+                    items.push({
+                      comp: null, hemisphere: null, style: null, enabled: true
+                    });
+                    setFieldsValue({ projectAvgComponentLines: items });
+                  }}
+                  onLineRemove={(index) => {
+                    const items = getFieldValue('projectAvgComponentLines');
+                    items.splice(index, 1);
+                    setFieldsValue({ projectAvgComponentLines: items });
+                  }}
+                />)}
                 <br />
-                {wrappedField('projectAvgLatitudeRanges')(
-                  <SettingsAvgChartLatitudes
-                    onCellChange={(field, index, value) => {
-                      let items = getFieldValue('projectAvgLatitudeRanges');
-                      items[index][field] = value;
-                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
-                    }}
-                    onLineAdd={() => {
-                      let items = getFieldValue('projectAvgLatitudeRanges');
-                      items.push([null, null]);
-                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
-                    }}
-                    onLineRemove={(index) => {
-                      let items = getFieldValue('projectAvgLatitudeRanges');
-                      items.splice(index, 1);
-                      setFieldsValue({ 'projectAvgLatitudeRanges': items });
-                    }}
-                  />
-                )}
+                {wrappedField('projectAvgLatitudeRanges')(<SettingsAvgChartLatitudes
+                  onCellChange={(field, index, value) => {
+                    const items = getFieldValue('projectAvgLatitudeRanges');
+                    items[index][field] = value;
+                    setFieldsValue({ projectAvgLatitudeRanges: items });
+                  }}
+                  onLineAdd={() => {
+                    const items = getFieldValue('projectAvgLatitudeRanges');
+                    items.push([null, null]);
+                    setFieldsValue({ projectAvgLatitudeRanges: items });
+                  }}
+                  onLineRemove={(index) => {
+                    const items = getFieldValue('projectAvgLatitudeRanges');
+                    items.splice(index, 1);
+                    setFieldsValue({ projectAvgLatitudeRanges: items });
+                  }}
+                />)}
               </Tabs.TabPane>
             </Tabs>
           </Form>

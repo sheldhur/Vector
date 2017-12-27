@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ResizeblePanel, Panel } from '../widgets/ResizeblePanel';
@@ -14,7 +14,9 @@ class MagnetopauseDashboard extends Component {
   };
 
   render = () => {
-    const { isLoading, isError, isEmpty, progress } = this.props;
+    const {
+      isLoading, isError, isEmpty, progress
+    } = this.props;
     if (isLoading || isError) {
       return (<ProgressAlert
         text={progress.title}
@@ -26,7 +28,7 @@ class MagnetopauseDashboard extends Component {
 
     if (!isEmpty) {
       return (
-        <div className={`magnetopause-view`}>
+        <div className="magnetopause-view">
           <ResizeblePanel type="vertical" eventWhen="mouseup" defaultSize={24}>
             <Panel>
               <MagnetopauseChart />

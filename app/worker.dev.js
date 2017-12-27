@@ -5,7 +5,7 @@ import errorToObject from './lib/errorToObject';
 import workers from './workers';
 
 
-//TODO: по сути бэкенд. Имеет смысл в рендере запросы к воркерам сделать аля API worker.stations.getLatitudeAvgValues() и держать пул воркеров.
+// TODO: по сути бэкенд. Имеет смысл в рендере запросы к воркерам сделать аля API worker.stations.getLatitudeAvgValues() и держать пул воркеров.
 
 let db;
 
@@ -25,7 +25,7 @@ process.on('message', async (data) => {
     }
 
     try {
-      workers[data.worker](db, data)
+      workers[data.worker](db, data);
     } catch (e) {
       console.error(e);
       process.send({ event: 'setError', data: errorToObject(e) });

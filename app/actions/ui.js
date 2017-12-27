@@ -60,14 +60,14 @@ export function setGridSelectedRows(payload) {
   return {
     type: types.GRID_SELECTED_ROWS,
     payload,
-  }
+  };
 }
 
 export function setGridLastOpenItem(payload) {
   return {
     type: types.GRID_LAST_OPEN_ITEM,
     payload,
-  }
+  };
 }
 
 export function setImportShowModal(payload) {
@@ -104,15 +104,15 @@ export function importCloseModal() {
       worker.kill();
     }
     dispatch(setImportShowModal(false));
-  }
+  };
 }
 
 export function addStation(station) {
   return (dispatch, getState) => {
-    let { stations, extremes } = getState().station;
+    const { stations, extremes } = getState().station;
 
     if (stations[station.id] === undefined) {
-      let stationsNew = { ...stations, [station.id]: station };
+      const stationsNew = { ...stations, [station.id]: station };
 
       dispatch({
         type: stationTypes.STATIONS,
@@ -120,7 +120,7 @@ export function addStation(station) {
         extremes
       });
     }
-  }
+  };
 }
 
 export function importFiles(workerName, filePaths, fileType) {
@@ -159,10 +159,12 @@ export function importFiles(workerName, filePaths, fileType) {
       }
     });
 
-    worker.send({ worker: workerName, main, filePaths, fileType }, () => {
+    worker.send({
+      worker: workerName, main, filePaths, fileType
+    }, () => {
       dispatch(setImportShowModal(true));
     });
-  }
+  };
 }
 
 export function importStations(filePaths, fileType) {

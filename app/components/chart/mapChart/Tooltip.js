@@ -10,7 +10,7 @@ class Tooltip extends Component {
     if (value) {
       result = value.toFixed(3);
       if (value >= 0) {
-        result = ' ' + result;
+        result = ` ${result}`;
       }
     }
 
@@ -18,7 +18,9 @@ class Tooltip extends Component {
   };
 
   render = () => {
-    const { station, projection, width, height } = this.props;
+    const {
+      station, projection, width, height
+    } = this.props;
 
     if (station !== null) {
       const position = projection([station.longitude, station.latitude]);
@@ -26,7 +28,8 @@ class Tooltip extends Component {
       return (
         <TooltipText
           className="map-tooltip-text"
-          position={{ x: position[0], y: position[1] }} width={width}
+          position={{ x: position[0], y: position[1] }}
+          width={width}
           height={height}
           stroke="silver"
         >

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class TimeCursor extends Component {
-
   // componentDidUpdate = () => {
   //   if (this.context && this.context.onComponentDidUpdate !== undefined) {
   //     this.context.onComponentDidUpdate(this.displayName);
@@ -17,12 +16,14 @@ class TimeCursor extends Component {
     if (position > 0) {
       return (
         <g className="chart-time-cursor" transform={this.props.transform}>
-          <line className="x"
-                ref="lineX"
-                y1="0"
-                y2={this.props.height}
-                transform={`translate(${this.props.scale.x(currentTime)}, 0)`}
-                shapeRendering="optimizeSpeed" />
+          <line
+            className="x"
+            ref="lineX"
+            y1="0"
+            y2={this.props.height}
+            transform={`translate(${this.props.scale.x(currentTime)}, 0)`}
+            shapeRendering="optimizeSpeed"
+          />
         </g>
       );
     }

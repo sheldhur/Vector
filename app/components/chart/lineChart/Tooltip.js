@@ -5,13 +5,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { sprintf } from 'sprintf-js';
 import * as d3 from 'd3';
-import { mathAvg } from "../../../utils/helper";
+import { mathAvg } from '../../../utils/helper';
 import TooltipPoint from './TooltipPoint';
 import TooltipText from './TooltipText';
 import * as uiActions from '../../../actions/ui';
 
 class Tooltip extends Component {
-
   componentDidMount = () => {
     const _handlerMouseMove = this.handlerMouseMove;
     const _handlerMouseClick = this.handlerMouseClick;
@@ -26,8 +25,8 @@ class Tooltip extends Component {
         const mousePosition = d3.mouse(this);
         if (window.timeout !== undefined) {
           clearTimeout(window.timeout);
-          window.timeout = setTimeout(function () {
-            _handlerMouseMove(mousePosition)
+          window.timeout = setTimeout(() => {
+            _handlerMouseMove(mousePosition);
           }, delay);
         } else {
           _handlerMouseMove(mousePosition);
@@ -65,7 +64,7 @@ class Tooltip extends Component {
   getCurrentPointList = (mousePosition, data, scale) => {
     const bisectDate = d3.bisector(d => d.x).left;
 
-    let points = [];
+    const points = [];
     if (mousePosition === null) {
       return points;
     }
@@ -78,7 +77,7 @@ class Tooltip extends Component {
         const point1 = line.points[i];
 
         if (point0 !== undefined && point1 !== undefined) {
-          let point = x0 - point0.x > point1.x - x0 ? point1 : point0;
+          const point = x0 - point0.x > point1.x - x0 ? point1 : point0;
           point.stroke = line.style.stroke;
           point.name = line.name;
           point.si = linesGroup.si;
@@ -94,68 +93,85 @@ class Tooltip extends Component {
   };
 
   render = () => {
-    //const {points} = this.state;
+    // const {points} = this.state;
 
     const points = this.getCurrentPointList(this.props.time, this.props.data, this.props.scale);
 
-    let tooltipPointList = [];
+    const tooltipPointList = [];
     let tooltipTextList = [];
-    let tooltipTextPosition = { x: [], y: [] };
+    const tooltipTextPosition = { x: [], y: [] };
     points.forEach((item, i) => {
       if (item.y !== null) {
         tooltipPointList.push(<TooltipPoint
-          key={`tooltipPoint-${i}` + i}
+          key={`tooltipPoint-${i}`}
           stroke={item.stroke}
           position={{
             x: this.props.scale.x(item.x),
             y: this.props.scale.y[item.linesGroup](item.y)
-          }} />);
+          }}
+        />);
 
         if (this.props.group) {
-          tooltipTextList.push(<tspan key={'tooltipText-' + i} fill={item.stroke} dy="1em"
-                                      x="2.5">{sprintf(item.format, item)}</tspan>);
+          tooltipTextList.push(<tspan
+            key={`tooltipText-${i}`}
+            fill={item.stroke}
+            dy="1em"
+            x="2.5"
+          >
+            {sprintf(item.format, item)}
+          </tspan>);
           tooltipTextPosition.x.push(this.props.scale.x(item.x));
           tooltipTextPosition.y.push(this.props.scale.y[item.linesGroup](item.y));
         } else {
           tooltipTextList.push(<TooltipText
-            key={'tooltipText-' + i}
+            key={`tooltipText-${i}`}
             stroke={item.stroke}
             width={this.props.width}
             position={{
               x: this.props.scale.x(item.x),
               y: this.props.scale.y[item.linesGroup](item.y)
-            }}>{sprintf(item.format, item)}</TooltipText>);
+            }}
+          >
+            {sprintf(item.format, item)}
+          </TooltipText>);
         }
       }
     });
 
     if (this.props.group) {
-      tooltipTextList = <TooltipText
-        key={'tooltipText'}
+      tooltipTextList = (<TooltipText
+        key="tooltipText"
         width={this.props.width}
         position={{
           x: Math.round(mathAvg(tooltipTextPosition.x)),
           y: Math.round(mathAvg(tooltipTextPosition.y))
-        }}>{tooltipTextList}</TooltipText>;
+        }}
+      >
+        {tooltipTextList}
+      </TooltipText>);
     }
 
     return (
       <g className="chart-tooltip" transform={this.props.transform}>
         {points.length > 0 && <g>
-          <line className="x"
-                ref="lineX"
-                y1="0"
-                y2={this.props.height}
-                transform={`translate(${this.props.scale.x(points[0].x)}, 0)`}
-                shapeRendering="optimizeSpeed" />
+          <line
+            className="x"
+            ref="lineX"
+            y1="0"
+            y2={this.props.height}
+            transform={`translate(${this.props.scale.x(points[0].x)}, 0)`}
+            shapeRendering="optimizeSpeed"
+          />
           {tooltipPointList.length && tooltipPointList}
           {tooltipPointList.length && tooltipTextList}
         </g>}
-        <rect width={this.props.width}
-              height={this.props.height}
-              fill="none"
-              ref="rect"
-              pointerEvents="all" />
+        <rect
+          width={this.props.width}
+          height={this.props.height}
+          fill="none"
+          ref="rect"
+          pointerEvents="all"
+        />
       </g>
     );
   };

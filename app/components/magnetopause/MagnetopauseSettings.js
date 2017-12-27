@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Icon, Button, Input, Select, Form } from "antd";
-import * as mainActions from "./../../actions/main";
-import * as magnetopauseActions from "./../../actions/magnetopause";
+import { Modal, Icon, Button, Input, Select, Form } from 'antd';
+import * as mainActions from './../../actions/main';
+import * as magnetopauseActions from './../../actions/magnetopause';
 
 
 class MagnetopauseSettings extends Component {
@@ -34,9 +34,9 @@ class MagnetopauseSettings extends Component {
 
   handlerSave = (e) => {
     e.preventDefault();
-    let values = this.props.form.getFieldsValue();
+    const values = this.props.form.getFieldsValue();
 
-    for (let field in values) {
+    for (const field in values) {
       values[field] = values[field] ? parseInt(values[field]) : null;
     }
 
@@ -52,33 +52,33 @@ class MagnetopauseSettings extends Component {
     const { setFieldsValue } = this.props.form;
 
     return {
-      'b': {
+      b: {
         initialValue: magnetopause.b ? magnetopause.b.toString() : magnetopause.b,
         rules: [{
           transform: (value) => {
             setFieldsValue({
-              'b': value === undefined ? null : value
-            })
+              b: value === undefined ? null : value
+            });
           }
         }]
       },
-      'bz': {
+      bz: {
         initialValue: magnetopause.bz ? magnetopause.bz.toString() : magnetopause.bz,
         rules: [{
           transform: (value) => {
             setFieldsValue({
-              'bz': value === undefined ? null : value
-            })
+              bz: value === undefined ? null : value
+            });
           }
         }]
       },
-      'pressureSolar': {
+      pressureSolar: {
         initialValue: magnetopause.pressureSolar ? magnetopause.pressureSolar.toString() : magnetopause.pressureSolar,
         rules: [{
           transform: (value) => {
             setFieldsValue({
-              'pressureSolar': value === undefined ? null : value
-            })
+              pressureSolar: value === undefined ? null : value
+            });
           }
         }]
       },
@@ -94,9 +94,7 @@ class MagnetopauseSettings extends Component {
       rules = this.getValidationRules();
     }
 
-    let wrappedField = (name) => {
-      return this.props.form.getFieldDecorator(name, rules[name]);
-    };
+    const wrappedField = (name) => this.props.form.getFieldDecorator(name, rules[name]);
 
     const formItemLayout = {
       labelCol: {
@@ -109,27 +107,21 @@ class MagnetopauseSettings extends Component {
       },
     };
 
-    const DataSetSelector = (props) => {
-      return (
-        <Form.Item {...formItemLayout} label={props.label}>
-          {wrappedField(props.name)(
-            <Select size={this.props.size} allowClear={true}>
-              {dataSets.map((item) => {
-                return (
-                  <Select.Option value={item.id.toString()} key={item.id} title={item.name}>
-                    {item.name} ({item.si})
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          )}
-        </Form.Item>
-      )
-    };
+    const DataSetSelector = (props) => (
+      <Form.Item {...formItemLayout} label={props.label}>
+        {wrappedField(props.name)(<Select size={this.props.size} allowClear>
+          {dataSets.map((item) => (
+            <Select.Option value={item.id.toString()} key={item.id} title={item.name}>
+              {item.name} ({item.si})
+            </Select.Option>
+                ))}
+        </Select>)}
+      </Form.Item>
+    );
 
     return (
       <Input.Group size={this.props.size} compact>
-        <Button icon="setting" size={this.props.size} onClick={this.handlerModalOpen}></Button>
+        <Button icon="setting" size={this.props.size} onClick={this.handlerModalOpen} />
         <Modal
           wrapClassName="main-page-settings magnetopause-view-settings"
           width={460}
@@ -139,9 +131,9 @@ class MagnetopauseSettings extends Component {
           visible={this.state.modalVisible}
         >
           <Form>
-            {DataSetSelector({ name: "b", label: "B (nT), GSM" })}
-            {DataSetSelector({ name: "bz", label: (<span>B<sub>z</sub> (nT), GSM</span>) })}
-            {DataSetSelector({ name: "pressureSolar", label: "Solar pressure (nPa)" })}
+            {DataSetSelector({ name: 'b', label: 'B (nT), GSM' })}
+            {DataSetSelector({ name: 'bz', label: (<span>B<sub>z</sub> (nT), GSM</span>) })}
+            {DataSetSelector({ name: 'pressureSolar', label: 'Solar pressure (nPa)' })}
           </Form>
         </Modal>
       </Input.Group>

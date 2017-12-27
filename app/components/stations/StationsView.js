@@ -7,18 +7,16 @@ import StationsGrid from './StationsGrid';
 
 
 class Stations extends Component {
-  render = () => {
-    return (
-      <div className={`stations-view theme-${this.props.theme}`}>
-        <Row>
-          <StationsActions />
-        </Row>
-        <Row>
-          <StationsGrid />
-        </Row>
-      </div>
-    );
-  };
+  render = () => (
+    <div className={`stations-view theme-${this.props.theme}`}>
+      <Row>
+        <StationsActions />
+      </Row>
+      <Row>
+        <StationsGrid />
+      </Row>
+    </div>
+  );
 }
 
 function mapStateToProps(state) {

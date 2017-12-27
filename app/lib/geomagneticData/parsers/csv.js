@@ -9,7 +9,7 @@ export default function (filePath, callback) {
         throw error;
       }
 
-      let data = {
+      const data = {
         properties: {},
         columns: [],
         rows: [],
@@ -18,13 +18,13 @@ export default function (filePath, callback) {
       if (callback === undefined || typeof callback !== 'function') {
         callback = (item, i) => {
           if (i === 0) {
-            item = moment(item, ["YYYY-MM-DD HH:mm:ss.SSS", "DD-MM-YYYY HH:mm:ss.SSS"]).toDate();
+            item = moment(item, ['YYYY-MM-DD HH:mm:ss.SSS', 'DD-MM-YYYY HH:mm:ss.SSS']).toDate();
           } else {
             item = parseFloat(item.replace(',', '.'));
           }
 
-          return item
-        }
+          return item;
+        };
       }
 
       csv.forEach(rawData.toString(), ';', (row, i) => {
@@ -44,4 +44,4 @@ export default function (filePath, callback) {
       resolve(data);
     });
   });
-};
+}

@@ -17,7 +17,6 @@ const { Menu } = remote;
 
 
 class StationGrid extends Component {
-
   state = {
     availableHeight: 'auto',
     pageSize: 5,
@@ -61,7 +60,7 @@ class StationGrid extends Component {
       availableHeight,
       pageSize,
       pageCurrent,
-    })
+    });
   };
 
   calcPageCurrent = (props, pageSize) => {
@@ -143,36 +142,43 @@ class StationGrid extends Component {
       dataIndex: 'compX',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+      render: (text, record, index) => (<Grid.InputCell
+        value={text}
+        onChange={
         (value, afterAction) => this.handlerCellChange('compX', record.id, value, afterAction)
-      } />),
+      }
+      />),
       width: compWidth
     }, {
       title: 'Y',
       dataIndex: 'compY',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+      render: (text, record, index) => (<Grid.InputCell
+        value={text}
+        onChange={
         (value, afterAction) => this.handlerCellChange('compY', record.id, value, afterAction)
-      } />),
+      }
+      />),
       width: compWidth
     }, {
       title: 'Z',
       dataIndex: 'compZ',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+      render: (text, record, index) => (<Grid.InputCell
+        value={text}
+        onChange={
         (value, afterAction) => this.handlerCellChange('compZ', record.id, value, afterAction)
-      } />),
+      }
+      />),
       width: compWidth
     }, {
       title: '',
       dataIndex: 'format',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => {
-        return app.VALUES_CONVERT_FORMAT[text];
-      },
+      render: (text, record, index) => app.VALUES_CONVERT_FORMAT[text],
       width: 80
     }];
 
@@ -190,9 +196,7 @@ class StationGrid extends Component {
     return (
       <div style={{ height: this.state.availableHeight }}>
         <Grid
-          rowClassName={(record) => {
-            return record.time === currentTimeStr ? 'select-row' : ''
-          }}
+          rowClassName={(record) => (record.time === currentTimeStr ? 'select-row' : '')}
           ref="grid"
           rowKey="id"
           columns={columns}
@@ -206,7 +210,7 @@ class StationGrid extends Component {
             onChange: this.handlerPageChange
           }}
           size="x-small"
-          bordered={true}
+          bordered
           onRow={(record, index) => ({
             onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
           })}

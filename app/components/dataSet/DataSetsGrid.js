@@ -17,7 +17,6 @@ const { Menu } = remote;
 
 
 class DataSetsGrid extends Component {
-
   state = {
     availableHeight: 'auto',
     pageSize: 5,
@@ -56,7 +55,7 @@ class DataSetsGrid extends Component {
       availableHeight,
       pageSize,
       pageCurrent,
-    })
+    });
   };
 
   calcPageCurrent = (props, pageSize) => {
@@ -117,7 +116,7 @@ class DataSetsGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.dataSetActions.deleteDataSet({ id: record.id })
+                this.props.dataSetActions.deleteDataSet({ id: record.id });
               },
             });
           }
@@ -132,7 +131,7 @@ class DataSetsGrid extends Component {
               okType: 'danger',
               cancelText: 'No',
               onOk: () => {
-                this.props.dataSetActions.deleteDataSetValue({ stationId: record.id })
+                this.props.dataSetActions.deleteDataSetValue({ stationId: record.id });
               },
             });
           }
@@ -142,12 +141,10 @@ class DataSetsGrid extends Component {
   };
 
   render() {
-    const optionsAxisY = app.DATA_SET_AXIS_Y.map((item) => {
-      return {
-        value: item.toString().toLowerCase(),
-        text: item
-      }
-    });
+    const optionsAxisY = app.DATA_SET_AXIS_Y.map((item) => ({
+      value: item.toString().toLowerCase(),
+      text: item
+    }));
 
     const columns = [
       {
@@ -160,34 +157,46 @@ class DataSetsGrid extends Component {
         dataIndex: 'name',
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('name', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'SI',
         dataIndex: 'si',
         width: 75,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('si', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Bad value',
         dataIndex: 'badValue',
         width: 75,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('badValue', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: 'Style',
         dataIndex: 'style',
         width: 75,
-        render: (text, record, index) => (<Grid.LineStyleCell value={record.style} onChange={
+        render: (text, record, index) => (<Grid.LineStyleCell
+          value={record.style}
+          onChange={
           (value, afterAction) => this.handlerCellChange('style', record.id, value, afterAction)
-        } />)
+        }
+        />)
       },
       // {
       //   title: 'Axis Y',
@@ -205,16 +214,22 @@ class DataSetsGrid extends Component {
         width: 50,
         hasFilter: true,
         hasSorter: true,
-        render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+        render: (text, record, index) => (<Grid.InputCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('axisGroup', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }, {
         title: '',
         dataIndex: 'status',
         width: 30,
-        render: (text, record, index) => (<Grid.CheckboxCell value={text} onChange={
+        render: (text, record, index) => (<Grid.CheckboxCell
+          value={text}
+          onChange={
           (value, afterAction) => this.handlerCellChange('status', record.id, value, afterAction)
-        } />)
+        }
+        />)
       }
     ];
 
@@ -230,12 +245,12 @@ class DataSetsGrid extends Component {
     };
 
     return (
-      <div className="dataset-grid"
-           style={{ height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1) }}>
+      <div
+        className="dataset-grid"
+        style={{ height: this.state.availableHeight, opacity: (this.state.availableHeight === 'auto' ? 0 : 1) }}
+      >
         <Grid
-          rowClassName={(record) => {
-            return record.id === this.props.lastOpenItem ? 'select-row' : ''
-          }}
+          rowClassName={(record) => (record.id === this.props.lastOpenItem ? 'select-row' : '')}
           ref="grid"
           rowKey="id"
           columns={columns}
@@ -249,7 +264,7 @@ class DataSetsGrid extends Component {
             onChange: this.handlerPageChange
           }}
           size="x-small"
-          bordered={true}
+          bordered
           onRow={(record, index) => ({
             onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
           })}

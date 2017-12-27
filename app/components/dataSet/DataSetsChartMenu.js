@@ -25,7 +25,7 @@ function openWindowDataSet(id) {
     icon: resourcePath('./assets/icons/line-chart.png'),
   };
 
-  let win = windowManager.get(WINDOW_DATASET);
+  const win = windowManager.get(WINDOW_DATASET);
   if (!win) {
     windowManager.open(WINDOW_DATASET, url, windowOptions);
   } else {
@@ -48,7 +48,7 @@ function openWindowMagnetopause() {
     parent: remote.getCurrentWindow()
   };
 
-  let win = windowManager.get(WINDOW_MAGNETOPAUSE);
+  const win = windowManager.get(WINDOW_MAGNETOPAUSE);
   if (!win) {
     windowManager.open(WINDOW_MAGNETOPAUSE, url, windowOptions);
   } else {
@@ -91,12 +91,12 @@ export default function (props) {
             chart.classList.add('screencapture');
             domToImage.toPng(chart).then((dataUrl) => {
               chart.classList.remove('screencapture');
-              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (error) => {
+              fs.writeFile(filePath, dataUrl.replace(/^data:image\/png;base64,/, ''), 'base64', (error) => {
                 if (error) {
                   message.error(error.message, 6);
                   throw error;
                 } else {
-                  message.success(filePath + ' was saved', 3);
+                  message.success(`${filePath} was saved`, 3);
                 }
               });
             });

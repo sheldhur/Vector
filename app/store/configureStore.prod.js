@@ -1,5 +1,5 @@
 // @flow
-import { electronEnhancer } from "redux-electron-store";
+import { electronEnhancer } from 'redux-electron-store';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
@@ -35,7 +35,7 @@ function configureStore(initialState) {
   // Create Store
   const store = createStore(rootReducer, initialState, enhancer);
 
-  return store
+  return store;
 }
 
 export default { configureStore, history };

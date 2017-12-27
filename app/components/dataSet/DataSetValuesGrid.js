@@ -18,7 +18,6 @@ const { Menu } = remote;
 
 
 class DataSetValuesGrid extends Component {
-
   state = {
     availableHeight: 'auto',
     pageSize: 5,
@@ -63,7 +62,7 @@ class DataSetValuesGrid extends Component {
       availableHeight,
       pageSize,
       pageCurrent,
-    })
+    });
   };
 
   calcPageCurrent = (props, pageSize) => {
@@ -131,23 +130,26 @@ class DataSetValuesGrid extends Component {
       dataIndex: 'value',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => (<Grid.InputCell value={text} onChange={
+      render: (text, record, index) => (<Grid.InputCell
+        value={text}
+        onChange={
         (value, afterAction) => this.handlerCellChange('value', record.id, value, afterAction)
-      } />),
+      }
+      />),
       width: 175
     }, {
       title: '',
       dataIndex: 'format',
       hasFilter: true,
       hasSorter: true,
-      render: (text, record, index) => {
-        return app.VALUES_CONVERT_FORMAT[text];
-      },
+      render: (text, record, index) => app.VALUES_CONVERT_FORMAT[text],
       width: 80
     }];
 
 
-    const { dataSetValues, dataSetId, isLoading, currentTime } = this.props;
+    const {
+      dataSetValues, dataSetId, isLoading, currentTime
+    } = this.props;
     const currentTimeStr = moment(currentTime).format(app.FORMAT_DATE_SQL);
     const data = dataSetValues[dataSetId] || [];
 
@@ -161,9 +163,7 @@ class DataSetValuesGrid extends Component {
     return (
       <div style={{ height: this.state.availableHeight }}>
         <Grid
-          rowClassName={(record) => {
-            return record.time === currentTimeStr ? 'select-row' : ''
-          }}
+          rowClassName={(record) => (record.time === currentTimeStr ? 'select-row' : '')}
           ref="grid"
           rowKey="id"
           columns={columns}
@@ -177,7 +177,7 @@ class DataSetValuesGrid extends Component {
             onChange: this.handlerPageChange
           }}
           size="x-small"
-          bordered={true}
+          bordered
           onRow={(record, index) => ({
             onContextMenu: (event) => this.handlerRowOnContextMenu(record, index, event)
           })}
