@@ -19,7 +19,6 @@ const currentWindow = remote.getCurrentWindow();
 let db;
 
 
-
 export function setLoading(payload) {
   return {
     type: types.LOADING,
@@ -178,12 +177,11 @@ export function closeDataBase() {
 }
 
 function openMainPage() {
-  // if (HashRouter.getCurrentLocation().pathname !== '/main') {
-  return (dispatch) => {
-    dispatch(push('/main'));
+  return (dispatch, getState) => {
+    if (getState().router.location.pathname !== '/main') {
+      return dispatch(push('/main'));
+    }
   }
-
-  // }
 }
 
 export function dialogOpenCreateDataBase(settings) {

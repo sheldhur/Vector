@@ -284,7 +284,9 @@ export function clearDataSets() {
 }
 
 function openDataSetPage() {
-  if (hashHistory.getCurrentLocation().pathname !== '/dataSet') {
-    hashHistory.push('/dataSet');
+  return (dispatch, getState) => {
+    if (getState().router.location.pathname !== '/dataSet') {
+      return dispatch(push('/dataSet'));
+    }
   }
 }

@@ -344,7 +344,9 @@ export function clearStations() {
 }
 
 function openStationPage() {
-  if (hashHistory.getCurrentLocation().pathname !== '/station') {
-    hashHistory.push('/station');
+  return (dispatch, getState) => {
+    if (getState().router.location.pathname !== '/station') {
+      return dispatch(push('/station'));
+    }
   }
 }
