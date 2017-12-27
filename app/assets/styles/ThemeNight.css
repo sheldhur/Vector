@@ -13,6 +13,10 @@
   color: #b0b0b0;
 }
 
+.theme-night .ant-pagination-item-active {
+  background-color: transparent;
+}
+
 .theme-night .ant-table-bordered table {
   border-color: #464545;
 }
