@@ -75,6 +75,8 @@ export function getLastDataBase(openMain = true) {
         console.error(e);
         dispatch(setError(errorToObject(new Error('Can\'t open last database: ' + path))));
       }
+    } else {
+      dispatch(setDataBasePath(null));
     }
   }
 }

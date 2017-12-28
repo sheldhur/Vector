@@ -5,6 +5,7 @@ import * as types from '../constants/main';
 
 const initialState = {
   settings: { ...DEFAULT_SETTINGS },
+  isLaunch: true,
   isLoading: false,
   isError: false,
   dbPath: null,
@@ -37,7 +38,7 @@ export default function main(state = initialState, action) {
     case types.UPDATE:
       return { ...state, update: action.payload };
     case types.DB_PATH:
-      return { ...state, dbPath: action.payload };
+      return { ...state, dbPath: action.payload, isLaunch: false };
     default:
       return state;
   }

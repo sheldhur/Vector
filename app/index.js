@@ -14,6 +14,7 @@ import './app.global.css';
 
 const currentWin = remote.getCurrentWindow();
 const store = configureStore();
+store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));
 
 render(
   <LocaleProvider locale={locale}>
@@ -63,4 +64,3 @@ ipcRenderer.on('windowManger', (event, msg) => {
   }
 });
 
-store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));

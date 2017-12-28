@@ -1,21 +1,22 @@
-// @flow
 import { remote } from 'electron';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert } from 'antd';
 import moment from 'moment';
+import { LoadingAlert } from './widgets/ChartAlert';
 import * as mainActions from '../actions/main';
 import * as app from '../constants/app';
 // import IconResizer from './_IconResizer';
 // import './../lib/geomagneticData/_test';
 
+const settings = JSON.parse(window.localStorage['appSettings'] || null);
+const theme = settings ? settings.appTheme : 'night';
 
 class Home extends Component {
-  avgByList = app.IMPORT_AVG;
   state = {
     avg: {
-      by: this.avgByList[1],
+      by: app.IMPORT_AVG[1],
       value: 1,
     },
     period: {
@@ -23,7 +24,6 @@ class Home extends Component {
       end: undefined,
     }
   };
-  avgData = app.IMPORT_AVG_DATA.map((item, i) => ({ label: item, value: i }));
   handlerDaterangeOk = (value) => {
     this.setState({
       period: {
@@ -71,8 +71,12 @@ class Home extends Component {
 
   render = () => {
     const { avg, period } = this.state;
-
+    const avgData = app.IMPORT_AVG_DATA.map((item, i) => ({ label: item, value: i }));
     const isDateRange = period.start && period.end;
+
+    if (this.props.isLaunch || this.props.isLoading) {
+      return (<LoadingAlert className={`theme-${theme}`} />);
+    }
 
     return (
       <div className="home-page">
@@ -117,12 +121,15 @@ class Home extends Component {
                   <Input style={{ width: '100px' }} value="Averaged data" disabled className="ant-input-group-addon" />
                   <InputNumber min={1} defaultValue={avg.value} onChange={this.handlerAvgValueChange} />
                   <Select defaultValue={avg.by} onChange={this.handlerAvgBySelect}>
-                    {this.avgByList.map((item, i) => <Select.Option key={i} value={i.toString()}>{item}</Select.Option>)}
+                    {app.IMPORT_AVG.map((item, i) => (<Select.Option
+                      key={i}
+                      value={i.toString()}
+                    >{item}</Select.Option>))}
                   </Select>
                 </Input.Group>
               </Row>
               <Row style={{ display: 'none' }}>
-                <Radio.Group options={this.avgData} defaultValue={0} />
+                <Radio.Group options={avgData} defaultValue={0} />
               </Row>
               <Row>
                 <Button
@@ -143,7 +150,10 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
+    dbPath: state.main.dbPath,
     isError: state.main.isError,
+    isLaunch: state.main.isLaunch,
+    isLoading: state.main.isLoading,
   };
 }
 
