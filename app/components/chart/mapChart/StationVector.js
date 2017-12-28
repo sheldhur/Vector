@@ -72,16 +72,18 @@ class StationVector extends Component {
       for (const stationId in stations) {
         const item = stations[stationId];
         const coordinates = projection([item.longitude, item.latitude]);
-        names.push(<text
-          key={`name-${stationId}`}
-          x={coordinates[0]}
-          y={coordinates[1]}
-          onClick={() => this.handlerMouseClick(item)}
-          onMouseEnter={() => this.handlerMouseEnter(item)}
-          onMouseOut={() => this.handlerMouseOut()}
-        >
-          {item.name}
-        </text>);
+        names.push((
+          <text
+            key={`name-${stationId}`}
+            x={coordinates[0]}
+            y={coordinates[1]}
+            onClick={() => this.handlerMouseClick(item)}
+            onMouseEnter={() => this.handlerMouseEnter(item)}
+            onMouseLeave={() => this.handlerMouseOut()}
+          >
+            {item.name}
+          </text>
+        ));
       }
     } else {
       data.forEach((item, i) => {
@@ -107,7 +109,7 @@ class StationVector extends Component {
               coordinates2 = projection(coordinates2);
 
               lines.push(<line
-                key={`line-${i}`}
+                key={`line-${item.id}`}
                 x1={coordinates[0]}
                 y1={coordinates[1]}
                 x2={coordinates2[0]}
@@ -120,7 +122,7 @@ class StationVector extends Component {
             if (item.delta.dZ) {
               const circleClass = item.delta.dZ > 0 ? 'positive' : 'negative';
               circles[circleClass].push(<circle
-                key={`circle-${i}`}
+                key={`circle-${item.id}`}
                 cx={coordinates[0]}
                 cy={coordinates[1]}
                 r={Math.abs(item.delta.dZ * circleNormal)}
@@ -135,15 +137,15 @@ class StationVector extends Component {
         /* should be so transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
            but in the electron 1.6.12+ have bug. */
         points.push(<rect
-          key={`point-${i}`}
+          key={`point-${item.id}`}
           width={pointSize}
           height={pointSize}
-          x={(coordinates[0] - pointSize) / 2}
-          y={(coordinates[1] - pointSize) / 2}
+          x={coordinates[0] - (pointSize / 2)}
+          y={coordinates[1] - (pointSize / 2)}
           onClick={() => this.handlerMouseClick(item)}
           onMouseEnter={() => this.handlerMouseEnter(item)}
-          onMouseOut={() => this.handlerMouseOut()}
-          transform={`rotate(45, ${coordinates[0] / 10000000}, ${coordinates[1] / 10000000})`}
+          onMouseLeave={() => this.handlerMouseOut()}
+          transform={`rotate(45, ${coordinates[0] / 1000000000}, ${coordinates[1] / 1000000000})`}
           className={pointClass}
         />);
       });
