@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Input, Icon, Popconfirm } from 'antd';
 import HighlightValue from './HighlightValue';
@@ -15,7 +14,7 @@ class InputCell extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const { value, editable } = this.state;
+    const { value } = this.state;
     const isUpdate = nextProps.value && nextProps.value.hasOwnProperty('search') ?
       (value.text !== nextProps.value || value.search !== nextProps.search) :
       (value !== nextProps.value);
@@ -101,7 +100,7 @@ class InputCell extends Component {
     const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-                             </div>) : null;
+    </div>) : null;
 
     let plainValue = null;
     let search = null;

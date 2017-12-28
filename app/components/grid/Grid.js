@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Table, Input, Button, Icon } from 'antd';
 
@@ -18,9 +17,7 @@ class Grid extends Component {
   };
 
   componentWillReceiveProps = (nextProp) => {
-    if (this.props.data.length !== nextProp.data.length) {
-      this.handlerFilter(null, nextProp.data);
-    }
+    this.handlerFilter(null, nextProp.data);
   };
 
   columnSorter = (dataIndex, a, b) =>

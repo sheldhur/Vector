@@ -1,4 +1,3 @@
-// @flow
 import { remote } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -166,7 +165,7 @@ class DataSetsGrid extends Component {
       }, {
         title: 'SI',
         dataIndex: 'si',
-        width: 75,
+        width: 200,
         hasFilter: true,
         hasSorter: true,
         render: (text, record, index) => (<Grid.InputCell

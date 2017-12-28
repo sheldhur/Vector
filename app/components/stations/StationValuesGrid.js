@@ -1,4 +1,3 @@
-// @flow
 import { remote } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -27,12 +26,6 @@ class StationGrid extends Component {
     window.addEventListener('resize', this.handlerResize);
   };
 
-  componentWillUnmount = () => {
-    window.removeEventListener('resize', this.handlerResize);
-
-    this.props.uiActions.setGridSelectedRows(null);
-  };
-
   componentWillReceiveProps = (nextProps) => {
     if (!nextProps.isLoading) {
       if (this.state.availableHeight === 'auto') {
@@ -43,6 +36,12 @@ class StationGrid extends Component {
         this.setState({ pageCurrent: this.calcPageCurrent(nextProps, this.state.pageSize) });
       }
     }
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.handlerResize);
+
+    this.props.uiActions.setGridSelectedRows(null);
   };
 
   handlerResize = () => {
@@ -145,8 +144,8 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell
         value={text}
         onChange={
-        (value, afterAction) => this.handlerCellChange('compX', record.id, value, afterAction)
-      }
+          (value, afterAction) => this.handlerCellChange('compX', record.id, value, afterAction)
+        }
       />),
       width: compWidth
     }, {
@@ -157,8 +156,8 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell
         value={text}
         onChange={
-        (value, afterAction) => this.handlerCellChange('compY', record.id, value, afterAction)
-      }
+          (value, afterAction) => this.handlerCellChange('compY', record.id, value, afterAction)
+        }
       />),
       width: compWidth
     }, {
@@ -169,8 +168,8 @@ class StationGrid extends Component {
       render: (text, record, index) => (<Grid.InputCell
         value={text}
         onChange={
-        (value, afterAction) => this.handlerCellChange('compZ', record.id, value, afterAction)
-      }
+          (value, afterAction) => this.handlerCellChange('compZ', record.id, value, afterAction)
+        }
       />),
       width: compWidth
     }, {
