@@ -15,16 +15,16 @@ process.on('message', async (data) => {
   }
 
   if (data.worker !== undefined) {
-    if (db && db.path !== data.main.dbPath) {
-      db.close();
-      db = undefined;
-    }
-
-    if (db === undefined) {
-      db = await dbConnect(data.main.dbPath);
-    }
-
     try {
+      if (db && db.path !== data.main.dbPath) {
+        db.close();
+        db = undefined;
+      }
+
+      if (db === undefined) {
+        db = await dbConnect(data.main.dbPath);
+      }
+
       workers[data.worker](db, data);
     } catch (e) {
       console.error(e);
