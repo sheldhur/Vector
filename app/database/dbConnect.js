@@ -2,6 +2,10 @@ import Sequelize from 'sequelize';
 import models from './models';
 import consoleLogSQL from '../lib/consoleLogSQL';
 
+
+export let db;
+const INIT_TRY = { timeout: 1000, attempts: 10 };
+const timeout = ms => new Promise(res => setTimeout(res, ms));
 const { Op } = Sequelize;
 const operatorsAliases = {
   $eq: Op.eq,
@@ -40,28 +44,47 @@ const operatorsAliases = {
   $col: Op.col
 };
 
-export let db;
-
 const dbConnect = async (dbPath) => {
   if (dbPath !== undefined && (db === undefined || db.sequelize === undefined)) {
-    const sequelize = new Sequelize('database', null, null, {
-      dialect: 'sqlite',
-      dialectModulePath: 'sqlite3-offline',
-      storage: dbPath,
-      logging: (log) => {
-        if (!db.disableLogging) {
-          if (process.send !== undefined) {
-            process.send({ consoleLogSQL: log });
-          } else {
-            consoleLogSQL(log);
-          }
+    let sequelize;
+
+    /**
+     * Sometimes ASAR can not unpack 'sqlite' node module in time
+     * This error can get only then you spawn new child electron process with ELECTRON_RUN_AS_NODE flag
+     * This code trying init 'sequelize' few times with timeout
+     */
+    for (let i = 1; i <= INIT_TRY.attempts; i++) {
+      try {
+        sequelize = new Sequelize('database', null, null, {
+          dialect: 'sqlite',
+          dialectModulePath: 'sqlite3-offline',
+          storage: dbPath,
+          logging: (log) => {
+            if (!db.disableLogging) {
+              if (process.send !== undefined) {
+                process.send({ consoleLogSQL: log });
+              } else {
+                consoleLogSQL(log);
+              }
+            }
+          },
+          define: {
+            timestamps: false
+          },
+          operatorsAliases
+        });
+      } catch (e) {
+        if (i === INIT_TRY.attempts) {
+          throw e;
+        } else {
+          await timeout(INIT_TRY.timeout);
         }
-      },
-      define: {
-        timestamps: false
-      },
-      operatorsAliases
-    });
+      }
+
+      if (sequelize) {
+        break;
+      }
+    }
 
     db = {};
 
@@ -110,5 +133,6 @@ const dbConnect = async (dbPath) => {
 
   return db;
 };
+
 
 export default dbConnect;
