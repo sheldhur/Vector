@@ -104,9 +104,11 @@ app.on('ready', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.show();
-    mainWindow.focus();
     mainWindow.maximize();
+    setTimeout(() => {
+      mainWindow.show();
+      mainWindow.focus();
+    }, 500);
 
     autoUpdater.checkForUpdates();
   });
