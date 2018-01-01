@@ -35,7 +35,9 @@
     "no-prototype-builtins": "off",
     "guard-for-in": "off",
     "no-restricted-syntax": ["off", "ForInStatement"],
-    "react/prop-types": ["off"]
+    "react/prop-types": ["off"],
+    "react/jsx-closing-tag-location": ["off"],
+    "no-trailing-spaces": "off"
   },
   "plugins": [
     "flowtype",
