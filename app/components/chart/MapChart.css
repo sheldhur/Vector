@@ -50,7 +50,6 @@
   fill: transparent;
   stroke: black;
   stroke-width: 1px;
-  transform-origin: 50% 50%;
 }
 
 .map-point rect.bad-value {

@@ -77,6 +77,7 @@ class StationVector extends Component {
             key={`name-${stationId}`}
             x={coordinates[0]}
             y={coordinates[1]}
+            dy="-0.75em"
             onClick={() => this.handlerMouseClick(item)}
             onMouseEnter={() => this.handlerMouseEnter(item)}
             onMouseLeave={() => this.handlerMouseOut()}
@@ -84,6 +85,19 @@ class StationVector extends Component {
             {item.name}
           </text>
         ));
+
+        points.push(<rect
+          key={`point-${item.id}`}
+          width={pointSize}
+          height={pointSize}
+          x={coordinates[0] - (pointSize / 2)}
+          y={coordinates[1] - (pointSize / 2)}
+          onClick={() => this.handlerMouseClick(item)}
+          onMouseEnter={() => this.handlerMouseEnter(item)}
+          onMouseLeave={() => this.handlerMouseOut()}
+          transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
+          className="defalut"
+        />);
       }
     } else {
       data.forEach((item, i) => {
@@ -134,8 +148,6 @@ class StationVector extends Component {
           pointClass = 'bad-value';
         }
 
-        /* should be so transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
-           but in the electron 1.6.12+ have bug. */
         points.push(<rect
           key={`point-${item.id}`}
           width={pointSize}
@@ -145,7 +157,7 @@ class StationVector extends Component {
           onClick={() => this.handlerMouseClick(item)}
           onMouseEnter={() => this.handlerMouseEnter(item)}
           onMouseLeave={() => this.handlerMouseOut()}
-          transform={`rotate(45, ${coordinates[0] / 1000000000}, ${coordinates[1] / 1000000000})`}
+          transform={`rotate(45, ${coordinates[0]}, ${coordinates[1]})`}
           className={pointClass}
         />);
       });
@@ -235,7 +247,7 @@ function mapStateToProps(state) {
     mapLayerZ: state.main.settings.projectMapLayerZ,
     // timeStart: state.main.settings.projectTimeSelectedStart,
     // currentTime: state.chart.chartCurrentTime,
-    isShowNames: state.ui.chartCurrentTime && state.ui.chartCurrentTime === state.main.settings.projectTimeSelected[0].valueOf()
+    isShowNames: !state.ui.chartCurrentTime || (state.ui.chartCurrentTime && state.ui.chartCurrentTime === state.main.settings.projectTimeSelected[0].valueOf())
   };
 }
 
