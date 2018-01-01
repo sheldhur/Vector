@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import * as fs from 'fs';
 import * as topojson from 'topojson';
@@ -6,6 +5,28 @@ import resourcePath from '../../../lib/resourcePath';
 
 
 class World extends Component {
+  state = {
+    worldData: undefined,
+    world: undefined
+  };
+
+  componentDidMount = () => {
+    this.loadWorldData(this.props.scale);
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.scale !== this.props.scale) {
+      this.loadWorldData(nextProps.scale);
+    } else if (
+      nextProps.size.width !== this.props.size.width ||
+      nextProps.size.height !== this.props.size.height ||
+      nextProps.clipAngle !== this.props.clipAngle ||
+      nextProps.rotate[2] !== this.props.rotate[2]
+    ) {
+      this.prepareWorldMap(nextProps);
+    }
+  };
+
   loadWorldData = (scale) => {
     const files = {
       '1:50': 'world-50m.v1.json',
@@ -22,6 +43,7 @@ class World extends Component {
       });
     });
   };
+
   prepareWorldMap = (props) => {
     const { worldData } = this.state;
     const { path, ocean } = props;
@@ -37,28 +59,7 @@ class World extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      worldData: undefined,
-      world: undefined
-    };
-  }
-
-  componentDidMount() {
-    this.loadWorldData(this.props.scale);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.scale !== this.props.scale) {
-      this.loadWorldData(nextProps.scale);
-    } else if (nextProps.size.width !== this.props.size.width || nextProps.size.height !== this.props.size.height) {
-      this.prepareWorldMap(nextProps);
-    }
-  }
-
-  render() {
+  render = () => {
     const { countries } = this.props;
     const { world } = this.state;
 
@@ -84,7 +85,7 @@ class World extends Component {
         <path className="map-ocean" d={this.props.path(this.props.ocean)} style={{ fill: color.water }} />
       </g>
     );
-  }
+  };
 }
 
 World.defaultProps = {

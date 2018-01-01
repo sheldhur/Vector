@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import interpolator from 'interpolating-polynomial';
 import Chart from './Chart';
 import World from './World';
 import Graticule from './Graticule';
@@ -7,7 +8,29 @@ import GeomagEquator from './GeomagEquator';
 import SolarTerminator from './SolarTerminator';
 import StationVector from './StationVector';
 import Tooltip from './Tooltip';
+import { IS_PROD } from '../../../constants/app';
 
+const scaleFactor = interpolator([
+  [170, 0.131941969],
+  [168, 0.15867751223091939],
+  [165, 0.19795],
+  [160, 0.265934761],
+  [150, 0.404381469],
+  [140, 0.549101428],
+  [130, 0.70361102],
+  [120, 0.87164905],
+  [110, 1.056978256],
+  [100, 1.26693152],
+  [90, 1.510000025],
+  [80, 1.800250819],
+  [70, 2.157817949],
+  [60, 2.615396589],
+  [50, 3.240179428],
+  [40, 4.151219858],
+  [30, 5.635396181],
+  [20, 8.568856971],
+  [10, 17.26990111],
+]);
 
 class MapAzimuthal extends Component {
   state = {
@@ -44,12 +67,14 @@ class MapAzimuthal extends Component {
     };
     const size = this.calculateSize(margin, axisMargin);
 
+    const scale = size.height / Math.PI;
+
     const projection = d3.geoStereographic()
-      .clipAngle(clipAngle) // 60
-      .scale(size.height / Math.PI * 1.5) // 2.6
+      .clipAngle(clipAngle)
+      .scale(scale * scaleFactor(clipAngle))
       .translate([size.width / 2, size.height / 2])
       .rotate(rotate)
-      .precision(0.6);
+      .precision(0.1);
 
     const path = d3.geoPath().projection(projection);
     const graticule = d3.geoGraticule().step(graticuleStep);
@@ -58,16 +83,21 @@ class MapAzimuthal extends Component {
     const range = d3.range(0, 360, graticuleStep[0]).reverse();
     const ticks = [];
     range.forEach((item, i) => {
-      const transform = `rotate(${item - 90})translate(${Math.PI * (size.height / 6.55)})rotate(${item > 270 || item < 90 ? 90 : -90})`;
-      const dy = item > 270 || item < 90 ? '-0.65em' : '1.3em';
-      const y2 = item > 270 || item < 90 ? -5 : 5;
+      // const angle = item - 90 + (rotate[1] >= 0 ? 180 - rotate[2] : rotate[2]);
+      // console.log(angle);
+      let angle = (rotate[1] >= 0 ? item + 90 : item - 90) + (180 - rotate[2]);
+      angle -= (Math.round(angle / 360) * 360);
+
+      const transform = `rotate(${angle})translate(${Math.PI * (size.height / 6.55)})rotate(${angle < 0 ? 90 : -90})`;
+      const dy = angle < 0 ? '-0.65em' : '1.3em';
+      const y2 = angle < 0 ? -5 : 5;
       ticks.push(<g key={`axis-tick-${i}`} className="tick" transform={transform}>
-        <text textAnchor="middle" dy={dy}>{item}°</text>
+        <text textAnchor="middle" dy={dy}> {item}°</text>
         <line y2={y2} />
       </g>);
     });
 
-    const coordinates = projection([0, 0]);
+    const coordinates = projection([0, (90 - clipAngle)]);
 
     // 2011, 7, 9, 7, 2
     return (
@@ -92,6 +122,8 @@ class MapAzimuthal extends Component {
               path={path}
               ocean={outline}
               size={{ width, height }}
+              clipAngle={clipAngle}
+              rotate={rotate}
               {...this.props.world}
             />
             <Graticule
@@ -99,6 +131,7 @@ class MapAzimuthal extends Component {
               graticule={graticule}
               outline={outline}
               shapeRendering="auto"
+              clipPath={`url(#${this.uid}-vector)`}
             />
             <GeomagEquator path={path} />
             <SolarTerminator
@@ -121,7 +154,7 @@ class MapAzimuthal extends Component {
               width={size.container.width}
               height={size.container.height}
             />
-            {/* <circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888"/> */}
+            {IS_PROD == true && <circle cx={coordinates[0]} cy={coordinates[1]} r="3" fill="red" stroke="#888888" />}
           </g>}
           <g className="map-axis azimuthal" transform={`translate(${size.width / 2},${size.height / 2})`}>
             {ticks}

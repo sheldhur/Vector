@@ -9,7 +9,7 @@ class Graticule extends Component {
     } = this.props;
 
     return (
-      <g>
+      <g clipPath={this.props.clipPath}>
         <g className="map-graticule" shapeRendering={shapeRendering}>
           {graticule.lines().map((item, i) => <path key={`graticule-${i}`} d={path(item)} />)}
         </g>

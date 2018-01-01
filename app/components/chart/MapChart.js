@@ -72,7 +72,8 @@ class MapChart extends Component {
             width={size.width / 2}
             height={size.height}
             dataFilter={(item) => item.latitude <= 0}
-            rotate={[0, 90, 0]}
+            clipAngle={this.props.stereographicClipAngle}
+            rotate={[0, 90, 0 + this.props.stereographicRotate]}
             data={data}
             terminator={this.props.terminator}
             world={world}
@@ -82,13 +83,14 @@ class MapChart extends Component {
             width={size.width / 2}
             height={size.height}
             dataFilter={(item) => item.latitude >= 0}
-            rotate={[0, -90, 180]}
+            clipAngle={this.props.stereographicClipAngle}
+            rotate={[0, -90, 180 + this.props.stereographicRotate]}
             data={data}
             terminator={this.props.terminator}
             world={world}
             antiAliasing={this.props.antiAliasing}
           />
-                </div>);
+        </div>);
       } else if (projectionType === 'equirectangular') {
         return (<div className="svg-wrapper centered-box" ref="svgMapWrapper">
           <MapCylindrical
@@ -99,7 +101,7 @@ class MapChart extends Component {
             world={world}
             antiAliasing={this.props.antiAliasing}
           />
-                </div>);
+        </div>);
       }
     }
 
@@ -110,6 +112,8 @@ class MapChart extends Component {
 MapChart.defaultProps = {
   width: '100%',
   height: '100%',
+  stereographicClipAngle: 90,
+  stereographicRotate: 0,
   projectionType: 'stereographic', // equirectangular stereographic
   world: {},
   terminator: null,

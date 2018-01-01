@@ -1,14 +1,17 @@
-// @flow
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import MapChart from '../chart/MapChart';
 import VectorMapMenu from './VectorMapMenu';
 import * as stationActions from '../../actions/station';
+import { numberIsBetween } from '../../utils/helper';
 
 
 class VectorMapChart extends Component {
-  state = {};
+  state = {
+    stereographicClipAngle: 45,
+    stereographicRotate: 0
+  };
 
   handlerContextMenu = (e) => {
     if (!e.ctrlKey) {
@@ -23,6 +26,18 @@ class VectorMapChart extends Component {
         stationActions: this.props.stationActions,
         dataNotEmpty: true,
       });
+    }
+  };
+
+  handlerWheel = (e) => {
+    if (e.ctrlKey) {
+      const stereographicRotate = this.state.stereographicRotate + ((e.deltaY / 100) * 5);
+      this.setState({ stereographicRotate });
+    } else {
+      const stereographicClipAngle = this.state.stereographicClipAngle + ((e.deltaY / 100) * 5);
+      if (numberIsBetween(stereographicClipAngle, [10, 170])) {
+        this.setState({ stereographicClipAngle });
+      }
     }
   };
 
@@ -42,7 +57,12 @@ class VectorMapChart extends Component {
     };
 
     return (
-      <div style={{ height: '100%', padding: '5px' }} onContextMenu={this.handlerContextMenu} id="mapChart">
+      <div
+        style={{ height: '100%', padding: '5px' }}
+        onContextMenu={this.handlerContextMenu}
+        id="mapChart"
+        onWheel={this.handlerWheel}
+      >
         <MapChart
           width="100%"
           height="100%"
