@@ -6,14 +6,13 @@
 .color-cell-wrapper {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTJDBGvsAAAAK0lEQVQ4T2M4gwP8xwFGNSADqDwGIF0DlMYAUH0YYFQDMoDKYwASNZw5AwCE0rCf8ngV7wAAAABJRU5ErkJggg==');
   background-position: center;
-  border-radius: 4px;
-  text-align: center;
   cursor: pointer;
+  padding: 0;
+  top: 6px;
 }
 
 .color-cell-wrapper > div {
-  height: 16px;
-  border: 1px solid silver;
+  height: 100%;
   border-radius: 4px;
 }
 

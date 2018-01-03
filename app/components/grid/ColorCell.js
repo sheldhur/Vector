@@ -75,7 +75,7 @@ class ColorCell extends Component {
     const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-                             </div>) : null;
+    </div>) : null;
 
     const colorPicker = (
       <div>

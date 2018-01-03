@@ -20,8 +20,8 @@ class World extends Component {
     } else if (
       nextProps.size.width !== this.props.size.width ||
       nextProps.size.height !== this.props.size.height ||
-      nextProps.clipAngle !== this.props.clipAngle ||
-      nextProps.rotate[2] !== this.props.rotate[2]
+      (nextProps.clipAngle && nextProps.clipAngle !== this.props.clipAngle) ||
+      (nextProps.rotate && nextProps.rotate[2] !== this.props.rotate[2])
     ) {
       this.prepareWorldMap(nextProps);
     }

@@ -14,14 +14,14 @@ class LineStyleCell extends Component {
 
   isMouseEnter = false;
 
+  componentDidMount = () => {
+    document.addEventListener('click', this.handleMouseClick);
+  };
+
   componentWillReceiveProps = (nextProps) => {
     if (JSON.stringify(this.state.value) !== JSON.stringify(nextProps.value)) {
       this.setState({ value: nextProps.value });
     }
-  };
-
-  componentDidMount = () => {
-    document.addEventListener('click', this.handleMouseClick);
   };
 
   componentWillUnmount = () => {
@@ -116,7 +116,7 @@ class LineStyleCell extends Component {
     const message = error ? (<div>
       <h4>{error.name}</h4>
       <p>{error.message}</p>
-                             </div>) : null;
+    </div>) : null;
 
     const style = {
       stroke: '#000000',
