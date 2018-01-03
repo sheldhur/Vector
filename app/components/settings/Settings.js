@@ -6,6 +6,7 @@ import moment from 'moment';
 import SettingsAvgChartLines from './SettingsAvgChartLines';
 import SettingsAvgChartLatitudes from './SettingsAvgChartLatitudes';
 import SettingsDataTimeRage from './SettingsDataTimeRage';
+import SettingsInputColor from './SettingsInputColor';
 import * as mainActions from './../../actions/main';
 import * as dataSetActions from '../../actions/dataSet';
 import * as stationActions from '../../actions/station';
@@ -440,17 +441,17 @@ class Settings extends Component {
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Water color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.water')(<Input placeholder="Color" size={this.props.size} />)}
+                        {wrappedField('appMapColor.water')(<SettingsInputColor size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Land color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.land')(<Input placeholder="Color" size={this.props.size} />)}
+                        {wrappedField('appMapColor.land')(<SettingsInputColor size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Borders color">
                       <Col span={6}>
-                        {wrappedField('appMapColor.border')(<Input placeholder="Color" size={this.props.size} />)}
+                        {wrappedField('appMapColor.border')(<SettingsInputColor size={this.props.size} />)}
                       </Col>
                     </Form.Item>
                   </div>

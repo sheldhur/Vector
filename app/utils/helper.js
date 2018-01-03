@@ -29,3 +29,8 @@ export const numberIsBetween = (value, range, exact = true, bool = true) => {
 
   return number;
 };
+
+export const isHexColor = (value) => {
+  const sNum = value.replace('#', '');
+  return (typeof sNum === 'string') && sNum.length === 6 && !isNaN(parseInt(sNum, 16));
+};
