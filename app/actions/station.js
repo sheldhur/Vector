@@ -150,6 +150,7 @@ export function getData(dispatch, getState, action, args) {
 
 export function getLatitudeAvgValues() {
   return (dispatch, getState) => {
+    dispatch(resetStation());
     dispatch(setLoading(true));
     getData(dispatch, getState, 'getLatitudeAvgValues');
   };
