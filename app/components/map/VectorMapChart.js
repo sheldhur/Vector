@@ -10,7 +10,14 @@ import { numberIsBetween } from '../../utils/helper';
 class VectorMapChart extends Component {
   state = {
     stereographicClipAngle: 45,
-    stereographicRotate: 0
+    stereographicRotate: 0,
+    projectionType: this.props.mapProjectionType
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.mapProjectionType !== this.props.mapProjectionType) {
+      this.setState({ projectionType: nextProps.mapProjectionType });
+    }
   };
 
   handlerContextMenu = (e) => {
@@ -43,7 +50,7 @@ class VectorMapChart extends Component {
 
   render = () => {
     const {
-      antiAliasing, mapProjectionType, mapScale, mapCountries, mapColor
+      antiAliasing, mapScale, mapCountries, mapColor
     } = this.props;
     const props = {
       antiAliasing,
@@ -52,7 +59,6 @@ class VectorMapChart extends Component {
         countries: mapCountries,
         color: mapColor,
       },
-      projectionType: mapProjectionType,
       ...this.state
     };
 

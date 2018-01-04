@@ -13,10 +13,6 @@ class SettingsInputColor extends Component {
   isMouseEnter = false;
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.id === 'appMapColor.water') {
-      console.log(nextProps.value);
-    }
-
     if (this.state.value !== nextProps.value) {
       this.setState({ value: nextProps.value });
     }
@@ -127,7 +123,7 @@ class SettingsInputColor extends Component {
         placement="right"
       >
         <div
-          className="color-cell-wrapper ant-input ant-input-sm"
+          className="color-input ant-input ant-input-sm"
           onClick={this.handlerColorPickerShow}
           onMouseEnter={() => this.isMouseEnter = true}
           onMouseLeave={() => this.isMouseEnter = false}
