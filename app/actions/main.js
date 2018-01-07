@@ -92,7 +92,8 @@ export function saveSettings(values, useDefault = false) {
       let value = settings[key];
 
       if (key === 'projectTimePeriod' || key === 'projectTimeSelected') {
-        value = value.map(item => item.format(FORMAT_DATE_SQL));
+        console.log(value);
+        value = value.map(item => item.millisecond(0).format(FORMAT_DATE_SQL));
       }
 
       tmp[type][key] = value;
@@ -159,7 +160,7 @@ export function createDataBase(path, settings) {
       await db.Project.upsert({ id: 1 }, { where: { _id: 1 } });
       await dispatch(saveSettings(settings, true));
       dispatch(saveLastDataBase(path));
-      openMainPage();
+      dispatch(openMainPage());
     } catch (e) {
       console.error(e);
       dispatch(setError(e));
@@ -200,12 +201,6 @@ export function dialogOpenCreateDataBase(settings) {
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
         if (settings) {
-          settings.project.time.period = {
-            start: settings.project.time.period.start.millisecond(0).toISOString(),
-            end: settings.project.time.period.end.millisecond(0).toISOString(),
-          };
-          settings.project.time.selected = settings.project.time.period;
-
           dispatch(createDataBase(filePaths, settings));
         } else {
           dispatch(openDataBase(filePaths[0]));

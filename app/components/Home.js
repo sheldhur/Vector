@@ -19,18 +19,11 @@ class Home extends Component {
       by: app.IMPORT_AVG[1],
       value: 1,
     },
-    period: {
-      start: undefined,
-      end: undefined,
-    }
+    period: [undefined, undefined]
   };
-  handlerDaterangeOk = (value) => {
-    this.setState({
-      period: {
-        start: value[0],
-        end: value[1],
-      }
-    });
+
+  handlerDaterangeOk = (period) => {
+    this.setState({ period });
   };
 
   handlerAvgBySelect = (value) => {
@@ -49,12 +42,9 @@ class Home extends Component {
 
   handlerDialog = (e, isCreateNew) => {
     const settings = isCreateNew ? {
-      project: {
-        time: {
-          avg: this.state.avg,
-          period: this.state.period
-        }
-      }
+      projectTimePeriod: this.state.period,
+      projectTimeSelected: this.state.period,
+      projectTimeAvg: this.state.avg,
     } : undefined;
 
     this.props.mainActions.dialogOpenCreateDataBase(settings);
@@ -72,7 +62,7 @@ class Home extends Component {
   render = () => {
     const { avg, period } = this.state;
     const avgData = app.IMPORT_AVG_DATA.map((item, i) => ({ label: item, value: i }));
-    const isDateRange = period.start && period.end;
+    const isDateRange = period[0] && period[1];
 
     if (this.props.isLaunch || this.props.isLoading) {
       return (<LoadingAlert className={`theme-${theme}`} />);
@@ -137,8 +127,7 @@ class Home extends Component {
                   type="primary"
                   onClick={(e) => this.handlerDialog(e, true)}
                   disabled={!isDateRange}
-                >Create new database
-                </Button>
+                >Create new database</Button>
               </Row>
             </Card>
           </Col>

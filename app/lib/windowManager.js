@@ -44,7 +44,7 @@ class WindowManager {
       }
     });
 
-    console.log(windowOptions);
+    // console.log(windowOptions);
 
     const win = this.get(name, url) || new remote.BrowserWindow(windowOptions);
     win.setMenu(menu);

@@ -6,8 +6,8 @@ const getFileName = (path) => path.replace(/^.*[\\\/]/, '');
 
 const WbrString = (props) => (
   <span dangerouslySetInnerHTML={{
-      __html: props.children.replace(/\\/g, (str) => `${str}<wbr />`)
-    }}
+    __html: props.children.replace(/\\/g, (str) => `${str}<wbr />`)
+  }}
   />
 );
 
@@ -30,7 +30,7 @@ const ImportProgressBar = (props) => (
   <Row className={`import-progress-bar${props.className ? ` ${props.className}` : ''}`}>
     <Progress percent={Math.ceil(props.progressBar.total)} className="animation-off" />
     <small>
-        File: <FilePathTooltip>{props.currentFile}</FilePathTooltip>
+      File: <FilePathTooltip>{props.currentFile}</FilePathTooltip>
     </small>
     <Progress percent={Math.ceil(props.progressBar.current)} className="animation-off" />
   </Row>
@@ -50,11 +50,11 @@ const ImportLogList = (props) => {
           <List.Item.Meta
             title={<div>
               <Icon type="cross-circle" /> {FileLink} processing error
-                   </div>}
+            </div>}
             description={<div>
               <strong>{props.error.name}: </strong>
               {props.error.message}
-                         </div>}
+            </div>}
           />
         </List.Item>
       );
@@ -64,7 +64,7 @@ const ImportLogList = (props) => {
         <List.Item.Meta
           title={<div>
             <Icon type="exclamation-circle" /> {FileLink} no data for import
-                 </div>}
+          </div>}
         />
       </List.Item>
     );
