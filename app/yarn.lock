@@ -82,9 +82,9 @@ semver@^5.0.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
 
-sequelize@^4.28.7:
-  version "4.28.7"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.28.7.tgz#237da9c8a5caeb0a06d4dd37f4faf70fc2e230ea"
+sequelize@^4.29.0:
+  version "4.29.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.29.0.tgz#d858dacda903a5e67b7239c600fa322b83db80f6"
   dependencies:
     bluebird "^3.4.6"
     cls-bluebird "^2.0.1"
