@@ -36,8 +36,6 @@ export default function (dbSession, data) {
 
         for (const stationKey in stationsData) {
           const stationData = stationsData[stationKey];
-          process.send({ stationData });
-
           const data = await saveStation(stationData, fileType);
           process.send({ event: 'addStation', data: data.station });
 
@@ -111,7 +109,7 @@ function saveStationValues(data, files, stations, fileCurrent) {
           if (i === 0) {
             return moment(item).format(db.formatTime);
           } else if (i >= 1 && i <= 3) {
-            return item.toFixed(5);
+            return item ? item.toFixed(5) : item;
           }
         });
         stmt.run(...row, station.id, format, (error) => {
@@ -141,8 +139,8 @@ function saveStationValues(data, files, stations, fileCurrent) {
 
 function convertToXY(values, reported = 'XYZF') {
   if (!reported.startsWith('XY')) {
-    let X,
-      Y;
+    let X;
+    let Y;
     if (reported.startsWith('HD')) {
       const H = values[1];
       const D = values[2];

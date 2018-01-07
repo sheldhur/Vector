@@ -70,7 +70,7 @@ function saveDataSets(data) {
             results.push({
               dataSetId: id,
               time: moment(row[0]).format(db.formatTime),
-              value: row[i].toFixed(5),
+              value: row[i] ? row[i].toFixed(5) : row[i],
               format: data.format
             });
           });
