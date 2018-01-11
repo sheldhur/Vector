@@ -148,6 +148,7 @@ export function openDataBase(path, openMain = true) {
     } catch (e) {
       console.error(e);
       dispatch(setError(errorToObject(e)));
+      dispatch(push('/'));
     }
   }
 }
