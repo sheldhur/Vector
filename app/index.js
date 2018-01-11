@@ -6,6 +6,7 @@ import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import { LocaleProvider } from 'antd';
 import locale from 'antd/lib/locale-provider/ru_RU';
+import {IS_PROD} from './constants/app';
 import * as mainActions from './actions/main';
 import * as stationActions from './actions/station';
 import * as dataSetActions from './actions/dataSet';
@@ -14,7 +15,13 @@ import './app.global.css';
 
 const currentWin = remote.getCurrentWindow();
 const store = configureStore();
-store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));
+
+const openDb = remote.process.argv[1] || null;
+if (openDb && IS_PROD) {
+  store.dispatch(mainActions.openDataBase(openDb, true));
+} else {
+  store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));
+}
 
 render(
   <LocaleProvider locale={locale}>
