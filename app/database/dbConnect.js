@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import Sequelize from 'sequelize';
 import models from './models';
 import consoleLogSQL from '../lib/consoleLogSQL';
@@ -44,9 +45,35 @@ const operatorsAliases = {
   $col: Op.col
 };
 
+const isSqliteFile = async (path) => {
+  const header = 'SQLite format 3';
+  return new Promise((resolve, reject) => {
+    fs.open(path, 'r+', (error, fd) => {
+      if (error) {
+        reject(error);
+      }
+
+      const buffer = new Buffer(header.length);
+      fs.read(fd, buffer, 0, header.length, 0, (error) => {
+        if (error) {
+          reject(error);
+        }
+
+        if (buffer.toString() === header) {
+          resolve(true);
+        } else {
+          reject(new Error('Is not SQLite3 file'));
+        }
+      });
+    });
+  });
+};
+
 const dbConnect = async (dbPath) => {
   if (dbPath !== undefined && (db === undefined || db.sequelize === undefined)) {
     let sequelize;
+
+    await isSqliteFile(dbPath);
 
     /**
      * Sometimes ASAR can not unpack 'sqlite' node module in time
