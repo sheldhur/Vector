@@ -47,6 +47,14 @@ export default function (dbSession, data) {
     throw new Error("Can't get project settings");
   }
 
+  if (!data.main.settings.projectTimePeriod[0] || !data.main.settings.projectTimePeriod[1]) {
+    throw new Error("Can't get time period");
+  }
+
+  if (!data.main.settings.projectTimeSelected[0] || !data.main.settings.projectTimeSelected[1]) {
+    throw new Error("Can't get time selected");
+  }
+
   db = dbSession;
 
   (async () => {
@@ -67,10 +75,6 @@ function actionStationViewValues(data) {
     console.time('actionStationViewValues');
     const { settings } = data.main;
     const sqlite = db.sequelize.connectionManager.connections.default;
-
-    if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
-      throw new Error("Can't get time period");
-    }
 
     const timePeriod = {
       start: moment(settings.projectTimePeriod[0]),
@@ -143,18 +147,10 @@ async function actionStationsValue(data) {
 
 async function actionLatitudeAvgValues(data) {
   const { settings } = data.main;
-
-  if (!settings.projectTimePeriod[0] || !settings.projectTimePeriod[1]) {
-    throw new Error("Can't get time period");
-  }
   const timePeriod = {
     start: moment(settings.projectTimePeriod[0]),
     end: moment(settings.projectTimePeriod[1])
   };
-
-  if (!settings.projectTimeSelected[0] || !settings.projectTimeSelected[1]) {
-    throw new Error("Can't get time selected");
-  }
   const timeSelected = {
     start: moment(settings.projectTimeSelected[0]),
     end: moment(settings.projectTimeSelected[1])
