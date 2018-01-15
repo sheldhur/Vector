@@ -48,15 +48,15 @@ const operatorsAliases = {
 const isSqliteFile = async (path) => {
   const header = 'SQLite format 3';
   return new Promise((resolve, reject) => {
-    fs.open(path, 'r+', (error, fd) => {
-      if (error) {
-        reject(error);
+    fs.open(path, 'r+', (openError, fd) => {
+      if (openError) {
+        reject(openError);
       }
 
-      const buffer = new Buffer(header.length);
-      fs.read(fd, buffer, 0, header.length, 0, (error) => {
-        if (error) {
-          reject(error);
+      const buffer = Buffer.alloc(header.length);
+      fs.read(fd, buffer, 0, header.length, 0, (readError) => {
+        if (readError) {
+          reject(readError);
         }
 
         if (buffer.toString() === header) {
