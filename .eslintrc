@@ -37,7 +37,9 @@
     "no-restricted-syntax": ["off", "ForInStatement"],
     "react/prop-types": ["off"],
     "react/jsx-closing-tag-location": ["off"],
-    "no-trailing-spaces": "off"
+    "no-trailing-spaces": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": "off"
   },
   "plugins": [
     "flowtype",

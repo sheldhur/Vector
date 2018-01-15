@@ -2,7 +2,7 @@ import { remote } from 'electron';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Alert } from 'antd';
+import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Modal } from 'antd';
 import moment from 'moment';
 import { LoadingAlert } from './widgets/ChartAlert';
 import * as mainActions from '../actions/main';
@@ -10,7 +10,7 @@ import * as app from '../constants/app';
 // import IconResizer from './_IconResizer';
 // import './../lib/geomagneticData/_test';
 
-const settings = JSON.parse(window.localStorage['appSettings'] || null);
+const settings = JSON.parse(window.localStorage[app.LS_KEY_APP_SETTINGS] || null);
 const theme = settings ? settings.appTheme : 'night';
 
 class Home extends Component {
@@ -68,18 +68,17 @@ class Home extends Component {
       return (<LoadingAlert className={`theme-${theme}`} />);
     }
 
+    if (this.props.isError) {
+      Modal.error({
+        title: 'Project file error',
+        content: this.props.isError.message
+      });
+    }
+
     return (
       <div className="home-page">
         <Row justify="center" align="middle">
           <Col span={12} offset={6}>
-            {this.props.isError && <Row justify="center" align="middle">
-              <Alert
-                message={this.props.isError.name}
-                description={this.props.isError.message}
-                type="error"
-                showIcon
-              />
-            </Row>}
             <Card title={remote.app.getName()} bordered={false}>
               <Row>
                 <Button

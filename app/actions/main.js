@@ -92,7 +92,6 @@ export function saveSettings(values, useDefault = false) {
       let value = settings[key];
 
       if (key === 'projectTimePeriod' || key === 'projectTimeSelected') {
-        console.log(value);
         value = value.map(item => item.millisecond(0).format(FORMAT_DATE_SQL));
       }
 
@@ -121,8 +120,7 @@ export function loadSettings(id = 1) {
 
       return dispatch(setSettings({ ...settingsApp, ...settingsProject }));
     } catch (e) {
-      console.error(e);
-      dispatch(setError(errorToObject(e)));
+      throw e;
     }
   }
 }

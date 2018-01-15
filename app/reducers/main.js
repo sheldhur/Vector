@@ -33,7 +33,6 @@ export default function main(state = initialState, action) {
     case types.LOADING:
       return { ...state, isLoading: action.payload };
     case types.ERROR:
-      console.log(action.payload);
       return { ...state, isError: action.payload, isLoading: false };
     case types.UPDATE:
       return { ...state, update: action.payload };
