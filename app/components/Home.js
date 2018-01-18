@@ -2,10 +2,11 @@ import { remote } from 'electron';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Modal } from 'antd';
+import { Card, Col, Row, Button, Input, InputNumber, Select, Radio, Modal } from 'antd';
 import moment from 'moment';
 import { LoadingAlert } from './widgets/ChartAlert';
 import SettingsDataTimeRage from './settings/SettingsDataTimeRage';
+import MainUpdateApp from './main/MainUpdateApp';
 import * as mainActions from '../actions/main';
 import * as app from '../constants/app';
 
@@ -115,6 +116,7 @@ class Home extends Component {
             </Card>
           </Col>
         </Row>
+        <MainUpdateApp />
       </div>
     );
   }
