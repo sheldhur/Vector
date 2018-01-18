@@ -17,20 +17,34 @@ class SettingsDataTimeRage extends Component {
   disabledRangeTime = (current, type, range) => {
     const disabled = {};
 
-    if (range && Array.isArray(current)) {
-      const rangeMap = this.valuesToMap(range);
+    if (current && Array.isArray(current)) {
       const currentMap = this.valuesToMap(current);
 
-      if (currentMap[type].format(FORMAT_DATE_INPUT) === rangeMap[type].format(FORMAT_DATE_INPUT)) {
-        const rangeHour = rangeMap[type].hour();
-        const rangeMinute = rangeMap[type].minute();
+      if (range && Array.isArray(range)) {
+        const rangeMap = this.valuesToMap(range);
 
-        if (type === 'start') {
-          disabled.disabledHours = () => createRange(0, rangeHour);
-          disabled.disabledMinutes = () => createRange(0, rangeMinute);
-        } else if (type === 'end') {
-          disabled.disabledHours = () => createRange(rangeHour + 1, 24);
-          disabled.disabledMinutes = () => createRange(rangeMinute + 1, 60);
+        if (currentMap[type].format(FORMAT_DATE_INPUT) === rangeMap[type].format(FORMAT_DATE_INPUT)) {
+          const rangeHour = rangeMap[type].hour();
+          const rangeMinute = rangeMap[type].minute();
+
+          if (type === 'start') {
+            disabled.disabledHours = () => createRange(0, rangeHour);
+            disabled.disabledMinutes = () => createRange(0, rangeMinute);
+          } else if (type === 'end') {
+            disabled.disabledHours = () => createRange(rangeHour + 1, 24);
+            disabled.disabledMinutes = () => createRange(rangeMinute + 1, 60);
+          }
+        }
+      } else {
+        const now = moment();
+        if (currentMap[type].format(FORMAT_DATE_INPUT) === now.format(FORMAT_DATE_INPUT)) {
+          const nowHour = now.hour();
+          const nowMinute = now.minute();
+
+          disabled.disabledHours = () => createRange(nowHour + 1, 24);
+          if (currentMap[type].hour() === nowHour) {
+            disabled.disabledMinutes = () => createRange(nowMinute + 1, 60);
+          }
         }
       }
     }
