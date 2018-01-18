@@ -1,7 +1,7 @@
 {
   "name": "Vector",
   "productName": "Vector",
-  "version": "2.0.0-beta.8",
+  "version": "2.0.0-beta.9",
   "description": "App for visualize Earth's geomagnetic structure in perioads of Solar activity by observatory and satelite data",
   "scripts": {
     "clean": "node ./internals/scripts/CleanUp.js",
