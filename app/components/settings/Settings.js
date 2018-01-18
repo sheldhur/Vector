@@ -16,7 +16,7 @@ import { stringCamelCase, numberIsBetween } from '../../utils/helper';
 
 class Settings extends Component {
   state = {
-    modalVisible: true,
+    modalVisible: false,
     modalHeight: 250,
   };
 

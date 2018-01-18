@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === 'development') {
   app.setName(appPackage.name);
   app.setVersion(appPackage.version);
   autoUpdater.updateConfigPath = './dev-app-update.yml';
+  autoUpdater.currentVersion = '0.0.0';
 }
 
 if (process.env.NODE_ENV === 'production') {
