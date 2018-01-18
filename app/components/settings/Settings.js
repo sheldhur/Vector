@@ -16,7 +16,7 @@ import { stringCamelCase, numberIsBetween } from '../../utils/helper';
 
 class Settings extends Component {
   state = {
-    modalVisible: false,
+    modalVisible: true,
     modalHeight: 250,
   };
 
@@ -465,12 +465,21 @@ class Settings extends Component {
                 <Form.Item {...formItemLayout} label="Time">
                   {wrappedField('projectTimePeriod')(<SettingsDataTimeRage
                     size={this.props.size}
+                    onChange={(value) => {
+                      const selected = getFieldValue('projectTimeSelected');
+                      const newSelected = [
+                        Math.max(value[0].valueOf(), selected[0].valueOf()),
+                        Math.min(value[1].valueOf(), selected[1].valueOf())
+                      ].map(item => moment(item));
+
+                      setFieldsValue({ projectTimeSelected: newSelected });
+                    }}
                   />)}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Selected time">
                   {wrappedField('projectTimeSelected')(<SettingsDataTimeRage
                     size={this.props.size}
-                    valueLimit={getFieldValue('time.period')}
+                    valueLimit={getFieldValue('projectTimePeriod')}
                   />)}
                 </Form.Item>
                 <br />
@@ -527,7 +536,7 @@ class Settings extends Component {
                             <div className="negative" />
                           </div>
                         </Radio.Button>
-                       </Radio.Group>)}
+                      </Radio.Group>)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Color">
                       <Col span={12}>

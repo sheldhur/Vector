@@ -9,7 +9,9 @@ export const IMPORT_AVG_DATA = ['Only station data', 'All data'];
 export const IMPORT_TYPE_DATA_SET = ['CDAWeb', 'GOES', 'CSV'].sort();
 export const IMPORT_TYPE_STATION = ['IAGA-2002', 'IAGA-2000', 'CSV', 'CDAWeb', 'CARISMA', '210 MM', 'MagBase', 'SAMNET', 'IMAGE'].sort();
 
-export const FORMAT_DATE_INPUT = 'DD.MM.YYYY HH:mm';
+export const FORMAT_DATE_INPUT = 'DD.MM.YYYY';
+export const FORMAT_TIME_INPUT = 'HH:mm';
+export const FORMAT_DATETIME_INPUT = `${FORMAT_DATE_INPUT} ${FORMAT_TIME_INPUT}`;
 export const FORMAT_DATE_SQL = 'YYYY-MM-DD HH:mm:ss.SSS';
 
 export const DATASET_DISABLED = 0;

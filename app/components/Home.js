@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { Card, Col, Row, Button, DatePicker, Input, InputNumber, Select, Radio, Modal } from 'antd';
 import moment from 'moment';
 import { LoadingAlert } from './widgets/ChartAlert';
+import SettingsDataTimeRage from './settings/SettingsDataTimeRage';
 import * as mainActions from '../actions/main';
 import * as app from '../constants/app';
-// import IconResizer from './_IconResizer';
-// import './../lib/geomagneticData/_test';
 
 const settings = JSON.parse(window.localStorage[app.LS_KEY_APP_SETTINGS] || null);
 const theme = settings ? settings.appTheme : 'night';
+
 
 class Home extends Component {
   state = {
@@ -19,7 +19,7 @@ class Home extends Component {
       by: app.IMPORT_AVG[1],
       value: 1,
     },
-    period: [undefined, undefined]
+    period: [null, null]
   };
 
   handlerDaterangeOk = (period) => {
@@ -41,23 +41,14 @@ class Home extends Component {
   };
 
   handlerDialog = (e, isCreateNew) => {
-    const settings = isCreateNew ? {
+    const initSettings = isCreateNew ? {
       projectTimePeriod: this.state.period,
       projectTimeSelected: this.state.period,
       projectTimeAvg: this.state.avg,
     } : undefined;
 
-    this.props.mainActions.dialogOpenCreateDataBase(settings);
+    this.props.mainActions.dialogOpenCreateDataBase(initSettings);
   };
-
-  disabledRangeTime = () => ({
-    disabledSeconds: () => {
-      const range = [...Array(60).keys()];
-      range.shift();
-
-      return range;
-    },
-  });
 
   render = () => {
     const { avg, period } = this.state;
@@ -92,26 +83,19 @@ class Home extends Component {
               <Row>
                 <Input.Group compact>
                   <Input style={{ width: '100px' }} value="Time period" disabled className="ant-input-group-addon" />
-                  <DatePicker.RangePicker
-                    showTime={{
-                      hideDisabledOptions: true,
-                      defaultValue: moment('00:00:00', 'HH:mm:ss')
-                    }}
-                    format={app.FORMAT_DATE_INPUT}
-                    defaultValue={[period.start, period.end]}
-                    placeholder={['Start Time', 'End Time']}
-                    disabledTime={this.disabledRangeTime}
+                  <SettingsDataTimeRage
+                    defaultValue={period.map(item => (item ? moment(item) : item))}
                     onOk={this.handlerDaterangeOk}
                   />
                 </Input.Group>
               </Row>
               <Row>
                 <Input.Group compact>
-                  <Input style={{ width: '100px' }} value="Averaged data" disabled className="ant-input-group-addon" />
+                  <Input style={{ width: '150px' }} value="Averaged data" disabled className="ant-input-group-addon" />
                   <InputNumber min={1} defaultValue={avg.value} onChange={this.handlerAvgValueChange} />
                   <Select defaultValue={avg.by} onChange={this.handlerAvgBySelect}>
                     {app.IMPORT_AVG.map((item, i) => (<Select.Option
-                      key={i}
+                      key={item}
                       value={i.toString()}
                     >{item}</Select.Option>))}
                   </Select>

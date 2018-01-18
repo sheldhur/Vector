@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -36,25 +35,18 @@ class MainHeader extends Component {
       this.props.stationActions.getLatitudeAvgValues();
       this.props.dataSetActions.getData();
     }
-    // e.target.blur(); // TODO: focusout not working
   };
 
   handlerClose = (e) => {
     this.props.mainActions.closeDataBase();
-    // e.target.blur(); // TODO: focusout not working
   };
 
   handlerDatePickerOk = (value) => {
-    // this.props.mainActions.saveSettings({
-    //   time: {
-    //     selected: {
-    //       start: value[0],
-    //       end: value[1],
-    //     }
-    //   }
-    // }).then(() => {
-    //   this.handlerReload();
-    // });
+    this.props.mainActions.saveSettings({ projectTimeSelected: value })
+      .then(this.handlerReload)
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   render = () => {

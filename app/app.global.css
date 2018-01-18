@@ -129,6 +129,10 @@ hr {
   -webkit-animation-timing-function: linear;
 }
 
+.ant-input-group .ant-calendar-picker + .ant-input-group-addon {
+  border-left: 0;
+}
+
 @-webkit-keyframes spinnerRotate {
   from {
     -webkit-transform: rotate(0deg);

@@ -34,3 +34,12 @@ export const isHexColor = (value) => {
   const sNum = value.replace('#', '');
   return (typeof sNum === 'string') && sNum.length === 6 && !isNaN(parseInt(sNum, 16));
 };
+
+export const createRange = (start, end) => {
+  const result = [];
+  for (let i = start; i < end; i++) {
+    result.push(i);
+  }
+
+  return result;
+};
