@@ -1,4 +1,5 @@
 import { ipcRenderer, remote } from 'electron';
+import * as fs from 'fs';
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -17,7 +18,7 @@ const currentWin = remote.getCurrentWindow();
 const store = configureStore();
 
 const openDb = remote.process.argv[1] || null;
-if (openDb && IS_PROD) {
+if (openDb && fs.existsSync(openDb) && IS_PROD) {
   store.dispatch(mainActions.openDataBase(openDb, true));
 } else {
   store.dispatch(mainActions.getLastDataBase(currentWin.id === 1 && window.location.hash === '#/'));
