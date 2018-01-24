@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Icon, Popconfirm, Popover, Button } from 'antd';
 import { SketchPicker } from 'react-color';
