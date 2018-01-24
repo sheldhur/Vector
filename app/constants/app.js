@@ -2,7 +2,7 @@ export const LS_KEY_LAST_DB = 'lastDataBase';
 export const LS_KEY_APP_SETTINGS = 'appSettings';
 
 export const FILE_EXT_ALL = ['*'];
-export const FILE_EXT_DB = ['db3', 'db'];
+export const FILE_EXT_DB = ['db3', 'db', 'vpdb'];
 
 export const IMPORT_AVG = ['seconds', 'minutes'];
 export const IMPORT_AVG_DATA = ['Only station data', 'All data'];

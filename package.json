@@ -73,6 +73,18 @@
         "AppImage"
       ]
     },
+    "fileAssociations": [
+      {
+        "ext": [".vpdb"],
+        "description": "Vector project database",
+        "role": "none"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
     "directories": {
       "buildResources": "resources",
       "output": "release"
