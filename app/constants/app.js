@@ -13,6 +13,7 @@ export const FORMAT_DATE_INPUT = 'DD.MM.YYYY';
 export const FORMAT_TIME_INPUT = 'HH:mm';
 export const FORMAT_DATETIME_INPUT = `${FORMAT_DATE_INPUT} ${FORMAT_TIME_INPUT}`;
 export const FORMAT_DATE_SQL = 'YYYY-MM-DD HH:mm:ss.SSS';
+export const FORMAT_FILENAME = 'YYYY-MM-DD HH-mm';
 
 export const DATASET_DISABLED = 0;
 export const DATASET_ENABLED = 1;
@@ -43,7 +44,7 @@ export const AVG_CHART_COMP = ['dH', 'dD', 'dZ'];
 export const AVG_CHART_HEMISPHERE = ['global', 'east', 'west'];
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
-export const WORKER_PATH = `./worker.${IS_PROD ? 'prod' : 'dev'}.js`;
+export const WORKER_PATH = IS_PROD ? './dist/worker.prod.js' : './worker.dev.js';
 
 export const THEMES = ['Night', 'Light'];
 export const LANGUAGES = [
