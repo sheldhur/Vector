@@ -128,7 +128,7 @@ export function loadSettings(id = 1) {
 
 async function createConnect(path) {
   if (db && db.sequelize !== undefined) {
-    db.close();
+    await db.close();
     db = null;
   }
   db = await dbConnect(path);

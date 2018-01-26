@@ -42,30 +42,34 @@ const operatorsAliases = {
   $any: Op.any,
   $all: Op.all,
   $values: Op.values,
-  $col: Op.col
+  $col: Op.col,
 };
 
 const isSqliteFile = async (path) => {
   const header = 'SQLite format 3';
   return new Promise((resolve, reject) => {
-    fs.open(path, 'r+', (openError, fd) => {
-      if (openError) {
-        reject(openError);
-      }
-
-      const buffer = Buffer.alloc(header.length);
-      fs.read(fd, buffer, 0, header.length, 0, (readError) => {
-        if (readError) {
-          reject(readError);
-        }
-
-        if (buffer.toString() === header) {
-          resolve(true);
+    if (fs.existsSync(path)) {
+      fs.open(path, 'r+', (openError, fd) => {
+        if (openError) {
+          reject(openError);
         } else {
-          reject(new Error('Is not SQLite3 file'));
+          const buffer = Buffer.alloc(header.length);
+          fs.read(fd, buffer, 0, header.length, 0, (readError) => {
+            if (readError) {
+              reject(readError);
+            }
+
+            if (buffer.toString() === header) {
+              resolve(true);
+            } else {
+              reject(new Error('Is not SQLite3 file'));
+            }
+          });
         }
       });
-    });
+    }
+
+    resolve(null);
   });
 };
 
@@ -96,9 +100,9 @@ const dbConnect = async (dbPath) => {
             }
           },
           define: {
-            timestamps: false
+            timestamps: false,
           },
-          operatorsAliases
+          operatorsAliases,
         });
       } catch (e) {
         if (i === INIT_TRY.attempts) {
