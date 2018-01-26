@@ -6,6 +6,7 @@ import {
   FILE_EXT_ALL,
   FILE_EXT_DB,
   FORMAT_DATE_SQL,
+  FORMAT_FILENAME,
   LS_KEY_APP_SETTINGS,
   LS_KEY_LAST_DB
 } from '../constants/app';
@@ -187,10 +188,11 @@ function openMainPage() {
 
 export function dialogOpenCreateDataBase(settings) {
   return (dispatch) => {
-    let showDialog = !settings ? dialog.showOpenDialog : dialog.showSaveDialog;
+    const showDialog = !settings ? dialog.showOpenDialog : dialog.showSaveDialog;
+    const defaultPath = !settings ? 'project.vpdb' : `project ${settings.projectTimePeriod[0].format(FORMAT_FILENAME)}.vpdb`;
     showDialog(currentWindow, {
       title: !settings ? 'Select database file' : 'Select path for new database',
-      defaultPath: 'project.db3',
+      defaultPath: defaultPath,
       properties: !settings ? ['openFile'] : ['openFile', 'createDirectory', 'promptToCreate'],
       buttonLabel: !settings ? 'Open database' : 'Create database',
       filters: [
