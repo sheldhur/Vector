@@ -63,7 +63,8 @@ class Home extends Component {
     if (this.props.isError) {
       Modal.error({
         title: 'Project file error',
-        content: this.props.isError.message
+        content: this.props.isError.message,
+        width: 600,
       });
     }
 
