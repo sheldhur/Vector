@@ -2,13 +2,7 @@ import { remote } from 'electron';
 import * as fs from 'fs';
 import { push } from 'react-router-redux';
 import {
-  DEFAULT_SETTINGS,
-  FILE_EXT_ALL,
-  FILE_EXT_DB,
-  FORMAT_DATE_SQL,
-  FORMAT_FILENAME,
-  LS_KEY_APP_SETTINGS,
-  LS_KEY_LAST_DB
+  DEFAULT_SETTINGS, FILE_EXT_ALL, FILE_EXT_DB, FORMAT_DATE_SQL, FORMAT_FILENAME, LS_KEY_APP_SETTINGS, LS_KEY_LAST_DB,
 } from '../constants/app';
 import * as types from '../constants/main';
 import dbConnect from '../database/dbConnect';
@@ -22,21 +16,21 @@ let db;
 export function setLoading(payload) {
   return {
     type: types.LOADING,
-    payload
+    payload,
   };
 }
 
 export function setError(payload) {
   return {
     type: types.ERROR,
-    payload
+    payload,
   };
 }
 
 export function setUpdate(payload) {
   return {
     type: types.UPDATE,
-    payload
+    payload,
   };
 }
 
@@ -44,7 +38,7 @@ export function setSettings(payload) {
   return {
     type: types.SETTINGS,
     payload,
-    syncState: true
+    syncState: true,
   };
 }
 
@@ -52,7 +46,7 @@ export function setDataBasePath(payload) {
   return {
     type: types.DB_PATH,
     payload,
-    syncState: true
+    syncState: true,
   };
 }
 
@@ -75,11 +69,12 @@ export function getLastDataBase(openMain = true) {
       } catch (e) {
         console.error(e);
         dispatch(setError(errorToObject(new Error('Can\'t open last database: ' + path))));
+        dispatch(push('/'));
       }
     } else {
       dispatch(setDataBasePath(null));
     }
-  }
+  };
 }
 
 export function saveSettings(values, useDefault = false) {
@@ -106,7 +101,7 @@ export function saveSettings(values, useDefault = false) {
     localStorage[LS_KEY_APP_SETTINGS] = settingsApp;
 
     return dispatch(setSettings(settings));
-  }
+  };
 }
 
 export function loadSettings(id = 1) {
@@ -123,7 +118,7 @@ export function loadSettings(id = 1) {
     } catch (e) {
       throw e;
     }
-  }
+  };
 }
 
 async function createConnect(path) {
@@ -149,7 +144,7 @@ export function openDataBase(path, openMain = true) {
       dispatch(setError(errorToObject(e)));
       dispatch(push('/'));
     }
-  }
+  };
 }
 
 export function createDataBase(path, settings) {
@@ -165,7 +160,7 @@ export function createDataBase(path, settings) {
       console.error(e);
       dispatch(setError(e));
     }
-  }
+  };
 }
 
 export function closeDataBase() {
@@ -175,7 +170,7 @@ export function closeDataBase() {
       db = null;
       dispatch(push('/home'));
     }
-  }
+  };
 }
 
 function openMainPage() {
@@ -183,7 +178,7 @@ function openMainPage() {
     if (getState().router.location.pathname !== '/main') {
       return dispatch(push('/main'));
     }
-  }
+  };
 }
 
 export function dialogOpenCreateDataBase(settings) {
@@ -197,7 +192,7 @@ export function dialogOpenCreateDataBase(settings) {
       buttonLabel: !settings ? 'Open database' : 'Create database',
       filters: [
         { name: 'Database', extensions: FILE_EXT_DB },
-        { name: 'All Files', extensions: FILE_EXT_ALL }
+        { name: 'All Files', extensions: FILE_EXT_ALL },
       ],
     }, (filePaths) => {
       if (filePaths && filePaths.length) {
@@ -208,5 +203,5 @@ export function dialogOpenCreateDataBase(settings) {
         }
       }
     });
-  }
+  };
 }
