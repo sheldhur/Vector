@@ -18,7 +18,7 @@ render(
       <Root store={store} history={history} />
     </AppContainer>
   </LocaleProvider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 if (module.hot) {
@@ -30,7 +30,7 @@ if (module.hot) {
           <NextRoot store={store} history={history} />
         </AppContainer>
       </LocaleProvider>,
-      document.getElementById('root')
+      document.getElementById('root'),
     );
   });
 }
