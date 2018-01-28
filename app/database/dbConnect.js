@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import Sequelize from 'sequelize';
 import models from './models';
 import consoleLogSQL from '../lib/consoleLogSQL';
@@ -45,45 +44,14 @@ const operatorsAliases = {
   $col: Op.col,
 };
 
-const isSqliteFile = async (path) => {
-  const header = 'SQLite format 3';
-  return new Promise((resolve, reject) => {
-    if (fs.existsSync(path)) {
-      fs.open(path, 'r+', (openError, fd) => {
-        if (openError) {
-          reject(openError);
-        } else {
-          const buffer = Buffer.alloc(header.length);
-          fs.read(fd, buffer, 0, header.length, 0, (readError) => {
-            if (readError) {
-              reject(readError);
-            }
-
-            if (buffer.toString() === header) {
-              resolve(true);
-            } else {
-              reject(new Error('Is not SQLite3 file'));
-            }
-          });
-        }
-      });
-    }
-
-    resolve(null);
-  });
-};
-
 const dbConnect = async (dbPath) => {
   if (dbPath !== undefined && (db === undefined || db.sequelize === undefined)) {
-    let sequelize;
-
-    await isSqliteFile(dbPath);
-
     /**
      * Sometimes ASAR can not unpack 'sqlite' node module in time
      * This error can get only then you spawn new child electron process with ELECTRON_RUN_AS_NODE flag
      * This code trying init 'sequelize' few times with timeout
      */
+    let sequelize;
     for (let i = 1; i <= INIT_TRY.attempts; i++) {
       try {
         sequelize = new Sequelize('database', null, null, {
