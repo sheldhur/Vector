@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
@@ -7,11 +6,12 @@ import { solarPoint } from '../../../lib/geopack';
 class SolarTerminator extends Component {
   render = () => {
     const {
-      projection, path, currentTime, pointRadius
+      projection, path, pointRadius, currentTime,
     } = this.props;
+    // const currentTime = new Date(2015, 5, 21, 16, 45, 0);
 
     if (currentTime) {
-      const utcTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
+      const utcTime = new Date(currentTime.getTime() - (currentTime.getTimezoneOffset() * 60000));
       const circle = d3.geoCircle();
       const center = solarPoint.calculate(utcTime);
       const antipode = solarPoint.antipode(center);
@@ -38,7 +38,7 @@ class SolarTerminator extends Component {
     }
 
     return null;
-  }
+  };
 }
 
 SolarTerminator.propTypes = {};
@@ -49,7 +49,7 @@ SolarTerminator.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    currentTime: state.ui.chartCurrentTime ? new Date(state.ui.chartCurrentTime) : null
+    currentTime: state.ui.chartCurrentTime ? new Date(state.ui.chartCurrentTime) : null,
   };
 }
 
