@@ -54,7 +54,7 @@ class MagnetopauseMapX extends Component {
       const chartLines = [
         {
           si: 'Z (Re)',
-          extent: { x: [-range + 20, 20], y: [-(range / 2), range / 2] },
+          extent: { x: [-range + 15, 15], y: [-(range / 2), range / 2] },
           lines: [{
             name: 'Magnetopause',
             si: 'Z (Re)',

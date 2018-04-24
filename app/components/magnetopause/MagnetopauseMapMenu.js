@@ -46,6 +46,14 @@ export default function (props) {
       icon: resourcePath('./assets/icons/globe-green.png'),
       submenu: [
         {
+          label: '30 Re',
+          type: 'radio',
+          checked: props.state.range === 30,
+          click: () => {
+            props.setState({ range: 30 });
+          }
+        },
+        {
           label: '40 Re',
           type: 'radio',
           checked: props.state.range === 40,
